@@ -1,0 +1,7 @@
+{
+  "name": "CrazyRubbish.Editor",
+  "rootNamespace": "CrazyRubbish.Editor",
+  "references": ["CrazyRubbish.Core", "CrazyRubbish.Prototype"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

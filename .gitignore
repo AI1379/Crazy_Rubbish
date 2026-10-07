@@ -1,0 +1,51 @@
+# Unity-generated data and local build/test artifacts
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Tt]est[Rr]esults/
+/Artifacts/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/ExportedObj/
+
+# Keep the existing Plastic workspace local to this checkout.
+/.plastic/
+
+# IDE-generated files
+.vs/
+.idea/
+.vscode/
+.gradle/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.opendb
+*.VC.db
+*.pdb
+*.mdb
+*.tmp
+*.bak
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# OS and machine-local configuration
+.DS_Store
+Thumbs.db
+Desktop.ini
+.env
+.env.*
+!.env.example
+
+# Assets/**/*.meta and Packages/packages-lock.json are intentionally tracked.

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48fbc033d6637ff449ce9db7f2fcc1e7, type: 3}
+  m_Name: M1Balance
+  m_EditorClassIdentifier: 
+  notice: "M1 \u5B9E\u9A8C\u914D\u7F6E\u3002\u6570\u91CF\u3001\u8017\u65F6\u3001\u552E\u4EF7\u3001\u5BB9\u91CF\u3001\u538B\u529B\u66F2\u7EBF\u548C\u72EC\u7ACB\u6728\u5DE5\u914D\u65B9\u4EC5\u7528\u4E8E\u539F\u578B\u8BD5\u73A9\uFF0C\u672A\u6210\u4E3A\u6B63\u5F0F\u7B56\u5212\u7ED3\u8BBA\u3002"
+  values:
+    mapWidth: 20
+    mapHeight: 14
+    carryCapacity: 12
+    warehouseCapacity: 40
+    outputCapacity: 4
+    pileCapacity: 5
+    moveSpeed: 4.5
+    interactionRadius: 1.7
+    benchWoodCost: 4
+    benchFastenerCost: 2
+    recipeWoodInput: 2
+    plankOutput: 1
+    handleOutput: 2
+    plankSeconds: 4
+    handleSeconds: 5
+    plankPrice: 5
+    handlePrice: 3
+    pressureRadius: 5
+    pressureTilesForMaximum: 12
+    minimumEfficiency: 0.35
+    firstInputSeconds: 22
+    inputGrowthSeconds: 90
+    initialWaveUnits: 3
+    automaticInput: 1

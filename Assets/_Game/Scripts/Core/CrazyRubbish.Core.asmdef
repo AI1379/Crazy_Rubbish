@@ -1,0 +1,7 @@
+{
+  "name": "CrazyRubbish.Core",
+  "rootNamespace": "CrazyRubbish.Core",
+  "references": [],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

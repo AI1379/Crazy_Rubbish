@@ -1,0 +1,8 @@
+{
+  "name": "CrazyRubbish.EditModeTests",
+  "rootNamespace": "CrazyRubbish.Tests",
+  "references": ["CrazyRubbish.Core", "CrazyRubbish.Prototype"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

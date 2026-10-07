@@ -1,0 +1,6 @@
+{
+  "name": "CrazyRubbish.Prototype",
+  "rootNamespace": "CrazyRubbish.Prototype",
+  "references": ["CrazyRubbish.Core", "UnityEngine.UI"],
+  "autoReferenced": true
+}
