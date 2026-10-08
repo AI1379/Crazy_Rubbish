@@ -15,7 +15,7 @@ namespace CrazyRubbish.Editor
         private const string BalancePath = "Assets/_Game/Data/M1Balance.asset";
         private const string AppearancePath = "Assets/_Game/Data/M1Appearance.asset";
 
-        [MenuItem("Crazy Rubbish/Setup M1 Prototype")]
+        [MenuItem("Crazy Rubbish/Setup Starting Prototype")]
         public static void Setup()
         {
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
@@ -77,7 +77,7 @@ namespace CrazyRubbish.Editor
             PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
             PlayerSettings.resizableWindow = true;
             AssetDatabase.SaveAssets();
-            Debug.Log("M1 prototype setup complete. Main scene and experimental balance are ready.");
+            Debug.Log("M2 starting prototype setup complete. Main scene and balance are ready.");
         }
 
         private static Sprite LoadSprite(string folder, string name) => AssetDatabase.LoadAssetAtPath<Sprite>(folder + name + ".png");
@@ -104,7 +104,7 @@ namespace CrazyRubbish.Editor
             EditorSceneManager.SaveScene(scene, ScenePath);
         }
 
-        [MenuItem("Crazy Rubbish/Build M1 Windows Prototype")]
+        [MenuItem("Crazy Rubbish/Build Starting Windows Prototype")]
         public static void BuildWindows()
         {
             Setup();
@@ -121,7 +121,7 @@ namespace CrazyRubbish.Editor
                 throw new InvalidOperationException("Prototype build failed: " + report.summary.result);
             // Font attribution accompanies the distributable, not just the source repository.
             File.Copy("Assets/_Game/Art/Fonts/OFL.txt", "Builds/Windows/Font-OFL.txt", true);
-            Debug.Log("M1 Windows development build succeeded.");
+            Debug.Log("M2 Windows development build succeeded.");
         }
     }
 }

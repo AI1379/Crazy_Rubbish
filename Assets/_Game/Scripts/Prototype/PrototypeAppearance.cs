@@ -16,7 +16,12 @@ namespace CrazyRubbish.Prototype
                 case ItemId.RecoveredFastener: return fastener;
                 case ItemId.WoodHandSaw: return saw;
                 case ItemId.Plank: return plank;
-                default: return woodHandle;
+                case ItemId.WoodHandle: return woodHandle;
+                case ItemId.WoodChips: return wasteWood;
+                case ItemId.DamagedMotor: case ItemId.ThermalModule: case ItemId.GeneratorModule: return workbench;
+                case ItemId.SteelPart: case ItemId.CopperPart: case ItemId.RecoveredWire:
+                case ItemId.SteelMaterial: case ItemId.CopperMaterial: return fastener;
+                default: return ItemCatalog.IsTool(item) ? saw : mixedPlastic;
             }
         }
     }

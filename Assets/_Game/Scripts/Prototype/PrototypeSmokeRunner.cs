@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Globalization;
 using CrazyRubbish.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,9 @@ namespace CrazyRubbish.Prototype
             yield return null;
             yield return null;
             string screenshot = Argument("-prototypeScreenshot");
-            long earnedMoney = 0;
+            decimal earnedMoney = 0;
+            long wagesPaid = 0;
+            int recruited = 0;
             int batches = 0;
             if (!string.IsNullOrEmpty(screenshot))
             {
@@ -36,26 +39,17 @@ namespace CrazyRubbish.Prototype
                 if (FindObjectsOfType<Button>().Length < 20 || Camera.main == null)
                     throw new InvalidOperationException("Scene HUD or camera was not initialized.");
                 PrototypeSimulation model = game.Model;
-                MoveTo(model, 4, 5); Require(model.PickUp(), "pick up saw");
-                MoveTo(model, 5, 5); Require(model.PickUp(int.MaxValue), "pick up fasteners");
-                MoveTo(model, 5, 6); Require(model.PickUp(int.MaxValue), "pick up wood");
-                MoveTo(model, 6, 6); Require(model.PickUp(int.MaxValue), "fill backpack with wood");
-                MoveTo(model, PrototypeSimulation.WarehouseX - 1.8, PrototypeSimulation.WarehouseY);
-                Require(model.Deposit(), "deposit materials");
-                Require(model.BuildBench(), "build woodwork bench");
-                MoveTo(model, PrototypeSimulation.BenchX - 1, PrototypeSimulation.BenchY);
-                Require(model.ToggleWork(), "request manual production");
-                model.Advance(18);
-                if (model.CompletedBatches < 1 || model.Warehouse.Count(ItemId.Plank) < 1)
-                    throw new InvalidOperationException("Wood production did not deliver a plank.");
-                Require(model.Sell(ItemId.Plank, 1), "sell a plank");
-                if (model.Money <= 0) throw new InvalidOperationException("Sale did not yield money.");
+                PrototypeStartingScenario.Run(model);
+                if (model.Money <= 0 || model.TotalWagesPaidCents != 5000 || model.Residents.Count != 5)
+                    throw new InvalidOperationException("M2起步、招募和首期发薪验证失败。");
+                wagesPaid = model.TotalWagesPaidCents;
+                recruited = model.Residents.Count;
                 double time = model.GameSeconds;
                 model.SetPaused(true); model.Advance(10);
                 if (Math.Abs(model.GameSeconds - time) > 0.0001) throw new InvalidOperationException("Pause did not stop game time.");
                 model.SetPaused(false);
                 if (failed) throw new InvalidOperationException("Runtime emitted an error or exception.");
-                game.Report(new ActionResult(true, "首条回收流程验证成功。"));
+                game.Report(new ActionResult(true, "起步、发电、招募与首次发薪验证成功。"));
                 earnedMoney = model.Money;
                 batches = model.CompletedBatches;
             }
@@ -82,7 +76,7 @@ namespace CrazyRubbish.Prototype
                 int visiblePiles = 0;
                 foreach (Transform child in game.transform)
                     if (child.name.StartsWith("GroundPile_", StringComparison.Ordinal)) visiblePiles++;
-                if (game.Model.Money != 0 || game.Model.BenchBuilt || game.Model.Carry.Used != 0
+                if (game.Model.Money != 0 || game.Model.BenchBuilt || game.Model.GeneratorBuilt || game.Model.Residents.Count != 0 || game.Model.Carry.Used != 0
                     || game.Model.Warehouse.Used != 0 || visiblePiles != game.Model.Ground.Count)
                     throw new InvalidOperationException("Restart did not reset state and visible ground piles.");
                 if (failed) throw new InvalidOperationException("Runtime emitted an error or exception.");
@@ -90,10 +84,11 @@ namespace CrazyRubbish.Prototype
                 if (!string.IsNullOrEmpty(resultPath))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(resultPath)));
-                    File.WriteAllText(resultPath, "{\"success\":true,\"money\":" + earnedMoney
-                        + ",\"batches\":" + batches + ",\"buttons\":" + FindObjectsOfType<Button>().Length + ",\"restart\":true}");
+                    File.WriteAllText(resultPath, "{\"success\":true,\"money\":" + earnedMoney.ToString(CultureInfo.InvariantCulture)
+                        + ",\"batches\":" + batches + ",\"buttons\":" + FindObjectsOfType<Button>().Length
+                        + ",\"wagesPaidCents\":" + wagesPaid + ",\"residents\":" + recruited + ",\"restart\":true}");
                 }
-                Debug.Log("PROTOTYPE_SMOKE_PASS: pickup, transfer, build, production, sale, pause and restart.");
+                Debug.Log("PROTOTYPE_SMOKE_PASS: pickup, weighted storage, woodwork, dismantle, generator, recruitment, resident production, payroll, pause and restart.");
             }
             catch (Exception exception) { failed = true; Debug.LogException(exception); }
             Application.logMessageReceived -= OnLog;

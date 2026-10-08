@@ -54,7 +54,7 @@ switch ($Action) {
         $artifactDirectory = Join-Path $projectRoot 'Artifacts'
         New-Item -ItemType Directory -Path $resultDirectory, $artifactDirectory -Force | Out-Null
         $resultFile = Join-Path $resultDirectory 'standalone-smoke.json'
-        $screenshotFile = Join-Path $artifactDirectory 'M1-preview.png'
+        $screenshotFile = Join-Path $artifactDirectory 'M2-preview.png'
         $editorArguments = @('-batchmode', '-screen-width', '1280', '-screen-height', '800', '-screen-fullscreen', '0',
             '-logFile', $quotedLog, '-prototypeSmoke', '-prototypeResults', ('"' + $resultFile + '"'),
             '-prototypeScreenshot', ('"' + $screenshotFile + '"'))

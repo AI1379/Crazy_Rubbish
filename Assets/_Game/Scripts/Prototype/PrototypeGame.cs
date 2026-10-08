@@ -60,10 +60,10 @@ namespace CrazyRubbish.Prototype
         {
             int quantity = Model.Warehouse.Count(ItemId.Plank) + Model.Warehouse.Count(ItemId.WoodHandle);
             if (quantity == 0) { Report(new ActionResult(false, "仓库没有可出售的产品。")); return; }
-            long previous = Model.Money;
+            decimal previous = Model.Money;
             Model.Sell(ItemId.Plank, int.MaxValue);
             Model.Sell(ItemId.WoodHandle, int.MaxValue);
-            Report(new ActionResult(true, $"出售 {quantity} 件产品，获得 {Model.Money - previous} 金钱。"));
+            Report(new ActionResult(true, $"出售 {quantity} 件产品，获得 {Model.Money - previous:0.00} 金钱。"));
         }
 
         public static string ItemName(ItemId item)
@@ -75,7 +75,28 @@ namespace CrazyRubbish.Prototype
                 case ItemId.RecoveredFastener: return "连接件";
                 case ItemId.WoodHandSaw: return "木柄手锯";
                 case ItemId.Plank: return "木板";
-                default: return "木柄";
+                case ItemId.WoodHandle: return "木柄";
+                case ItemId.WoodChips: return "木料碎屑";
+                case ItemId.SteelPart: return "钢铁零件";
+                case ItemId.CopperPart: return "铜零件";
+                case ItemId.RecoveredWire: return "回收电线";
+                case ItemId.ThermalModule: return "热动力组件";
+                case ItemId.GeneratorModule: return "发电组件";
+                case ItemId.Screwdriver: return "螺丝刀";
+                case ItemId.Wrench: return "扳手";
+                case ItemId.Hammer: return "锤子";
+                case ItemId.Scissors: return "剪刀";
+                case ItemId.SewingKit: return "针线工具";
+                case ItemId.Food: return "食物";
+                case ItemId.DrinkingWater: return "饮用水";
+                case ItemId.Soap: return "肥皂";
+                case ItemId.WasteTextile: return "废纺织物";
+                case ItemId.OldClothes: return "旧衣服";
+                case ItemId.DamagedMotor: return "损坏电机";
+                case ItemId.SteelMaterial: return "钢铁材料";
+                case ItemId.CopperMaterial: return "铜材料";
+                case ItemId.PowerAsh: return "发电灰渣";
+                default: return item.ToString();
             }
         }
 
@@ -86,9 +107,9 @@ namespace CrazyRubbish.Prototype
                 case WorkState.NotBuilt: return "等待搭建";
                 case WorkState.Idle: return "已停工 · 进度保留";
                 case WorkState.Paused: return "游戏暂停";
-                case WorkState.NeedsOperator: return "等待主角靠近木工台";
-                case WorkState.NeedsTool: return "缺少手锯 · 请先拾取";
-                case WorkState.NeedsMaterials: return "缺少废木料 · 请搬进入库";
+                case WorkState.NeedsOperator: return "等待操作人员到岗";
+                case WorkState.NeedsTool: return "缺少对应工具";
+                case WorkState.NeedsMaterials: return "缺少原料 · 请搬进入库";
                 case WorkState.OutputBlocked: return "输出堵塞 · 仓库或内部容量已满";
                 default: return "正在手工锯切";
             }

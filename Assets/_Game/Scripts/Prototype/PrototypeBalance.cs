@@ -6,7 +6,7 @@ namespace CrazyRubbish.Prototype
     [CreateAssetMenu(menuName = "Crazy Rubbish/M1 Experimental Balance")]
     public sealed class PrototypeBalance : ScriptableObject
     {
-        [TextArea(3, 5)] public string notice = "M1 实验配置。数量、耗时、售价、容量、压力曲线和独立木工配方仅用于原型试玩，未成为正式策划结论。";
+        [TextArea(3, 5)] public string notice = "M2起步配置，采用2026-10-08合并版首版规则；白盒位置和未接入系统见开发说明。";
         public PrototypeSettings values = new PrototypeSettings();
     }
 }
