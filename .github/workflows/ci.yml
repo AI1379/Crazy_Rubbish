@@ -1,0 +1,33 @@
+name: CI checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pipeline-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Validate workflow syntax
+        shell: pwsh
+        run: |
+          $actionlint = ./Tools/CI/GetActionlint.ps1
+          & $actionlint -color -shellcheck=
+          if ($LASTEXITCODE -ne 0) { throw 'Workflow validation failed.' }
+      - name: Test PowerShell scripts and package contents
+        shell: pwsh
+        run: ./Tools/CI/TestPipeline.ps1

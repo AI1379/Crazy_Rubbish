@@ -47,5 +47,7 @@ Desktop.ini
 .env
 .env.*
 !.env.example
+*.ulf
+*.alf
 
 # Assets/**/*.meta and Packages/packages-lock.json are intentionally tracked.

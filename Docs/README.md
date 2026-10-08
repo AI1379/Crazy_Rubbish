@@ -13,6 +13,7 @@
 | [项目结构与协作](Development/02_项目结构与协作.md) | 代码、资源、版本控制及变更方式 |
 | [M1历史原型](Development/03_M1原型说明.md) | 2026-10-06实验参数及当时验证记录 |
 | [M2起步说明](Development/04_M2起步说明.md) | 当前操作、实际接入内容、临时简化和验证记录 |
+| [CI与发布](Development/05_CI与发布.md) | GitHub Actions、Personal Secrets、Windows正式构建与Release附件 |
 
 ## 来源快照
 

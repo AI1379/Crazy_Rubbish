@@ -1,7 +1,9 @@
 param(
-    [ValidateSet('Import', 'Open', 'Setup', 'Test', 'Build', 'Smoke')]
+    [ValidateSet('Import', 'Open', 'Setup', 'Test', 'Build', 'Release', 'Smoke')]
     [string]$Action = 'Import',
-    [string]$UnityPath
+    [string]$UnityPath,
+    [ValidatePattern('^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$')]
+    [string]$ReleaseVersion
 )
 
 $ErrorActionPreference = 'Stop'
@@ -47,6 +49,10 @@ switch ($Action) {
     'Build' {
         $editorArguments += @('-nographics', '-quit', '-buildTarget', 'StandaloneWindows64', '-executeMethod', 'CrazyRubbish.Editor.PrototypeProjectSetup.BuildWindows')
     }
+    'Release' {
+        $editorArguments += @('-nographics', '-quit', '-buildTarget', 'StandaloneWindows64', '-executeMethod', 'CrazyRubbish.Editor.PrototypeProjectSetup.BuildWindowsRelease')
+        if ($ReleaseVersion) { $editorArguments += @('-releaseVersion', $ReleaseVersion) }
+    }
     'Smoke' {
         $runPath = Join-Path $projectRoot 'Builds\Windows\CrazyRubbish.exe'
         if (-not (Test-Path -LiteralPath $runPath -PathType Leaf)) { throw 'Run Build before Smoke.' }
@@ -61,7 +67,10 @@ switch ($Action) {
     }
 }
 $startedAt = [DateTime]::UtcNow
-$editorProcess = Start-Process -FilePath $runPath -ArgumentList $editorArguments -WindowStyle Hidden -PassThru -Wait
+$editorProcess = Start-Process -FilePath $runPath -ArgumentList $editorArguments -WindowStyle Hidden -PassThru
+# Unity can leave shared licensing/package helpers running; wait for the Editor/player itself.
+$editorProcess.WaitForExit()
+$editorProcess.Refresh()
 
 if ($editorProcess.ExitCode -ne 0) {
     throw "Unity $Action failed with exit code $($editorProcess.ExitCode). See $logFile"

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Globalization;
 using CrazyRubbish.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +12,16 @@ namespace CrazyRubbish.Prototype
     {
         public PrototypeGame game;
         private bool failed;
+
+        [Serializable]
+        private sealed class SmokeReport
+        {
+            public bool success, restart, development;
+            public double money;
+            public int batches, buttons, residents;
+            public long wagesPaidCents;
+            public string version;
+        }
 
         private IEnumerator Start()
         {
@@ -84,9 +93,12 @@ namespace CrazyRubbish.Prototype
                 if (!string.IsNullOrEmpty(resultPath))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(resultPath)));
-                    File.WriteAllText(resultPath, "{\"success\":true,\"money\":" + earnedMoney.ToString(CultureInfo.InvariantCulture)
-                        + ",\"batches\":" + batches + ",\"buttons\":" + FindObjectsOfType<Button>().Length
-                        + ",\"wagesPaidCents\":" + wagesPaid + ",\"residents\":" + recruited + ",\"restart\":true}");
+                    File.WriteAllText(resultPath, JsonUtility.ToJson(new SmokeReport
+                    {
+                        success = true, restart = true, development = Debug.isDebugBuild,
+                        money = (double)earnedMoney, batches = batches, buttons = FindObjectsOfType<Button>().Length,
+                        wagesPaidCents = wagesPaid, residents = recruited, version = Application.version
+                    }));
                 }
                 Debug.Log("PROTOTYPE_SMOKE_PASS: pickup, weighted storage, woodwork, dismantle, generator, recruitment, resident production, payroll, pause and restart.");
             }

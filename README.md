@@ -41,6 +41,7 @@ WASD／方向键移动，E 拾取，Shift+E 整堆，Q 入库，F 开工／停�
 - [项目结构与协作](Docs/Development/02_项目结构与协作.md)
 - [M1 原型说明](Docs/Development/03_M1原型说明.md)
 - [M2起步说明](Docs/Development/04_M2起步说明.md)
+- [CI与Windows发布](Docs/Development/05_CI与发布.md)
 
 四份输入原文保存于Docs/Source，S4为当前基线。旧延期范围与17天排期仅保留历史；新版3区域与恢复的经营系统已纳入开发计划。首版数值与未完成内容明确区分。
 
@@ -51,11 +52,14 @@ WASD／方向键移动，E 拾取，Shift+E 整堆，Q 入库，F 开工／停�
 .\Tools\Unity.ps1 -Action Setup
 .\Tools\Unity.ps1 -Action Test
 .\Tools\Unity.ps1 -Action Build
+.\Tools\Unity.ps1 -Action Release -ReleaseVersion '0.2.0'
 .\Tools\Unity.ps1 -Action Smoke
 .\Tools\Unity.ps1 -Action Open
 ```
 
 脚本按 `ProjectVersion.txt` 查找对应 Editor；自定义安装位置可以加 `-UnityPath`。`Import` 在 Editor 关闭本项目时以批处理模式导入、解析依赖并检查编译，日志写入 `Logs/import.log`。参数依据 [Unity 2022.3 命令行文档](https://docs.unity3d.com/2022.3/Documentation/Manual/EditorCommandLineArguments.html)。
+
+GitHub Actions在main推送/PR时检查workflow和打包脚本；发布Release时运行Unity测试，构建Windows x64正式包，在Windows runner无图形验收后上传ZIP和SHA-256到该Release。支持手动构建快照，手动运行只产生Actions artifacts。Personal构建需UNITY_LICENSE、UNITY_EMAIL、UNITY_PASSWORD三个Secrets；本轮按用户要求先上传workflow，云端Unity构建待配置凭据后验证。完整操作见[发布说明](Docs/Development/05_CI与发布.md)。
 
 当前主要通过 **Git + Git LFS** 同步到公开的 [AI1379/Crazy_Rubbish](https://github.com/AI1379/Crazy_Rubbish)，分支为 `main`。首次克隆需要安装 Git LFS：
 

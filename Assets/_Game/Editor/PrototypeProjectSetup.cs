@@ -105,23 +105,47 @@ namespace CrazyRubbish.Editor
         }
 
         [MenuItem("Crazy Rubbish/Build Starting Windows Prototype")]
-        public static void BuildWindows()
+        public static void BuildWindows() => BuildWindowsPlayer(true);
+
+        [MenuItem("Crazy Rubbish/Build Windows Release")]
+        public static void BuildWindowsRelease() => BuildWindowsPlayer(false);
+
+        private static void BuildWindowsPlayer(bool development)
         {
             Setup();
-            Directory.CreateDirectory("Builds/Windows");
-            var options = new BuildPlayerOptions
+            string outputDirectory = development ? "Builds/Windows" : "Builds/WindowsRelease";
+            Directory.CreateDirectory(outputDirectory);
+            string originalVersion = PlayerSettings.bundleVersion;
+            string releaseVersion = CommandLineValue("-releaseVersion");
+            if (!string.IsNullOrEmpty(releaseVersion) && !System.Text.RegularExpressions.Regex.IsMatch(releaseVersion,
+                @"^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"))
+                throw new ArgumentException("Release version must be a numeric version with an optional prerelease suffix.");
+            if (PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone) != ScriptingImplementation.Mono2x)
+                throw new InvalidOperationException("The Windows CI pipeline requires the Mono scripting backend.");
+            try
             {
-                scenes = new[] { ScenePath },
-                locationPathName = "Builds/Windows/CrazyRubbish.exe",
-                target = BuildTarget.StandaloneWindows64,
-                options = BuildOptions.Development
-            };
-            BuildReport report = BuildPipeline.BuildPlayer(options);
-            if (report.summary.result != BuildResult.Succeeded)
-                throw new InvalidOperationException("Prototype build failed: " + report.summary.result);
-            // Font attribution accompanies the distributable, not just the source repository.
-            File.Copy("Assets/_Game/Art/Fonts/OFL.txt", "Builds/Windows/Font-OFL.txt", true);
-            Debug.Log("M2 Windows development build succeeded.");
+                if (!string.IsNullOrEmpty(releaseVersion)) PlayerSettings.bundleVersion = releaseVersion;
+                var options = new BuildPlayerOptions
+                {
+                    scenes = new[] { ScenePath },
+                    locationPathName = outputDirectory + "/CrazyRubbish.exe",
+                    target = BuildTarget.StandaloneWindows64,
+                    options = development ? BuildOptions.Development : BuildOptions.None
+                };
+                BuildReport report = BuildPipeline.BuildPlayer(options);
+                if (report.summary.result != BuildResult.Succeeded)
+                    throw new InvalidOperationException("Windows build failed: " + report.summary.result);
+                File.Copy("Assets/_Game/Art/Fonts/OFL.txt", outputDirectory + "/Font-OFL.txt", true);
+                Debug.Log("Windows " + (development ? "development" : "release") + " build succeeded: " + outputDirectory);
+            }
+            finally { PlayerSettings.bundleVersion = originalVersion; }
+        }
+
+        private static string CommandLineValue(string name)
+        {
+            string[] arguments = Environment.GetCommandLineArgs();
+            int index = Array.IndexOf(arguments, name);
+            return index >= 0 && index + 1 < arguments.Length ? arguments[index + 1] : null;
         }
     }
 }
