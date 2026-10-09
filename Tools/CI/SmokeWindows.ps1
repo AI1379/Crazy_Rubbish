@@ -17,7 +17,7 @@ $runKey = [Guid]::NewGuid().ToString('N')
 $resultPath = Join-Path $resultRoot "smoke-$runKey.json"
 $logPath = Join-Path $resultRoot "smoke-$runKey.log"
 $arguments = @('-batchmode', '-nographics', '-prototypeSmoke', '-prototypeResults', ('"' + $resultPath + '"'),
-    '-logFile', ('"' + $logPath + '"'))
+    '-logFile', ('"' + $logPath + '"'), '-prototypeSaveDirectory', ('"' + (Join-Path $resultRoot ("saves-$runKey")) + '"'))
 $process = Start-Process -FilePath $playerPath -ArgumentList $arguments -WorkingDirectory $playerRoot -WindowStyle Hidden -PassThru
 if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
     Stop-Process -Id $process.Id -Force
@@ -31,6 +31,7 @@ if (-not $report.success -or -not $report.restart -or $report.residents -ne 5 -o
     throw "Smoke acceptance criteria failed. See $resultPath"
 }
 if ($report.development -ne $false) { throw 'Release player was built with development options, or omitted build metadata.' }
+if ($report.deliveredTrips -le 0 -or -not $report.saveRoundtrip) { throw 'Physical delivery or runtime save/load acceptance failed.' }
 if ($ExpectedVersion -and $report.version -cne $ExpectedVersion) {
     throw "Expected player version $ExpectedVersion, got $($report.version)."
 }

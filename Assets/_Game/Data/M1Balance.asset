@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48fbc033d6637ff449ce9db7f2fcc1e7, type: 3}
   m_Name: M1Balance
   m_EditorClassIdentifier: 
-  notice: "M2起步配置，采用2026-10-08合并版首版规则；白盒位置和未接入系统见开发说明。"
+  notice: "S5最新策划基线，第20章优先；当前地图、交互、预约和运输采用新规则。"
   values:
-    mapWidth: 30
-    mapHeight: 24
+    mapWidth: 32
+    mapHeight: 28
     carryCapacity: 8
     warehouseCapacity: 80
     outputCapacity: 8
     pileCapacity: 5
-    moveSpeed: 4.5
+    moveSpeed: 0.8
     residentMoveSpeed: 0.8
-    interactionRadius: 1.7
+    interactionRadius: 1.5
+    interactionSeconds: 0.5
     benchWoodCost: 4
     benchFastenerCost: 2
     recipeWoodInput: 4

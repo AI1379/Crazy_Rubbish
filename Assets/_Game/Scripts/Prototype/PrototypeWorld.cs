@@ -37,27 +37,31 @@ namespace CrazyRubbish.Prototype
                 for (int y = 0; y < model.Settings.mapHeight; y++)
                     floor.Add(Sprite("Ground", game.appearance.tile, x, y, 1, -20));
             SpriteRenderer depot = Sprite("WarehouseWhitebox", game.appearance.warehouse,
-                PrototypeSimulation.WarehouseX, PrototypeSimulation.WarehouseY, 2.8f, 4);
+                PrototypeSimulation.WarehouseX, 3, 2.8f, 4);
             depot.color = new Color32(165, 194, 174, 255);
             bench = Sprite("WoodworkBench", game.appearance.workbench,
-                PrototypeSimulation.BenchX, PrototypeSimulation.BenchY, 1.7f, 5);
-            benchLabel = Label("BenchLabel", "木工台 · 待搭建", PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 2, 0.13f);
-            generator = Sprite("GeneratorWhitebox", game.appearance.workbench, PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY, 1.8f, 5);
-            generatorLabel = Label("GeneratorLabel", "发电机 · 待组装", PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 2, 0.13f);
-            table = Sprite("TableWhitebox", game.appearance.workbench, PrototypeSimulation.TableX, PrototypeSimulation.TableY, 1.8f, 5);
-            tableLabel = Label("TableLabel", "工作台 · 待建", PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 2, 0.13f);
-            dismantle = Sprite("DismantleWhitebox", game.appearance.workbench, PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY, 1.8f, 5);
-            dismantleLabel = Label("DismantleLabel", "拆解台 · 待建", PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 2, 0.13f);
-            var housing = Sprite("OldHousingWhitebox", game.appearance.warehouse, PrototypeSimulation.HousingX, PrototypeSimulation.HousingY, 2.8f, 4);
+                PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 1.5f, 1.7f, 5);
+            benchLabel = Label("BenchLabel", "木工台 · 待搭建", PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 3.2f, 0.13f);
+            generator = Sprite("GeneratorWhitebox", game.appearance.workbench, PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 1.5f, 1.8f, 5);
+            generatorLabel = Label("GeneratorLabel", "发电机 · 待组装", PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 3.2f, 0.13f);
+            table = Sprite("TableWhitebox", game.appearance.workbench, PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 1.5f, 1.8f, 5);
+            tableLabel = Label("TableLabel", "工作台 · 待建", PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 3.2f, 0.13f);
+            dismantle = Sprite("DismantleWhitebox", game.appearance.workbench, PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 1.5f, 1.8f, 5);
+            dismantleLabel = Label("DismantleLabel", "拆解台 · 待建", PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 3.2f, 0.13f);
+            var housing = Sprite("OldHousingWhitebox", game.appearance.warehouse, PrototypeSimulation.HousingX, 3, 2.8f, 4);
             housing.color = new Color32(214, 177, 136, 255);
-            Label("HousingLabel", "旧住房 · 6人", PrototypeSimulation.HousingX, PrototypeSimulation.HousingY + 2, 0.13f);
+            Label("HousingLabel", "旧住房 · 6人", PrototypeSimulation.HousingX, 5.8f, 0.13f);
             Label("OwnedLandLabel", "可建设空地 18×18", 21, 18.5f, 0.18f);
-            var hole = Sprite("HoleWhitebox", game.appearance.tile, 4, 2, 1.8f, -5);
+            var hole = Sprite("HoleWhitebox", game.appearance.tile, 2.5f, 20.5f, 1.8f, -5);
             hole.color = new Color32(38, 43, 43, 255);
-            Label("HoleLabel", "洞 · 去向不明", 4, 0.8f, 0.12f);
-            Label("WarehouseLabel", "仓库", PrototypeSimulation.WarehouseX, PrototypeSimulation.WarehouseY + 2, 0.13f);
-            Label("DropLabel", "上层垃圾落点", PrototypeSimulation.DropX, 12, 0.15f);
+            Label("HoleLabel", "洞 · 去向不明", 2.5f, 19.2f, 0.12f);
+            Label("WarehouseLabel", "仓库", PrototypeSimulation.WarehouseX, 5.8f, 0.13f);
+            Label("DropLabel", "上层垃圾落点", 3.5f, 12.3f, 0.15f);
 
+            var lamp = Sprite("CommunityLamp", game.appearance.fastener, 20, 5, 0.8f, 5);
+            lamp.color = new Color32(143, 142, 112, 255);
+            Label("LampLabel", "社区路灯", 20, 6, 0.11f);
+            Label("MeetingPoint", "会面点", 16, 1, 0.11f);
             worker = Sprite("Protagonist", game.appearance.worker, 4, 4, 1.1f, 40).transform;
             playerLabel = Label("PlayerLabel", "主角", 4, 3.25f, 0.08f);
         }
@@ -66,6 +70,10 @@ namespace CrazyRubbish.Prototype
         {
             PrototypeSimulation model = game.Model;
             if (screenWidth != Screen.width || screenHeight != Screen.height) FitCamera(model);
+            float scroll = Input.mouseScrollDelta.y;
+            Vector2 mouse = new Vector2(Input.mousePosition.x / Mathf.Max(1, Screen.width), Input.mousePosition.y / Mathf.Max(1, Screen.height));
+            if (scroll != 0 && worldCamera.rect.Contains(mouse))
+                worldCamera.orthographicSize = Mathf.Clamp(worldCamera.orthographicSize * Mathf.Pow(0.85f, scroll), 4, model.Settings.mapHeight / 2f + 0.65f);
             if (previousModel != model)
             {
                 foreach (PileView view in piles.Values) Destroy(view.Root);
@@ -109,7 +117,7 @@ namespace CrazyRubbish.Prototype
                 {
                     view = Sprite("Resident_" + resident.Id, game.appearance.worker, (float)resident.X, (float)resident.Y, 1, 35).transform;
                     view.GetComponent<SpriteRenderer>().color = new Color32(143, 200, 179, 255);
-                    var label = Label("ResidentLabel", "居民" + resident.Id, (float)resident.X, (float)resident.Y - 0.7f, 0.11f);
+                    var label = Label("ResidentLabel", resident.Id.ToString(), (float)resident.X, (float)resident.Y - 0.7f, 0.10f);
                     label.transform.SetParent(view, true);
                     residentViews.Add(resident.Id, view);
                 }
@@ -125,8 +133,7 @@ namespace CrazyRubbish.Prototype
                 model.Settings.mapWidth / (2f * aspect) + 0.65f);
         }
 
-        private static int PileKey(GroundPile pile, PrototypeSimulation model) =>
-            (pile.Y * model.Settings.mapWidth + pile.X) * Enum.GetValues(typeof(ItemId)).Length + (int)pile.Item;
+        private static int PileKey(GroundPile pile, PrototypeSimulation model) => pile.Id;
 
         private void ReconcilePiles(PrototypeSimulation model)
         {
@@ -159,9 +166,9 @@ namespace CrazyRubbish.Prototype
                 view.Icon.transform.position = new Vector3(pile.X + dx, pile.Y + dy, 0);
                 view.Icon.transform.localScale = new Vector3(0.55f, 0.55f, 1);
                 view.Count.transform.position = new Vector3(pile.X + dx, pile.Y + dy - 0.28f, -0.1f);
-                bool overloaded = model.Ground.Where(p => p.X == pile.X && p.Y == pile.Y)
-                    .Sum(p => p.Amount * ItemCatalog.CapacityTicks(p.Item)) > model.Settings.pileCapacity * 20;
-                view.Count.text = "×" + pile.Amount + (overloaded ? "↑" : "");
+                bool overloaded = model.GroundCapacityAt(pile.X, pile.Y) > model.Settings.pileCapacity;
+                view.Count.text = "×" + pile.Amount + (overloaded ? "↑" : "") + (ItemCatalog.IsDevice(pile.Item) ? (pile.Usable ? "✓" : "×") : "");
+                view.Icon.color = ItemCatalog.IsDevice(pile.Item) ? new Color32(203, 178, 139, 255) : Color.white;
                 view.Count.color = overloaded ? new Color32(242, 166, 92, 255) : new Color32(225, 222, 202, 255);
             }
             var removed = new List<int>();

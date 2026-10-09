@@ -7,10 +7,15 @@ namespace CrazyRubbish.Core
         WasteWood, MixedPlastic, RecoveredFastener, WoodHandSaw, Plank, WoodHandle,
         WoodChips, SteelPart, CopperPart, RecoveredWire, ThermalModule, GeneratorModule,
         Screwdriver, Wrench, Hammer, Scissors, SewingKit, Food, DrinkingWater, Soap,
-        WasteTextile, OldClothes, DamagedMotor, SteelMaterial, CopperMaterial, PowerAsh
+        WasteTextile, OldClothes, DamagedMotor, SteelMaterial, CopperMaterial, PowerAsh,
+        Motor, MachineBlade, HeatingElement, Container, HandleMould, BoxMould, FeedingModule, GrowingLight,
+        FurnaceModule, FurnaceLining, Fixture, AluminumPart, AluminumMaterial, ToolSteelWaste,
+        OldCutter, OldWasher, OldFormer, MouldBox, OldContainer, WireBundle, OldGrowingLamp,
+        OldFeeder, OldFurnace, OldMetalTable, OldControlBox, LightingModule, OldLamp,
+        SawBlade, HammerHead, ScrewdriverRod, BroomHead, SortedWood, BrokenWoodTool
     }
     public enum WorkState { NotBuilt, Idle, Paused, NeedsOperator, NeedsTool, NeedsMaterials, Working, OutputBlocked }
-    public enum WoodRecipe { Plank, WoodHandle }
+    public enum WoodRecipe { Plank, WoodHandle, SortedWood }
     public enum WorkerJob { Idle, Woodwork }
 
     public readonly struct ItemAmount
@@ -32,6 +37,11 @@ namespace CrazyRubbish.Core
         public readonly int X, Y;
         public readonly ItemId Item;
         public int Amount { get; internal set; }
+        public int Id { get; internal set; }
+        public int Reserved { get; internal set; }
+        public bool Usable { get; internal set; } = true;
+        public int ToolId { get; internal set; }
+        public int Width { get; internal set; } = 1;
         internal GroundPile(int x, int y, ItemId item, int amount)
         { X = x; Y = y; Item = item; Amount = amount; }
     }
@@ -43,7 +53,11 @@ namespace CrazyRubbish.Core
         public double Y { get; internal set; }
         public long CashCents { get; internal set; } = 500;
         public decimal Cash => CashCents / 100m;
-        internal Resident(int id) { Id = id; X = PrototypeSimulation.HousingX; Y = PrototypeSimulation.HousingY; }
+        public UnitInventory Cargo { get; } = new UnitInventory(8);
+        public string Activity { get; internal set; } = "空闲";
+        internal DeliveryTask Delivery;
+        internal int[] Path; internal int PathIndex,PathTargetX,PathTargetY,PathRevision;
+        internal Resident(int id) { Id = id; X = 14 + id; Y = 5; }
     }
     public sealed class WageBill
     {
@@ -65,7 +79,7 @@ namespace CrazyRubbish.Core
         }
     }
 
-    public static class ItemCatalog
+    public static partial class ItemCatalog
     {
         public const int CapacityScale = 20;
         public static int CapacityTicks(ItemId item)
@@ -73,10 +87,17 @@ namespace CrazyRubbish.Core
             switch (item)
             {
                 case ItemId.SteelPart: case ItemId.CopperPart: case ItemId.WoodHandle:
-                case ItemId.RecoveredFastener: case ItemId.RecoveredWire: case ItemId.Soap: return 10;
+                case ItemId.RecoveredFastener: case ItemId.RecoveredWire: case ItemId.Soap:
+                case ItemId.AluminumPart: case ItemId.HandleMould: case ItemId.BoxMould: case ItemId.SawBlade: case ItemId.MachineBlade:
+                case ItemId.HammerHead: case ItemId.ScrewdriverRod: case ItemId.BroomHead: return 10;
                 case ItemId.DrinkingWater: return 2;
-                case ItemId.ThermalModule: case ItemId.GeneratorModule: return 80;
-                case ItemId.DamagedMotor: return 120;
+                case ItemId.ThermalModule: case ItemId.GeneratorModule: case ItemId.Motor:
+                case ItemId.FeedingModule: case ItemId.FurnaceModule: return 80;
+                case ItemId.Container: case ItemId.FurnaceLining: case ItemId.Fixture:
+                case ItemId.HeatingElement: case ItemId.GrowingLight: case ItemId.LightingModule: case ItemId.OldContainer: return 40;
+                case ItemId.DamagedMotor: case ItemId.OldCutter: case ItemId.OldWasher: case ItemId.OldFormer:
+                case ItemId.MouldBox: case ItemId.WireBundle: case ItemId.OldGrowingLamp: case ItemId.OldFeeder:
+                case ItemId.OldFurnace: case ItemId.OldMetalTable: case ItemId.OldControlBox: case ItemId.OldLamp: return 120;
                 default: return 20;
             }
         }

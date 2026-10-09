@@ -16,9 +16,9 @@ namespace CrazyRubbish.Prototype
         [Serializable]
         private sealed class SmokeReport
         {
-            public bool success, restart, development;
+            public bool success, restart, development, saveRoundtrip;
             public double money;
-            public int batches, buttons, residents;
+            public int batches, buttons, residents, deliveredTrips;
             public long wagesPaidCents;
             public string version;
         }
@@ -34,6 +34,8 @@ namespace CrazyRubbish.Prototype
             decimal earnedMoney = 0;
             long wagesPaid = 0;
             int recruited = 0;
+            int deliveredTrips = 0;
+            bool saveRoundtrip = false;
             int batches = 0;
             if (!string.IsNullOrEmpty(screenshot))
             {
@@ -49,10 +51,23 @@ namespace CrazyRubbish.Prototype
                     throw new InvalidOperationException("Scene HUD or camera was not initialized.");
                 PrototypeSimulation model = game.Model;
                 PrototypeStartingScenario.Run(model);
-                if (model.Money <= 0 || model.TotalWagesPaidCents != 5000 || model.Residents.Count != 5)
+                if (model.Money <= 0 || model.TotalWagesPaidCents != 5000 || model.Residents.Count != 5 || model.DeliveredTrips <= 0)
                     throw new InvalidOperationException("M2起步、招募和首期发薪验证失败。");
                 wagesPaid = model.TotalWagesPaidCents;
                 recruited = model.Residents.Count;
+                deliveredTrips = model.DeliveredTrips;
+                if (!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
+                {
+                    decimal savedCash = model.Money;
+                    game.SaveGame();
+                    if (!game.LastActionSucceeded) throw new InvalidOperationException("Runtime save failed: " + game.Notice);
+                    Require(model.SellTechnology(Technology.Wood), "change cash after save");
+                    game.LoadLatest();
+                    model = game.Model;
+                    if (!game.LastActionSucceeded || model.Money != savedCash || model.DeliveredTrips != deliveredTrips || model.TotalWagesPaidCents != wagesPaid)
+                        throw new InvalidOperationException("Runtime file save/load did not restore cash, transport and payroll.");
+                    saveRoundtrip = true;
+                }
                 double time = model.GameSeconds;
                 model.SetPaused(true); model.Advance(10);
                 if (Math.Abs(model.GameSeconds - time) > 0.0001) throw new InvalidOperationException("Pause did not stop game time.");
@@ -97,7 +112,8 @@ namespace CrazyRubbish.Prototype
                     {
                         success = true, restart = true, development = Debug.isDebugBuild,
                         money = (double)earnedMoney, batches = batches, buttons = FindObjectsOfType<Button>().Length,
-                        wagesPaidCents = wagesPaid, residents = recruited, version = Application.version
+                        wagesPaidCents = wagesPaid, residents = recruited, version = Application.version,
+                        deliveredTrips = deliveredTrips, saveRoundtrip = saveRoundtrip
                     }));
                 }
                 Debug.Log("PROTOTYPE_SMOKE_PASS: pickup, weighted storage, woodwork, dismantle, generator, recruitment, resident production, payroll, pause and restart.");

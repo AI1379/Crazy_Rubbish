@@ -1,281 +1,241 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 namespace CrazyRubbish.Core
 {
-    public sealed class PrototypeSimulation
+    public sealed partial class PrototypeSimulation
     {
-        public const int BenchX = 13, BenchY = 6, WarehouseX = 15, WarehouseY = 22;
-        public const int DropX = 4, DropY = 8, HousingX = 21, HousingY = 22;
-        public const int TableX = 13, TableY = 14, DismantleX = 13, DismantleY = 10;
-        public const int GeneratorX = 18, GeneratorY = 6;
-        private const double Step = 0.05;
-        private readonly List<GroundPile> ground = new List<GroundPile>();
-        private readonly Dictionary<(int, int), int> groundCapacity = new Dictionary<(int, int), int>();
-        private readonly List<Resident> residents = new List<Resident>();
-        private readonly List<WageBill> bills = new List<WageBill>();
-        private readonly Random random;
-        private readonly double[] salesPressure = new double[Enum.GetValues(typeof(ItemId)).Length];
-        private double accumulatedTime, inputTimer, nextInput, jobProgress, dismantleProgress, nextWage;
+        public const int BenchX=13,BenchY=7,WarehouseX=12,WarehouseY=5;
+        public const int DropX=7,DropY=6,HousingX=17,HousingY=5;
+        public const int TableX=13,TableY=15,DismantleX=13,DismantleY=11,GeneratorX=18,GeneratorY=7;
+        private const double Step=0.05;
+        private readonly List<GroundPile> ground=new List<GroundPile>();
+        private readonly Dictionary<(int,int),int> groundCapacity=new Dictionary<(int,int),int>();
+        private readonly List<Resident> residents=new List<Resident>();
+        private readonly List<WageBill> bills=new List<WageBill>();
+        private readonly List<ToolInstance> tools=new List<ToolInstance>();
+        private readonly HashSet<ItemId> discovered=new HashSet<ItemId>();
+        private readonly SerializableRandom random;
+        private readonly double[] salesPressure=new double[Enum.GetValues(typeof(ItemId)).Length];
+        private readonly Dictionary<int,List<(UnitInventory inventory,int token)>> blueprints=new Dictionary<int,List<(UnitInventory,int)>>();
+        private double accumulatedTime,inputTimer,nextInput,jobProgress,dismantleProgress,nextWage;
         private decimal saleRemainderCents;
-        private bool jobActive, dismantleActive;
+        private bool jobActive,dismantleActive;
         private WoodRecipe activeRecipe;
-        private int pendingBuildings;
+        private int pendingBuildings,nextGroundId=1,nextToolId=1,geometryRevision,woodToken,dismantleToken,woodToolId,screwToolId,wrenchToolId;
+        private int dismantleObjectId;
+        private bool dismantleUsable=true;
         private long cashCents;
-        private int fuelWood, fuelChips;
-        private double fuelRemaining, equivalentHeat;
-        private double activeFuelHeatRate;
-        private readonly Dictionary<(int, int), (int revision, float value)> pressureCache = new Dictionary<(int, int), (int, float)>();
-
-        public PrototypeSettings Settings { get; }
-        public UnitInventory Carry { get; }
-        public UnitInventory Warehouse { get; }
-        public UnitInventory Output { get; }
-        public UnitInventory DismantleOutput { get; } = new UnitInventory(8);
-        public UnitInventory GeneratorResidue { get; } = new UnitInventory(10);
-        public IReadOnlyList<GroundPile> Ground => ground;
-        public IReadOnlyList<Resident> Residents => residents;
-        public IReadOnlyList<WageBill> WageBills => bills;
-        public double PlayerX { get; private set; } = 4;
-        public double PlayerY { get; private set; } = 4;
-        public double GameSeconds { get; private set; }
-        public bool Paused { get; private set; }
-        public int Speed { get; private set; } = 1;
-        public bool BenchBuilt { get; private set; }
-        public bool BuildPending => (pendingBuildings & 1) != 0;
-        public bool TableBuilt { get; private set; }
-        public bool DismantleBuilt { get; private set; }
-        public bool GeneratorBuilt { get; private set; }
-        public bool HasBeenPowered { get; private set; }
-        public bool RunRequested { get; private set; }
-        public bool DismantleRequested { get; private set; }
-        public WoodRecipe SelectedRecipe { get; private set; }
-        public WorkState State { get; private set; } = WorkState.NotBuilt;
-        public WorkState DismantleState { get; private set; } = WorkState.NotBuilt;
-        public long CashCents => cashCents;
-        public decimal Money => cashCents / 100m;
-        public long TotalSold { get; private set; }
-        public long TotalWagesPaidCents { get; private set; }
-        public int CompletedBatches { get; private set; }
-        public int DismantledBatches { get; private set; }
-        public int GroundRevision { get; private set; }
-        public long IncomingUnits => 0; // Natural arrivals are always represented on the ground.
-        public long SpawnedUnits { get; private set; }
-        public bool JobActive => jobActive;
-        public int ReservedWood => jobActive ? WoodInput(activeRecipe) : 0;
-        public float Progress => jobActive ? (float)Math.Min(1, jobProgress / Duration(activeRecipe)) : 0;
-        public float DismantleProgress => (float)(dismantleProgress / 35);
-        public bool NearWarehouse => Near(WarehouseX, WarehouseY, 2.2);
-        public bool NearBench => Near(BenchX, BenchY);
-        public bool NearGenerator => Near(GeneratorX, GeneratorY);
-        public bool HasSaw => HasTool(ItemId.WoodHandSaw);
-        public int FuelCount => fuelWood + fuelChips;
-        public double FuelSeconds => fuelRemaining + fuelWood * Settings.woodFuelSeconds + fuelChips * Settings.chipsFuelSeconds;
-        public float AvailablePower => GeneratorBuilt && fuelRemaining > 0 && !(equivalentHeat >= 20 - 0.000001 && GeneratorResidue.FreeTicks < 20) ? Settings.generatorOutput : 0;
-        public double SecondsToWage => residents.Count == 0 ? 0 : Math.Max(0, nextWage - GameSeconds);
-        public long UnpaidWageCents => bills.Sum(b => b.RemainingCents);
-        public decimal UnpaidWages => UnpaidWageCents / 100m;
-        public double EquivalentUnpaidPeriods => bills.Sum(b => (double)b.RemainingCents / b.OriginalCents);
-        public Resident Woodworker => residents.Find(r => r.Job == WorkerJob.Woodwork);
-        public bool WorkerAtBench => Woodworker != null && Distance(Woodworker.X, Woodworker.Y, BenchX, BenchY) <= 0.1;
-        public bool AnyBuildPending => pendingBuildings != 0;
-
-        public PrototypeSimulation(PrototypeSettings settings, int seed = 4271)
+        private int fuelWood,fuelChips,manualStation;
+        private double fuelRemaining,equivalentHeat,activeFuelHeatRate;
+        private readonly Dictionary<(int,int),(int revision,float value)> pressureCache=new Dictionary<(int,int),(int,float)>();
+        public PrototypeSettings Settings {get;}
+        public UnitInventory Carry {get;}
+        public UnitInventory Warehouse {get;}
+        public UnitInventory WoodInputStock {get;}=new UnitInventory(8);
+        public UnitInventory DismantleInput {get;}=new UnitInventory(12);
+        public UnitInventory WoodTools {get;}=new UnitInventory(2);
+        public UnitInventory DismantleTools {get;}=new UnitInventory(4);
+        public UnitInventory BrokenTools {get;}=new UnitInventory(8);
+        public UnitInventory Output {get;}
+        public UnitInventory DismantleOutput {get;}=new UnitInventory(11);
+        public UnitInventory GeneratorResidue {get;}=new UnitInventory(10);
+        public IReadOnlyList<GroundPile> Ground=>ground;
+        public IReadOnlyList<Resident> Residents=>residents;
+        public IReadOnlyList<WageBill> WageBills=>bills;
+        public IReadOnlyList<ToolInstance> Tools=>tools;
+        public double PlayerX {get;private set;}=8;
+        public double PlayerY {get;private set;}=6;
+        public double GameSeconds {get;private set;}
+        public bool Paused {get;private set;}
+        public int Speed {get;private set;}=1;
+        public bool BenchBuilt {get;private set;}
+        public bool TableBuilt {get;private set;}
+        public bool DismantleBuilt {get;private set;}
+        public bool GeneratorBuilt {get;private set;}
+        public bool BuildPending=>(pendingBuildings&1)!=0;
+        public bool AnyBuildPending=>pendingBuildings!=0;
+        public bool HasBeenPowered {get;private set;}
+        public bool RunRequested {get;private set;}
+        public bool DismantleRequested {get;private set;}
+        public WoodRecipe SelectedRecipe {get;private set;}
+        public ItemId SelectedDevice {get;private set;}=ItemId.OldCutter;
+        private WoodRecipe? pendingRecipe;
+        private ItemId? pendingDevice;
+        public bool RecipeChangePending=>pendingRecipe!=null;
+        public WorkState State {get;private set;}
+        public WorkState DismantleState {get;private set;}
+        public long CashCents=>cashCents;
+        public decimal Money=>cashCents/100m;
+        public long TotalSold {get;private set;}
+        public long TotalWagesPaidCents {get;private set;}
+        public int CompletedBatches {get;private set;}
+        public int DismantledBatches {get;private set;}
+        public int DeliveredTrips {get;private set;}
+        public int GroundRevision {get;private set;}
+        public long IncomingUnits=>0;
+        public long SpawnedUnits {get;private set;}
+        public bool JobActive=>jobActive;
+        public int ReservedWood=>jobActive?WoodInput(activeRecipe):0;
+        public float Progress=>jobActive?(float)Math.Min(1,jobProgress/Duration(activeRecipe)):0;
+        public float DismantleProgress=>(float)(dismantleProgress/35);
+        public bool NearWarehouse=>Near(WarehouseX,WarehouseY);
+        public bool NearBench=>Near(BenchX,BenchY);
+        public bool NearGenerator=>Near(GeneratorX,GeneratorY);
+        public bool HasSaw=>tools.Any(t=>t.Item==ItemId.WoodHandSaw&&t.Durability>0&&!t.Location.StartsWith("ground:"));
+        public int FuelCount=>fuelWood+fuelChips;
+        public double FuelSeconds=>fuelRemaining+fuelWood*Settings.woodFuelSeconds+fuelChips*Settings.chipsFuelSeconds;
+        public float AvailablePower=>GeneratorBuilt&&fuelRemaining>0?Settings.generatorOutput:0;
+        public double SecondsToWage=>residents.Count==0?0:Math.Max(0,nextWage-GameSeconds);
+        public long UnpaidWageCents=>bills.Sum(b=>b.RemainingCents);
+        public decimal UnpaidWages=>UnpaidWageCents/100m;
+        public double EquivalentUnpaidPeriods=>bills.Sum(b=>(double)b.RemainingCents/b.OriginalCents);
+        public Resident Woodworker=>residents.Find(r=>r.Job==WorkerJob.Woodwork);
+        public bool WorkerAtBench=>Woodworker!=null&&Woodworker.Delivery==null&&Distance(Woodworker.X,Woodworker.Y,BenchX,BenchY)<=0.1;
+        public PrototypeSimulation(PrototypeSettings settings,int seed=4271)
         {
-            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            settings.Validate();
-            random = new Random(seed);
-            Carry = new UnitInventory(settings.carryCapacity);
-            Warehouse = new UnitInventory(settings.warehouseCapacity);
-            Output = new UnitInventory(settings.outputCapacity);
-            nextInput = RandomInputInterval();
-            AddInitial(4, 5, ItemId.WoodHandSaw, 1);
-            AddInitial(5, 5, ItemId.RecoveredFastener, settings.initialFasteners);
-            AddInitial(DropX, DropY, ItemId.WasteWood, settings.initialWood);
-            AddInitial(DropX, DropY, ItemId.SteelPart, 30);
-            AddInitial(DropX, DropY, ItemId.CopperPart, 2);
-            AddInitial(DropX, DropY, ItemId.RecoveredWire, 8);
-            AddInitial(DropX, DropY, ItemId.ThermalModule, 1);
-            AddInitial(DropX, DropY, ItemId.GeneratorModule, 1);
-            foreach (ItemId tool in new[] { ItemId.Screwdriver, ItemId.Wrench, ItemId.Hammer, ItemId.Scissors, ItemId.SewingKit })
-                AddInitial(DropX, DropY, tool, 1);
-            AddInitial(DropX, DropY, ItemId.Food, 30);
-            AddInitial(DropX, DropY, ItemId.DrinkingWater, 40);
-            AddInitial(DropX, DropY, ItemId.Soap, 3);
-            AddInitial(DropX, DropY, ItemId.WasteTextile, 12);
-            AddInitial(DropX, DropY, ItemId.OldClothes, 6);
-            // A labelled damaged motor is the documented steel3/copper1 example, never a universal parts loot roll.
-            AddInitial(DropX, DropY, ItemId.DamagedMotor, 1);
+            Settings=settings??throw new ArgumentNullException(nameof(settings));settings.Validate();random=new SerializableRandom(seed);
+            Carry=new UnitInventory(settings.carryCapacity);Warehouse=new UnitInventory(settings.warehouseCapacity);Output=new UnitInventory(settings.outputCapacity);
+            nextInput=RandomInputInterval();
+            AddInitial(7,6,ItemId.WoodHandSaw,1);AddInitial(7,7,ItemId.RecoveredFastener,settings.initialFasteners);
+            AddInitial(DropX,DropY,ItemId.WasteWood,settings.initialWood);
+            foreach(var pair in new[]{new ItemAmount(ItemId.SteelPart,30),new ItemAmount(ItemId.CopperPart,2),new ItemAmount(ItemId.RecoveredWire,8),
+                new ItemAmount(ItemId.ThermalModule,1),new ItemAmount(ItemId.GeneratorModule,1),new ItemAmount(ItemId.Food,30),new ItemAmount(ItemId.DrinkingWater,40),
+                new ItemAmount(ItemId.Soap,3),new ItemAmount(ItemId.WasteTextile,12),new ItemAmount(ItemId.OldClothes,6)})
+                AddInitial(DropX,DropY,pair.Item,pair.Amount);
+            foreach(var item in new[]{ItemId.Screwdriver,ItemId.Wrench,ItemId.Hammer,ItemId.Scissors,ItemId.SewingKit})AddInitial(DropX,DropY,item,1);
+            foreach(var pair in new[]{new ItemAmount(ItemId.OldCutter,2),new ItemAmount(ItemId.OldWasher,1),new ItemAmount(ItemId.OldFormer,1),new ItemAmount(ItemId.MouldBox,1),
+                new ItemAmount(ItemId.OldContainer,2),new ItemAmount(ItemId.WireBundle,1),new ItemAmount(ItemId.OldGrowingLamp,1),new ItemAmount(ItemId.OldFeeder,1),
+                new ItemAmount(ItemId.OldFurnace,2),new ItemAmount(ItemId.OldMetalTable,1),new ItemAmount(ItemId.OldControlBox,1)})AddInitial(DropX,DropY,pair.Item,pair.Amount);
         }
-
-        public static double Distance(double ax, double ay, double bx, double by)
-        { double dx = ax - bx, dy = ay - by; return Math.Sqrt(dx * dx + dy * dy); }
-        private bool Near(int x, int y, double radius = -1) => Distance(PlayerX, PlayerY, x, y) <= (radius < 0 ? Settings.interactionRadius : radius);
-        private bool HasTool(ItemId tool) => Carry.Count(tool) + Warehouse.Count(tool) > 0;
-        public static bool IsOwnedGround(int x, int y) =>
-            (x >= 10 && x < 28 && y >= 3 && y < 21) || (x >= 1 && x <= 8 && y >= 5 && y <= 10);
-        private static bool InBuilding(int x, int y, int bx, int by, int width = 2, int height = 2) =>
-            x >= bx && x < bx + width && y >= by && y < by + height;
-        public static bool IsReservedCell(int x, int y) =>
-            InBuilding(x, y, BenchX, BenchY) || InBuilding(x, y, TableX, TableY) ||
-            InBuilding(x, y, DismantleX, DismantleY) || InBuilding(x, y, GeneratorX, GeneratorY) ||
-            InBuilding(x, y, WarehouseX - 1, WarehouseY - 1, 3, 3) ||
-            InBuilding(x, y, HousingX - 1, HousingY - 1, 3, 3);
-
-        public void SetPaused(bool paused) { Paused = paused; RefreshState(); }
-        public void SetSpeed(int speed)
+        public static double Distance(double ax,double ay,double bx,double by){double dx=ax-bx,dy=ay-by;return Math.Sqrt(dx*dx+dy*dy);}
+        private bool Near(int x,int y,double radius=-1)=>Distance(PlayerX,PlayerY,x,y)<=(radius<0?Settings.interactionRadius:radius);
+        public static bool IsOwnedGround(int x,int y)=>(x>=10&&x<=27&&y>=6&&y<=23)||(x>=0&&x<=7&&y>=6&&y<=11);
+        private static bool InBuilding(int x,int y,int bx,int by,int width=2,int height=2)=>x>=bx&&x<bx+width&&y>=by&&y<by+height;
+        public static bool IsReservedCell(int x,int y)=>InBuilding(x,y,11,2,3,3)||InBuilding(x,y,16,2,3,3)||InBuilding(x,y,2,20)||(x==20&&y==5);
+        private bool Occupied(int x,int y)=>IsReservedCell(x,y)||!IsWalkable(x,y);
+        public void SetPaused(bool value){Paused=value;RefreshState();}
+        public void SetSpeed(int speed){if(speed<1||speed>3)throw new ArgumentOutOfRangeException(nameof(speed));Speed=speed;}
+        public void MovePlayer(double hx,double hy,double seconds)
         {
-            if (speed != 1 && speed != 2 && speed != 4) throw new ArgumentOutOfRangeException(nameof(speed));
-            Speed = speed;
-        }
-        public void MovePlayer(double horizontal, double vertical, double realSeconds)
-        {
-            if (Paused || realSeconds <= 0) return;
-            double length = Math.Sqrt(horizontal * horizontal + vertical * vertical);
-            if (length > 1) { horizontal /= length; vertical /= length; }
-            PlayerX = Math.Max(0.5, Math.Min(Settings.mapWidth - 1.5, PlayerX + horizontal * Settings.moveSpeed * realSeconds * Speed));
-            PlayerY = Math.Max(0.5, Math.Min(Settings.mapHeight - 1.5, PlayerY + vertical * Settings.moveSpeed * realSeconds * Speed));
-        }
-        public GroundPile NearestPickup()
-        {
-            GroundPile nearest = null;
-            double best = Settings.interactionRadius + 0.0001;
-            foreach (GroundPile pile in ground)
+            if(Paused||seconds<=0||hx==0&&hy==0)return;
+            CancelInteraction();manualStation=0;
+            if(Math.Abs(hx)>=Math.Abs(hy))hy=0;else hx=0;
+            double amount=Settings.moveSpeed*seconds*Speed;
+            while(amount>0)
             {
-                double distance = Distance(PlayerX, PlayerY, pile.X, pile.Y);
-                if (distance < best) { nearest = pile; best = distance; }
+                double step=Math.Min(0.1,amount),x=PlayerX+Math.Sign(hx)*step,y=PlayerY+Math.Sign(hy)*step;
+                if(!IsWalkable((int)Math.Floor(x+0.5),(int)Math.Floor(y+0.5)))break;
+                PlayerX=x;PlayerY=y;amount-=step;
             }
-            return nearest;
+            ReleaseUnusedTools();RefreshState();
         }
-        public ActionResult PickUp(int requested = 1, ItemId? selected = null)
+        public GroundPile NearestPickup()=>ground.Where(p=>p.Amount>p.Reserved&&Distance(PlayerX,PlayerY,p.X,p.Y)<=Settings.interactionRadius)
+            .OrderBy(p=>Distance(PlayerX,PlayerY,p.X,p.Y)).ThenBy(p=>p.Id).FirstOrDefault();
+        public ActionResult BuildBench()=>Build(1,BenchBuilt,new ItemAmount(ItemId.WasteWood,4),new ItemAmount(ItemId.RecoveredFastener,2));
+        public ActionResult BuildDismantle()=>Build(2,DismantleBuilt,new ItemAmount(ItemId.WasteWood,4),new ItemAmount(ItemId.RecoveredFastener,2));
+        public ActionResult BuildTable()=>Build(4,TableBuilt,new ItemAmount(ItemId.Plank,4),new ItemAmount(ItemId.SteelPart,2));
+        public ActionResult BuildGenerator()=>Build(8,GeneratorBuilt,new ItemAmount(ItemId.SteelPart,6),new ItemAmount(ItemId.ThermalModule,1),new ItemAmount(ItemId.GeneratorModule,1),new ItemAmount(ItemId.RecoveredWire,2));
+        private ActionResult Build(int flag,bool built,params ItemAmount[] costs)
         {
-            if (Paused) return Fail("恢复运行后再拾取。");
-            GroundPile pile = selected == null ? NearestPickup() : ground.Where(p => p.Item == selected.Value &&
-                Distance(PlayerX, PlayerY, p.X, p.Y) <= Settings.interactionRadius).OrderBy(p => Distance(PlayerX, PlayerY, p.X, p.Y)).FirstOrDefault();
-            if (pile == null) return Fail("靠近地上的物品后按E拾取。");
-            int amount = Math.Min(Math.Min(Math.Max(0, requested), pile.Amount), Carry.AvailableSlots(pile.Item));
-            if (amount == 0) return Fail("背包容量不足，先入库。");
-            Carry.TryAdd(pile.Item, amount); pile.Amount -= amount;
-            groundCapacity[(pile.X, pile.Y)] = CellTicks(pile.X, pile.Y) - amount * ItemCatalog.CapacityTicks(pile.Item);
-            if (pile.Amount == 0) ground.Remove(pile);
-            GroundRevision++; RefreshState();
-            return Ok("已拾取，物品进入背包。", amount);
+            if(built||(pendingBuildings&flag)!=0)return Fail("已经建成或规划。");
+            if(manualStation!=0&&!residents.Any(r=>r.Job==WorkerJob.Idle&&r.Delivery==null))return Fail("缺空闲建设人员，请先退出岗位。");
+            if(flag==4 && (!discovered.Contains(ItemId.Plank)||!discovered.Contains(ItemId.SteelPart)))return Fail("首次取得木板和钢铁零件后解锁工作台。");
+            if(flag==8&&!discovered.Contains(ItemId.SteelPart))return Fail("先取得钢铁零件以解锁发电机。");
+            int x=flag==1?BenchX:flag==2?DismantleX:flag==4?TableX:GeneratorX,y=flag==1?BenchY:flag==2?DismantleY:flag==4?TableY:GeneratorY;
+            for(int px=x;px<x+2;px++)for(int py=y+1;py<y+3;py++)if(CellTicks(px,py)>0)return Fail("建设位置有地面物品，先清理。");
+            var tokens=new List<(UnitInventory,int)>();
+            foreach(var cost in costs)
+            {
+                int fromCarry=Math.Min(cost.Amount,Carry.Available(cost.Item)),fromWarehouse=cost.Amount-fromCarry;
+                if(Warehouse.Available(cost.Item)<fromWarehouse){foreach(var token in tokens)token.Item1.Release(token.Item2);return Fail("背包及仓库材料不足。");}
+                if(fromCarry>0)tokens.Add((Carry,Carry.Reserve(new ItemAmount(cost.Item,fromCarry))));
+                if(fromWarehouse>0)tokens.Add((Warehouse,Warehouse.Reserve(new ItemAmount(cost.Item,fromWarehouse))));
+            }
+            blueprints[flag]=tokens;pendingBuildings|=flag;
+            if(!Paused)CompleteBuildings();
+            RefreshState();return Ok(Paused?"已预约材料，恢复后建成；取消可全释放。":"建设完成。");
         }
-        public ActionResult Deposit()
+        public ActionResult CancelBlueprints()
         {
-            if (Paused || !NearWarehouse) return Fail("恢复运行并靠近仓库后入库。");
-            int moved = 0;
-            foreach (ItemId item in Enum.GetValues(typeof(ItemId)))
-                if (item != ItemId.WoodHandSaw) moved += Carry.TransferTo(Warehouse, item, Carry.Count(item));
-            RefreshState();
-            return moved > 0 ? Ok("已入库，手锯随身保留。", moved) : Fail("仓库容量不足或背包没有待入库物品。");
-        }
-        public ActionResult Withdraw(ItemId item, int requested = 1)
-        {
-            if (Paused || !NearWarehouse) return Fail("恢复运行并靠近仓库后取出。");
-            int moved = Warehouse.TransferTo(Carry, item, requested); RefreshState();
-            return moved > 0 ? Ok("已取出。", moved) : Fail("库存不足或背包容量不足。");
-        }
-        public ActionResult Drop(ItemId item)
-        {
-            if (Paused || Carry.Count(item) == 0) return Fail("恢复运行并确认背包有该物品。");
-            if (!FindGroundSpace(item, (int)Math.Round(PlayerX), (int)Math.Round(PlayerY), out GroundPile pile, out int x, out int y, 2.5))
-                return Fail("附近没有普通堆放空间，物品保留在背包。");
-            Place(item, 1, pile, x, y); Carry.TryRemove(item, 1); RefreshState();
-            return Ok("已放下。", 1);
-        }
-
-        public ActionResult BuildBench() => Build(1, BenchBuilt, new ItemAmount(ItemId.WasteWood, Settings.benchWoodCost), new ItemAmount(ItemId.RecoveredFastener, Settings.benchFastenerCost));
-        public ActionResult BuildDismantle() => Build(2, DismantleBuilt, new ItemAmount(ItemId.WasteWood, 4), new ItemAmount(ItemId.RecoveredFastener, 2));
-        public ActionResult BuildTable() => Build(4, TableBuilt, new ItemAmount(ItemId.Plank, 4), new ItemAmount(ItemId.SteelPart, 2));
-        public ActionResult BuildGenerator()
-        {
-            if (!TableBuilt) return Fail("先建通用工作台，再组装发电机。");
-            return Build(8, GeneratorBuilt, new ItemAmount(ItemId.SteelPart, 6), new ItemAmount(ItemId.ThermalModule, 1),
-                new ItemAmount(ItemId.GeneratorModule, 1), new ItemAmount(ItemId.RecoveredWire, 2));
-        }
-        private ActionResult Build(int flag, bool built, params ItemAmount[] costs)
-        {
-            if (built || (pendingBuildings & flag) != 0) return Fail("已经建成或预留蓝图。");
-            bool idlePerson = !(State == WorkState.Working && NearBench && !WorkerAtBench) && DismantleState != WorkState.Working;
-            if (!idlePerson && !residents.Exists(r => r.Job == WorkerJob.Idle)) return Fail("缺空闲建设人，请先停工。");
-            if (!Warehouse.TryConsume(costs)) return Fail("建设材料不足，请将所需材料入库。");
-            pendingBuildings |= flag;
-            if (!Paused) CompleteBuildings();
-            RefreshState(); return Ok(Paused ? "材料已预留，恢复后建成。" : "建设完成。");
+            foreach(var list in blueprints.Values)foreach(var token in list)token.inventory.Release(token.token);
+            blueprints.Clear();pendingBuildings=0;return Ok("蓝图已取消，预约全部释放。");
         }
         private void CompleteBuildings()
         {
-            if ((pendingBuildings & 1) != 0) BenchBuilt = true;
-            if ((pendingBuildings & 2) != 0) DismantleBuilt = true;
-            if ((pendingBuildings & 4) != 0) TableBuilt = true;
-            if ((pendingBuildings & 8) != 0) GeneratorBuilt = true;
-            pendingBuildings = 0;
+            if(pendingBuildings==0)return;
+            foreach(var list in blueprints.Values)foreach(var token in list)token.inventory.Commit(token.token);
+            if((pendingBuildings&1)!=0)BenchBuilt=true;if((pendingBuildings&2)!=0)DismantleBuilt=true;if((pendingBuildings&4)!=0)TableBuilt=true;if((pendingBuildings&8)!=0)GeneratorBuilt=true;
+            blueprints.Clear();pendingBuildings=0;geometryRevision++;GroundRevision++;
         }
         public ActionResult SelectRecipe(WoodRecipe recipe)
         {
-            if (!Enum.IsDefined(typeof(WoodRecipe), recipe)) throw new ArgumentOutOfRangeException(nameof(recipe));
-            if (jobActive) return Fail("当前批次完成后再切换。");
-            TransferOutputs();
-            if (Output.UsedTicks > 0) return Fail("旧配方输出未清空，请先腾仓库空间。");
-            Output.SetCapacity(recipe == WoodRecipe.Plank ? Settings.outputCapacity : (int)Math.Ceiling(BatchTicks(recipe) * 2 / 20.0));
-            SelectedRecipe = recipe; RefreshState(); return Ok("已切换配方。");
+            if(!Enum.IsDefined(typeof(WoodRecipe),recipe))throw new ArgumentOutOfRangeException(nameof(recipe));
+            pendingRecipe=recipe;ApplyRecipeChanges();RefreshState();return Ok(pendingRecipe!=null?"配方已排队：先完成当前批次，并实际清出旧缓冲。":"已切换配方。");
+        }
+        public ActionResult SelectDevice(ItemId item)
+        {
+            if(!ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))return Fail("选择可拆设备。");
+            pendingDevice=item;ApplyRecipeChanges();RefreshState();return Ok(pendingDevice!=null?"拆解模板排队，完成后先搬走旧缓冲。":"拆解配方已选择。");
+        }
+        private void ApplyRecipeChanges()
+        {
+            if(pendingRecipe!=null&&!jobActive&&Output.UsedTicks==0)
+            {
+                int capacity=pendingRecipe==WoodRecipe.WoodHandle?4:8;
+                if(WoodInputStock.Used<=capacity){SelectedRecipe=pendingRecipe.Value;WoodInputStock.SetCapacity(capacity);Output.SetCapacity(SelectedRecipe==WoodRecipe.WoodHandle?4:8);pendingRecipe=null;}
+            }
+            if(pendingDevice!=null&&!dismantleActive&&DismantleInput.UsedTicks==0&&DismantleOutput.UsedTicks==0)
+            {
+                SelectedDevice=pendingDevice.Value;int ticks=ItemCatalog.DeviceYield(SelectedDevice).Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item));DismantleOutput.SetCapacity((int)Math.Ceiling(ticks*2/20.0));pendingDevice=null;
+            }
         }
         public ActionResult ToggleWork()
         {
-            if (!BenchBuilt) return Fail("先搭建木工台。");
-            RunRequested = !RunRequested; RefreshState();
-            return Ok(RunRequested ? "连续木工已开启，主角或指定居民到岗后作业。" : "木工已停，保留进度和投入。");
+            if(!BenchBuilt)return Fail("先建木工地点。");
+            if(NearBench){manualStation=manualStation==1?0:1;RunRequested=true;ReleaseUnusedTools();RefreshState();return Ok(manualStation==1?"主角进入木工岗位。":"主角退出，投入及进度保留。");}
+            RunRequested=!RunRequested;RefreshState();return Ok(RunRequested?"木工请求已开启。":"木工请求已停。");
         }
         public ActionResult ToggleDismantle()
         {
-            if (!DismantleBuilt) return Fail("先搭建拆解台。");
-            DismantleRequested = !DismantleRequested; RefreshState();
-            return Ok(DismantleRequested ? "靠近拆解台，用螺丝刀拆解废旧电机。" : "拆解已停，保留进度和投入。");
+            if(!DismantleBuilt)return Fail("先建拆解地点。");
+            DismantleRequested=!DismantleRequested;manualStation=DismantleRequested&&Near(DismantleX,DismantleY)?2:0;ReleaseUnusedTools();RefreshState();return Ok("拆解请求已调整。");
         }
-        public ActionResult AddFuel(ItemId item, int requested = 1)
+        public ActionResult CancelBatch(bool dismantle=false)
         {
-            if (!GeneratorBuilt || Paused || !NearGenerator) return Fail("恢复运行并靠近已建发电机后补燃料。");
-            if (item != ItemId.WasteWood && item != ItemId.WoodChips) return Fail("只接受废木料和碎屑。");
-            int moved = Math.Min(Math.Min(Math.Max(0, requested), Carry.Count(item)), 10 - FuelCount);
-            if (moved <= 0) return Fail("背包缺燃料或燃料缓冲已满。");
-            Carry.TryRemove(item, moved);
-            if (item == ItemId.WasteWood) fuelWood += moved; else fuelChips += moved;
-            Ignite(); return Ok("燃料已送入，发电机自行运行。", moved);
+            if(dismantle)
+            {
+                if(dismantleProgress>=35-0.000001&&dismantleActive)return Fail("已完成待出料的批次不能退同批原料。");
+                if(dismantleActive)DismantleInput.Release(dismantleToken);dismantleActive=false;dismantleProgress=0;DismantleRequested=false;
+            }
+            else
+            {
+                if(jobActive&&jobProgress>=Duration(activeRecipe)-0.000001)return Fail("已完成待出料的批次不能退同批原料。");
+                if(jobActive)WoodInputStock.Release(woodToken);jobActive=false;jobProgress=0;RunRequested=false;
+            }
+            manualStation=0;ReleaseUnusedTools();RefreshState();return Ok("在制预约释放，进度清零；已用人时不返还。");
         }
         private void Ignite()
         {
-            if (fuelRemaining > 0 || !GeneratorBuilt) return;
-            if (GeneratorResidue.FreeTicks < 20 && equivalentHeat >= 20 - 0.000001) return;
-            if (fuelWood > 0) { fuelWood--; fuelRemaining = Settings.woodFuelSeconds; activeFuelHeatRate = 1.0 / Settings.woodFuelSeconds; }
-            else if (fuelChips > 0) { fuelChips--; fuelRemaining = Settings.chipsFuelSeconds; activeFuelHeatRate = 0.5 / Settings.chipsFuelSeconds; }
-            else return;
-            HasBeenPowered = true;
-        }
-        public ActionResult TakeAsh()
-        {
-            if (Paused || !NearGenerator) return Fail("恢复运行并靠近发电机后取灰渣。");
-            int moved = GeneratorResidue.TransferTo(Carry, ItemId.PowerAsh, int.MaxValue);
-            return moved > 0 ? Ok("灰渣进入背包，占容量但不计地面压力。", moved) : Fail("无灰渣或背包已满。");
+            if(fuelRemaining>0||!GeneratorBuilt)return;
+            if(GeneratorResidue.FreeTicks<20&&equivalentHeat>=20-0.000001)return;
+            if(fuelWood>0){fuelWood--;fuelRemaining=Settings.woodFuelSeconds;activeFuelHeatRate=1.0/Settings.woodFuelSeconds;}
+            else if(fuelChips>0){fuelChips--;fuelRemaining=Settings.chipsFuelSeconds;activeFuelHeatRate=0.5/Settings.chipsFuelSeconds;}else return;
+            HasBeenPowered=true;
         }
         public ActionResult Recruit()
         {
-            if (!HasBeenPowered) return Fail("先完成发电机并实际补料发电，获得认可。");
-            if (residents.Count >= Settings.firstResidents || residents.Count + 1 >= Settings.housingCapacity)
-                return Fail("旧住房已达到首批招募容量；新住房将在后续阶段接入。");
-            if (residents.Count == 0) nextWage = GameSeconds + Settings.wageSeconds;
-            residents.Add(new Resident(residents.Count + 1));
-            return Ok("居民已加入，自带5钱；仅免招募费，每600秒工资10钱。");
+            if(!HasBeenPowered)return Fail("先实际发电取得认可。");
+            if(residents.Count>=Settings.firstResidents)return Fail("旧住房满，请在后续住房阶段扩员。");
+            if(residents.Count==0)nextWage=GameSeconds+Settings.wageSeconds;
+            residents.Add(new Resident(residents.Count+1));return Ok("居民加入：迁入存款5，周期工资10。");
         }
         public ActionResult AssignWoodworker()
         {
-            Resident assigned = Woodworker;
-            if (assigned != null) { assigned.Job = WorkerJob.Idle; RefreshState(); return Ok("木工居民已释放。"); }
-            Resident idle = residents.Find(r => r.Job == WorkerJob.Idle);
-            if (idle == null) return Fail("没有空闲居民。");
-            idle.Job = WorkerJob.Woodwork; RefreshState();
-            return Ok("已指定居民，步行到木工台后开始作业。");
+            var worker=Woodworker;if(worker!=null){worker.Job=WorkerJob.Idle;RefreshState();return Ok("取消木工指定，已携货仍会送达。");}
+            worker=residents.FirstOrDefault(r=>r.Job==WorkerJob.Idle);
+            if(worker==null)return Fail("没有可分配居民。");
+            worker.Job=WorkerJob.Woodwork;RefreshState();return Ok("居民完成当前搬运后到木工正面；请交接手锯。");
         }
         public ActionResult PayWages()
         {
@@ -305,203 +265,106 @@ namespace CrazyRubbish.Core
 
         public double SalePrice(ItemId item)
         {
-            if (item == ItemId.Plank) return Math.Max(1, Settings.plankPrice * Math.Exp(-salesPressure[(int)item] / 100));
-            if (item == ItemId.WoodHandle) return Math.Max(0.7, Settings.handlePrice * Math.Exp(-salesPressure[(int)item] / 100));
-            return 0;
+            var price=ItemCatalog.Price(item);return MinimumPriceOnly(item)?(double)price.minimum:Math.Max((double)price.minimum,(double)price.sale*Math.Exp(-salesPressure[(int)item]/100));
         }
         public ActionResult Sell(ItemId item, int requested)
         {
-            if (item != ItemId.Plank && item != ItemId.WoodHandle) return Fail("当前只接入木板和木柄外销。");
-            int amount = Math.Min(Math.Max(0, requested), Warehouse.Count(item));
+            if (ItemCatalog.Price(item).sale<=0) return Fail("此物品没有前期出售渠道。");
+            int amount = Math.Min(Math.Max(0, requested), Warehouse.Available(item));
             if (amount == 0) return Fail("仓库没有该成品。");
             decimal receipt = saleRemainderCents;
-            for (int i = 0; i < amount; i++) { receipt += (decimal)SalePrice(item) * 100; salesPressure[(int)item] += 1; }
+            for (int i = 0; i < amount; i++) { receipt += (decimal)SalePrice(item) * 100 * SaleDurabilityFactor(item, i); salesPressure[(int)item] += 1; }
             long earned = (long)decimal.Floor(receipt);
             saleRemainderCents = receipt - earned;
             Warehouse.TryRemove(item, amount); cashCents += earned; TotalSold += amount; RefreshState();
+            if(ItemCatalog.IsTool(item))foreach(var tool in tools.Where(t=>t.Item==item&&t.Location=="warehouse"&&t.ReservedBy==0).OrderBy(t=>t.Id).Take(amount).ToArray())tools.Remove(tool);
             return Ok($"出售{amount}，获得{earned / 100m:0.00}钱。", amount);
         }
 
-        public int NearbyPressureTiles => ground.Where(p => p.Item != ItemId.PowerAsh && Distance(p.X, p.Y, BenchX, BenchY) <= Settings.pressureRadius)
-            .Select(p => p.Y * Settings.mapWidth + p.X).Distinct().Count();
-        public float PressureAt(double cx, double cy)
-        {
-            var cacheKey = ((int)Math.Round(cx), (int)Math.Round(cy));
-            if (pressureCache.TryGetValue(cacheKey, out var cached) && cached.revision == GroundRevision) return cached.value;
-            cx = cacheKey.Item1; cy = cacheKey.Item2;
-            int available = 0;
-            for (int x = 0; x < Settings.mapWidth; x++)
-                for (int y = 0; y < Settings.mapHeight; y++)
-                    if (IsOwnedGround(x, y) && !IsReservedCell(x, y) && Distance(x, y, cx, cy) <= Settings.pressureRadius) available++;
-            var exposed = ground.Where(p => p.Item != ItemId.PowerAsh && Distance(p.X, p.Y, cx, cy) <= Settings.pressureRadius)
-                .GroupBy(p => p.Y * Settings.mapWidth + p.X).ToArray();
-            double ratio = available == 0 ? 0 : (double)exposed.Length / available;
-            double area = ratio <= 0.3 ? 1 : ratio <= 0.6 ? 1 - (ratio - 0.3) * 0.2 / 0.3 : 0.8 - (ratio - 0.6) * 0.2 / 0.4;
-            double excess = exposed.Sum(group => Math.Max(0, group.Sum(p => p.Amount * ItemCatalog.CapacityTicks(p.Item)) / 20.0 - Settings.pileCapacity));
-            double reference = exposed.Length * Settings.pileCapacity;
-            double overload = reference == 0 ? 1 : Math.Max(0.4, 1 / (1 + excess / reference));
-            float result = (float)Math.Max(Settings.minimumEfficiency, area * overload);
-            pressureCache[cacheKey] = (GroundRevision, result);
-            return result;
-        }
-        public float HumanEfficiency => (float)Math.Max(Settings.minimumEfficiency,
-            PressureAt(BenchX, BenchY) * (WorkerAtBench ? Math.Max(0.6, 1 - EquivalentUnpaidPeriods * 0.1) : 1));
-        public double Duration(WoodRecipe recipe) => recipe == WoodRecipe.Plank ? Settings.plankSeconds : Settings.handleSeconds;
-        public int ProductAmount(WoodRecipe recipe) => recipe == WoodRecipe.Plank ? Settings.plankOutput : Settings.handleOutput;
-        public ItemId Product(WoodRecipe recipe) => recipe == WoodRecipe.Plank ? ItemId.Plank : ItemId.WoodHandle;
-        public int WoodInput(WoodRecipe recipe) => recipe == WoodRecipe.Plank ? Settings.recipeWoodInput : Settings.handleWoodInput;
-        private int BatchTicks(WoodRecipe recipe) => ProductAmount(recipe) * ItemCatalog.CapacityTicks(Product(recipe)) + Settings.chipsOutput * 20;
 
-        public void Advance(double realSeconds)
+        public int NearbyPressureTiles=>ground.Where(p=>p.Item!=ItemId.PowerAsh&&Distance(p.X,p.Y,BenchX,BenchY)<=4).Select(p=>(p.X,p.Y)).Distinct().Count();
+        public float PressureAt(double cx,double cy)
         {
-            if (double.IsNaN(realSeconds) || double.IsInfinity(realSeconds) || realSeconds < 0) throw new ArgumentOutOfRangeException(nameof(realSeconds));
-            if (Paused) { RefreshState(); return; }
-            accumulatedTime += realSeconds * Speed;
-            while (accumulatedTime + 0.00000001 >= Step)
+            var key=((int)Math.Round(cx),(int)Math.Round(cy));
+            if(pressureCache.TryGetValue(key,out var value)&&value.revision==GroundRevision)return value.value;
+            int cells=0,exposed=0;double excess=0;
+            for(int x=0;x<Settings.mapWidth;x++)for(int y=0;y<Settings.mapHeight;y++)
             {
-                accumulatedTime -= Step; GameSeconds += Step;
-                CompleteBuildings();
-                double recovery = Math.Exp(-Math.Log(2) * Step / 600);
-                for (int i = 0; i < salesPressure.Length; i++) salesPressure[i] *= recovery;
-                if (fuelRemaining > 0 && (equivalentHeat < 20 - 0.000001 || GeneratorResidue.FreeTicks >= 20))
+                if(!IsOwnedGround(x,y)||Occupied(x,y)||Distance(x,y,key.Item1,key.Item2)>4)continue;cells++;
+                int ticks=ground.Where(p=>p.Item!=ItemId.PowerAsh&&p.Y==y&&x>=p.X&&x<p.X+p.Width).Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item)/p.Width);
+                if(ticks>0){exposed++;excess+=Math.Max(0,ticks/20.0-5);}
+            }
+            double ratio=cells==0?0:(double)exposed/cells;
+            double area=ratio<=0.3?1:ratio<=0.6?1-(ratio-0.3)*0.2/0.3:0.8-(ratio-0.6)*0.2/0.4;
+            double overload=exposed==0?1:Math.Max(0.4,1/(1+excess/(exposed*5)));
+            float result=(float)Math.Max(0.25,area*overload);pressureCache[key]=(GroundRevision,result);return result;
+        }
+        public float HumanEfficiency=>(float)DesignRules.HumanEfficiency(1,0,70,WorkerAtBench?EquivalentUnpaidPeriods:0,1,1,PressureAt(BenchX,BenchY),1);
+        public double Duration(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?40:recipe==WoodRecipe.WoodHandle?30:10;
+        public int ProductAmount(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?3:recipe==WoodRecipe.WoodHandle?2:4;
+        public ItemId Product(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?ItemId.Plank:recipe==WoodRecipe.WoodHandle?ItemId.WoodHandle:ItemId.SortedWood;
+        public int WoodInput(WoodRecipe recipe)=>recipe==WoodRecipe.WoodHandle?2:4;
+        private ItemAmount[] WoodProducts(WoodRecipe recipe)=>recipe==WoodRecipe.SortedWood?new[]{new ItemAmount(ItemId.SortedWood,4)}:new[]{new ItemAmount(Product(recipe),ProductAmount(recipe)),new ItemAmount(ItemId.WoodChips,1)};
+        private int BatchTicks(WoodRecipe recipe)=>WoodProducts(recipe).Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item));
+        public void Advance(double seconds)
+        {
+            if(double.IsNaN(seconds)||double.IsInfinity(seconds)||seconds<0)throw new ArgumentOutOfRangeException(nameof(seconds));
+            if(Paused){RefreshState();return;}accumulatedTime+=seconds*Speed;
+            while(accumulatedTime+0.00000001>=Step)
+            {
+                accumulatedTime-=Step;GameSeconds+=Step;CompleteBuildings();TickInteraction(Step);
+                for(int i=0;i<salesPressure.Length;i++)salesPressure[i]*=Math.Exp(-Math.Log(2)*Step/600);
+                if(fuelRemaining>0&&(equivalentHeat<20-0.000001||GeneratorResidue.FreeTicks>=20))
+                {double burned=Math.Min(Step,fuelRemaining);fuelRemaining=Math.Max(0,fuelRemaining-burned);if(fuelRemaining<1e-8)fuelRemaining=0;equivalentHeat+=burned*activeFuelHeatRate;}
+                if(equivalentHeat>=20-0.000001&&GeneratorResidue.TryAdd(ItemId.PowerAsh,1))equivalentHeat=Math.Max(0,equivalentHeat-20);Ignite();
+                if(residents.Count>0&&GameSeconds+1e-6>=nextWage){bills.Add(new WageBill(residents.Select(r=>r.Id).ToArray(),1000,nextWage));nextWage+=600;}
+                TickResidents(Step);
+                if(Settings.automaticInput){inputTimer+=Step;while(inputTimer>=nextInput){inputTimer-=nextInput;GenerateInput(nextInput);nextInput=RandomInputInterval();}}
+                RefreshState();
+                if(State==WorkState.Working)
                 {
-                    double burned = Math.Min(Step, fuelRemaining);
-                    fuelRemaining = Math.Max(0, fuelRemaining - burned);
-                    if (fuelRemaining < 0.00000001) fuelRemaining = 0;
-                    equivalentHeat += burned * activeFuelHeatRate;
+                    if(!jobActive){woodToken=WoodInputStock.Reserve(new ItemAmount(ItemId.WasteWood,WoodInput(SelectedRecipe)));jobActive=true;activeRecipe=SelectedRecipe;jobProgress=0;woodToolId=SelectedRecipe==WoodRecipe.SortedWood?0:ToolFor(1,ItemId.WoodHandSaw)?.Id??0;var tool=tools.FirstOrDefault(t=>t.Id==woodToolId);if(tool!=null)tool.UsingAt=1;}
+                    jobProgress=Math.Min(Duration(activeRecipe),jobProgress+Step*HumanEfficiency);
                 }
-                if (equivalentHeat >= 20 - 0.000001 && GeneratorResidue.TryAdd(ItemId.PowerAsh, 1)) equivalentHeat = Math.Max(0, equivalentHeat - 20);
-                Ignite();
-                if (residents.Count > 0 && GameSeconds + 0.000001 >= nextWage)
+                if(jobActive&&jobProgress+1e-6>=Duration(activeRecipe)&&Output.FreeTicks>=BatchTicks(activeRecipe)&&CanWear(woodToolId,WoodInput(activeRecipe)))
                 {
-                    bills.Add(new WageBill(residents.Select(r => r.Id).ToArray(), (long)Math.Round(Settings.wagePerResident * 100), nextWage));
-                    nextWage += Settings.wageSeconds;
+                    WoodInputStock.Commit(woodToken);Output.TryAddBatch(WoodProducts(activeRecipe));DiscoverProducts(WoodProducts(activeRecipe));
+                    WearTool(woodToolId,WoodInput(activeRecipe));jobActive=false;jobProgress=0;CompletedBatches++;woodToolId=0;
                 }
-                foreach (Resident resident in residents)
+                if(DismantleState==WorkState.Working)
                 {
-                    double tx = resident.Job == WorkerJob.Woodwork ? BenchX : HousingX;
-                    double ty = resident.Job == WorkerJob.Woodwork ? BenchY : HousingY;
-                    double distance = Distance(resident.X, resident.Y, tx, ty);
-                    double travel = Math.Min(distance, Settings.residentMoveSpeed * Step * PressureAt(resident.X, resident.Y));
-                    if (distance > 0) { resident.X += (tx - resident.X) / distance * travel; resident.Y += (ty - resident.Y) / distance * travel; }
+                    if(!dismantleActive){dismantleToken=DismantleInput.Reserve(new ItemAmount(SelectedDevice,1));dismantleActive=true;dismantleProgress=0;screwToolId=ToolFor(2,ItemId.Screwdriver)?.Id??0;wrenchToolId=ItemCatalog.NeedsWrench(SelectedDevice)?ToolFor(2,ItemId.Wrench)?.Id??0:0;var device=tools.FirstOrDefault(t=>t.Item==SelectedDevice&&t.Location=="dismantleInput");dismantleObjectId=device?.Id??0;dismantleUsable=device?.Usable??true;}
+                    dismantleProgress=Math.Min(35,dismantleProgress+Step*PressureAt(DismantleX,DismantleY));
                 }
-                if (Settings.automaticInput)
+                var products=ItemCatalog.DeviceYield(SelectedDevice,dismantleUsable);
+                if(dismantleActive&&dismantleProgress>=35-1e-6&&DismantleOutput.FreeTicks>=products.Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item))&&CanWearDismantleTools())
                 {
-                    inputTimer += Step;
-                    if (inputTimer >= nextInput)
-                    {
-                        inputTimer -= nextInput;
-                        double rate = GameSeconds < 600 ? 8 : GameSeconds < 1800 ? 12 : 12 * Math.Pow(1.25, 1 + Math.Floor((GameSeconds - 1800) / 1800));
-                        int count = Math.Max(1, (int)Math.Round(rate * nextInput / 60 * (0.75 + random.NextDouble() * 0.5)));
-                        ItemId item = random.NextDouble() < 0.635 ? ItemId.WasteWood : ItemId.MixedPlastic;
-                        // The full five-category item/instance pool is the next input milestone.
-                        AddNatural(item, count); SpawnedUnits += count; nextInput = RandomInputInterval();
-                    }
+                    DismantleInput.Commit(dismantleToken);DismantleOutput.TryAddBatch(products);DiscoverProducts(products);
+                    WearTool(screwToolId,1);WearTool(wrenchToolId,1);dismantleActive=false;dismantleProgress=0;DismantledBatches++;screwToolId=wrenchToolId=0;
+                    tools.RemoveAll(t=>t.Id==dismantleObjectId);dismantleObjectId=0;
                 }
-                TransferOutputs(); RefreshState();
-                if (State == WorkState.Working)
-                {
-                    if (!jobActive)
-                    {
-                        Warehouse.TryRemove(ItemId.WasteWood, WoodInput(SelectedRecipe));
-                        jobActive = true; activeRecipe = SelectedRecipe; jobProgress = 0;
-                    }
-                    jobProgress = Math.Min(Duration(activeRecipe), jobProgress + Step * HumanEfficiency);
-                    if (jobProgress + 0.00000001 >= Duration(activeRecipe) && Output.TryAddBatch(
-                        new ItemAmount(Product(activeRecipe), ProductAmount(activeRecipe)), new ItemAmount(ItemId.WoodChips, Settings.chipsOutput)))
-                    { jobActive = false; jobProgress = 0; CompletedBatches++; }
-                }
-                if (DismantleState == WorkState.Working)
-                {
-                    if (!dismantleActive) { Warehouse.TryRemove(ItemId.DamagedMotor, 1); dismantleActive = true; dismantleProgress = 0; }
-                    dismantleProgress = Math.Min(35, dismantleProgress + Step * PressureAt(DismantleX, DismantleY));
-                    if (dismantleProgress + 0.00000001 >= 35 && DismantleOutput.TryAddBatch(new ItemAmount(ItemId.SteelMaterial, 3), new ItemAmount(ItemId.CopperMaterial, 1)))
-                    { dismantleActive = false; dismantleProgress = 0; DismantledBatches++; }
-                }
-                TransferOutputs(); RefreshState();
+                ReleaseUnusedTools();RefreshState();
+                ApplyRecipeChanges();
             }
         }
-        private void TransferOutputs()
-        {
-            foreach (ItemId item in new[] { ItemId.Plank, ItemId.WoodHandle, ItemId.WoodChips })
-                Output.TransferTo(Warehouse, item, Output.Count(item));
-            foreach (ItemId item in new[] { ItemId.SteelMaterial, ItemId.CopperMaterial })
-                DismantleOutput.TransferTo(Warehouse, item, DismantleOutput.Count(item));
-        }
+        private void DiscoverProducts(ItemAmount[] products){foreach(var product in products)discovered.Add(product.Item);}
         private void RefreshState()
         {
-            if (!BenchBuilt) State = WorkState.NotBuilt;
-            else if (Paused) State = WorkState.Paused;
-            else if (!RunRequested) State = WorkState.Idle;
-            else if (Output.FreeTicks < BatchTicks(jobActive ? activeRecipe : SelectedRecipe)) State = WorkState.OutputBlocked;
-            else if (!NearBench && !WorkerAtBench) State = WorkState.NeedsOperator;
-            else if (!HasSaw) State = WorkState.NeedsTool;
-            else if (!jobActive && Warehouse.Count(ItemId.WasteWood) < WoodInput(SelectedRecipe)) State = WorkState.NeedsMaterials;
-            else State = WorkState.Working;
-            if (!DismantleBuilt) DismantleState = WorkState.NotBuilt;
-            else if (Paused) DismantleState = WorkState.Paused;
-            else if (!DismantleRequested) DismantleState = WorkState.Idle;
-            else if (DismantleOutput.FreeTicks < 80) DismantleState = WorkState.OutputBlocked;
-            else if (!Near(DismantleX, DismantleY)) DismantleState = WorkState.NeedsOperator;
-            else if (!HasTool(ItemId.Screwdriver)) DismantleState = WorkState.NeedsTool;
-            else if (!dismantleActive && Warehouse.Count(ItemId.DamagedMotor) == 0) DismantleState = WorkState.NeedsMaterials;
-            else DismantleState = WorkState.Working;
+            bool mainWood=manualStation==1&&AtFront(BenchX,BenchY),mainDismantle=manualStation==2&&AtFront(DismantleX,DismantleY);
+            if(!BenchBuilt)State=WorkState.NotBuilt;else if(Paused)State=WorkState.Paused;else if(!RunRequested)State=WorkState.Idle;
+            else if(pendingRecipe!=null&&!jobActive)State=WorkState.OutputBlocked;
+            else if(jobActive&&jobProgress>=Duration(activeRecipe)-1e-6||!jobActive&&Output.FreeTicks<BatchTicks(SelectedRecipe))State=WorkState.OutputBlocked;
+            else if(!mainWood&&!WorkerAtBench)State=WorkState.NeedsOperator;
+            else if((jobActive?activeRecipe:SelectedRecipe)!=WoodRecipe.SortedWood&&ToolFor(1,ItemId.WoodHandSaw)==null)State=WorkState.NeedsTool;
+            else if(!jobActive&&WoodInputStock.Available(ItemId.WasteWood)<WoodInput(SelectedRecipe))State=WorkState.NeedsMaterials;else State=WorkState.Working;
+            if(!DismantleBuilt)DismantleState=WorkState.NotBuilt;else if(Paused)DismantleState=WorkState.Paused;else if(!DismantleRequested)DismantleState=WorkState.Idle;
+            else if(pendingDevice!=null&&!dismantleActive)DismantleState=WorkState.OutputBlocked;
+            else if(dismantleActive&&dismantleProgress>=35-1e-6)DismantleState=WorkState.OutputBlocked;
+            else if(!mainDismantle)DismantleState=WorkState.NeedsOperator;
+            else if(ToolFor(2,ItemId.Screwdriver)==null||ItemCatalog.NeedsWrench(SelectedDevice)&&ToolFor(2,ItemId.Wrench)==null)DismantleState=WorkState.NeedsTool;
+            else if(!dismantleActive&&DismantleInput.Available(SelectedDevice)==0)DismantleState=WorkState.NeedsMaterials;else DismantleState=WorkState.Working;
         }
-
-        private double RandomInputInterval() => Settings.firstInputSeconds * (2.0 / 3.0 + random.NextDouble() * 2.0 / 3.0);
-        private void AddInitial(int x, int y, ItemId item, int count) => AddNatural(item, count, x, y);
-        private void AddNatural(ItemId item, int count, int centerX = DropX, int centerY = DropY)
-        {
-            while (count > 0)
-            {
-                if (FindGroundSpace(item, centerX, centerY, out GroundPile pile, out int x, out int y))
-                {
-                    int free = Math.Max(1, (Settings.pileCapacity * 20 - CellTicks(x, y)) / ItemCatalog.CapacityTicks(item));
-                    int placed = Math.Min(count, free);
-                    Place(item, placed, pile, x, y); count -= placed;
-                }
-                else
-                {
-                    GroundPile overflow = ground.Where(p => p.Item == item)
-                        .OrderBy(p => Distance(p.X, p.Y, centerX, centerY)).FirstOrDefault();
-                    if (overflow == null)
-                    {
-                        GroundPile cell = ground.OrderBy(p => Distance(p.X, p.Y, centerX, centerY)).First();
-                        Place(item, count, null, cell.X, cell.Y);
-                    }
-                    else Place(item, count, overflow, overflow.X, overflow.Y);
-                    count = 0;
-                }
-            }
-        }
-        private int CellTicks(int x, int y) => groundCapacity.TryGetValue((x, y), out int ticks) ? ticks : 0;
-        private bool FindGroundSpace(ItemId item, int centerX, int centerY, out GroundPile target,
-            out int x, out int y, double maximumDistance = double.MaxValue)
-        {
-            target = null; x = y = -1;
-            double best = maximumDistance;
-            for (int px = 0; px < Settings.mapWidth; px++)
-                for (int py = 0; py < Settings.mapHeight; py++)
-                {
-                    if (!IsOwnedGround(px, py) || IsReservedCell(px, py)) continue;
-                    double distance = Distance(centerX, centerY, px, py);
-                    if (distance > best) continue;
-                    int used = CellTicks(px, py);
-                    if (used > 0 && used + ItemCatalog.CapacityTicks(item) > Settings.pileCapacity * 20) continue;
-                    GroundPile existing = ground.Find(p => p.X == px && p.Y == py && p.Item == item);
-                    // Prefer a compatible stack; still allow different types to share remaining capacity.
-                    if (distance == best && x >= 0 && existing == null) continue;
-                    target = existing; x = px; y = py; best = distance;
-                }
-            return x >= 0;
-        }
-        private void Place(ItemId item, int amount, GroundPile target, int x, int y)
-        {
-            groundCapacity[(x, y)] = CellTicks(x, y) + amount * ItemCatalog.CapacityTicks(item);
-            if (target == null) ground.Add(new GroundPile(x, y, item, amount)); else target.Amount += amount;
-            GroundRevision++;
-        }
-        private static ActionResult Fail(string message) => new ActionResult(false, message);
-        private static ActionResult Ok(string message, int amount = 0) => new ActionResult(true, message, amount);
+        private static ActionResult Fail(string message)=>new ActionResult(false,message);
+        private static ActionResult Ok(string message,int amount=0)=>new ActionResult(true,message,amount);
     }
 }

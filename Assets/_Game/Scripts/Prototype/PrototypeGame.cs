@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using CrazyRubbish.Core;
 using UnityEngine;
 
@@ -14,6 +15,17 @@ namespace CrazyRubbish.Prototype
         public bool LastActionSucceeded { get; private set; } = true;
         public bool SmokeMode { get; private set; }
         private string sessionBalance;
+        private int interactionRevision;
+        private string saveSlot;
+        private int autoIndex;
+        private string SaveRoot
+        {
+            get
+            {
+                string[] arguments=Environment.GetCommandLineArgs();int index=Array.IndexOf(arguments,"-prototypeSaveDirectory");
+                return index>=0&&index+1<arguments.Length?Path.GetFullPath(arguments[index+1]):Path.Combine(Application.persistentDataPath,"Saves");
+            }
+        }
 
         private void Awake()
         {
@@ -31,6 +43,8 @@ namespace CrazyRubbish.Prototype
             Model = new PrototypeSimulation(settings, SmokeMode ? 4271 : Environment.TickCount);
             Notice = "先拾取手锯，再把木料和连接件送进仓库。";
             LastActionSucceeded = true;
+            interactionRevision = 0;
+            saveSlot = Guid.NewGuid().ToString("N"); autoIndex = 0;
         }
 
         private void Update()
@@ -40,21 +54,63 @@ namespace CrazyRubbish.Prototype
             if (Input.GetKeyDown(KeyCode.Space)) Model.SetPaused(!Model.Paused);
             if (Input.GetKeyDown(KeyCode.Alpha1)) Model.SetSpeed(1);
             if (Input.GetKeyDown(KeyCode.Alpha2)) Model.SetSpeed(2);
-            if (Input.GetKeyDown(KeyCode.Alpha4)) Model.SetSpeed(4);
+            if (Input.GetKeyDown(KeyCode.Alpha3)) Model.SetSpeed(3);
+            if (Input.GetKeyDown(KeyCode.Escape)) Model.LeaveManualRole();
             double x = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1 : 0)
                 - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1 : 0);
             double y = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) ? 1 : 0)
                 - (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) ? 1 : 0);
             Model.MovePlayer(x, y, delta);
-            if (Input.GetKeyDown(KeyCode.E)) Report(Model.PickUp(
-                Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ? int.MaxValue : 1));
+            if (Input.GetKeyDown(KeyCode.E)) Interact();
             if (Input.GetKeyDown(KeyCode.Q)) Report(Model.Deposit());
             if (Input.GetKeyDown(KeyCode.F)) Report(Model.ToggleWork());
             Model.Advance(delta);
+            if (interactionRevision != Model.InteractionRevision) { interactionRevision = Model.InteractionRevision; Report(Model.LastInteraction); }
+            if (Model.GameSeconds >= Model.NextAutosave && !Model.Interacting)
+            {
+                Model.NextAutosave += 300;
+                WriteSave("auto-" + autoIndex + ".json"); autoIndex = (autoIndex + 1) % 3;
+            }
         }
 
         public void Report(ActionResult result)
         { Notice = result.Message; LastActionSucceeded = result.Success; }
+
+        public void SaveGame()
+        {
+            if (Model.Interacting) { Report(new ActionResult(false,"请等待当前交互完成后保存。")); return; }
+            WriteSave("manual.json");
+        }
+        private void WriteSave(string name)
+        {
+            if (SmokeMode && Array.IndexOf(Environment.GetCommandLineArgs(),"-prototypeSaveDirectory")<0) return;
+            try
+            {
+                var snapshot=Model.Capture();snapshot.slot=saveSlot;snapshot.autoIndex=autoIndex;
+                string folder=Path.Combine(SaveRoot,saveSlot);
+                Directory.CreateDirectory(folder);string path=Path.Combine(folder,name),temporary=path+".tmp";
+                File.WriteAllText(temporary,JsonUtility.ToJson(snapshot,true));
+                if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
+                Report(new ActionResult(true,"存档已保存。"));
+            }
+            catch(Exception error){Report(new ActionResult(false,"保存失败："+error.Message));}
+        }
+        public void LoadLatest()
+        {
+            try
+            {
+                string rootPath=SaveRoot;
+                if(!Directory.Exists(rootPath)){Report(new ActionResult(false,"尚无存档。"));return;}
+                string[] paths=Directory.GetFiles(rootPath,"*.json",SearchOption.AllDirectories);
+                if(paths.Length==0){Report(new ActionResult(false,"尚无存档。"));return;}
+                Array.Sort(paths,(a,b)=>File.GetLastWriteTimeUtc(b).CompareTo(File.GetLastWriteTimeUtc(a)));
+                var snapshot=JsonUtility.FromJson<SimulationSnapshot>(File.ReadAllText(paths[0]));
+                if(snapshot.slot==null||!System.Text.RegularExpressions.Regex.IsMatch(snapshot.slot,@"^[a-f0-9]{32}$"))throw new InvalidOperationException("存档槽标识无效。");
+                Model=PrototypeSimulation.Restore(snapshot);saveSlot=snapshot.slot;autoIndex=snapshot.autoIndex;
+                interactionRevision=Model.InteractionRevision;Report(new ActionResult(true,"已读取最近存档，工资、预约和工具状态保留。"));
+            }
+            catch(Exception error){Report(new ActionResult(false,"读取失败："+error.Message));}
+        }
 
         public void SellAll()
         {
@@ -66,39 +122,30 @@ namespace CrazyRubbish.Prototype
             Report(new ActionResult(true, $"出售 {quantity} 件产品，获得 {Model.Money - previous:0.00} 金钱。"));
         }
 
-        public static string ItemName(ItemId item)
+        public void Interact()
         {
-            switch (item)
+            bool bulk = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            if (bulk) { Report(Model.PickUp(int.MaxValue)); return; }
+            if (Model.NearWarehouse && Model.Carry.Used > Model.Carry.Count(ItemId.WoodHandSaw)) { Report(Model.Deposit()); return; }
+            if (Model.NearBench && Model.BenchBuilt)
             {
-                case ItemId.WasteWood: return "废木料";
-                case ItemId.MixedPlastic: return "混杂塑料";
-                case ItemId.RecoveredFastener: return "连接件";
-                case ItemId.WoodHandSaw: return "木柄手锯";
-                case ItemId.Plank: return "木板";
-                case ItemId.WoodHandle: return "木柄";
-                case ItemId.WoodChips: return "木料碎屑";
-                case ItemId.SteelPart: return "钢铁零件";
-                case ItemId.CopperPart: return "铜零件";
-                case ItemId.RecoveredWire: return "回收电线";
-                case ItemId.ThermalModule: return "热动力组件";
-                case ItemId.GeneratorModule: return "发电组件";
-                case ItemId.Screwdriver: return "螺丝刀";
-                case ItemId.Wrench: return "扳手";
-                case ItemId.Hammer: return "锤子";
-                case ItemId.Scissors: return "剪刀";
-                case ItemId.SewingKit: return "针线工具";
-                case ItemId.Food: return "食物";
-                case ItemId.DrinkingWater: return "饮用水";
-                case ItemId.Soap: return "肥皂";
-                case ItemId.WasteTextile: return "废纺织物";
-                case ItemId.OldClothes: return "旧衣服";
-                case ItemId.DamagedMotor: return "损坏电机";
-                case ItemId.SteelMaterial: return "钢铁材料";
-                case ItemId.CopperMaterial: return "铜材料";
-                case ItemId.PowerAsh: return "发电灰渣";
-                default: return item.ToString();
+                if (Model.Carry.Available(ItemId.WasteWood)>0 && Model.WoodInputStock.FreeTicks>0) Report(Model.DeliverInput());
+                else if (Model.Output.UsedTicks>0) Report(Model.TakeOutput());
+                else Report(Model.ToggleWork());
+                return;
             }
+            if (Model.NearGenerator && Model.GeneratorBuilt)
+            { Report(Model.AddFuel(Model.Carry.Available(ItemId.WoodChips)>0?ItemId.WoodChips:ItemId.WasteWood,int.MaxValue)); return; }
+            if (Model.DismantleBuilt && PrototypeSimulation.Distance(Model.PlayerX, Model.PlayerY, PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY) <= Model.Settings.interactionRadius)
+            {
+                if (Model.Carry.Available(Model.SelectedDevice)>0) Report(Model.DeliverInput(true));
+                else if (Model.DismantleOutput.UsedTicks>0) Report(Model.TakeOutput(true));
+                else Report(Model.ToggleDismantle());
+                return;
+            }
+            Report(Model.PickUp());
         }
+        public static string ItemName(ItemId item) => ItemCatalog.Name(item);
 
         public static string StateName(WorkState state)
         {
@@ -109,7 +156,7 @@ namespace CrazyRubbish.Prototype
                 case WorkState.Paused: return "游戏暂停";
                 case WorkState.NeedsOperator: return "等待操作人员到岗";
                 case WorkState.NeedsTool: return "缺少对应工具";
-                case WorkState.NeedsMaterials: return "缺少原料 · 请搬进入库";
+                case WorkState.NeedsMaterials: return "缺少现场原料 · 请实际投料";
                 case WorkState.OutputBlocked: return "输出堵塞 · 仓库或内部容量已满";
                 default: return "正在手工锯切";
             }

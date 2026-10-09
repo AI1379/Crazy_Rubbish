@@ -5,9 +5,10 @@ namespace CrazyRubbish.Core
     [Serializable]
     public sealed class PrototypeSettings
     {
-        public int mapWidth = 30, mapHeight = 24;
+        public int mapWidth = 32, mapHeight = 28;
         public int carryCapacity = 8, warehouseCapacity = 80, outputCapacity = 8, pileCapacity = 5;
-        public float moveSpeed = 4.5f, residentMoveSpeed = 0.8f, interactionRadius = 1.7f;
+        public float moveSpeed = 0.8f, residentMoveSpeed = 0.8f, interactionRadius = 1.5f;
+        public float interactionSeconds = 0.5f;
         public int benchWoodCost = 4, benchFastenerCost = 2;
         public int recipeWoodInput = 4, handleWoodInput = 2, plankOutput = 3, handleOutput = 2, chipsOutput = 1;
         public float plankSeconds = 40f, handleSeconds = 30f;
@@ -23,13 +24,13 @@ namespace CrazyRubbish.Core
 
         public void Validate()
         {
-            if (mapWidth < 30 || mapHeight < 24 || mapWidth > 128 || mapHeight > 128)
-                throw new ArgumentException("起步白盒地图至少30×24，以容纳324格可建地及独立垃圾山。");
+            if (mapWidth < 32 || mapHeight < 28 || mapWidth > 128 || mapHeight > 128)
+                throw new ArgumentException("S5首区至少32×28，包含324格产权与独立社区区域。");
             int[] values = { carryCapacity, warehouseCapacity, outputCapacity, pileCapacity, benchWoodCost,
                 benchFastenerCost, recipeWoodInput, handleWoodInput, plankOutput, handleOutput, chipsOutput,
                 plankPrice, handlePrice, initialWood, initialFasteners, firstResidents, housingCapacity };
             foreach (int value in values) if (value <= 0 || value > 100000) throw new ArgumentException("配置数量必须为正数。");
-            float[] times = { moveSpeed, residentMoveSpeed, interactionRadius, plankSeconds, handleSeconds, pressureRadius,
+            float[] times = { moveSpeed, residentMoveSpeed, interactionRadius, interactionSeconds, plankSeconds, handleSeconds, pressureRadius,
                 firstInputSeconds, wageSeconds, wagePerResident, woodFuelSeconds, chipsFuelSeconds, generatorOutput };
             foreach (float value in times)
                 if (float.IsNaN(value) || float.IsInfinity(value) || value <= 0) throw new ArgumentException("时间和速度必须为有限正数。");

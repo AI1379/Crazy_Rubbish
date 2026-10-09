@@ -5,354 +5,278 @@ using CrazyRubbish.Prototype;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-
 namespace CrazyRubbish.Tests
 {
     public sealed class PrototypeRulesTests
     {
-        private static PrototypeSettings Settings() => new PrototypeSettings { automaticInput = false };
-        private static void MoveTo(PrototypeSimulation model, double x, double y)
+        private static PrototypeSimulation Fresh(bool input=false)=>new PrototypeSimulation(new PrototypeSettings{automaticInput=input});
+        private static void Move(PrototypeSimulation m,int x,int y)=>PrototypeStartingScenario.MoveTo(m,x,y);
+        private static void Act(PrototypeSimulation m,Func<ActionResult> action)=>PrototypeStartingScenario.Act(m,action);
+        private static void Collect(PrototypeSimulation m,ItemId item,int amount)=>PrototypeStartingScenario.Collect(m,item,amount);
+        private static PrototypeSimulation Ready(bool feed=true)
         {
-            double dx = x - model.PlayerX, dy = y - model.PlayerY;
-            double length = Math.Sqrt(dx * dx + dy * dy);
-            if (length > 0) model.MovePlayer(dx / length, dy / length, length / (model.Settings.moveSpeed * model.Speed));
-        }
-        private static PrototypeSimulation Ready(PrototypeSettings settings = null)
-        {
-            var model = new PrototypeSimulation(settings ?? Settings());
-            model.Warehouse.TryAdd(ItemId.WasteWood, model.Settings.benchWoodCost + model.Settings.recipeWoodInput * 2);
-            model.Warehouse.TryAdd(ItemId.RecoveredFastener, model.Settings.benchFastenerCost);
-            model.Carry.TryAdd(ItemId.WoodHandSaw, 1);
-            Assert.That(model.BuildBench().Success, Is.True);
-            MoveTo(model, PrototypeSimulation.BenchX, PrototypeSimulation.BenchY);
-            return model;
+            var m=Fresh();Collect(m,ItemId.WoodHandSaw,1);Collect(m,ItemId.RecoveredFastener,2);Collect(m,ItemId.WasteWood,12);
+            Assert.That(m.BuildBench().Success,Is.True);
+            if(feed)
+            {
+                while(m.WoodInputStock.Count(ItemId.WasteWood)<8)
+                {
+                    Move(m,PrototypeSimulation.WarehouseX,PrototypeSimulation.WarehouseY);Act(m,()=>m.Withdraw(ItemId.WasteWood,8-m.WoodInputStock.Count(ItemId.WasteWood)));
+                    Move(m,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);Act(m,()=>m.DeliverInput());
+                }
+            }
+            Move(m,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);return m;
         }
         private static PrototypeSimulation Powered()
         {
-            var model = Ready();
-            model.Warehouse.TryAdd(ItemId.Plank, 4);
-            model.Warehouse.TryAdd(ItemId.SteelPart, 8);
-            model.Warehouse.TryAdd(ItemId.ThermalModule, 1);
-            model.Warehouse.TryAdd(ItemId.GeneratorModule, 1);
-            model.Warehouse.TryAdd(ItemId.RecoveredWire, 2);
-            Assert.That(model.BuildTable().Success, Is.True);
-            Assert.That(model.BuildGenerator().Success, Is.True);
-            model.Carry.TryAdd(ItemId.WasteWood, 2);
-            MoveTo(model, PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY);
-            Assert.That(model.AddFuel(ItemId.WasteWood, 2).Success, Is.True);
-            return model;
+            var m=Ready(false);Collect(m,ItemId.SteelPart,6);Collect(m,ItemId.ThermalModule,1);Collect(m,ItemId.GeneratorModule,1);Collect(m,ItemId.RecoveredWire,2);
+            Assert.That(m.BuildGenerator().Success,Is.True);
+            Move(m,PrototypeSimulation.WarehouseX,PrototypeSimulation.WarehouseY);Act(m,()=>m.Withdraw(ItemId.WasteWood,2));
+            Move(m,PrototypeSimulation.GeneratorX,PrototypeSimulation.GeneratorY);Act(m,()=>m.AddFuel(ItemId.WasteWood,2));return m;
         }
-
-        [Test]
-        public void WeightedCapacityRejectsOverflowWithoutMutation()
+        private static PrototypeSimulation Roundtrip(PrototypeSimulation m)=>PrototypeSimulation.Restore(JsonUtility.FromJson<SimulationSnapshot>(JsonUtility.ToJson(m.Capture())));
+        [Test]public void WeightedCapacityAndOverflowAreExact()
         {
-            var inventory = new UnitInventory(3);
-            Assert.That(inventory.TryAdd(ItemId.WasteWood, 2), Is.True);
-            Assert.That(inventory.TryAdd(ItemId.Plank, 2), Is.False);
-            Assert.That(inventory.TryAdd(ItemId.Plank, -1), Is.False);
-            Assert.That(inventory.TryRemove(ItemId.WasteWood, 3), Is.False);
-            Assert.That(inventory.Used, Is.EqualTo(2));
-            Assert.That(inventory.TryAdd(ItemId.SteelPart, 2), Is.True);
-            Assert.That(inventory.Used, Is.EqualTo(3));
+            var s=new UnitInventory(8);Assert.That(s.TryAdd(ItemId.ThermalModule,1),Is.True);Assert.That(s.TryAdd(ItemId.DrinkingWater,40),Is.True);
+            Assert.That(s.UsedTicks,Is.EqualTo(160));Assert.That(s.TryAdd(ItemId.DrinkingWater,1),Is.False);Assert.That(s.TryRemove(ItemId.DrinkingWater,-1),Is.False);
         }
-        [Test]
-        public void WaterAndModulesUseExactCapacity()
+        [Test]public void ReservationDoesNotConsumeAndPreventsDoubleSpending()
         {
-            var inventory = new UnitInventory(8);
-            Assert.That(inventory.TryAdd(ItemId.ThermalModule, 1), Is.True);
-            Assert.That(inventory.TryAdd(ItemId.DrinkingWater, 40), Is.True);
-            Assert.That(inventory.UsedTicks, Is.EqualTo(160));
-            Assert.That(inventory.TryAdd(ItemId.DrinkingWater, 1), Is.False);
+            var s=new UnitInventory(10);s.TryAdd(ItemId.WasteWood,8);int token=s.Reserve(new ItemAmount(ItemId.WasteWood,4));
+            Assert.That(token,Is.Not.Zero);Assert.That(s.Count(ItemId.WasteWood),Is.EqualTo(8));Assert.That(s.Available(ItemId.WasteWood),Is.EqualTo(4));
+            Assert.That(s.TryRemove(ItemId.WasteWood,5),Is.False);Assert.That(s.Commit(token),Is.True);Assert.That(s.Count(ItemId.WasteWood),Is.EqualTo(4));Assert.That(s.Commit(token),Is.False);
         }
-        [Test]
-        public void MultiProductOutputIsAtomic()
+        [Test]public void CancellingReservationReturnsAvailabilityWithoutCreatingStock()
         {
-            var inventory = new UnitInventory(3);
-            Assert.That(inventory.TryAddBatch(new ItemAmount(ItemId.Plank, 3), new ItemAmount(ItemId.WoodChips, 1)), Is.False);
-            Assert.That(inventory.Used, Is.Zero);
+            var s=new UnitInventory(10);s.TryAdd(ItemId.WasteWood,4);int token=s.Reserve(new ItemAmount(ItemId.WasteWood,4));s.Release(token);
+            Assert.That(s.Count(ItemId.WasteWood),Is.EqualTo(4));Assert.That(s.Available(ItemId.WasteWood),Is.EqualTo(4));
         }
-        [Test]
-        public void BatchConsumptionAggregatesDuplicateCostsAtomically()
+        [Test]public void DuplicateCostsAndMultipleOutputsStayAtomic()
         {
-            var inventory = new UnitInventory(10);
-            inventory.TryAdd(ItemId.WasteWood, 4); inventory.TryAdd(ItemId.RecoveredFastener, 1);
-            Assert.That(inventory.TryConsume(new ItemAmount(ItemId.WasteWood, 3), new ItemAmount(ItemId.WasteWood, 2),
-                new ItemAmount(ItemId.RecoveredFastener, 1)), Is.False);
-            Assert.That(inventory.Count(ItemId.WasteWood), Is.EqualTo(4));
-            Assert.That(inventory.TryConsume(new ItemAmount(ItemId.WasteWood, 2), new ItemAmount(ItemId.WasteWood, 2),
-                new ItemAmount(ItemId.RecoveredFastener, 1)), Is.True);
-            Assert.That(inventory.Used, Is.Zero);
+            var s=new UnitInventory(4);s.TryAdd(ItemId.WasteWood,4);
+            Assert.That(s.Reserve(new ItemAmount(ItemId.WasteWood,3),new ItemAmount(ItemId.WasteWood,2)),Is.Zero);
+            var output=new UnitInventory(3);Assert.That(output.TryAddBatch(new ItemAmount(ItemId.Plank,3),new ItemAmount(ItemId.WoodChips,1)),Is.False);Assert.That(output.UsedTicks,Is.Zero);
         }
-        [Test]
-        public void PartialTransferPreservesRemainderAndUsesTargetItemWeight()
+        [Test]public void ReservedTransferWaitsForWholeDestinationCapacity()
         {
-            var source = new UnitInventory(10); var target = new UnitInventory(2);
-            source.TryAdd(ItemId.SteelPart, 5);
-            Assert.That(source.TransferTo(target, ItemId.SteelPart, 5), Is.EqualTo(4));
-            Assert.That(source.Count(ItemId.SteelPart), Is.EqualTo(1));
-            Assert.That(target.Count(ItemId.SteelPart), Is.EqualTo(4));
-            Assert.That(source.TransferTo(target, ItemId.SteelPart, 1), Is.Zero);
+            var source=new UnitInventory(8);source.TryAdd(ItemId.WasteWood,8);int token=source.Reserve(new ItemAmount(ItemId.WasteWood,8));
+            Assert.That(source.TransferReserved(token,new UnitInventory(7)),Is.False);Assert.That(source.Count(ItemId.WasteWood),Is.EqualTo(8));
+            var target=new UnitInventory(8);Assert.That(source.TransferReserved(token,target),Is.True);Assert.That(target.Count(ItemId.WasteWood),Is.EqualTo(8));
         }
-        [Test]
-        public void FullBackpackDoesNotRemoveGroundItems()
+        [Test]public void NewSceneAndFixedSourcesMatchS5()
         {
-            var model = new PrototypeSimulation(Settings());
-            model.Carry.TryAdd(ItemId.MixedPlastic, model.Carry.Capacity);
-            int before = model.Ground.Sum(p => p.Amount);
-            Assert.That(model.PickUp().Success, Is.False);
-            Assert.That(model.Ground.Sum(p => p.Amount), Is.EqualTo(before));
+            var m=Fresh();Assert.That(m.Settings.mapWidth,Is.EqualTo(32));Assert.That(m.Settings.mapHeight,Is.EqualTo(28));Assert.That(m.PlayerX,Is.EqualTo(8));Assert.That(m.PlayerY,Is.EqualTo(6));
+            Assert.That(m.Ground.Where(p=>p.Item==ItemId.OldCutter).Sum(p=>p.Amount),Is.EqualTo(2));Assert.That(m.Ground.Where(p=>p.Item==ItemId.OldFurnace).Sum(p=>p.Amount),Is.EqualTo(2));
+            Assert.That(m.Ground.Any(p=>p.Item==ItemId.DamagedMotor),Is.False);Assert.That(m.Warehouse.Used,Is.Zero);Assert.That(m.Ground.Select(p=>p.Id).Distinct().Count(),Is.EqualTo(m.Ground.Count));
         }
-        [Test]
-        public void InitialGuaranteesExistOnGroundAndWarehouseStartsEmpty()
+        [Test]public void LargeDevicesHaveTwoGroundCells()
         {
-            var model = new PrototypeSimulation(Settings());
-            Assert.That(model.Warehouse.Used, Is.Zero);
-            Assert.That(model.Money, Is.Zero);
-            Assert.That(model.Ground.Where(p => p.Item == ItemId.WasteWood).Sum(p => p.Amount), Is.EqualTo(80));
-            Assert.That(model.Ground.Where(p => p.Item == ItemId.SteelPart).Sum(p => p.Amount), Is.EqualTo(30));
-            Assert.That(model.Ground.Where(p => p.Item == ItemId.DrinkingWater).Sum(p => p.Amount), Is.EqualTo(40));
-            Assert.That(model.Residents.Count, Is.Zero);
+            var m=Fresh();Assert.That(m.Ground.Where(p=>p.Item==ItemId.OldCutter).All(p=>p.Width==2),Is.True);
+            Assert.That(m.Ground.All(p=>!PrototypeSimulation.IsReservedCell(p.X,p.Y)),Is.True);
         }
-        [Test]
-        public void FailedBuildDoesNotConsumePartialMaterials()
+        [Test]public void CommunityAndHoleAreSolidButGarbageIsWalkable()
         {
-            var model = new PrototypeSimulation(Settings());
-            model.Warehouse.TryAdd(ItemId.WasteWood, 4);
-            Assert.That(model.BuildBench().Success, Is.False);
-            Assert.That(model.Warehouse.Count(ItemId.WasteWood), Is.EqualTo(4));
+            var m=Fresh();Assert.That(m.IsWalkable(12,3),Is.False);Assert.That(m.IsWalkable(17,3),Is.False);Assert.That(m.IsWalkable(2,20),Is.False);
+            Assert.That(m.IsWalkable(7,6),Is.True);Assert.That(m.FindPath(8,6,12,5),Is.Not.Null);
         }
-        [Test]
-        public void PausedBlueprintReservesMaterialsAndCompletesOnResume()
+        [Test]public void BuiltBodyBlocksPathsAndFrontRemainsReachable()
         {
-            var model = new PrototypeSimulation(Settings());
-            model.Warehouse.TryAdd(ItemId.WasteWood, 4); model.Warehouse.TryAdd(ItemId.RecoveredFastener, 2);
-            model.SetPaused(true); Assert.That(model.BuildBench().Success, Is.True); model.Advance(100);
-            Assert.That(model.BenchBuilt, Is.False); Assert.That(model.BuildPending, Is.True);
-            Assert.That(model.Warehouse.Used, Is.Zero);
-            model.SetPaused(false); model.Advance(0.05);
-            Assert.That(model.BenchBuilt, Is.True);
+            var m=Ready();Assert.That(m.IsWalkable(13,8),Is.False);Assert.That(m.IsWalkable(13,7),Is.True);
+            var path=m.FindPath(8,6,13,7);int previous=6*32+8;
+            foreach(int cell in path){Assert.That(Math.Abs(cell%32-previous%32)+Math.Abs(cell/32-previous/32),Is.EqualTo(1));previous=cell;}
         }
-        [Test]
-        public void MissingSawDoesNotReserveWoodAndRestoringItResumes()
+        [Test]public void PlayerCannotWalkThroughWarehouse()
         {
-            var model = Ready(); model.Carry.TryRemove(ItemId.WoodHandSaw, 1); model.ToggleWork();
-            int before = model.Warehouse.Count(ItemId.WasteWood); model.Advance(2);
-            Assert.That(model.State, Is.EqualTo(WorkState.NeedsTool));
-            Assert.That(model.Warehouse.Count(ItemId.WasteWood), Is.EqualTo(before));
-            model.Carry.TryAdd(ItemId.WoodHandSaw, 1); model.Advance(0.1);
-            Assert.That(model.ReservedWood, Is.EqualTo(4));
+            var m=Fresh();Move(m,10,3);m.MovePlayer(1,0,10);Assert.That(m.PlayerX,Is.LessThan(10.5));Assert.That(m.IsWalkable((int)Math.Floor(m.PlayerX+0.5),3),Is.True);
         }
-        [Test]
-        public void NewWoodRecipeProducesBothPlanksAndChips()
+        [Test]public void PickupUsesHalfASecondAndCanBeCancelled()
         {
-            var model = Ready(); model.ToggleWork(); model.Advance(40.05);
-            Assert.That(model.CompletedBatches, Is.EqualTo(1));
-            Assert.That(model.Warehouse.Count(ItemId.Plank), Is.EqualTo(3));
-            Assert.That(model.Warehouse.Count(ItemId.WoodChips), Is.EqualTo(1));
+            var m=Fresh();Assert.That(m.PickUp(1,ItemId.WoodHandSaw).Success,Is.True);m.Advance(0.25);Assert.That(m.Carry.Count(ItemId.WoodHandSaw),Is.Zero);
+            m.MovePlayer(1,0,0.1);m.Advance(1);Assert.That(m.Carry.Count(ItemId.WoodHandSaw),Is.Zero);
+            Move(m,8,6);Act(m,()=>m.PickUp(1,ItemId.WoodHandSaw));Assert.That(m.Carry.Count(ItemId.WoodHandSaw),Is.EqualTo(1));
         }
-        [Test]
-        public void HandleRecipeUsesTwoWoodAndIncludesChips()
+        [Test]public void PauseFreezesInteractionAndOnlyThreeSpeedLevelsAreAllowed()
         {
-            var model = Ready(); model.SelectRecipe(WoodRecipe.WoodHandle); model.ToggleWork(); model.Advance(30.05);
-            Assert.That(model.CompletedBatches, Is.EqualTo(1));
-            Assert.That(model.Warehouse.Count(ItemId.WoodHandle), Is.EqualTo(2));
-            Assert.That(model.Warehouse.Count(ItemId.WoodChips), Is.EqualTo(1));
-            Assert.That(model.Output.Capacity, Is.EqualTo(4));
+            var m=Fresh();m.PickUp(1,ItemId.WoodHandSaw);m.SetPaused(true);m.Advance(100);Assert.That(m.Carry.Count(ItemId.WoodHandSaw),Is.Zero);
+            m.SetPaused(false);m.Advance(0.55);Assert.That(m.Carry.Count(ItemId.WoodHandSaw),Is.EqualTo(1));Assert.Throws<ArgumentOutOfRangeException>(()=>m.SetSpeed(4));m.SetSpeed(3);
         }
-        [Test]
-        public void PauseFreezesInputProductionFuelAndPayroll()
+        [Test]public void BlueprintReservesUntilResumeAndCancelIsLossless()
         {
-            var model = Powered(); model.Recruit(); model.ToggleWork();
-            double time = model.GameSeconds, fuel = model.FuelSeconds, wage = model.SecondsToWage;
-            model.SetPaused(true); model.SetSpeed(4); model.Advance(200);
-            Assert.That(model.GameSeconds, Is.EqualTo(time)); Assert.That(model.FuelSeconds, Is.EqualTo(fuel));
-            Assert.That(model.SecondsToWage, Is.EqualTo(wage)); Assert.That(model.UnpaidWages, Is.Zero);
+            var m=Fresh();Collect(m,ItemId.WasteWood,4);Collect(m,ItemId.RecoveredFastener,2);m.SetPaused(true);
+            Assert.That(m.BuildBench().Success,Is.True);Assert.That(m.Warehouse.Count(ItemId.WasteWood),Is.EqualTo(4));Assert.That(m.Warehouse.Available(ItemId.WasteWood),Is.Zero);
+            Assert.That(m.CancelBlueprints().Success,Is.True);Assert.That(m.Warehouse.Available(ItemId.WasteWood),Is.EqualTo(4));Assert.That(m.BenchBuilt,Is.False);
+            m.BuildBench();m.SetPaused(false);m.Advance(0.05);Assert.That(m.BenchBuilt,Is.True);Assert.That(m.Warehouse.Count(ItemId.WasteWood),Is.Zero);
         }
-        [Test]
-        public void StopAndLeavingPreserveJobProgressAndReservedWood()
+        [Test]public void FailedConstructionDoesNotConsumePartialMaterials()
         {
-            var model = Ready(); model.ToggleWork(); model.Advance(1);
-            float progress = model.Progress; int stored = model.Warehouse.Count(ItemId.WasteWood);
-            model.ToggleWork(); model.Advance(20);
-            Assert.That(model.Progress, Is.EqualTo(progress)); Assert.That(model.Warehouse.Count(ItemId.WasteWood), Is.EqualTo(stored));
-            model.ToggleWork(); MoveTo(model, 1, 1); model.Advance(2);
-            Assert.That(model.State, Is.EqualTo(WorkState.NeedsOperator)); Assert.That(model.Progress, Is.EqualTo(progress));
-            MoveTo(model, PrototypeSimulation.BenchX, PrototypeSimulation.BenchY); model.Advance(0.5);
-            Assert.That(model.Progress, Is.GreaterThan(progress));
+            var m=Fresh();Collect(m,ItemId.WasteWood,4);Assert.That(m.BuildBench().Success,Is.False);Assert.That(m.Warehouse.Count(ItemId.WasteWood),Is.EqualTo(4));
         }
-        [Test]
-        public void FullOutputDoesNotReserveNextBatchAndRecovers()
+        [Test]public void GeneratorHasNoUnspecifiedWorkbenchGate()
         {
-            var settings = Settings(); settings.warehouseCapacity = 20; settings.outputCapacity = 4;
-            var model = Ready(settings); model.ToggleWork(); model.Advance(0.05);
-            model.Warehouse.TryAdd(ItemId.MixedPlastic, (int)model.Warehouse.Free);
-            model.Advance(60);
-            Assert.That(model.State, Is.EqualTo(WorkState.OutputBlocked));
-            Assert.That(model.CompletedBatches, Is.EqualTo(1));
-            Assert.That(model.Warehouse.Count(ItemId.WasteWood), Is.EqualTo(4));
-            MoveTo(model, PrototypeSimulation.WarehouseX, PrototypeSimulation.WarehouseY);
-            Assert.That(model.Withdraw(ItemId.MixedPlastic, 4).Success, Is.True); model.Advance(0.05);
-            Assert.That(model.Output.Used, Is.Zero);
-            Assert.That(model.Warehouse.Count(ItemId.Plank), Is.EqualTo(3));
+            var m=Powered();Assert.That(m.TableBuilt,Is.False);Assert.That(m.HasBeenPowered,Is.True);Assert.That(m.AvailablePower,Is.EqualTo(4));
         }
-        [Test]
-        public void WarehouseContentsDoNotChangeGroundPressure()
+        [Test]public void WarehouseWoodDoesNotTeleportIntoProduction()
         {
-            var model = new PrototypeSimulation(Settings()); float before = model.HumanEfficiency;
-            model.Warehouse.TryAdd(ItemId.MixedPlastic, 50);
-            Assert.That(model.HumanEfficiency, Is.EqualTo(before));
+            var m=Ready(false);m.ToggleWork();m.Advance(20);Assert.That(m.State,Is.EqualTo(WorkState.NeedsMaterials));Assert.That(m.CompletedBatches,Is.Zero);Assert.That(m.Warehouse.Count(ItemId.WasteWood),Is.EqualTo(8));
         }
-        [Test]
-        public void FullGroundPhysicallyStacksAllIncomingWasteWithoutQueue()
+        [Test]public void BatchInputIsChargedAtCompletionAndOutputStaysAtSite()
         {
-            var settings = Settings(); settings.automaticInput = true; settings.firstInputSeconds = 0.001f;
-            var model = new PrototypeSimulation(settings); long initial = model.Ground.Sum(p => (long)p.Amount);
-            model.Advance(120);
-            Assert.That(model.IncomingUnits, Is.Zero);
-            Assert.That(model.Ground.Sum(p => (long)p.Amount), Is.EqualTo(initial + model.SpawnedUnits));
-            Assert.That(model.Ground.Any(p => p.Amount * ItemCatalog.CapacityTicks(p.Item) > 100), Is.True);
-            Assert.That(model.Ground.All(p => PrototypeSimulation.IsOwnedGround(p.X, p.Y) && !PrototypeSimulation.IsReservedCell(p.X, p.Y)), Is.True);
-            Assert.That(model.PressureAt(13, 6), Is.LessThan(1));
+            var m=Ready();m.ToggleWork();m.Advance(1);Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.EqualTo(8));Assert.That(m.ReservedWood,Is.EqualTo(4));
+            PrototypeStartingScenario.WaitUntil(m,()=>m.CompletedBatches==1,90);Assert.That(m.Output.Count(ItemId.Plank),Is.EqualTo(3));Assert.That(m.Output.Count(ItemId.WoodChips),Is.EqualTo(1));Assert.That(m.Warehouse.Count(ItemId.Plank),Is.Zero);
         }
-        [Test]
-        public void FixedClockIsIndependentOfFramePartitioning()
+        [Test]public void ForcedCancellationReleasesInProcessStockWithoutHalfProducts()
         {
-            var first = Ready(); var second = Ready(); first.ToggleWork(); second.ToggleWork();
-            first.Advance(81); for (int i = 0; i < 1620; i++) second.Advance(0.05);
-            Assert.That(first.CompletedBatches, Is.EqualTo(second.CompletedBatches));
-            Assert.That(first.Warehouse.Count(ItemId.Plank), Is.EqualTo(second.Warehouse.Count(ItemId.Plank)));
-            Assert.That(first.GameSeconds, Is.EqualTo(second.GameSeconds).Within(0.00001));
+            var m=Ready();m.ToggleWork();m.Advance(3);int before=m.WoodInputStock.Count(ItemId.WasteWood);
+            Assert.That(m.CancelBatch().Success,Is.True);Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.EqualTo(before));Assert.That(m.WoodInputStock.Reserved(ItemId.WasteWood),Is.Zero);Assert.That(m.Output.Used,Is.Zero);
         }
-        [Test]
-        public void AccelerationScalesTheSameSimulationClock()
+        [Test]public void FullOutputStopsBeforeConsumingThirdBatch()
         {
-            var normal = Powered(); var fast = Powered(); normal.Recruit(); fast.Recruit(); fast.SetSpeed(4);
-            normal.Advance(100); fast.Advance(25);
-            Assert.That(fast.GameSeconds, Is.EqualTo(normal.GameSeconds).Within(0.00001));
-            Assert.That(fast.FuelSeconds, Is.EqualTo(normal.FuelSeconds).Within(0.00001));
-            Assert.That(fast.SecondsToWage, Is.EqualTo(normal.SecondsToWage).Within(0.00001));
+            var m=Ready();m.ToggleWork();PrototypeStartingScenario.WaitUntil(m,()=>m.CompletedBatches==2,180);int input=m.WoodInputStock.Count(ItemId.WasteWood);m.Advance(30);
+            Assert.That(m.State,Is.EqualTo(WorkState.OutputBlocked));Assert.That(m.CompletedBatches,Is.EqualTo(2));Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.EqualTo(input));
         }
-        [Test]
-        public void RecruitingRequiresActualPowerAndDoesNotSpendWages()
+        [Test]public void ToolInstanceMovesOnceAndWearOccursOncePerCompletedBatch()
         {
-            var empty = new PrototypeSimulation(Settings()); Assert.That(empty.Recruit().Success, Is.False);
-            var model = Powered(); Assert.That(model.Recruit().Success, Is.True);
-            Assert.That(model.Money, Is.Zero); Assert.That(model.Residents[0].Cash, Is.EqualTo(5));
-            Assert.That(model.SecondsToWage, Is.EqualTo(600).Within(0.0001));
+            var m=Ready();var saw=m.Tools.Single(t=>t.Item==ItemId.WoodHandSaw);int id=saw.Id;Assert.That(saw.Location,Is.EqualTo("carry"));
+            m.ToggleWork();PrototypeStartingScenario.WaitUntil(m,()=>m.CompletedBatches==1,90);Assert.That(saw.Durability,Is.EqualTo(296));
+            m.LeaveManualRole();Act(m,()=>m.HandOffTool(ItemId.WoodHandSaw));Assert.That(saw.Id,Is.EqualTo(id));Assert.That(saw.Location,Is.EqualTo("benchTools"));Assert.That(m.Carry.Count(ItemId.WoodHandSaw),Is.Zero);
         }
-        [Test]
-        public void OldHousingLimitsRecruitmentToFive()
+        [Test]public void ResidentCannotUseProtagonistsRemotePersonalSaw()
         {
-            var model = Powered(); for (int i = 0; i < 5; i++) Assert.That(model.Recruit().Success, Is.True);
-            Assert.That(model.Recruit().Success, Is.False);
-            Assert.That(model.Residents.Count, Is.EqualTo(5));
+            var m=Powered();m.Recruit();m.AssignWoodworker();if(!m.RunRequested)m.ToggleWork();Move(m,8,5);m.Advance(60);
+            Assert.That(m.CompletedBatches,Is.Zero);Assert.That(m.State,Is.EqualTo(WorkState.NeedsTool));Assert.That(m.Carry.Count(ItemId.WoodHandSaw),Is.EqualTo(1));
         }
-        [Test]
-        public void WorkerMustWalkToBenchBeforeProducingWithoutPlayer()
+        [Test]public void PhysicalTransportTakesTimeAndCommitsActualCargo()
         {
-            var model = Powered(); model.Recruit(); model.AssignWoodworker(); model.ToggleWork();
-            MoveTo(model, 1, 1); model.Advance(1);
-            Assert.That(model.State, Is.EqualTo(WorkState.NeedsOperator)); Assert.That(model.CompletedBatches, Is.Zero);
-            model.Advance(70);
-            Assert.That(model.WorkerAtBench, Is.True); Assert.That(model.CompletedBatches, Is.GreaterThan(0));
+            var m=Powered();Move(m,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);Act(m,()=>m.HandOffTool(ItemId.WoodHandSaw));m.Recruit();m.AssignWoodworker();
+            if(!m.RunRequested)m.ToggleWork();Move(m,8,5);m.Advance(0.1);Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.Zero);
+            PrototypeStartingScenario.WaitUntil(m,()=>m.DeliveredTrips>0,90);Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.GreaterThan(0));Assert.That(m.Warehouse.Count(ItemId.WasteWood),Is.LessThan(6));
         }
-        [Test]
-        public void PayrollCreatesBillButNeverAutoPays()
+        [Test]public void IdleWorkersAndProducerDoNotReserveSameStockTwice()
         {
-            var model = Powered(); model.Recruit(); model.Warehouse.TryAdd(ItemId.Plank, 10); model.Sell(ItemId.Plank, 10);
-            decimal money = model.Money; model.Advance(600);
-            Assert.That(model.UnpaidWages, Is.EqualTo(10)); Assert.That(model.Money, Is.EqualTo(money));
-            Assert.That(model.Residents[0].Cash, Is.EqualTo(5));
+            var m=Powered();Move(m,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);Act(m,()=>m.HandOffTool(ItemId.WoodHandSaw));m.Recruit();m.Recruit();m.AssignWoodworker();if(!m.RunRequested)m.ToggleWork();m.Advance(0.1);
+            Assert.That(m.Warehouse.Reserved(ItemId.WasteWood),Is.LessThanOrEqualTo(m.Warehouse.Count(ItemId.WasteWood)));Assert.That(m.WoodInputStock.Used,Is.Zero);
         }
-        [Test]
-        public void PayrollTransfersCashAndClearsActualDebt()
+        [Test]public void MotorPresetAndInstanceStatusSurviveSerialization()
         {
-            var model = Powered(); model.Recruit(); model.Warehouse.TryAdd(ItemId.Plank, 10); model.Sell(ItemId.Plank, 10);
-            model.Advance(600); long before = model.CashCents + model.Residents.Sum(r => r.CashCents);
-            Assert.That(model.PayWages().Success, Is.True);
-            Assert.That(model.UnpaidWages, Is.Zero); Assert.That(model.Residents[0].Cash, Is.EqualTo(15));
-            Assert.That(model.CashCents + model.Residents.Sum(r => r.CashCents), Is.EqualTo(before));
+            var m=Fresh();var other=Roundtrip(m);Assert.That(other.Ground.Where(p=>p.Item==ItemId.OldCutter).All(p=>p.Usable),Is.True);
+            Assert.That(ItemCatalog.DeviceYield(ItemId.OldCutter).Single(p=>p.Item==ItemId.Motor).Amount,Is.EqualTo(1));
+            Assert.That(ItemCatalog.DeviceYield(ItemId.OldCutter,false).Any(p=>p.Item==ItemId.Motor),Is.False);
         }
-        [Test]
-        public void PartialPayrollPreservesOldBillAndDistributesFairly()
+        [Test]public void DirectOpeningDoesNotRequireManufacturingTools()
         {
-            var model = Powered(); model.Recruit(); model.Recruit(); model.Warehouse.TryAdd(ItemId.Plank, 1); model.Sell(ItemId.Plank, 1);
-            model.Advance(600); Assert.That(model.PayWages().Success, Is.True);
-            Assert.That(model.UnpaidWages, Is.EqualTo(17));
-            Assert.That(model.Residents[0].Cash, Is.EqualTo(6.5m)); Assert.That(model.Residents[1].Cash, Is.EqualTo(6.5m));
-            Assert.That(model.WageBills[0].OriginalCents, Is.EqualTo(2000));
-            model.Recruit(); Assert.That(model.WageBills[0].ResidentIds.Length, Is.EqualTo(2));
+            var m=Fresh();var box=m.Ground.First(p=>p.Item==ItemId.MouldBox);Move(m,box.X,box.Y);Act(m,()=>m.PickUp(1,ItemId.MouldBox));
+            Assert.That(m.Ground.Count(p=>p.Item==ItemId.MouldBox),Is.Zero);Assert.That(m.Ground.Where(p=>p.Item==ItemId.HandleMould).Sum(p=>p.Amount),Is.EqualTo(1));
         }
-        [Test]
-        public void FuelComesFromCarriedStockAndStopsWhenExhausted()
+        [Test]public void RecruitingAndPayrollUseOriginalEmployeeList()
         {
-            var model = Powered(); Assert.That(model.AvailablePower, Is.EqualTo(4));
-            Assert.That(model.Carry.Count(ItemId.WasteWood), Is.Zero);
-            model.Advance(240.1); Assert.That(model.AvailablePower, Is.Zero);
-            Assert.That(model.HasBeenPowered, Is.True);
+            var m=Powered();for(int i=0;i<5;i++)Assert.That(m.Recruit().Success,Is.True);Assert.That(m.Recruit().Success,Is.False);m.Advance(600);
+            Assert.That(m.UnpaidWages,Is.EqualTo(50));Assert.That(m.Residents.All(r=>r.Cash==5),Is.True);Assert.That(m.WageBills[0].ResidentIds.Length,Is.EqualTo(5));
         }
-        [Test]
-        public void SalesApplyPressurePerItemAndRecoverOverGameTime()
+        [Test]public void PayrollTransfersCashWithoutCreatingMoney()
         {
-            var model = new PrototypeSimulation(Settings()); model.Warehouse.TryAdd(ItemId.Plank, 30);
-            model.SetPaused(true); model.Sell(ItemId.Plank, 30);
-            Assert.That(model.Money, Is.EqualTo(78.14m));
-            double lowered = model.SalePrice(ItemId.Plank);
-            model.Advance(600); Assert.That(model.SalePrice(ItemId.Plank), Is.EqualTo(lowered));
-            model.SetPaused(false); model.Advance(600);
-            Assert.That(model.SalePrice(ItemId.Plank), Is.GreaterThan(lowered));
+            var m=Powered();m.Recruit();m.Warehouse.TryAdd(ItemId.Plank,10);m.Sell(ItemId.Plank,10);m.Advance(600);
+            long total=m.CashCents+m.Residents.Sum(r=>r.CashCents);Assert.That(m.PayWages().Success,Is.True);Assert.That(m.Residents[0].Cash,Is.EqualTo(15));Assert.That(m.CashCents+m.Residents.Sum(r=>r.CashCents),Is.EqualTo(total));
         }
-        [Test]
-        public void AshAppearsAfterActualBurningRatherThanLoadingFuel()
+        [Test]public void PartialWagesDistributeFairlyAndPreserveDebt()
         {
-            var model = Powered();
-            model.Carry.TryAdd(ItemId.WasteWood, 6); model.AddFuel(ItemId.WasteWood, 6); model.Advance(960);
-            model.Carry.TryAdd(ItemId.WasteWood, 6); model.AddFuel(ItemId.WasteWood, 6); model.Advance(720);
-            model.Carry.TryAdd(ItemId.WasteWood, 6); model.AddFuel(ItemId.WasteWood, 6);
-            Assert.That(model.GeneratorResidue.Count(ItemId.PowerAsh), Is.Zero);
-            model.Advance(720.1);
-            Assert.That(model.GeneratorResidue.Count(ItemId.PowerAsh), Is.EqualTo(1));
+            var m=Powered();m.Recruit();m.Recruit();m.Warehouse.TryAdd(ItemId.Plank,1);m.Sell(ItemId.Plank,1);m.Advance(600);m.PayWages();
+            Assert.That(m.UnpaidWages,Is.EqualTo(17));Assert.That(m.Residents[0].Cash,Is.EqualTo(6.5m));Assert.That(m.Residents[1].Cash,Is.EqualTo(6.5m));
         }
-        [Test]
-        public void SplittingSalesDoesNotCreateRoundingProfit()
+        [Test]public void SalesAndRoundingRemainConsistentAcrossBatchSizes()
         {
-            var first = new PrototypeSimulation(Settings()); var second = new PrototypeSimulation(Settings());
-            first.Warehouse.TryAdd(ItemId.Plank, 30); second.Warehouse.TryAdd(ItemId.Plank, 30);
-            first.Sell(ItemId.Plank, 30); for (int i = 0; i < 30; i++) second.Sell(ItemId.Plank, 1);
-            Assert.That(first.CashCents, Is.EqualTo(second.CashCents));
+            var one=Fresh();var many=Fresh();one.Warehouse.TryAdd(ItemId.Plank,30);many.Warehouse.TryAdd(ItemId.Plank,30);one.Sell(ItemId.Plank,30);for(int i=0;i<30;i++)many.Sell(ItemId.Plank,1);
+            Assert.That(one.Money,Is.EqualTo(78.14m));Assert.That(one.CashCents,Is.EqualTo(many.CashCents));
         }
-        [Test]
-        public void MotorDismantleUsesDocumentedPresetWithoutReroll()
+        [Test]public void TechnologyCanOnlyBeSoldOnceAndLocksMinimumPrice()
         {
-            var model = new PrototypeSimulation(Settings());
-            model.Warehouse.TryAdd(ItemId.WasteWood, 4); model.Warehouse.TryAdd(ItemId.RecoveredFastener, 2);
-            model.Warehouse.TryAdd(ItemId.DamagedMotor, 1); model.Warehouse.TryAdd(ItemId.Screwdriver, 1);
-            Assert.That(model.BuildDismantle().Success, Is.True);
-            MoveTo(model, PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY);
-            model.ToggleDismantle(); model.Advance(36);
-            Assert.That(model.DismantledBatches, Is.EqualTo(1));
-            Assert.That(model.Warehouse.Count(ItemId.SteelMaterial), Is.EqualTo(3));
-            Assert.That(model.Warehouse.Count(ItemId.CopperMaterial), Is.EqualTo(1));
+            var m=Fresh();Assert.That(m.SellTechnology(Technology.Wood).Success,Is.True);Assert.That(m.Money,Is.EqualTo(60));Assert.That(m.SellTechnology(Technology.Wood).Success,Is.False);
+            Assert.That(m.SalePrice(ItemId.Plank),Is.EqualTo(1));m.Advance(600);Assert.That(m.SalePrice(ItemId.Plank),Is.EqualTo(1));
         }
-        [Test]
-        public void FreshGameCompletesGeneratorRecruitmentProductionAndFirstPayrollWithoutInjection()
+        [Test]public void GeneratorSaleCannotAlsoReturnConstructionMaterials()
         {
-            var model = new PrototypeSimulation(Settings());
-            Assert.DoesNotThrow(() => PrototypeStartingScenario.Run(model));
-            Assert.That(model.TotalWagesPaidCents, Is.EqualTo(5000));
-            Assert.That(model.Residents.Count, Is.EqualTo(5));
-            Assert.That(model.CompletedBatches, Is.GreaterThanOrEqualTo(12));
-            Assert.That(model.DismantledBatches, Is.EqualTo(1));
+            var m=Powered();int steel=m.Warehouse.Count(ItemId.SteelPart);Assert.That(m.RemoveFacility(8,true).Success,Is.True);
+            Assert.That(m.Money,Is.EqualTo(34.20m));Assert.That(m.Warehouse.Count(ItemId.SteelPart),Is.EqualTo(steel));Assert.That(m.RemoveFacility(8,false).Success,Is.False);
         }
-        [Test]
-        public void SavedSceneUsesCurrentBalanceAndChineseFont()
+        [Test]public void PurchaseDoesNotDeductWhenBothWarehouseAndGroundCannotAcceptIt()
         {
-            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Main.unity");
-            var game = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
-            Assert.That(game, Is.Not.Null); Assert.That(game.balance, Is.Not.Null); Assert.That(game.appearance.worker, Is.Not.Null);
-            Assert.That(game.appearance.font.HasCharacter('薪'), Is.True);
-            Assert.That(game.balance.values.warehouseCapacity, Is.EqualTo(80));
-            Assert.DoesNotThrow(() => game.balance.values.Validate());
+            var m=Fresh();m.SellTechnology(Technology.Wood);long cash=m.CashCents;Assert.That(m.Buy(ItemId.WoodHandSaw,100).Success,Is.False);Assert.That(m.CashCents,Is.EqualTo(cash));
+        }
+        [Test]public void InputFrequencyAndHappinessValuesMatchNewDefaultRules()
+        {
+            Assert.That(DesignRules.InputMeanInterval(0),Is.EqualTo(60));Assert.That(DesignRules.InputMeanInterval(600),Is.EqualTo(54));Assert.That(DesignRules.InputMeanInterval(1800),Is.EqualTo(48));Assert.That(DesignRules.InputMeanInterval(3600),Is.EqualTo(42));
+            Assert.That(DesignRules.InputRate(3600),Is.EqualTo(18.75));Assert.That(DesignRules.HappinessEfficiency(40),Is.EqualTo(0.8714285714).Within(1e-8));
+            Assert.That(DesignRules.HappinessLoss(720,120,600,20),Is.EqualTo(20));Assert.That(DesignRules.RiotPayment(100),Is.EqualTo(34));
+        }
+        [Test]public void NaturalWasteRemainsVisibleAndDoesNotCoverCommunityBuildings()
+        {
+            var m=Fresh(true);long initial=m.Ground.Sum(p=>(long)p.Amount);m.Advance(7200);
+            Assert.That(m.IncomingUnits,Is.Zero);Assert.That(m.Ground.Sum(p=>(long)p.Amount),Is.EqualTo(initial+m.SpawnedUnits));
+            Assert.That(m.Ground.Any(p=>m.GroundCapacityAt(p.X,p.Y)>5),Is.True);Assert.That(m.Ground.All(p=>!PrototypeSimulation.IsReservedCell(p.X,p.Y)),Is.True);
+        }
+        [Test]public void SnapshotPreservesInProcessInputsToolsAndCompletionCount()
+        {
+            var m=Ready();m.ToggleWork();m.Advance(8);var copy=Roundtrip(m);Assert.That(copy.ReservedWood,Is.EqualTo(4));Assert.That(copy.Progress,Is.EqualTo(m.Progress));
+            m.Advance(90);copy.Advance(90);Assert.That(copy.CompletedBatches,Is.EqualTo(m.CompletedBatches));Assert.That(copy.Tools.Single(t=>t.Item==ItemId.WoodHandSaw).Durability,Is.EqualTo(m.Tools.Single(t=>t.Item==ItemId.WoodHandSaw).Durability));
+        }
+        [Test]public void CompletedBlockedBatchCannotRefundInputsAndCommitsOnlyOnce()
+        {
+            var m=Ready();m.ToggleWork();m.Advance(1);m.Output.TryAdd(ItemId.Plank,8);m.Advance(90);
+            Assert.That(m.Progress,Is.EqualTo(1));Assert.That(m.CancelBatch().Success,Is.False);Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.EqualTo(8));
+            Act(m,()=>m.TakeOutput());Assert.That(m.CompletedBatches,Is.EqualTo(1));Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.EqualTo(4));m.Advance(1);Assert.That(m.CompletedBatches,Is.EqualTo(1));
+        }
+        [Test]public void ToolAtZeroBecomesOneDamagedInstanceAndStopsFurtherWork()
+        {
+            var m=Ready();var saw=m.Tools.Single(t=>t.Item==ItemId.WoodHandSaw);int id=saw.Id;m.ToggleWork();
+            for(int batch=1;batch<=75;batch++)
+            {
+                if(m.WoodInputStock.Count(ItemId.WasteWood)<4)m.WoodInputStock.TryAdd(ItemId.WasteWood,4);
+                PrototypeStartingScenario.WaitUntil(m,()=>m.CompletedBatches>=batch,90);
+                m.Output.TryRemove(ItemId.Plank,m.Output.Available(ItemId.Plank));m.Output.TryRemove(ItemId.WoodChips,m.Output.Available(ItemId.WoodChips));
+            }
+            m.Advance(1);Assert.That(m.Tools.Single(t=>t.Id==id).Durability,Is.Zero);Assert.That(m.BrokenTools.Count(ItemId.BrokenWoodTool),Is.EqualTo(1));Assert.That(m.State,Is.EqualTo(WorkState.NeedsTool));
+        }
+        [Test]public void PendingHalfSecondInteractionCannotCreateAnInconsistentSave()
+        {
+            var m=Fresh();m.PickUp(1,ItemId.WoodHandSaw);Assert.Throws<InvalidOperationException>(()=>m.Capture());m.CancelInteraction();Assert.DoesNotThrow(()=>m.Capture());
+        }
+        [Test]public void FullDamagedToolShelfPreventsLosingTheToolOrDoubleCommitting()
+        {
+            var original=Ready();var saved=original.Capture();saved.tools.Single(t=>t.item==(int)ItemId.WoodHandSaw).durability=4;
+            var m=PrototypeSimulation.Restore(saved);m.BrokenTools.TryAdd(ItemId.BrokenWoodTool,8);m.ToggleWork();m.Advance(90);
+            Assert.That(m.CompletedBatches,Is.Zero);Assert.That(m.WoodInputStock.Count(ItemId.WasteWood),Is.EqualTo(8));
+            m.BrokenTools.TryRemove(ItemId.BrokenWoodTool,1);m.Advance(0.1);Assert.That(m.CompletedBatches,Is.EqualTo(1));Assert.That(m.BrokenTools.Count(ItemId.BrokenWoodTool),Is.EqualTo(8));
+        }
+        [Test]public void SnapshotPreservesPausedBlueprintAndRandomFuture()
+        {
+            var m=Fresh(true);Collect(m,ItemId.WasteWood,4);Collect(m,ItemId.RecoveredFastener,2);m.SetPaused(true);m.BuildBench();var copy=Roundtrip(m);
+            Assert.That(copy.BuildPending,Is.True);Assert.That(copy.Warehouse.Reserved(ItemId.WasteWood),Is.EqualTo(4));m.SetPaused(false);copy.SetPaused(false);m.Advance(200);copy.Advance(200);
+            Assert.That(copy.SpawnedUnits,Is.EqualTo(m.SpawnedUnits));Assert.That(copy.Ground.Sum(p=>p.Amount),Is.EqualTo(m.Ground.Sum(p=>p.Amount)));Assert.That(copy.BenchBuilt,Is.True);
+        }
+        [Test]public void SnapshotPreservesMidDeliveryCargoAndReservations()
+        {
+            var m=Powered();Move(m,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);Act(m,()=>m.HandOffTool(ItemId.WoodHandSaw));m.Recruit();m.AssignWoodworker();if(!m.RunRequested)m.ToggleWork();
+            PrototypeStartingScenario.WaitUntil(m,()=>m.Residents[0].Cargo.UsedTicks>0,90);var copy=Roundtrip(m);m.Advance(30);copy.Advance(30);
+            Assert.That(copy.Residents[0].X,Is.EqualTo(m.Residents[0].X).Within(1e-6));Assert.That(copy.WoodInputStock.Count(ItemId.WasteWood),Is.EqualTo(m.WoodInputStock.Count(ItemId.WasteWood)));Assert.That(copy.DeliveredTrips,Is.EqualTo(m.DeliveredTrips));
+        }
+        [Test]public void RecipeChangeQueuesUntilBatchFinishesAndOutputsArePhysicallyRemoved()
+        {
+            var m=Ready();m.ToggleWork();m.Advance(1);Assert.That(m.SelectRecipe(WoodRecipe.WoodHandle).Success,Is.True);Assert.That(m.SelectedRecipe,Is.EqualTo(WoodRecipe.Plank));
+            PrototypeStartingScenario.WaitUntil(m,()=>m.CompletedBatches==1,90);Assert.That(m.SelectedRecipe,Is.EqualTo(WoodRecipe.Plank));Act(m,()=>m.TakeOutput());m.Advance(0.1);
+            Assert.That(m.SelectedRecipe,Is.EqualTo(WoodRecipe.WoodHandle));Assert.That(m.WoodInputStock.Capacity,Is.EqualTo(4));
+        }
+        [Test]public void SnapshotPreservesWalletsDebtPricesAndTechSale()
+        {
+            var m=Powered();m.Recruit();m.Warehouse.TryAdd(ItemId.Plank,3);m.Sell(ItemId.Plank,3);m.Advance(600);m.PayWages();m.SellTechnology(Technology.Wood);
+            var copy=Roundtrip(m);Assert.That(copy.CashCents,Is.EqualTo(m.CashCents));Assert.That(copy.UnpaidWageCents,Is.EqualTo(m.UnpaidWageCents));Assert.That(copy.Residents[0].CashCents,Is.EqualTo(m.Residents[0].CashCents));Assert.That(copy.SalePrice(ItemId.Plank),Is.EqualTo(1));
+        }
+        [Test]public void FreshGameFollowsNormalActionsThroughPhysicalLogisticsAndFirstPayroll()
+        {
+            var m=Fresh();Assert.DoesNotThrow(()=>PrototypeStartingScenario.Run(m));Assert.That(m.TotalWagesPaidCents,Is.EqualTo(5000));Assert.That(m.CompletedBatches,Is.GreaterThanOrEqualTo(12));Assert.That(m.DeliveredTrips,Is.GreaterThan(0));
+        }
+        [Test]public void SavedSceneContainsCurrentSettingsAndPortableChineseFont()
+        {
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Main.unity");var game=UnityEngine.Object.FindObjectOfType<PrototypeGame>();
+            Assert.That(game,Is.Not.Null);Assert.That(game.appearance.font.HasCharacter('锯'),Is.True);Assert.That(game.balance.values.mapWidth,Is.EqualTo(32));Assert.That(game.balance.values.moveSpeed,Is.EqualTo(0.8f));Assert.DoesNotThrow(()=>game.balance.values.Validate());
         }
     }
 }
