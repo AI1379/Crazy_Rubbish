@@ -49,6 +49,7 @@ namespace CrazyRubbish.Prototype
             {
                 if (FindObjectsOfType<Button>().Length < 20 || Camera.main == null)
                     throw new InvalidOperationException("Scene HUD or camera was not initialized.");
+                VerifyHudBindings(screenshot);
                 PrototypeSimulation model = game.Model;
                 PrototypeStartingScenario.Run(model);
                 if (model.Money <= 0 || model.TotalWagesPaidCents != 5000 || model.Residents.Count != 5 || model.DeliveredTrips <= 0)
@@ -98,7 +99,7 @@ namespace CrazyRubbish.Prototype
             try
             {
                 int visiblePiles = 0;
-                foreach (Transform child in game.transform)
+                foreach (Transform child in game.GetComponent<PrototypeWorld>().VisualRoot.Find("Ground Items"))
                     if (child.name.StartsWith("GroundPile_", StringComparison.Ordinal)) visiblePiles++;
                 if (game.Model.Money != 0 || game.Model.BenchBuilt || game.Model.GeneratorBuilt || game.Model.Residents.Count != 0 || game.Model.Carry.Used != 0
                     || game.Model.Warehouse.Used != 0 || visiblePiles != game.Model.Ground.Count)
@@ -126,6 +127,36 @@ namespace CrazyRubbish.Prototype
         private void OnLog(string message, string stack, LogType type)
         { if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) failed = true; }
 
+        private void VerifyHudBindings(string screenshot)
+        {
+            var root = game.GetComponent<PrototypeHud>().VisualRoot;
+            if (game.transform.Find("World") == null || root == null || FindObjectsOfType<Canvas>().Length != 1)
+                throw new InvalidOperationException("Runtime duplicated or lost the saved presentation.");
+            Button[] buttons = root.GetComponentsInChildren<Button>(true);
+            Button Find(string name) => Array.Find(buttons, button => button.name == name);
+            Find("Pause").onClick.Invoke();
+            if (!game.Model.Paused) throw new InvalidOperationException("Saved Pause button is unbound.");
+            Find("Pause").onClick.Invoke();
+            Find("Speed3").onClick.Invoke();
+            if (game.Model.Speed != 3) throw new InvalidOperationException("Saved speed buttons are unbound.");
+            Find("Speed1").onClick.Invoke();
+            for (int i = 0; i < 3; i++)
+            {
+                Find("Tab" + i).onClick.Invoke();
+                string[] names = { "现场 Page", "人员 Page", "仓库 Page" };
+                for (int j = 0; j < names.Length; j++)
+                    if (root.Find("Management/" + names[j]).gameObject.activeSelf != (i == j))
+                        throw new InvalidOperationException("Management tab navigation failed.");
+                if (i > 0 && !string.IsNullOrEmpty(screenshot))
+                    CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + (i == 1 ? "-people.png" : "-inventory.png")));
+            }
+            Find("InventoryFilter").onClick.Invoke();
+            if (!Find("Pick0").gameObject.activeInHierarchy)
+                throw new InvalidOperationException("Full inventory catalogue is inaccessible.");
+            Find("InventoryFilter").onClick.Invoke();
+            Find("Tab0").onClick.Invoke();
+        }
+
         private static string Argument(string name)
         {
             string[] arguments = Environment.GetCommandLineArgs();
@@ -138,11 +169,12 @@ namespace CrazyRubbish.Prototype
             Camera main = Camera.main;
             Canvas canvas = FindObjectOfType<Canvas>();
             if (main == null || canvas == null) throw new InvalidOperationException("Preview camera or canvas missing.");
-            var target = new RenderTexture(1280, 800, 24, RenderTextureFormat.ARGB32);
+            int width = Screen.width, height = Screen.height;
+            var target = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
             target.Create();
             Rect viewport = main.rect;
-            var worldTarget = new RenderTexture(Mathf.RoundToInt(1280 * viewport.width),
-                Mathf.RoundToInt(800 * viewport.height), 24, RenderTextureFormat.ARGB32);
+            var worldTarget = new RenderTexture(Mathf.RoundToInt(width * viewport.width),
+                Mathf.RoundToInt(height * viewport.height), 24, RenderTextureFormat.ARGB32);
             worldTarget.Create();
             RenderTexture previousActive = RenderTexture.active;
             RenderTexture previousTarget = main.targetTexture;
@@ -154,7 +186,7 @@ namespace CrazyRubbish.Prototype
             uiCamera.enabled = false;
             uiCamera.transform.position = new Vector3(0, 0, -100);
             uiCamera.orthographic = true;
-            uiCamera.orthographicSize = 400;
+            uiCamera.orthographicSize = height / 2f;
             uiCamera.nearClipPlane = 0.1f;
             uiCamera.farClipPlane = 200;
             uiCamera.clearFlags = CameraClearFlags.Depth;
@@ -174,14 +206,14 @@ namespace CrazyRubbish.Prototype
                 RenderTexture.active = target;
                 GL.Clear(true, true, new Color32(18, 28, 31, 255));
                 GL.PushMatrix();
-                GL.LoadPixelMatrix(0, 1280, 800, 0);
-                Graphics.DrawTexture(new Rect(viewport.x * 1280, (1 - viewport.yMax) * 800,
-                    viewport.width * 1280, viewport.height * 800), worldTarget);
+                GL.LoadPixelMatrix(0, width, height, 0);
+                Graphics.DrawTexture(new Rect(viewport.x * width, (1 - viewport.yMax) * height,
+                    viewport.width * width, viewport.height * height), worldTarget);
                 GL.PopMatrix();
                 uiCamera.Render();
                 RenderTexture.active = target;
-                pixels = new Texture2D(1280, 800, TextureFormat.RGB24, false);
-                pixels.ReadPixels(new Rect(0, 0, 1280, 800), 0, 0);
+                pixels = new Texture2D(width, height, TextureFormat.RGB24, false);
+                pixels.ReadPixels(new Rect(0, 0, width, height), 0, 0);
                 pixels.Apply();
                 Color32[] samples = pixels.GetPixels32();
                 int visible = 0;

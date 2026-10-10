@@ -23,3 +23,4 @@ MonoBehaviour:
   warehouse: {fileID: 21300000, guid: d57fc4c7debe5a149888e5e003fbf530, type: 3}
   workbench: {fileID: 21300000, guid: 0d38b486cedca804d93a19861790974d, type: 3}
   tile: {fileID: 21300000, guid: 75c119f9cd81d884eac2db23d5da97ce, type: 3}
+  marker: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}

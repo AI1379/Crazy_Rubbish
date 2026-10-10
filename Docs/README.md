@@ -15,6 +15,7 @@
 | [M2起步说明](Development/04_M2起步说明.md) | 当前操作、实际接入内容、临时简化和验证记录 |
 | [CI与发布](Development/05_CI与发布.md) | GitHub Actions、Personal Secrets、Windows正式构建与Release附件 |
 | [S5调整与验证](Development/06_S5调整与验证.md) | 当前工程对齐最新地图、交互、预约、工具、运输与存档 |
+| [界面与场景编辑](Development/07_界面与场景编辑.md) | 不运行时查看地图/UI，管理页签、地图视角与场景刷新 |
 
 ## 来源快照
 

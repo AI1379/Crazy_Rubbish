@@ -71,6 +71,8 @@ namespace CrazyRubbish.Editor
 
             if (File.Exists(ScenePath)) EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
             if (UnityEngine.Object.FindObjectOfType<PrototypeGame>() == null) CreateScene(balance, appearance);
+            PrototypePresentationEditor.EnsureCurrentLayout();
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
             PlayerSettings.defaultScreenWidth = 1280;
             PlayerSettings.defaultScreenHeight = 800;
@@ -92,7 +94,17 @@ namespace CrazyRubbish.Editor
             camera.orthographic = true;
             camera.orthographicSize = 7.7f;
             camera.clearFlags = CameraClearFlags.SolidColor;
-            camera.backgroundColor = new Color32(18, 28, 31, 255);
+            camera.backgroundColor = new Color32(17, 27, 30, 255);
+            // The world camera only clears its map viewport. Clear the entire frame first so
+            // resizing the Game view cannot leave pixels from the previous resolution behind.
+            var backgroundObject = new GameObject("Background Camera", typeof(Camera));
+            var backgroundCamera = backgroundObject.GetComponent<Camera>();
+            backgroundCamera.depth = -1;
+            backgroundCamera.clearFlags = CameraClearFlags.SolidColor;
+            backgroundCamera.backgroundColor = camera.backgroundColor;
+            backgroundCamera.cullingMask = 0;
+            backgroundCamera.allowHDR = false;
+            backgroundCamera.allowMSAA = false;
             var root = new GameObject("M1 Prototype");
             var game = root.AddComponent<PrototypeGame>();
             game.balance = balance;

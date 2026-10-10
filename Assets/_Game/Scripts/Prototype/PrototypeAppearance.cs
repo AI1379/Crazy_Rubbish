@@ -7,6 +7,7 @@ namespace CrazyRubbish.Prototype
     {
         public Font font;
         public Sprite worker, wasteWood, mixedPlastic, fastener, saw, plank, woodHandle, warehouse, workbench, tile;
+        public Sprite marker;
         public Sprite ItemSprite(ItemId item)
         {
             if(ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))return workbench;
