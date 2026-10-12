@@ -31,7 +31,8 @@ namespace CrazyRubbish.Core
         }
         private DeliveryTask Supply(Resident actor,UnitInventory target,string key,ItemId item,int x,int y,int wanted)
         {
-            var task=Plan(actor,Warehouse,target,"warehouse",key,item,WarehouseX,WarehouseY,x,y,wanted);if(task!=null)return task;
+            DeliveryTask task=null;
+            if(!ReferenceEquals(Warehouse,target)){task=Plan(actor,Warehouse,target,"warehouse",key,item,WarehouseX,WarehouseY,x,y,wanted);if(task!=null)return task;}
             foreach(var pile in ground.Where(p=>p.Item==item&&p.Amount>p.Reserved).OrderBy(p=>Distance(actor.X,actor.Y,p.X,p.Y)).ThenBy(p=>p.Id))
             {task=Plan(actor,null,target,"ground:"+pile.Id,key,item,pile.X,pile.Y,x,y,wanted);if(task!=null)return task;}
             return null;
@@ -39,14 +40,24 @@ namespace CrazyRubbish.Core
         private DeliveryTask NextTask(Resident actor)
         {
             DeliveryTask task=null;
-            if(BenchBuilt&&RunRequested&&Woodworker!=null&&WoodTools.Count(ItemId.WoodHandSaw)==0)
+            if(AutomaticLivingSupply)
+                foreach(var item in new[]{ItemId.DrinkingWater,ItemId.Food})
+                {
+                    int wanted=(item==ItemId.DrinkingWater?2:1)*(residents.Count+1)-Warehouse.Count(item);
+                    if(wanted>0){task=Supply(actor,Warehouse,"warehouse",item,WarehouseX,WarehouseY,wanted);if(task!=null)return task;}
+                }
+            if(BenchBuilt&&RunRequested&&Woodworker!=null&&(WoodTools.Count(ItemId.WoodHandSaw)==0||WoodTools.Count(ItemId.WoodHandSaw)<2&&tools.Any(t=>t.Item==ItemId.WoodHandSaw&&t.Location=="benchTools"&&t.Durability<=60)))
             {task=Supply(actor,WoodTools,"benchTools",ItemId.WoodHandSaw,BenchX,BenchY,1);if(task!=null)return task;}
+            if(DismantleBuilt&&DismantleRequested)
+                foreach(var item in new[]{ItemId.Screwdriver,ItemId.Wrench})
+                    if((item!=ItemId.Wrench||ItemCatalog.NeedsWrench(SelectedDevice))&&DismantleTools.Count(item)==0)
+                    {task=Supply(actor,DismantleTools,"dismantleTools",item,DismantleX,DismantleY,1);if(task!=null)return task;}
             if(GeneratorBuilt&&FuelSeconds<60)
             {
                 foreach(var fuel in new[]{ItemId.WoodChips,ItemId.WasteWood})
-                {task=Plan(actor,Warehouse,null,"warehouse","fuel",fuel,WarehouseX,WarehouseY,GeneratorX,GeneratorY,Math.Min(8,10-FuelCount));if(task!=null)return task;}
+                {task=Supply(actor,null,"fuel",fuel,GeneratorX,GeneratorY,Math.Min(8,10-FuelCount));if(task!=null)return task;}
             }
-            foreach(var output in new[]{(Output,"woodOutput",BenchX,BenchY),(DismantleOutput,"dismantleOutput",DismantleX,DismantleY),(BrokenTools,"broken",BenchX,BenchY)})
+            foreach(var output in new[]{(Output,"woodOutput",BenchX,BenchY),(DismantleOutput,"dismantleOutput",DismantleX,DismantleY),(TableOutput,"tableOutput",TableX,TableY),(GeneratorResidue,"ash",GeneratorX,GeneratorY),(BrokenTools,"broken",BenchX,BenchY)})
                 foreach(ItemId item in Enum.GetValues(typeof(ItemId)))if(output.Item1.Available(item)>0)
                 {task=Plan(actor,output.Item1,Warehouse,output.Item2,"warehouse",item,output.Item3,output.Item4,WarehouseX,WarehouseY,output.Item1.Available(item));if(task!=null)return task;}
             if(BenchBuilt&&RunRequested&&WoodInputStock.Count(ItemId.WasteWood)<WoodInput(SelectedRecipe))
@@ -60,6 +71,7 @@ namespace CrazyRubbish.Core
         {
             foreach(var actor in residents)
             {
+                if(RiotActive){actor.Activity="欠薪暴动：人工岗位停工";continue;}
                 if(actor.Delivery==null)
                 {
                     bool producing=actor.Job==WorkerJob.Woodwork&&RunRequested&&(jobActive||pendingRecipe==null&&WoodInputStock.Available(ItemId.WasteWood)>=WoodInput(SelectedRecipe))&&Output.FreeTicks>=BatchTicks(SelectedRecipe)&&(SelectedRecipe==WoodRecipe.SortedWood||ToolFor(1,ItemId.WoodHandSaw)!=null);
@@ -79,7 +91,7 @@ namespace CrazyRubbish.Core
                     continue;
                 }
                 if(Distance(actor.X,actor.Y,x,y)>0.001)continue;
-                delivery.Progress+=seconds*PressureAt(x,y);
+                delivery.Progress+=seconds*Math.Max(0.25,PressureAt(x,y)*LivingEfficiency(actor));
                 if(delivery.Progress<2-1e-6)continue;
                 if(!delivery.Picked)
                 {

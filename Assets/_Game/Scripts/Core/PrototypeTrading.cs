@@ -26,13 +26,15 @@ namespace CrazyRubbish.Core
         {
             bool built=flag==1?BenchBuilt:flag==2?DismantleBuilt:flag==4?TableBuilt:flag==8&&GeneratorBuilt;
             if(!built)return Fail("此玩家设施不存在；社区旧设施不能出售拆移。");
+            if(flag==4)RemoveAssemblyBatch();
             if(flag==1&&jobActive){if(jobProgress>=Duration(activeRecipe)-1e-6){WoodInputStock.Commit(woodToken);foreach(var p in WoodProducts(activeRecipe))ReturnAtOldSite(p.Item,p.Amount,"",BenchX,BenchY+1);WearTool(woodToolId,WoodInput(activeRecipe));CompletedBatches++;}else WoodInputStock.Release(woodToken);jobActive=false;jobProgress=0;RunRequested=false;}
             if(flag==2&&dismantleActive){if(dismantleProgress>=35-1e-6){DismantleInput.Commit(dismantleToken);foreach(var p in ItemCatalog.DeviceYield(SelectedDevice,dismantleUsable))ReturnAtOldSite(p.Item,p.Amount,"",DismantleX,DismantleY+1);DismantledBatches++;}else DismantleInput.Release(dismantleToken);dismantleActive=false;dismantleProgress=0;DismantleRequested=false;}
             int x=flag==1?BenchX:flag==2?DismantleX:flag==4?TableX:GeneratorX,y=flag==1?BenchY:flag==2?DismantleY:flag==4?TableY:GeneratorY;
             if(flag==1)BenchBuilt=false;if(flag==2)DismantleBuilt=false;if(flag==4)TableBuilt=false;if(flag==8)GeneratorBuilt=false;
             geometryRevision++;GroundRevision++;manualStation=0;
             var inventories=flag==1?new[]{(WoodInputStock,"woodInput"),(Output,"woodOutput"),(WoodTools,"benchTools")}:
-                flag==2?new[]{(DismantleInput,"dismantleInput"),(DismantleOutput,"dismantleOutput"),(DismantleTools,"dismantleTools")}:new (UnitInventory,string)[0];
+                flag==2?new[]{(DismantleInput,"dismantleInput"),(DismantleOutput,"dismantleOutput"),(DismantleTools,"dismantleTools")}:
+                flag==4?new[]{(TableInput,"tableInput"),(TableOutput,"tableOutput")}:new[]{(GeneratorResidue,"ash")};
             foreach(var actor in residents.Where(r=>r.Delivery!=null))
             {
                 if(inventories.Any(p=>p.Item1==actor.Delivery.Source||p.Item1==actor.Delivery.Target))

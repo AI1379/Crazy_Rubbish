@@ -1,14 +1,18 @@
 # Crazy Rubbish · 涌现
 
-垃圾回收与产线经营游戏的初始 Unity 项目。工作名称为 **Crazy Rubbish**，正式游戏名称待定。项目根目录就是本仓库目录。
+垃圾回收与产线经营 Unity 项目，现有可试玩的首区 Demo。工作名称为 **Crazy Rubbish**，正式游戏名称待定。项目根目录就是本仓库目录。
 
 ## 打开项目
 
 1. 使用 **Unity 2022.3.62f3**。
 2. Unity Hub → Add / 添加磁盘上的项目 → 选择本目录。
-3. 打开 `Assets/_Game/Scenes/Main.unity`，点击Play，运行M2起步原型。
+3. 打开 `Assets/_Game/Scenes/Main.unity`，点击Play，在菜单选择“开始试玩”。
 
-Main现在保存实际的World地图与Interface界面对象，不进入Play也能在Scene中查看。若视角偏离，使用`Crazy Rubbish → Focus World in Scene`；选中Interface后按F可聚焦UI。界面分为现场、人员、仓库三页，地图支持滚轮缩放和中键拖动。编辑方式见[界面与场景编辑](Docs/Development/07_界面与场景编辑.md)。
+2026-10-12已接入首区八项目标和阶段结算、食物/饮水供给与钱包、工作台工具装配、保护工资的替补采购、欠薪暴动和失败恢复。支持点击地图行走。推荐路线、验收数据与尚未实现内容见[首区Demo](Docs/Development/08_首区Demo.md)。
+
+新游戏默认开启[游戏内新手教程](Docs/Development/09_新手教程.md)，右侧新增“教程”页。12步实际操作、地图金色目标和按钮定位覆盖拾取到demo结算，支持跳过、逐课复习、保存并继续。
+
+Main现在保存实际的World地图与Interface界面对象，不进入Play也能在Scene中查看。若视角偏离，使用`Crazy Rubbish → Focus World in Scene`；选中Interface后按F可聚焦UI。界面分为现场、人员、仓库、教程四页，地图支持滚轮缩放和中键拖动。编辑方式见[界面与场景编辑](Docs/Development/07_界面与场景编辑.md)。
 
 现行策划为2026-10-09收到的合并版 (1)，S5第20章优先，取消固定整局小时数。当前工程采用32×28首区、0.8移速、现场输入输出、施工/生产预约、工具实例和实际人力配送，保留动态交易、工资并加入当前状态保存继续。操作和当前缺口见[S5调整说明](Docs/Development/06_S5调整与验证.md)，完整范围见[合并策划](Docs/Design/00_合并策划案.md)。
 
@@ -45,6 +49,7 @@ WASD／方向键移动，E就近交互，Shift+E附近整堆拾取，Q入库，F
 - [M2起步说明](Docs/Development/04_M2起步说明.md)
 - [CI与Windows发布](Docs/Development/05_CI与发布.md)
 - [当前S5调整与验证](Docs/Development/06_S5调整与验证.md)
+- [首区Demo与推荐试玩路线](Docs/Development/08_首区Demo.md)
 
 五份输入原文保存于Docs/Source，S5为当前基线，S1—S4保留历史。全部新增前期默认规则已纳入计划，已实现与尚未接入分开记录，不能把文档填完当成整局平衡验证。
 

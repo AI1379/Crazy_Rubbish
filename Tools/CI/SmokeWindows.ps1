@@ -32,6 +32,10 @@ if (-not $report.success -or -not $report.restart -or $report.residents -ne 5 -o
 }
 if ($report.development -ne $false) { throw 'Release player was built with development options, or omitted build metadata.' }
 if ($report.deliveredTrips -le 0 -or -not $report.saveRoundtrip) { throw 'Physical delivery or runtime save/load acceptance failed.' }
+if (-not $report.demoCompleted -or $report.assembledTools -lt 1 -or $report.mealsConsumed -le 0 -or $report.money -lt 200) {
+    throw 'Complete demo, nutrition, tool assembly or expansion-funding acceptance failed.'
+}
+if (-not $report.tutorialCompleted) { throw 'Tutorial progress or runtime bindings did not complete.' }
 if ($ExpectedVersion -and $report.version -cne $ExpectedVersion) {
     throw "Expected player version $ExpectedVersion, got $($report.version)."
 }

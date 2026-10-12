@@ -32,7 +32,7 @@ namespace CrazyRubbish.Editor
             if (scene.path != MainScene) return;
             var world = UnityEngine.Object.FindObjectOfType<PrototypeWorld>();
             var hud = UnityEngine.Object.FindObjectOfType<PrototypeHud>();
-            if (world == null || hud == null || (world.HasLayout && hud.HasLayout)) return;
+            if (world == null || hud == null || (world.HasCurrentLayout && hud.HasLayout)) return;
             bool wasDirty = scene.isDirty;
             EnsureCurrentLayout();
             // Never save unrelated unsaved scene work during automatic migration.
@@ -54,7 +54,7 @@ namespace CrazyRubbish.Editor
             var model = new PrototypeSimulation(settings, 4271);
             var world = game.GetComponent<PrototypeWorld>();
             var hud = game.GetComponent<PrototypeHud>();
-            bool changed = !world.HasLayout || !hud.HasLayout;
+            bool changed = !world.HasCurrentLayout || !hud.HasLayout;
             world.BuildLayout(model);
             hud.BuildLayout();
             if (!changed) return;

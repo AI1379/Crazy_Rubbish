@@ -66,12 +66,31 @@ namespace CrazyRubbish.Editor
             appearance.warehouse = LoadSprite(art, "Warehouse");
             appearance.workbench = LoadSprite(art, "Workbench");
             appearance.tile = LoadSprite(art, "Tile");
+            appearance.itemIcons = new Sprite[Enum.GetValues(typeof(CrazyRubbish.Core.ItemId)).Length];
+            foreach (CrazyRubbish.Core.ItemId item in Enum.GetValues(typeof(CrazyRubbish.Core.ItemId)))
+            {
+                string path = art + "Items/" + item + ".png";
+                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                if (importer == null) continue;
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spriteImportMode = SpriteImportMode.Single;
+                importer.spritePixelsPerUnit = 64;
+                importer.filterMode = FilterMode.Point;
+                importer.mipmapEnabled = false;
+                importer.alphaIsTransparency = true;
+                importer.textureCompression = TextureImporterCompression.Uncompressed;
+                importer.SaveAndReimport();
+                appearance.itemIcons[(int)item] = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            }
             EditorUtility.SetDirty(appearance);
             AssetDatabase.SaveAssets();
 
             if (File.Exists(ScenePath)) EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
             if (UnityEngine.Object.FindObjectOfType<PrototypeGame>() == null) CreateScene(balance, appearance);
             PrototypePresentationEditor.EnsureCurrentLayout();
+            var previewGame = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
+            var previewModel = new CrazyRubbish.Core.PrototypeSimulation(JsonUtility.FromJson<CrazyRubbish.Core.PrototypeSettings>(JsonUtility.ToJson(balance.values)), 4271);
+            previewGame.GetComponent<PrototypeWorld>().RefreshView(previewModel);
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
             PlayerSettings.defaultScreenWidth = 1280;
@@ -148,6 +167,8 @@ namespace CrazyRubbish.Editor
                 if (report.summary.result != BuildResult.Succeeded)
                     throw new InvalidOperationException("Windows build failed: " + report.summary.result);
                 File.Copy("Assets/_Game/Art/Fonts/OFL.txt", outputDirectory + "/Font-OFL.txt", true);
+                File.Copy("Docs/Development/08_首区Demo.md", outputDirectory + "/首区试玩说明.md", true);
+                File.Copy("Docs/Development/09_新手教程.md", outputDirectory + "/新手教程说明.md", true);
                 Debug.Log("Windows " + (development ? "development" : "release") + " build succeeded: " + outputDirectory);
             }
             finally { PlayerSettings.bundleVersion = originalVersion; }

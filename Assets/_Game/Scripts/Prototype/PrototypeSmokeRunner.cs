@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using CrazyRubbish.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,10 @@ namespace CrazyRubbish.Prototype
         [Serializable]
         private sealed class SmokeReport
         {
-            public bool success, restart, development, saveRoundtrip;
+            public bool success, restart, development, saveRoundtrip, demoCompleted, tutorialCompleted;
+            public double demoMinutes;
+            public int assembledTools, mealsConsumed;
+            public long demoWagesPaidCents;
             public double money;
             public int batches, buttons, residents, deliveredTrips;
             public long wagesPaidCents;
@@ -37,6 +41,8 @@ namespace CrazyRubbish.Prototype
             int deliveredTrips = 0;
             bool saveRoundtrip = false;
             int batches = 0;
+            bool demoCompleted=false;double demoMinutes=0;int assembledTools=0,mealsConsumed=0;long demoWages=0;
+            bool tutorialCompleted=false;
             if (!string.IsNullOrEmpty(screenshot))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(screenshot)));
@@ -50,8 +56,10 @@ namespace CrazyRubbish.Prototype
                 if (FindObjectsOfType<Button>().Length < 20 || Camera.main == null)
                     throw new InvalidOperationException("Scene HUD or camera was not initialized.");
                 VerifyHudBindings(screenshot);
+                VerifyWorldPresentation(screenshot);
                 PrototypeSimulation model = game.Model;
-                PrototypeStartingScenario.Run(model);
+                bool tutorialRoute=Array.IndexOf(Environment.GetCommandLineArgs(),"-prototypeTutorialSmoke")>=0;
+                if(tutorialRoute)PrototypeTutorialScenario.Run(model);else PrototypeStartingScenario.Run(model);
                 if (model.Money <= 0 || model.TotalWagesPaidCents != 5000 || model.Residents.Count != 5 || model.DeliveredTrips <= 0)
                     throw new InvalidOperationException("M2起步、招募和首期发薪验证失败。");
                 wagesPaid = model.TotalWagesPaidCents;
@@ -60,21 +68,37 @@ namespace CrazyRubbish.Prototype
                 if (!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
                 {
                     decimal savedCash = model.Money;
+                    int savedTutorialStep=model.Tutorial.step;bool savedTutorialActive=model.Tutorial.active;
                     game.SaveGame();
                     if (!game.LastActionSucceeded) throw new InvalidOperationException("Runtime save failed: " + game.Notice);
                     Require(model.SellTechnology(Technology.Wood), "change cash after save");
+                    model.Tutorial.Skip();
                     game.LoadLatest();
                     model = game.Model;
-                    if (!game.LastActionSucceeded || model.Money != savedCash || model.DeliveredTrips != deliveredTrips || model.TotalWagesPaidCents != wagesPaid)
+                    if (!game.LastActionSucceeded || model.Money != savedCash || model.DeliveredTrips != deliveredTrips || model.TotalWagesPaidCents != wagesPaid || model.Tutorial.step!=savedTutorialStep || model.Tutorial.active!=savedTutorialActive)
                         throw new InvalidOperationException("Runtime file save/load did not restore cash, transport and payroll.");
                     saveRoundtrip = true;
+                }
+                if(!tutorialRoute)PrototypeDemoScenario.RunAfterStarting(model);
+                tutorialCompleted=model.Tutorial.Completed;
+                if(!tutorialCompleted)throw new InvalidOperationException("教程实际进度未到完成，或教程按钮未绑定。");
+                if(!model.DemoCompleted||model.AssembledTools<1||model.MissingSupplyPeople>0||model.UnpaidWageCents>0||model.MealsConsumed==0)
+                    throw new InvalidOperationException("完整demo目标、生活供应或工具续补未完成。");
+                demoCompleted=model.DemoCompleted;demoMinutes=model.DemoCompletedAt/60;assembledTools=model.AssembledTools;mealsConsumed=model.MealsConsumed;demoWages=model.TotalWagesPaidCents;
+                if(!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
+                {
+                    game.SaveGame();if(!game.LastActionSucceeded)throw new InvalidOperationException(game.Notice);
+                    model.Tutorial.Skip();
+                    game.LoadLatest();model=game.Model;
+                    if(!game.LastActionSucceeded||!model.DemoCompleted||model.AssembledTools!=assembledTools||model.MealsConsumed!=mealsConsumed||!model.Tutorial.Completed||!model.Tutorial.active)
+                        throw new InvalidOperationException("完整demo存档恢复失败。");
                 }
                 double time = model.GameSeconds;
                 model.SetPaused(true); model.Advance(10);
                 if (Math.Abs(model.GameSeconds - time) > 0.0001) throw new InvalidOperationException("Pause did not stop game time.");
                 model.SetPaused(false);
                 if (failed) throw new InvalidOperationException("Runtime emitted an error or exception.");
-                game.Report(new ActionResult(true, "起步、发电、招募与首次发薪验证成功。"));
+                game.Report(new ActionResult(true, "完整首区demo验证成功：生活、工具制作、200钱、发薪与存档。"));
                 earnedMoney = model.Money;
                 batches = model.CompletedBatches;
             }
@@ -92,6 +116,11 @@ namespace CrazyRubbish.Prototype
                     Path.GetFileNameWithoutExtension(screenshot) + "-completed.png");
                 try { CapturePreview(completed); }
                 catch (Exception exception) { failed = true; Debug.LogException(exception); }
+            }
+            if(!failed&&!string.IsNullOrEmpty(screenshot))
+            {
+                try{game.ShowResult();game.GetComponent<PrototypeHud>().RefreshView(game.Model);CapturePreview(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(screenshot)),Path.GetFileNameWithoutExtension(screenshot)+"-result.png"));game.ContinueAfterResult();}
+                catch(Exception exception){failed=true;Debug.LogException(exception);}
             }
             game.ResetGame();
             yield return null;
@@ -114,7 +143,7 @@ namespace CrazyRubbish.Prototype
                         success = true, restart = true, development = Debug.isDebugBuild,
                         money = (double)earnedMoney, batches = batches, buttons = FindObjectsOfType<Button>().Length,
                         wagesPaidCents = wagesPaid, residents = recruited, version = Application.version,
-                        deliveredTrips = deliveredTrips, saveRoundtrip = saveRoundtrip
+                        deliveredTrips = deliveredTrips, saveRoundtrip = saveRoundtrip,demoCompleted=demoCompleted,demoMinutes=demoMinutes,assembledTools=assembledTools,mealsConsumed=mealsConsumed,demoWagesPaidCents=demoWages,tutorialCompleted=tutorialCompleted
                     }));
                 }
                 Debug.Log("PROTOTYPE_SMOKE_PASS: pickup, weighted storage, woodwork, dismantle, generator, recruitment, resident production, payroll, pause and restart.");
@@ -134,23 +163,45 @@ namespace CrazyRubbish.Prototype
                 throw new InvalidOperationException("Runtime duplicated or lost the saved presentation.");
             Button[] buttons = root.GetComponentsInChildren<Button>(true);
             Button Find(string name) => Array.Find(buttons, button => button.name == name);
+            Find("Menu").onClick.Invoke();game.GetComponent<PrototypeHud>().RefreshView(game.Model);
+            if(!game.MenuOpen||!root.Find("Demo Menu").gameObject.activeSelf)throw new InvalidOperationException("Demo menu is inaccessible.");
+            if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+"-menu.png"));
+            Find("Resume").onClick.Invoke();if(game.MenuOpen)throw new InvalidOperationException("Resume button is unbound.");
+            game.GetComponent<PrototypeHud>().RefreshView(game.Model);
+            Find("Tab3").onClick.Invoke();
+            if(!root.Find("Management/教程 Page").gameObject.activeSelf)throw new InvalidOperationException("Tutorial page missing.");
+            Find("TutorialAction").onClick.Invoke();game.GetComponent<PrototypeHud>().RefreshView(game.Model);
+            if(!game.Model.Tutorial.started || game.Model.Tutorial.step!=1)throw new InvalidOperationException("Tutorial start button is unbound.");
+            Find("TutorialPrevious").onClick.Invoke();Find("TutorialNext").onClick.Invoke();
+            if(game.Model.Tutorial.step!=1 || game.Model.CashCents!=0 || game.Model.Carry.UsedTicks!=0)throw new InvalidOperationException("Reviewing lessons changes world state.");
+            Find("TutorialStart").onClick.Invoke();Find("TutorialSkip").onClick.Invoke();
+            if(game.Model.Tutorial.active)throw new InvalidOperationException("Tutorial skip button is unbound.");
+            Find("TutorialStart").onClick.Invoke();game.GetComponent<PrototypeHud>().RefreshView(game.Model);
+            Find("TutorialLocate").onClick.Invoke();game.GetComponent<PrototypeHud>().RefreshView(game.Model);
+            if(!Find("Pick3").gameObject.activeInHierarchy)throw new InvalidOperationException("Tutorial does not reveal the suggested inventory control.");
+            Find("InventoryFilter").onClick.Invoke();
+            Find("Tab3").onClick.Invoke();game.GetComponent<PrototypeWorld>().RefreshView(game.Model);game.GetComponent<PrototypeHud>().RefreshView(game.Model);
+            if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+"-tutorial.png"));
+            Find("FoodPolicy").onClick.Invoke();if(game.Model.FoodPolicy!=SupplyPolicy.Free)throw new InvalidOperationException("Supply policy button is unbound.");Find("FoodPolicy").onClick.Invoke();Find("FoodPolicy").onClick.Invoke();
+            Find("ExternalSupply").onClick.Invoke();if(game.Model.ExternalSupply)throw new InvalidOperationException("External supply button is unbound.");Find("ExternalSupply").onClick.Invoke();
+            long beforeTrade=game.Model.CashCents;Find("Command22").onClick.Invoke();if(game.Model.CashCents!=beforeTrade||!root.Find("Trade Confirmation").gameObject.activeSelf)throw new InvalidOperationException("Technology trade confirmation is missing.");Find("CancelTrade").onClick.Invoke();
             Find("Pause").onClick.Invoke();
             if (!game.Model.Paused) throw new InvalidOperationException("Saved Pause button is unbound.");
             Find("Pause").onClick.Invoke();
             Find("Speed3").onClick.Invoke();
             if (game.Model.Speed != 3) throw new InvalidOperationException("Saved speed buttons are unbound.");
             Find("Speed1").onClick.Invoke();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Find("Tab" + i).onClick.Invoke();
-                string[] names = { "现场 Page", "人员 Page", "仓库 Page" };
+                string[] names = { "现场 Page", "人员 Page", "仓库 Page", "教程 Page" };
                 for (int j = 0; j < names.Length; j++)
                     if (root.Find("Management/" + names[j]).gameObject.activeSelf != (i == j))
                         throw new InvalidOperationException("Management tab navigation failed.");
-                if (i > 0 && !string.IsNullOrEmpty(screenshot))
+                if (i > 0 && i<3 && !string.IsNullOrEmpty(screenshot))
                     CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + (i == 1 ? "-people.png" : "-inventory.png")));
             }
-            Find("InventoryFilter").onClick.Invoke();
+            Find("Tab2").onClick.Invoke();Find("InventoryFilter").onClick.Invoke();
             if (!Find("Pick0").gameObject.activeInHierarchy)
                 throw new InvalidOperationException("Full inventory catalogue is inaccessible.");
             Find("InventoryFilter").onClick.Invoke();
@@ -162,6 +213,53 @@ namespace CrazyRubbish.Prototype
             string[] arguments = Environment.GetCommandLineArgs();
             int index = Array.IndexOf(arguments, name);
             return index >= 0 && index + 1 < arguments.Length ? arguments[index + 1] : null;
+        }
+
+        private void VerifyWorldPresentation(string screenshot)
+        {
+            var world = game.GetComponent<PrototypeWorld>();
+            var hud = game.GetComponent<PrototypeHud>();
+            var model = game.Model;
+            var camera = world.worldCamera;
+            float zoom = camera.orthographicSize;
+            Vector3 position = camera.transform.position;
+            long units = model.Ground.Sum(p => (long)p.Amount);
+            int piles = model.Ground.Count;
+            int cellCount = model.Ground.Select(p => (p.X, p.Y)).Distinct().Count();
+            camera.orthographicSize = 16;
+            world.RefreshView(model);
+            var items = world.VisualRoot.Find("Ground Items");
+            if (items.GetComponentsInChildren<SpriteRenderer>().Count(r => r.name == "Item" && r.enabled) != cellCount)
+                throw new InvalidOperationException("Dense ground cells are not represented by one icon per cell.");
+            if (items.GetComponentsInChildren<TextMesh>().Any(t => t.name == "Quantity"))
+                throw new InvalidOperationException("Quantity labels clutter the overview zoom.");
+            if (world.VisualRoot.Find("PlayerLabel").gameObject.activeSelf || world.VisualRoot.Find("Tutorial Guide Target/Tutorial Target Label") != null)
+                throw new InvalidOperationException("Player or tutorial text overlaps ground items.");
+            var crowded = model.Ground.GroupBy(p => (p.X, p.Y)).OrderByDescending(g => g.Count()).First();
+            world.FocusPoint(crowded.Key.X, crowded.Key.Y, 4);
+            world.RefreshView(model);
+            Vector3 targetPoint = camera.WorldToViewportPoint(new Vector3(crowded.Key.X, crowded.Key.Y, 0));
+            if (!new Rect(0, 0, 1, 1).Contains(targetPoint)) throw new InvalidOperationException("Focused inspection target is outside the map viewport.");
+            if (items.GetComponentsInChildren<TextMesh>().Count(t => t.name == "Quantity") != cellCount)
+                throw new InvalidOperationException("Detailed zoom lost cell summaries.");
+            world.InspectAt(new Vector2(crowded.Key.X, crowded.Key.Y));
+            Transform inspection = hud.VisualRoot.Find("Map Inspection");
+            string details = inspection.Find("Contents").GetComponent<Text>().text;
+            foreach (var item in crowded.Select(p => p.Item).Distinct())
+                if (!details.Contains(ItemCatalog.Name(item))) throw new InvalidOperationException("Inspection lost a mixed-cell item.");
+            if (inspection.GetComponentsInChildren<Graphic>().Any(g => g.raycastTarget))
+                throw new InvalidOperationException("Map inspection blocks movement clicks.");
+            Canvas.ForceUpdateCanvases();
+            var tooltipCorners = new Vector3[4]; inspection.GetComponent<RectTransform>().GetWorldCorners(tooltipCorners);
+            Rect viewport = camera.pixelRect;
+            if (tooltipCorners.Any(p => p.x < viewport.xMin || p.x > viewport.xMax || p.y < viewport.yMin || p.y > viewport.yMax))
+                throw new InvalidOperationException("Map inspection extends outside the map viewport.");
+            if (!string.IsNullOrEmpty(screenshot)) CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + "-inspection.png"));
+            world.InspectAt(null);
+            if (inspection.gameObject.activeSelf) throw new InvalidOperationException("Map inspection remains after pointer exit.");
+            camera.orthographicSize = zoom; camera.transform.position = position; world.RefreshView(model);
+            if (piles != model.Ground.Count || units != model.Ground.Sum(p => (long)p.Amount))
+                throw new InvalidOperationException("Presentation changed the simulated resources.");
         }
 
         private static void CapturePreview(string path)

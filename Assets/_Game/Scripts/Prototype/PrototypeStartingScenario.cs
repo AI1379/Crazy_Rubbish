@@ -8,6 +8,7 @@ namespace CrazyRubbish.Prototype
         public static void Run(PrototypeSimulation model)
         {
             Collect(model,ItemId.WoodHandSaw,1);
+            Collect(model,ItemId.DrinkingWater,24);Collect(model,ItemId.Food,12);
             Collect(model,ItemId.RecoveredFastener,4);Collect(model,ItemId.WasteWood,16);
             Require(model.BuildBench());Require(model.BuildDismantle());
             while(model.WoodInputStock.Count(ItemId.WasteWood)<8)
@@ -49,7 +50,7 @@ namespace CrazyRubbish.Prototype
             if(model.UnpaidWages!=50)throw new InvalidOperationException("首期工资不符。");
             if(model.Money<50)throw new InvalidOperationException("物理运输首期收入不足50："+model.Money);
             Require(model.PayWages());
-            if(model.UnpaidWages!=0||model.Residents.Sum(r=>r.CashCents)!=7500||model.DeliveredTrips==0)throw new InvalidOperationException("工资或实体配送未完成。");
+            if(model.UnpaidWages!=0||model.Residents.Any(r=>r.CashCents<0)||model.DeliveredTrips==0||model.Failed)throw new InvalidOperationException("工资、生活钱包或实体配送未完成。");
             WaitUntil(model,()=>model.CompletedBatches>=12,180);
             if(model.Warehouse.Available(ItemId.Plank)>0)model.Sell(ItemId.Plank,int.MaxValue);
         }
@@ -96,7 +97,8 @@ namespace CrazyRubbish.Prototype
         public static void WaitUntil(PrototypeSimulation model,Func<bool> condition,double timeout)
         {
             double end=model.GameSeconds+timeout;
-            while(!condition()&&model.GameSeconds<end)model.Advance(0.5);
+            while(!condition()&&model.GameSeconds<end&&!model.Failed)model.Advance(0.5);
+            if(model.Failed)throw new InvalidOperationException(model.FailureReason);
             if(!condition())throw new InvalidOperationException("等待超时："+model.State+" / "+model.DismantleState);
         }
         public static void Require(ActionResult result){if(!result.Success)throw new InvalidOperationException(result.Message);}

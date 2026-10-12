@@ -5,7 +5,8 @@ param(
     [Parameter(Mandatory)][ValidatePattern('^[a-fA-F0-9]{40}$')][string]$Commit,
     [string]$Repository = 'AI1379/Crazy_Rubbish',
     [string]$ReleaseTag = '',
-    [string]$UnityVersion = '2022.3.62f3'
+    [string]$UnityVersion = '2022.3.62f3',
+    [switch]$WorkingTreeDirty
 )
 
 $ErrorActionPreference = 'Stop'
@@ -32,6 +33,7 @@ $metadata = [ordered]@{
     product = 'CrazyRubbish'; version = $Version.TrimStart('v'); releaseTag = $ReleaseTag;
     commit = $Commit.ToLowerInvariant(); repository = $Repository; unityVersion = $UnityVersion;
     target = 'StandaloneWindows64'; scriptingBackend = 'Mono'; development = $false;
+    workingTreeDirty = [bool]$WorkingTreeDirty;
     builtAtUtc = [DateTime]::UtcNow.ToString('o')
 }
 $metadataPath = Join-Path $buildRoot 'build-info.json'

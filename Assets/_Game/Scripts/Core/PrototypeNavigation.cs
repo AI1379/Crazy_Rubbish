@@ -4,6 +4,7 @@ namespace CrazyRubbish.Core
 {
     public sealed partial class PrototypeSimulation
     {
+        private static int CellCoordinate(double position)=>(int)Math.Floor(position+0.5);
         public bool IsWalkable(int x, int y)
         {
             if (x < 0 || y < 0 || x >= Settings.mapWidth || y >= Settings.mapHeight) return false;
@@ -15,7 +16,7 @@ namespace CrazyRubbish.Core
         }
         public int[] FindPath(double fromX, double fromY, int tx, int ty)
         {
-            int sx=(int)Math.Round(fromX), sy=(int)Math.Round(fromY);
+            int sx=CellCoordinate(fromX), sy=CellCoordinate(fromY);
             if (!IsWalkable(sx,sy) || !IsWalkable(tx,ty)) return null;
             int start=sy*Settings.mapWidth+sx, target=ty*Settings.mapWidth+tx;
             var queue=new Queue<int>(); var previous=new Dictionary<int,int>();
@@ -38,6 +39,35 @@ namespace CrazyRubbish.Core
                 }
             }
             return null;
+        }
+        private bool RecoverPosition(double x,double y,out double recoveredX,out double recoveredY)
+        {
+            if(double.IsNaN(x)||double.IsInfinity(x)||double.IsNaN(y)||double.IsInfinity(y))
+                throw new ArgumentException("存档中的角色位置无效。");
+            recoveredX=x;recoveredY=y;
+            if(IsWalkable(CellCoordinate(x),CellCoordinate(y)))return false;
+            double closest=double.PositiveInfinity;
+            for(int cy=0;cy<Settings.mapHeight;cy++)for(int cx=0;cx<Settings.mapWidth;cx++)
+            {
+                if(!IsWalkable(cx,cy))continue;
+                double distance=(cx-x)*(cx-x)+(cy-y)*(cy-y);
+                if(distance>=closest)continue;
+                closest=distance;recoveredX=cx;recoveredY=cy;
+            }
+            if(double.IsInfinity(closest))throw new InvalidOperationException("地图没有可供角色站立的位置。");
+            return true;
+        }
+        private void RecoverBlockedActors()
+        {
+            // Older saves may contain actors enclosed by construction. Keep their cargo and jobs.
+            if(RecoverPosition(PlayerX,PlayerY,out double x,out double y))
+            {PlayerX=x;PlayerY=y;manualStation=0;ReleaseUnusedTools();}
+            foreach(var person in residents)
+            {
+                if(!RecoverPosition(person.X,person.Y,out x,out y))continue;
+                person.X=x;person.Y=y;person.Path=null;person.PathIndex=0;person.PathRevision=-1;
+                if(person.Delivery!=null)person.Delivery.RetryAt=0;
+            }
         }
         private void WalkResident(Resident person,int tx,int ty,double seconds)
         {

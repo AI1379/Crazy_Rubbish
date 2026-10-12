@@ -29,6 +29,8 @@ namespace CrazyRubbish.Core
         private int fuelWood,fuelChips,manualStation;
         private double fuelRemaining,equivalentHeat,activeFuelHeatRate;
         private readonly Dictionary<(int,int),(int revision,float value)> pressureCache=new Dictionary<(int,int),(int,float)>();
+        private readonly Dictionary<(int,int),int> pressureCapacity=new Dictionary<(int,int),int>();
+        private int pressureRevision=-1;
         public PrototypeSettings Settings {get;}
         public UnitInventory Carry {get;}
         public UnitInventory Warehouse {get;}
@@ -118,17 +120,26 @@ namespace CrazyRubbish.Core
         public void SetSpeed(int speed){if(speed<1||speed>3)throw new ArgumentOutOfRangeException(nameof(speed));Speed=speed;}
         public void MovePlayer(double hx,double hy,double seconds)
         {
-            if(Paused||seconds<=0||hx==0&&hy==0)return;
+            if(Paused||Failed||seconds<=0||hx==0&&hy==0)return;
             CancelInteraction();manualStation=0;
-            if(Math.Abs(hx)>=Math.Abs(hy))hy=0;else hx=0;
+            bool horizontalFirst=Math.Abs(hx)>=Math.Abs(hy);
             double amount=Settings.moveSpeed*seconds*Speed;
             while(amount>0)
             {
-                double step=Math.Min(0.1,amount),x=PlayerX+Math.Sign(hx)*step,y=PlayerY+Math.Sign(hy)*step;
-                if(!IsWalkable((int)Math.Floor(x+0.5),(int)Math.Floor(y+0.5)))break;
-                PlayerX=x;PlayerY=y;amount-=step;
+                double step=Math.Min(0.1,amount);
+                bool moved=horizontalFirst
+                    ? TryMovePlayerStep(Math.Sign(hx)*step,0)||(hy!=0&&TryMovePlayerStep(0,Math.Sign(hy)*step))
+                    : TryMovePlayerStep(0,Math.Sign(hy)*step)||(hx!=0&&TryMovePlayerStep(Math.Sign(hx)*step,0));
+                if(!moved)break;
+                amount-=step;
             }
             ReleaseUnusedTools();RefreshState();
+        }
+        private bool TryMovePlayerStep(double dx,double dy)
+        {
+            double x=PlayerX+dx,y=PlayerY+dy;
+            if(!IsWalkable(CellCoordinate(x),CellCoordinate(y)))return false;
+            PlayerX=x;PlayerY=y;return true;
         }
         public GroundPile NearestPickup()=>ground.Where(p=>p.Amount>p.Reserved&&Distance(PlayerX,PlayerY,p.X,p.Y)<=Settings.interactionRadius)
             .OrderBy(p=>Distance(PlayerX,PlayerY,p.X,p.Y)).ThenBy(p=>p.Id).FirstOrDefault();
@@ -138,12 +149,13 @@ namespace CrazyRubbish.Core
         public ActionResult BuildGenerator()=>Build(8,GeneratorBuilt,new ItemAmount(ItemId.SteelPart,6),new ItemAmount(ItemId.ThermalModule,1),new ItemAmount(ItemId.GeneratorModule,1),new ItemAmount(ItemId.RecoveredWire,2));
         private ActionResult Build(int flag,bool built,params ItemAmount[] costs)
         {
+            if(RiotActive||Failed)return Fail("暴动或失败期间无法安排建设。");
             if(built||(pendingBuildings&flag)!=0)return Fail("已经建成或规划。");
             if(manualStation!=0&&!residents.Any(r=>r.Job==WorkerJob.Idle&&r.Delivery==null))return Fail("缺空闲建设人员，请先退出岗位。");
             if(flag==4 && (!discovered.Contains(ItemId.Plank)||!discovered.Contains(ItemId.SteelPart)))return Fail("首次取得木板和钢铁零件后解锁工作台。");
             if(flag==8&&!discovered.Contains(ItemId.SteelPart))return Fail("先取得钢铁零件以解锁发电机。");
-            int x=flag==1?BenchX:flag==2?DismantleX:flag==4?TableX:GeneratorX,y=flag==1?BenchY:flag==2?DismantleY:flag==4?TableY:GeneratorY;
-            for(int px=x;px<x+2;px++)for(int py=y+1;py<y+3;py++)if(CellTicks(px,py)>0)return Fail("建设位置有地面物品，先清理。");
+            string obstruction=ConstructionObstruction(flag);
+            if(obstruction!=null)return Fail(obstruction);
             var tokens=new List<(UnitInventory,int)>();
             foreach(var cost in costs)
             {
@@ -164,9 +176,23 @@ namespace CrazyRubbish.Core
         private void CompleteBuildings()
         {
             if(pendingBuildings==0)return;
-            foreach(var list in blueprints.Values)foreach(var token in list)token.inventory.Commit(token.token);
-            if((pendingBuildings&1)!=0)BenchBuilt=true;if((pendingBuildings&2)!=0)DismantleBuilt=true;if((pendingBuildings&4)!=0)TableBuilt=true;if((pendingBuildings&8)!=0)GeneratorBuilt=true;
-            blueprints.Clear();pendingBuildings=0;geometryRevision++;GroundRevision++;
+            foreach(int flag in blueprints.Keys.ToArray())
+            {
+                // Recheck when resuming: people or dropped items can occupy an existing blueprint.
+                if(ConstructionObstruction(flag)!=null)continue;
+                foreach(var token in blueprints[flag])token.inventory.Commit(token.token);
+                if(flag==1)BenchBuilt=true;if(flag==2)DismantleBuilt=true;if(flag==4)TableBuilt=true;if(flag==8)GeneratorBuilt=true;
+                blueprints.Remove(flag);pendingBuildings&=~flag;geometryRevision++;GroundRevision++;
+            }
+        }
+        private string ConstructionObstruction(int flag)
+        {
+            int x=flag==1?BenchX:flag==2?DismantleX:flag==4?TableX:GeneratorX,y=flag==1?BenchY:flag==2?DismantleY:flag==4?TableY:GeneratorY;
+            if(InBuilding(CellCoordinate(PlayerX),CellCoordinate(PlayerY),x,y+1)||
+                residents.Any(r=>InBuilding(CellCoordinate(r.X),CellCoordinate(r.Y),x,y+1)))
+                return "建设位置有人，请先离开设施占地。";
+            for(int px=x;px<x+2;px++)for(int py=y+1;py<y+3;py++)if(CellTicks(px,py)>0)return "建设位置有地面物品，先清理。";
+            return null;
         }
         public ActionResult SelectRecipe(WoodRecipe recipe)
         {
@@ -192,12 +218,14 @@ namespace CrazyRubbish.Core
         }
         public ActionResult ToggleWork()
         {
+            if(RiotActive||Failed)return Fail("人工岗位因暴动或失败停工。");
             if(!BenchBuilt)return Fail("先建木工地点。");
             if(NearBench){manualStation=manualStation==1?0:1;RunRequested=true;ReleaseUnusedTools();RefreshState();return Ok(manualStation==1?"主角进入木工岗位。":"主角退出，投入及进度保留。");}
             RunRequested=!RunRequested;RefreshState();return Ok(RunRequested?"木工请求已开启。":"木工请求已停。");
         }
         public ActionResult ToggleDismantle()
         {
+            if(RiotActive||Failed)return Fail("人工岗位因暴动或失败停工。");
             if(!DismantleBuilt)return Fail("先建拆解地点。");
             DismantleRequested=!DismantleRequested;manualStation=DismantleRequested&&Near(DismantleX,DismantleY)?2:0;ReleaseUnusedTools();RefreshState();return Ok("拆解请求已调整。");
         }
@@ -227,8 +255,9 @@ namespace CrazyRubbish.Core
         {
             if(!HasBeenPowered)return Fail("先实际发电取得认可。");
             if(residents.Count>=Settings.firstResidents)return Fail("旧住房满，请在后续住房阶段扩员。");
-            if(residents.Count==0)nextWage=GameSeconds+Settings.wageSeconds;
-            residents.Add(new Resident(residents.Count+1));return Ok("居民加入：迁入存款5，周期工资10。");
+            if(residents.Count==0){nextWage=GameSeconds+Settings.wageSeconds;if(firstPayrollAt==double.MaxValue){firstPayrollAt=nextWage;nextLivingPeriod=nextWage;}}
+            int id=Math.Max(residents.Select(r=>r.Id).DefaultIfEmpty(0).Max(),bills.SelectMany(b=>b.ResidentIds).DefaultIfEmpty(0).Max())+1;
+            residents.Add(new Resident(id){Needs=new LivingNeeds{nextMeal=GameSeconds+300}});return Ok("居民加入：迁入存款5，周期工资10；饮食每300秒消耗。");
         }
         public ActionResult AssignWoodworker()
         {
@@ -253,13 +282,13 @@ namespace CrazyRubbish.Core
                         long transfer = Math.Min(Math.Min(share, bill.UnpaidCents[i]), cashCents);
                         if (transfer == 0) continue;
                         Resident recipient = residents.Find(r => r.Id == bill.ResidentIds[i]);
-                        if (recipient == null) throw new InvalidOperationException("工资账单收款居民不存在。");
-                        recipient.CashCents += transfer; cashCents -= transfer; bill.UnpaidCents[i] -= transfer; paid += transfer;
+                        if (recipient == null) CommunityCashCents += transfer; else recipient.CashCents += transfer;
+                        cashCents -= transfer; bill.UnpaidCents[i] -= transfer; paid += transfer;
                     }
                 }
                 if (cashCents == 0) break;
             }
-            TotalWagesPaidCents += paid; RefreshState();
+            TotalWagesPaidCents += paid;if(RiotActive){RiotPaidCents+=paid;if(RiotPaidCents>=RiotTargetCents)RiotActive=false;} RefreshState();
             return Ok($"实付工资{paid / 100m:0.00}，剩余欠款{UnpaidWages:0.00}。");
         }
 
@@ -271,6 +300,7 @@ namespace CrazyRubbish.Core
         {
             if (ItemCatalog.Price(item).sale<=0) return Fail("此物品没有前期出售渠道。");
             int amount = Math.Min(Math.Max(0, requested), Warehouse.Available(item));
+            if(item==ItemId.DrinkingWater)amount=Math.Min(amount,Math.Max(0,Warehouse.Available(item)-DrinkingReserve));
             if (amount == 0) return Fail("仓库没有该成品。");
             decimal receipt = saleRemainderCents;
             for (int i = 0; i < amount; i++) { receipt += (decimal)SalePrice(item) * 100 * SaleDurabilityFactor(item, i); salesPressure[(int)item] += 1; }
@@ -287,11 +317,19 @@ namespace CrazyRubbish.Core
         {
             var key=((int)Math.Round(cx),(int)Math.Round(cy));
             if(pressureCache.TryGetValue(key,out var value)&&value.revision==GroundRevision)return value.value;
+            if(pressureRevision!=GroundRevision)
+            {
+                pressureCapacity.Clear();
+                foreach(var pile in ground)
+                    if(pile.Item!=ItemId.PowerAsh)for(int x=pile.X;x<pile.X+pile.Width;x++)
+                    {var cell=(x,pile.Y);pressureCapacity.TryGetValue(cell,out int ticks);pressureCapacity[cell]=ticks+pile.Amount*ItemCatalog.CapacityTicks(pile.Item)/pile.Width;}
+                pressureRevision=GroundRevision;
+            }
             int cells=0,exposed=0;double excess=0;
-            for(int x=0;x<Settings.mapWidth;x++)for(int y=0;y<Settings.mapHeight;y++)
+            for(int x=Math.Max(0,key.Item1-4);x<=Math.Min(Settings.mapWidth-1,key.Item1+4);x++)for(int y=Math.Max(0,key.Item2-4);y<=Math.Min(Settings.mapHeight-1,key.Item2+4);y++)
             {
                 if(!IsOwnedGround(x,y)||Occupied(x,y)||Distance(x,y,key.Item1,key.Item2)>4)continue;cells++;
-                int ticks=ground.Where(p=>p.Item!=ItemId.PowerAsh&&p.Y==y&&x>=p.X&&x<p.X+p.Width).Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item)/p.Width);
+                pressureCapacity.TryGetValue((x,y),out int ticks);
                 if(ticks>0){exposed++;excess+=Math.Max(0,ticks/20.0-5);}
             }
             double ratio=cells==0?0:(double)exposed/cells;
@@ -299,7 +337,7 @@ namespace CrazyRubbish.Core
             double overload=exposed==0?1:Math.Max(0.4,1/(1+excess/(exposed*5)));
             float result=(float)Math.Max(0.25,area*overload);pressureCache[key]=(GroundRevision,result);return result;
         }
-        public float HumanEfficiency=>(float)DesignRules.HumanEfficiency(1,0,70,WorkerAtBench?EquivalentUnpaidPeriods:0,1,1,PressureAt(BenchX,BenchY),1);
+        public float HumanEfficiency=>(float)DesignRules.HumanEfficiency(1,0,70,WorkerAtBench?EquivalentUnpaidPeriods:0,(WorkerAtBench?Woodworker.Needs:PlayerNeeds).FoodMultiplier(GameSeconds),(WorkerAtBench?Woodworker.Needs:PlayerNeeds).WaterMultiplier(GameSeconds),PressureAt(BenchX,BenchY),1);
         public double Duration(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?40:recipe==WoodRecipe.WoodHandle?30:10;
         public int ProductAmount(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?3:recipe==WoodRecipe.WoodHandle?2:4;
         public ItemId Product(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?ItemId.Plank:recipe==WoodRecipe.WoodHandle?ItemId.WoodHandle:ItemId.SortedWood;
@@ -309,7 +347,7 @@ namespace CrazyRubbish.Core
         public void Advance(double seconds)
         {
             if(double.IsNaN(seconds)||double.IsInfinity(seconds)||seconds<0)throw new ArgumentOutOfRangeException(nameof(seconds));
-            if(Paused){RefreshState();return;}accumulatedTime+=seconds*Speed;
+            if(Paused||Failed){RefreshState();return;}accumulatedTime+=seconds*Speed;
             while(accumulatedTime+0.00000001>=Step)
             {
                 accumulatedTime-=Step;GameSeconds+=Step;CompleteBuildings();TickInteraction(Step);
@@ -317,7 +355,10 @@ namespace CrazyRubbish.Core
                 if(fuelRemaining>0&&(equivalentHeat<20-0.000001||GeneratorResidue.FreeTicks>=20))
                 {double burned=Math.Min(Step,fuelRemaining);fuelRemaining=Math.Max(0,fuelRemaining-burned);if(fuelRemaining<1e-8)fuelRemaining=0;equivalentHeat+=burned*activeFuelHeatRate;}
                 if(equivalentHeat>=20-0.000001&&GeneratorResidue.TryAdd(ItemId.PowerAsh,1))equivalentHeat=Math.Max(0,equivalentHeat-20);Ignite();
-                if(residents.Count>0&&GameSeconds+1e-6>=nextWage){bills.Add(new WageBill(residents.Select(r=>r.Id).ToArray(),1000,nextWage));nextWage+=600;}
+                if(residents.Count>0&&GameSeconds+1e-6>=nextWage){bills.Add(new WageBill(residents.Select(r=>r.Id).ToArray(),(long)(Settings.wagePerResident*100),nextWage));nextWage+=Settings.wageSeconds;CheckWageRiot();}
+                TickCommunity(Step);
+                if(Failed){accumulatedTime=0;break;}
+                TickWorkshop(Step);TickToolPurchase();
                 TickResidents(Step);
                 if(Settings.automaticInput){inputTimer+=Step;while(inputTimer>=nextInput){inputTimer-=nextInput;GenerateInput(nextInput);nextInput=RandomInputInterval();}}
                 RefreshState();
@@ -334,7 +375,7 @@ namespace CrazyRubbish.Core
                 if(DismantleState==WorkState.Working)
                 {
                     if(!dismantleActive){dismantleToken=DismantleInput.Reserve(new ItemAmount(SelectedDevice,1));dismantleActive=true;dismantleProgress=0;screwToolId=ToolFor(2,ItemId.Screwdriver)?.Id??0;wrenchToolId=ItemCatalog.NeedsWrench(SelectedDevice)?ToolFor(2,ItemId.Wrench)?.Id??0:0;var device=tools.FirstOrDefault(t=>t.Item==SelectedDevice&&t.Location=="dismantleInput");dismantleObjectId=device?.Id??0;dismantleUsable=device?.Usable??true;}
-                    dismantleProgress=Math.Min(35,dismantleProgress+Step*PressureAt(DismantleX,DismantleY));
+                    dismantleProgress=Math.Min(35,dismantleProgress+Step*PressureAt(DismantleX,DismantleY)*LivingEfficiency(null));
                 }
                 var products=ItemCatalog.DeviceYield(SelectedDevice,dismantleUsable);
                 if(dismantleActive&&dismantleProgress>=35-1e-6&&DismantleOutput.FreeTicks>=products.Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item))&&CanWearDismantleTools())
@@ -345,19 +386,21 @@ namespace CrazyRubbish.Core
                 }
                 ReleaseUnusedTools();RefreshState();
                 ApplyRecipeChanges();
+                CheckDemoComplete();
             }
+            Tutorial.Refresh(this);
         }
         private void DiscoverProducts(ItemAmount[] products){foreach(var product in products)discovered.Add(product.Item);}
         private void RefreshState()
         {
             bool mainWood=manualStation==1&&AtFront(BenchX,BenchY),mainDismantle=manualStation==2&&AtFront(DismantleX,DismantleY);
-            if(!BenchBuilt)State=WorkState.NotBuilt;else if(Paused)State=WorkState.Paused;else if(!RunRequested)State=WorkState.Idle;
+            if(!BenchBuilt)State=WorkState.NotBuilt;else if(Paused)State=WorkState.Paused;else if(RiotActive||!RunRequested)State=WorkState.Idle;
             else if(pendingRecipe!=null&&!jobActive)State=WorkState.OutputBlocked;
             else if(jobActive&&jobProgress>=Duration(activeRecipe)-1e-6||!jobActive&&Output.FreeTicks<BatchTicks(SelectedRecipe))State=WorkState.OutputBlocked;
             else if(!mainWood&&!WorkerAtBench)State=WorkState.NeedsOperator;
             else if((jobActive?activeRecipe:SelectedRecipe)!=WoodRecipe.SortedWood&&ToolFor(1,ItemId.WoodHandSaw)==null)State=WorkState.NeedsTool;
             else if(!jobActive&&WoodInputStock.Available(ItemId.WasteWood)<WoodInput(SelectedRecipe))State=WorkState.NeedsMaterials;else State=WorkState.Working;
-            if(!DismantleBuilt)DismantleState=WorkState.NotBuilt;else if(Paused)DismantleState=WorkState.Paused;else if(!DismantleRequested)DismantleState=WorkState.Idle;
+            if(!DismantleBuilt)DismantleState=WorkState.NotBuilt;else if(Paused)DismantleState=WorkState.Paused;else if(RiotActive||!DismantleRequested)DismantleState=WorkState.Idle;
             else if(pendingDevice!=null&&!dismantleActive)DismantleState=WorkState.OutputBlocked;
             else if(dismantleActive&&dismantleProgress>=35-1e-6)DismantleState=WorkState.OutputBlocked;
             else if(!mainDismantle)DismantleState=WorkState.NeedsOperator;

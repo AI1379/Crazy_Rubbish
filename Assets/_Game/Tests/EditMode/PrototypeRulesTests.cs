@@ -9,7 +9,12 @@ namespace CrazyRubbish.Tests
 {
     public sealed class PrototypeRulesTests
     {
-        private static PrototypeSimulation Fresh(bool input=false)=>new PrototypeSimulation(new PrototypeSettings{automaticInput=input});
+        // These focused pre-demo rules isolate player consumption and optional living deliveries.
+        // Community and complete-demo tests below run with the real defaults.
+        private static PrototypeSimulation Fresh(bool input=false)
+        {
+            var m=new PrototypeSimulation(new PrototypeSettings{automaticInput=input});m.PlayerNeeds.nextMeal=double.MaxValue;m.SetLivingDelivery(false);return m;
+        }
         private static void Move(PrototypeSimulation m,int x,int y)=>PrototypeStartingScenario.MoveTo(m,x,y);
         private static void Act(PrototypeSimulation m,Func<ActionResult> action)=>PrototypeStartingScenario.Act(m,action);
         private static void Collect(PrototypeSimulation m,ItemId item,int amount)=>PrototypeStartingScenario.Collect(m,item,amount);
@@ -169,17 +174,17 @@ namespace CrazyRubbish.Tests
         }
         [Test]public void RecruitingAndPayrollUseOriginalEmployeeList()
         {
-            var m=Powered();for(int i=0;i<5;i++)Assert.That(m.Recruit().Success,Is.True);Assert.That(m.Recruit().Success,Is.False);m.Advance(600);
+            var m=Powered();for(int i=0;i<5;i++)Assert.That(m.Recruit().Success,Is.True);foreach(var r in m.Residents)r.Needs.nextMeal=double.MaxValue;Assert.That(m.Recruit().Success,Is.False);m.Advance(600);
             Assert.That(m.UnpaidWages,Is.EqualTo(50));Assert.That(m.Residents.All(r=>r.Cash==5),Is.True);Assert.That(m.WageBills[0].ResidentIds.Length,Is.EqualTo(5));
         }
         [Test]public void PayrollTransfersCashWithoutCreatingMoney()
         {
-            var m=Powered();m.Recruit();m.Warehouse.TryAdd(ItemId.Plank,10);m.Sell(ItemId.Plank,10);m.Advance(600);
+            var m=Powered();m.Recruit();m.Residents[0].Needs.nextMeal=double.MaxValue;m.Warehouse.TryAdd(ItemId.Plank,10);m.Sell(ItemId.Plank,10);m.Advance(600);
             long total=m.CashCents+m.Residents.Sum(r=>r.CashCents);Assert.That(m.PayWages().Success,Is.True);Assert.That(m.Residents[0].Cash,Is.EqualTo(15));Assert.That(m.CashCents+m.Residents.Sum(r=>r.CashCents),Is.EqualTo(total));
         }
         [Test]public void PartialWagesDistributeFairlyAndPreserveDebt()
         {
-            var m=Powered();m.Recruit();m.Recruit();m.Warehouse.TryAdd(ItemId.Plank,1);m.Sell(ItemId.Plank,1);m.Advance(600);m.PayWages();
+            var m=Powered();m.Recruit();m.Recruit();foreach(var r in m.Residents)r.Needs.nextMeal=double.MaxValue;m.Warehouse.TryAdd(ItemId.Plank,1);m.Sell(ItemId.Plank,1);m.Advance(600);m.PayWages();
             Assert.That(m.UnpaidWages,Is.EqualTo(17));Assert.That(m.Residents[0].Cash,Is.EqualTo(6.5m));Assert.That(m.Residents[1].Cash,Is.EqualTo(6.5m));
         }
         [Test]public void SalesAndRoundingRemainConsistentAcrossBatchSizes()
@@ -271,7 +276,7 @@ namespace CrazyRubbish.Tests
         }
         [Test]public void FreshGameFollowsNormalActionsThroughPhysicalLogisticsAndFirstPayroll()
         {
-            var m=Fresh();Assert.DoesNotThrow(()=>PrototypeStartingScenario.Run(m));Assert.That(m.TotalWagesPaidCents,Is.EqualTo(5000));Assert.That(m.CompletedBatches,Is.GreaterThanOrEqualTo(12));Assert.That(m.DeliveredTrips,Is.GreaterThan(0));
+            var m=new PrototypeSimulation(new PrototypeSettings{automaticInput=false});Assert.DoesNotThrow(()=>PrototypeStartingScenario.Run(m));Assert.That(m.TotalWagesPaidCents,Is.EqualTo(5000));Assert.That(m.CompletedBatches,Is.GreaterThanOrEqualTo(12));Assert.That(m.DeliveredTrips,Is.GreaterThan(0));Assert.That(m.MealsConsumed,Is.GreaterThan(0));
         }
         [Test]public void SavedSceneContainsCurrentSettingsAndPortableChineseFont()
         {
