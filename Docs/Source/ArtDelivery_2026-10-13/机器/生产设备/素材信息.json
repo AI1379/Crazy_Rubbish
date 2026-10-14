@@ -1,0 +1,443 @@
+[
+  {
+    "id": "woodwork",
+    "name": "手工木料地点",
+    "footprint": [
+      2,
+      2
+    ],
+    "filename": "bld_woodwork_loaded.png",
+    "reused": true,
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "373b6711353e3a7a8c5394ae1332ac481d11cccf7f89113aee815b3e80c2ad27",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "disassembly",
+    "name": "拆解地点",
+    "footprint": [
+      2,
+      2
+    ],
+    "filename": "bld_disassembly_idle.png",
+    "source": "generated_images/exec-6a6fe071-a734-4fb1-be28-9fe8b95681ca.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "2e1504bdd6beaf922ba5764a7080140988e923c8c04faa8afbf8f71eac5ccfe3",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "workbench",
+    "name": "通用工作台",
+    "footprint": [
+      2,
+      2
+    ],
+    "filename": "bld_workbench_idle.png",
+    "source": "generated_images/exec-e2ef97ac-0bb0-47b1-9dab-eb629f745150.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "204f363caabf5d91493869e8709250312cc3a51c3978ce90525d91c72780c57f",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "washing",
+    "name": "清洗地点",
+    "footprint": [
+      2,
+      2
+    ],
+    "filename": "bld_washing_idle.png",
+    "source": "generated_images/exec-98bc8ce4-efae-425a-9d92-cb61587f0ccb.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "917055817e33b8585ed4e416def16b97a8a025d61e7411908e0d82a25a382996",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "generator",
+    "name": "简陋发电机",
+    "footprint": [
+      2,
+      2
+    ],
+    "filename": "bld_generator_idle.png",
+    "reused": true,
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "7fcd4dc852417e85b097e242d1330e7ccb164f0773739cdaf8c2e36e4e9eb569",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "electric_woodwork",
+    "name": "电动木工地点",
+    "footprint": [
+      3,
+      2
+    ],
+    "filename": "bld_electric_woodwork_idle.png",
+    "source": "generated_images/exec-5945bc3b-7d26-444e-b5be-a6d912d9f5bb.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "sha256": "bc5304e6d6f5a575579303f3d5ebda2890e7859d4c246e6cd310353673f28fea",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "automatic_woodwork",
+    "name": "自动木工地点",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_automatic_woodwork_idle.png",
+    "source": "generated_images/exec-09b9124f-ee47-4600-81ad-d72b407af7a4.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "0529b06c7f021aa8ef99d85589a015965fd10b32011996f5a4704acc2fd9ecf7",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "plastic_sorting",
+    "name": "塑料分选地点",
+    "footprint": [
+      2,
+      2
+    ],
+    "filename": "bld_plastic_sorting_idle.png",
+    "source": "generated_images/exec-456cf827-a365-4527-9642-020cb53b443b.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "2f37be5d807a36b0567f26dba465d43d2d0a89969abe9a8a9b5b027b8176a130",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "plastic_preprocessing",
+    "name": "塑料预处理地点",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_plastic_preprocessing_idle.png",
+    "source": "generated_images/exec-609a4b94-468b-433d-a468-18f3c1bb8289.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "caa07a8296ed45a5e52bd225abfb0c87f36780249cbaafa6bb89a4b369f0c94e",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "plastic_reprocessing",
+    "name": "塑料再加工地点",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_plastic_reprocessing_idle.png",
+    "source": "generated_images/exec-f45c2a3b-61c5-435e-b8a1-5b4c9357a50f.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "d68c68f1ad707ebdf0e857cb9f9fd64bdb4d51a04b35640c147d53ef9ffd3de2",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "metal_processing",
+    "name": "原料处理地点（金属）",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_metal_processing_idle.png",
+    "source": "generated_images/exec-ea804d32-fcf7-4f90-9d15-84b5d71366d0.png",
+    "size": [
+      1293,
+      1217
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "9b1f9c35e84aa8b123fa241c7f78fae377cc7f5afc6d86f7c016aa9397f269d9",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "metal_parts",
+    "name": "零件制造地点（金属）",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_metal_parts_idle.png",
+    "source": "generated_images/exec-c082095f-b0ae-4436-9e36-ddc5089ba040.png",
+    "size": [
+      1278,
+      1230
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "12396294f77e4db18674033fc52d6b3fd48333c48080842e821841aa39a02ce5",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "growing_bed",
+    "name": "小型种植地",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_growing_bed_idle.png",
+    "source": "generated_images/exec-bcf84a67-8b1d-4fea-8dc0-f0b2873412f1.png",
+    "size": [
+      1278,
+      1230
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "cabb5de2064f45af4ec3db957f9e2e97b9c49d795deac4642fd11b17e73f7ec1",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "grow_light",
+    "name": "太阳灯",
+    "footprint": [
+      1,
+      1
+    ],
+    "filename": "bld_grow_light_idle.png",
+    "source": "generated_images/exec-942601d8-29c8-42ab-a2bc-c2babfa91661.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "930d8afadb58c1a2a839b1ffafbab2d46f25dcdb7dc5258f79116004f472a80b",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "auto_plastic_preprocessing",
+    "name": "自动塑料预处理",
+    "footprint": [
+      3,
+      4
+    ],
+    "filename": "bld_auto_plastic_preprocessing_idle.png",
+    "source": "generated_images/exec-3bd95be5-e2e8-4485-8e53-ed6d6bb289c1.png",
+    "size": [
+      1086,
+      1448
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "82e4a368b0f35eaa35d9d84cefef3179a9394a9ae2cc3d5f33ac5faa840e5336",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "auto_plastic_reprocessing",
+    "name": "自动塑料再加工",
+    "footprint": [
+      3,
+      4
+    ],
+    "filename": "bld_auto_plastic_reprocessing_idle.png",
+    "source": "generated_images/exec-5c1fca28-29fa-4287-9658-526dfbb8502c.png",
+    "size": [
+      1086,
+      1448
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "f1a6cbdb0f4fe632b216caa8b08a0bb6a1aa09d2b6e996d496089e4f4eb1db15",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "auto_structural_parts",
+    "name": "自动结构零件地点",
+    "footprint": [
+      3,
+      4
+    ],
+    "filename": "bld_auto_structural_parts_idle.png",
+    "source": "generated_images/exec-e23e77de-0254-46a5-bdd3-8dc63daef193.png",
+    "size": [
+      1086,
+      1448
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "a3f9ed4574b5ee02e136f028836785ecdee45f0db67f346fb79d9231f105bc46",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "wire_manufacturing",
+    "name": "制线地点",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_wire_manufacturing_idle.png",
+    "source": "generated_images/exec-a5e487fd-40b3-4aae-9a04-92396f9e1b1d.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "7e1abea40ee1de8f444685fc049713396c08a888b7fea8902e150f9bcd10b2d2",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "refurbishment",
+    "name": "翻修测试台",
+    "footprint": [
+      3,
+      2
+    ],
+    "filename": "bld_refurbishment_idle.png",
+    "source": "generated_images/exec-14df7987-f805-4800-a5fd-afa86d8cf0f0.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "sha256": "1bf8cb22c8f26032d0aa4dd65d417b089833b8c22d8a765a8a2614db5ef5de50",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "composting",
+    "name": "堆肥场",
+    "footprint": [
+      3,
+      3
+    ],
+    "filename": "bld_composting_idle.png",
+    "source": "generated_images/exec-2b7d5c2a-b0d4-46f0-beba-c2685a64b1c8.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "f16c1a93cfa2719f343d877587722c8a298be7586fe890edc05a859b22070dab",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  },
+  {
+    "id": "substrate_mixing",
+    "name": "基质调配设备",
+    "footprint": [
+      2,
+      2
+    ],
+    "filename": "bld_substrate_mixing_idle.png",
+    "source": "generated_images/exec-94fc21d4-d912-441c-91c6-6e298d88ddbf.png",
+    "size": [
+      1272,
+      1236
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "sha256": "38443740f2eaef877cb9fd3553004f980687020c12f6775249daa62faf046f23",
+    "state": "静态主体样图（部分含物料或运行表现，见说明）"
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "direction": "down",
+    "filename": "chr_worker_down.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "visible_bbox_alpha_128": [
+      192,
+      74,
+      832,
+      1472
+    ],
+    "sha256": "3183a53d4782be2d8106d5e4d8eb1d3cc5b6d8dad9265922e16420525f331626"
+  },
+  {
+    "direction": "up",
+    "filename": "chr_worker_up.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "visible_bbox_alpha_128": [
+      192,
+      55,
+      832,
+      1473
+    ],
+    "sha256": "9d21c86094df3cd04b3bda1a19c0b89784069cdb68cdc0d372dd509758f7d086"
+  },
+  {
+    "direction": "left",
+    "filename": "chr_worker_left.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "visible_bbox_alpha_128": [
+      305,
+      87,
+      714,
+      1476
+    ],
+    "sha256": "f574e3e5c737c82d5a605472c9f3b02a7963cd1a609e194576413ce71fb93746"
+  },
+  {
+    "direction": "right",
+    "filename": "chr_worker_right.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "visible_bbox_alpha_128": [
+      315,
+      69,
+      709,
+      1468
+    ],
+    "sha256": "9305299f93d1cfb6d1eb335c01077dce00899fae9a4bfb6057d1687fab790f5e"
+  }
+]

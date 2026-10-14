@@ -1,0 +1,38 @@
+﻿《喂——出来》全部已确定生产设备与工作地点贴图
+数量：21类，每类1张独立透明PNG；新增19张，复用2张。
+风格：简洁像素风，俯视工业布局。
+生成方式：内置 image_gen 工具；全部提示词见生成提示词.json。
+
+名称 / 占格 / 文件 / 原图像素尺寸
+01. 手工木料地点 / 2×2格 / bld_woodwork_loaded.png / 1254×1254
+02. 拆解地点 / 2×2格 / bld_disassembly_idle.png / 1254×1254
+03. 通用工作台 / 2×2格 / bld_workbench_idle.png / 1254×1254
+04. 清洗地点 / 2×2格 / bld_washing_idle.png / 1254×1254
+05. 简陋发电机 / 2×2格 / bld_generator_idle.png / 1254×1254
+06. 电动木工地点 / 3×2格 / bld_electric_woodwork_idle.png / 1536×1024
+07. 自动木工地点 / 3×3格 / bld_automatic_woodwork_idle.png / 1254×1254
+08. 塑料分选地点 / 2×2格 / bld_plastic_sorting_idle.png / 1254×1254
+09. 塑料预处理地点 / 3×3格 / bld_plastic_preprocessing_idle.png / 1254×1254
+10. 塑料再加工地点 / 3×3格 / bld_plastic_reprocessing_idle.png / 1254×1254
+11. 原料处理地点（金属） / 3×3格 / bld_metal_processing_idle.png / 1293×1217
+12. 零件制造地点（金属） / 3×3格 / bld_metal_parts_idle.png / 1278×1230
+13. 小型种植地 / 3×3格 / bld_growing_bed_idle.png / 1278×1230
+14. 太阳灯 / 1×1格 / bld_grow_light_idle.png / 1254×1254
+15. 自动塑料预处理 / 3×4格 / bld_auto_plastic_preprocessing_idle.png / 1086×1448
+16. 自动塑料再加工 / 3×4格 / bld_auto_plastic_reprocessing_idle.png / 1086×1448
+17. 自动结构零件地点 / 3×4格 / bld_auto_structural_parts_idle.png / 1086×1448
+18. 制线地点 / 3×3格 / bld_wire_manufacturing_idle.png / 1254×1254
+19. 翻修测试台 / 3×2格 / bld_refurbishment_idle.png / 1536×1024
+20. 堆肥场 / 3×3格 / bld_composting_idle.png / 1254×1254
+21. 基质调配设备 / 2×2格 / bld_substrate_mixing_idle.png / 1272×1236
+
+交付说明：
+- 包含当前策划已确定的生产设备、工作地点、种植地与太阳灯。塑料分选地点也供已定义的有机分选工序复用。
+- 当前为每类一张合并静态主体样图，部分带有物料、喷水或炉内亮色；文件的idle后缀不表示已完成严格空料或无电状态。
+- 运行/停机切换、空料、耐久损坏、其他朝向和分层动画尚未制作；尚未在Unity内验证。
+- 原图像素尺寸不等于游戏占格；导入时统一像素密度、显示大小、占地原点与操作侧。
+- 3×2地点保持宽向，3×4地点保持长向；灯具1格指底座占地，不是整个画布占地。
+- 住房、仓库、普通路灯、传送带与接口属于其他建筑/物流素材，本包不将其计作生产机器。
+
+待定设备：
+第三区域勘探与开采、返回载具的具体设备设计待定；纸/玻璃回收、集中火电、工业水回用、垃圾压缩打包及沼气等仍为候选方向，未在本包编造新机器。

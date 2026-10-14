@@ -1,0 +1,378 @@
+fileFormatVersion: 2
+guid: a857d241ac4797c4eaa2ce41e33553f0
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.012711864}
+  spritePixelsToUnits: 330.7143
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: chr_hero_female_carry_up
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 989
+        width: 224
+        height: 472
+      alignment: 9
+      pivot: {x: 0.5, y: 0.012711864}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f75230c77835d6f83cd16eca6185f56
+      internalID: 248166016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_carry_down
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 987
+        width: 229
+        height: 474
+      alignment: 9
+      pivot: {x: 0.5, y: 0.012658228}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a71ee6a3a72455c8921a27660bcde59e
+      internalID: -1922843971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_carry_left
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 985
+        width: 221
+        height: 476
+      alignment: 9
+      pivot: {x: 0.57466066, y: 0.012605042}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49912f755aa2558680c12399d70f0a13
+      internalID: 2100784156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_carry_right
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 985
+        width: 227
+        height: 476
+      alignment: 9
+      pivot: {x: 0.4229075, y: 0.012605042}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e47daed8e43a5a45820e893d0fdd04cc
+      internalID: -146072768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_pickup_up
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 548
+        width: 243
+        height: 336
+      alignment: 9
+      pivot: {x: 0.5329218, y: 0.017857144}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02c57a0adad95facb65d7d17d551f027
+      internalID: -1125161465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_pickup_down
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 540
+        width: 210
+        height: 369
+      alignment: 9
+      pivot: {x: 0.37380952, y: 0.016260162}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b22df4e7a6a51d9816289d64367c4f2
+      internalID: -1031783709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_pickup_left
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 542
+        width: 249
+        height: 358
+      alignment: 9
+      pivot: {x: 0.7068273, y: 0.016759777}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 530d8410932352cea247ce28c4bd6a4f
+      internalID: -186911466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_pickup_right
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 540
+        width: 235
+        height: 366
+      alignment: 9
+      pivot: {x: 0.27659574, y: 0.016393442}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffc0f424376c57339ff0cb23ee925df7
+      internalID: 1377097163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_saw_up
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 57
+        width: 255
+        height: 441
+      alignment: 9
+      pivot: {x: 0.52156866, y: 0.013605442}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b7606828c865ab5b53f95d070f81fbb
+      internalID: -106999699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_saw_down
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 61
+        width: 236
+        height: 432
+      alignment: 9
+      pivot: {x: 0.52754235, y: 0.013888889}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d318710e53755aa94774130fa3f04d4
+      internalID: 856202797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_saw_left
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 54
+        width: 216
+        height: 438
+      alignment: 9
+      pivot: {x: 0.7222222, y: 0.011415525}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a94f07551a0f5d1ca35247cad299d71a
+      internalID: -2043361500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_female_saw_right
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 52
+        width: 231
+        height: 441
+      alignment: 9
+      pivot: {x: 0.27056277, y: 0.013605442}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb012b6a379b594ca0406aaaf7ca1438
+      internalID: -938807712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 13a29d2c00fdb2c4da7e1fdaa3620e5f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      chr_hero_female_carry_down: -1922843971
+      chr_hero_female_carry_left: 2100784156
+      chr_hero_female_carry_right: -146072768
+      chr_hero_female_carry_up: 248166016
+      chr_hero_female_pickup_down: -1031783709
+      chr_hero_female_pickup_left: -186911466
+      chr_hero_female_pickup_right: 1377097163
+      chr_hero_female_pickup_up: -1125161465
+      chr_hero_female_saw_down: 856202797
+      chr_hero_female_saw_left: -2043361500
+      chr_hero_female_saw_right: -938807712
+      chr_hero_female_saw_up: -106999699
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

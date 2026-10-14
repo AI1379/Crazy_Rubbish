@@ -1,0 +1,1244 @@
+{
+  "version": "balance-2026-10-11-v1",
+  "definitions": {
+    "manual_wood": {
+      "name": "手工木料加工",
+      "acquired_all": [
+        "waste_wood"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "wood"
+      ],
+      "recipes": [
+        "wood_boards",
+        "wood_handles",
+        "wood_sort"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "disassembly": {
+      "name": "工具拆解",
+      "acquired_all": [
+        "screwdriver_wood"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "disassembly"
+      ],
+      "recipes": [
+        "recycle_hammer_wood",
+        "recycle_hammer_plastic",
+        "recycle_handsaw_wood",
+        "recycle_handsaw_plastic",
+        "recycle_screwdriver_wood",
+        "recycle_screwdriver_plastic",
+        "recycle_wrench",
+        "recycle_scissors",
+        "recycle_sewing",
+        "recycle_tongs",
+        "recycle_file",
+        "recycle_broom",
+        "salvage_motor",
+        "scrap_old_motor",
+        "salvage_drive",
+        "scrap_old_drive",
+        "open_old_cutter",
+        "open_old_washer",
+        "open_old_former",
+        "open_old_molds",
+        "open_old_wires",
+        "open_old_grow_light",
+        "open_old_feeder",
+        "open_old_furnace",
+        "open_old_fixture",
+        "open_old_control_basic",
+        "open_old_controller",
+        "open_old_dryer",
+        "open_old_pet_former",
+        "open_old_drive_box",
+        "open_old_wire_maker",
+        "open_old_survey",
+        "open_old_drill",
+        "open_old_separator",
+        "open_old_kiln",
+        "open_old_structure",
+        "open_old_boiler",
+        "open_old_turbine",
+        "open_old_condenser",
+        "open_old_paper_machine",
+        "open_old_glass_mold",
+        "open_old_water_filter",
+        "reuse_old_motor",
+        "reuse_old_drive",
+        "unpack_waste_wood",
+        "unpack_sorted_wood",
+        "unpack_steel_scrap",
+        "unpack_copper_scrap",
+        "unpack_aluminum_scrap",
+        "unpack_tool_steel_scrap",
+        "unpack_plastic_mix",
+        "unpack_sorted_pp",
+        "unpack_sorted_hdpe",
+        "unpack_sorted_pet",
+        "unpack_plastic_other",
+        "unpack_waste_textile",
+        "unpack_cuttable_textile",
+        "unpack_waste_paper",
+        "unpack_waste_glass",
+        "unpack_slag",
+        "unpack_mixed_residue",
+        "unpack_organic_residual",
+        "unpack_mine_tailings",
+        "unpack_ceramic_scrap"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "workbench": {
+      "name": "基础装配",
+      "acquired_all": [
+        "boards",
+        "steel_parts"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "bench"
+      ],
+      "recipes": [
+        "patch",
+        "repair_clothes",
+        "make_broom",
+        "make_hammer_wood",
+        "make_hammer_plastic",
+        "make_handsaw_wood",
+        "make_handsaw_plastic",
+        "make_screwdriver_wood",
+        "make_screwdriver_plastic"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "washing": {
+      "name": "生活用品清洗",
+      "acquired_all": [
+        "container"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "workbench"
+      ],
+      "facilities": [
+        "washing"
+      ],
+      "recipes": [
+        "wash_old_clothes",
+        "wash_rags",
+        "rewash_rags",
+        "wash_food"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "generator": {
+      "name": "简陋火力发电",
+      "acquired_all": [
+        "thermal_module",
+        "generator_module",
+        "wire"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "generator",
+        "power_line"
+      ],
+      "recipes": [],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "housing": {
+      "name": "居住与仓储",
+      "acquired_all": [
+        "boards",
+        "steel_parts"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "housing",
+        "warehouse"
+      ],
+      "recipes": [],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "lighting": {
+      "name": "基础照明",
+      "acquired_all": [
+        "light_module",
+        "wire"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "streetlamp"
+      ],
+      "recipes": [],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "electric_wood": {
+      "name": "电动木工",
+      "acquired_all": [
+        "motor",
+        "machine_saw"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "manual_wood"
+      ],
+      "facilities": [
+        "electric_wood"
+      ],
+      "recipes": [
+        "electric_boards"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "auto_wood": {
+      "name": "自动木工",
+      "acquired_all": [
+        "feeder"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "electric_wood"
+      ],
+      "facilities": [
+        "auto_wood"
+      ],
+      "recipes": [
+        "auto_boards"
+      ],
+      "region_required": 1,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "sorting": {
+      "name": "人工分选",
+      "acquired_all": [
+        "plastic_mix"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "sorting"
+      ],
+      "recipes": [
+        "sort_plastic"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "plastic_pre": {
+      "name": "塑料清洗破碎",
+      "acquired_all": [],
+      "acquired_any": [
+        "sorted_pp",
+        "sorted_hdpe"
+      ],
+      "parents": [
+        "sorting"
+      ],
+      "facilities": [
+        "plastic_pre"
+      ],
+      "recipes": [
+        "wash_pp",
+        "wash_hdpe"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "plastic_remake": {
+      "name": "PP与HDPE再加工",
+      "acquired_all": [],
+      "acquired_any": [
+        "flakes_pp",
+        "flakes_hdpe"
+      ],
+      "parents": [
+        "plastic_pre"
+      ],
+      "facilities": [
+        "plastic_remake"
+      ],
+      "recipes": [
+        "melt_pp",
+        "melt_hdpe",
+        "plastic_handles",
+        "box_pp",
+        "box_hdpe"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "pet": {
+      "name": "PET再加工",
+      "acquired_all": [
+        "sorted_pet",
+        "dryer",
+        "pet_melter",
+        "strap_mold"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "plastic_pre"
+      ],
+      "facilities": [],
+      "recipes": [
+        "wash_pet",
+        "melt_pet",
+        "pet_strap",
+        "recognize_old_plastic"
+      ],
+      "region_required": 1,
+      "tier": "进阶",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "metal_raw": {
+      "name": "普通金属原料加工",
+      "acquired_all": [],
+      "acquired_any": [
+        "steel_scrap",
+        "copper_scrap",
+        "aluminum_scrap"
+      ],
+      "parents": [],
+      "facilities": [
+        "metal_raw"
+      ],
+      "recipes": [
+        "smelt_steel",
+        "smelt_copper",
+        "smelt_aluminum"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "metal_parts": {
+      "name": "普通金属零件",
+      "acquired_all": [],
+      "acquired_any": [
+        "steel_billet",
+        "copper_billet",
+        "aluminum_billet",
+        "mined_steel_billet",
+        "mined_copper_billet"
+      ],
+      "parents": [
+        "metal_raw"
+      ],
+      "facilities": [
+        "metal_parts"
+      ],
+      "recipes": [
+        "parts_steel",
+        "parts_copper",
+        "parts_aluminum",
+        "parts_steel_mined",
+        "parts_copper_mined"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "tool_steel": {
+      "name": "工具钢与部件",
+      "acquired_all": [
+        "tool_steel_scrap"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "metal_raw"
+      ],
+      "facilities": [],
+      "recipes": [
+        "smelt_tool_steel",
+        "make_hammer_head",
+        "make_handsaw_blade",
+        "make_screwdriver_shaft"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "growing": {
+      "name": "太阳灯种植",
+      "acquired_all": [
+        "seed",
+        "substrate",
+        "grow_light_module"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "growing",
+        "grow_lamp"
+      ],
+      "recipes": [
+        "grow"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "belts": {
+      "name": "皮带输送",
+      "acquired_all": [
+        "motor",
+        "steel_parts"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "belt",
+        "port"
+      ],
+      "recipes": [],
+      "region_required": 1,
+      "tier": "运输",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "landfill": {
+      "name": "划地填埋",
+      "acquired_all": [
+        "boards"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "landfill"
+      ],
+      "recipes": [],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "auto_plastic_pre": {
+      "name": "自动塑料预处理",
+      "acquired_all": [
+        "controller",
+        "drive",
+        "dryer"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "plastic_pre"
+      ],
+      "facilities": [
+        "auto_plastic_pre"
+      ],
+      "recipes": [
+        "auto_wash_pp",
+        "auto_wash_hdpe",
+        "auto_wash_pet"
+      ],
+      "region_required": 1,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": "PET配方另需PET知识；普通PP/HDPE不被PET知识卡住"
+    },
+    "auto_plastic_remake": {
+      "name": "自动塑料再加工",
+      "acquired_all": [
+        "controller",
+        "drive",
+        "pet_melter"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "plastic_remake"
+      ],
+      "facilities": [
+        "auto_plastic_remake"
+      ],
+      "recipes": [
+        "auto_melt_pp",
+        "auto_melt_hdpe",
+        "auto_melt_pet",
+        "auto_plastic_handles",
+        "auto_box_pp",
+        "auto_box_hdpe",
+        "auto_pet_strap"
+      ],
+      "region_required": 1,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "auto_parts": {
+      "name": "自动结构零件",
+      "acquired_all": [
+        "controller",
+        "drive",
+        "fixture"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "metal_parts"
+      ],
+      "facilities": [
+        "auto_parts"
+      ],
+      "recipes": [
+        "auto_parts_steel",
+        "auto_parts_copper",
+        "auto_parts_aluminum",
+        "auto_parts_steel_mined",
+        "auto_parts_copper_mined"
+      ],
+      "region_required": 1,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "wire": {
+      "name": "铜线与绝缘包覆",
+      "acquired_all": [
+        "wire_die",
+        "resin_hdpe"
+      ],
+      "acquired_any": [
+        "copper_billet",
+        "mined_copper_billet"
+      ],
+      "parents": [],
+      "facilities": [
+        "wire_maker"
+      ],
+      "recipes": [
+        "make_wire",
+        "make_wire_mined"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "refurbish": {
+      "name": "机电诊断翻修",
+      "acquired_all": [],
+      "acquired_any": [
+        "old_motor",
+        "old_drive",
+        "repair_motor",
+        "repair_drive"
+      ],
+      "parents": [],
+      "facilities": [
+        "refurbish"
+      ],
+      "recipes": [
+        "diagnose_motor",
+        "diagnose_drive",
+        "repair_motor",
+        "repair_drive"
+      ],
+      "region_required": 1,
+      "tier": "进阶",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "full_clothing": {
+      "name": "废布制衣",
+      "acquired_all": [
+        "cuttable_textile"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "washing",
+        "workbench"
+      ],
+      "facilities": [],
+      "recipes": [
+        "wash_fabric",
+        "cut_fabric",
+        "sew_clothes"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "compost": {
+      "name": "有机整理与堆肥",
+      "acquired_all": [
+        "organic_mix"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "sorting"
+      ],
+      "facilities": [
+        "composting"
+      ],
+      "recipes": [
+        "organic_sort",
+        "compost",
+        "resume_compost"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "substrate": {
+      "name": "基质再生",
+      "acquired_all": [
+        "compost",
+        "spent_substrate"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "substrate_mixer"
+      ],
+      "recipes": [
+        "substrate"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "electromechanical": {
+      "name": "机电部件组装",
+      "acquired_all": [
+        "motor",
+        "copper_parts",
+        "fixture"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "electromechanical"
+      ],
+      "recipes": [
+        "assemble_motor",
+        "assemble_drive",
+        "assemble_generator_module",
+        "assemble_feeder",
+        "assemble_coil"
+      ],
+      "region_required": 1,
+      "tier": "基础",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "control_assembly": {
+      "name": "控制组件装配",
+      "acquired_all": [
+        "ceramic_insulator"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "electromechanical"
+      ],
+      "facilities": [],
+      "recipes": [
+        "assemble_controller"
+      ],
+      "region_required": 1,
+      "tier": "进阶",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "survey": {
+      "name": "地质勘探",
+      "acquired_all": [
+        "survey_module",
+        "controller"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "survey"
+      ],
+      "recipes": [
+        "survey_iron",
+        "survey_copper",
+        "survey_clay"
+      ],
+      "region_required": 3,
+      "tier": "第三区域",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "mine": {
+      "name": "持续开采",
+      "acquired_all": [
+        "drill_module",
+        "motor"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "survey"
+      ],
+      "facilities": [
+        "mine"
+      ],
+      "recipes": [
+        "extract_iron",
+        "extract_copper",
+        "extract_clay"
+      ],
+      "region_required": 3,
+      "tier": "第三区域",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": "还需相应矿点勘探完成与采掘锚点"
+    },
+    "auto_mine": {
+      "name": "采掘自动送料",
+      "acquired_all": [
+        "feeder",
+        "controller"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "mine"
+      ],
+      "facilities": [],
+      "recipes": [
+        "auto_extract_iron",
+        "auto_extract_copper",
+        "auto_extract_clay"
+      ],
+      "region_required": 3,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "ore_pre": {
+      "name": "矿料分选",
+      "acquired_all": [],
+      "acquired_any": [
+        "iron_ore",
+        "copper_ore",
+        "clay_ore"
+      ],
+      "parents": [
+        "mine"
+      ],
+      "facilities": [
+        "ore_pre"
+      ],
+      "recipes": [
+        "ore_sort_iron",
+        "ore_sort_copper",
+        "ore_sort_clay"
+      ],
+      "region_required": 3,
+      "tier": "第三区域",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "ore_furnace": {
+      "name": "矿产金属加工",
+      "acquired_all": [],
+      "acquired_any": [
+        "iron_concentrate",
+        "copper_concentrate"
+      ],
+      "parents": [
+        "ore_pre"
+      ],
+      "facilities": [
+        "ore_furnace"
+      ],
+      "recipes": [
+        "ore_steel",
+        "ore_copper"
+      ],
+      "region_required": 3,
+      "tier": "第三区域",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "ceramics": {
+      "name": "陶瓷绝缘材料",
+      "acquired_all": [
+        "clean_clay",
+        "kiln_module"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "ore_pre"
+      ],
+      "facilities": [
+        "ceramic_kiln"
+      ],
+      "recipes": [
+        "ceramics"
+      ],
+      "region_required": 3,
+      "tier": "第三区域",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "complex": {
+      "name": "复合塑料再利用",
+      "acquired_all": [
+        "plastic_other",
+        "separator_module"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "plastic_remake"
+      ],
+      "facilities": [
+        "complex_recovery"
+      ],
+      "recipes": [
+        "complex_recovery"
+      ],
+      "region_required": 1,
+      "tier": "进阶",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "auto_complex": {
+      "name": "自动复合料处理",
+      "acquired_all": [
+        "controller",
+        "drive"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "complex"
+      ],
+      "facilities": [
+        "auto_complex"
+      ],
+      "recipes": [
+        "auto_complex_recovery"
+      ],
+      "region_required": 1,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "auto_metal": {
+      "name": "自动金属原料",
+      "acquired_all": [
+        "controller",
+        "drive"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "metal_raw"
+      ],
+      "facilities": [
+        "auto_metal_raw"
+      ],
+      "recipes": [
+        "auto_smelt_steel",
+        "auto_smelt_copper",
+        "auto_smelt_aluminum",
+        "auto_smelt_tool_steel"
+      ],
+      "region_required": 1,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "auto_tools": {
+      "name": "自动工具部件",
+      "acquired_all": [
+        "controller",
+        "drive"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "tool_steel"
+      ],
+      "facilities": [
+        "auto_tool_parts"
+      ],
+      "recipes": [
+        "auto_hammer_head",
+        "auto_handsaw_blade",
+        "auto_screwdriver_shaft"
+      ],
+      "region_required": 1,
+      "tier": "自动化",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "paper_pulp": {
+      "name": "废纸制浆",
+      "acquired_all": [
+        "waste_paper",
+        "paper_module"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "paper_pulper"
+      ],
+      "recipes": [
+        "paper_pulp"
+      ],
+      "region_required": 1,
+      "tier": "扩展",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "paperboard": {
+      "name": "再生纸板",
+      "acquired_all": [
+        "paper_pulp",
+        "press_module"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "paper_pulp"
+      ],
+      "facilities": [
+        "paper_press"
+      ],
+      "recipes": [
+        "paperboard",
+        "carton"
+      ],
+      "region_required": 1,
+      "tier": "扩展",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "glass": {
+      "name": "玻璃再加工",
+      "acquired_all": [
+        "waste_glass",
+        "glass_mold"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "glass_furnace"
+      ],
+      "recipes": [
+        "clean_glass",
+        "glass_product"
+      ],
+      "region_required": 1,
+      "tier": "扩展",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "water_recovery": {
+      "name": "工艺水回用",
+      "acquired_all": [
+        "filter_module"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "water_recovery"
+      ],
+      "recipes": [
+        "water_recovery"
+      ],
+      "region_required": 1,
+      "tier": "扩展",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": "可在首次产生废水前解锁，收集附件仅装于指定工序"
+    },
+    "baler": {
+      "name": "压缩暂存",
+      "acquired_all": [
+        "press_module",
+        "pet_strap"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "baler"
+      ],
+      "recipes": [
+        "pack_waste_wood",
+        "pack_sorted_wood",
+        "pack_steel_scrap",
+        "pack_copper_scrap",
+        "pack_aluminum_scrap",
+        "pack_tool_steel_scrap",
+        "pack_plastic_mix",
+        "pack_sorted_pp",
+        "pack_sorted_hdpe",
+        "pack_sorted_pet",
+        "pack_plastic_other",
+        "pack_waste_textile",
+        "pack_cuttable_textile",
+        "pack_waste_paper",
+        "pack_waste_glass",
+        "pack_slag",
+        "pack_mixed_residue",
+        "pack_organic_residual",
+        "pack_mine_tailings",
+        "pack_ceramic_scrap"
+      ],
+      "region_required": 1,
+      "tier": "扩展",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "thermal_power": {
+      "name": "集中火电",
+      "acquired_all": [
+        "boiler_module",
+        "turbine_module",
+        "condenser_module"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "generator"
+      ],
+      "facilities": [
+        "boiler",
+        "turbine",
+        "condenser",
+        "steam_pipe"
+      ],
+      "recipes": [],
+      "region_required": 1,
+      "tier": "扩展",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "lift_frame": {
+      "name": "返程承力结构",
+      "acquired_all": [
+        "reclaimed_structure",
+        "mined_steel_billet"
+      ],
+      "acquired_any": [],
+      "parents": [],
+      "facilities": [
+        "lift_assembly"
+      ],
+      "recipes": [
+        "build_lift_frame"
+      ],
+      "region_required": 3,
+      "tier": "返程",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "lift_drive": {
+      "name": "返程爬升驱动",
+      "acquired_all": [
+        "mined_copper_billet",
+        "motor",
+        "drive"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "lift_frame"
+      ],
+      "facilities": [],
+      "recipes": [
+        "build_lift_drive"
+      ],
+      "region_required": 3,
+      "tier": "返程",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "lift_safety": {
+      "name": "制动与控制",
+      "acquired_all": [
+        "ceramic_insulator",
+        "tool_steel_billet",
+        "controller"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "lift_frame"
+      ],
+      "facilities": [],
+      "recipes": [
+        "build_lift_brake",
+        "build_lift_control",
+        "build_lift_cable"
+      ],
+      "region_required": 3,
+      "tier": "返程",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    },
+    "lift_final": {
+      "name": "返程总装",
+      "acquired_all": [
+        "lift_frame",
+        "lift_drive",
+        "lift_brake",
+        "lift_control",
+        "lift_cable"
+      ],
+      "acquired_any": [],
+      "parents": [
+        "lift_drive",
+        "lift_safety"
+      ],
+      "facilities": [
+        "lift_launch"
+      ],
+      "recipes": [
+        "build_lift",
+        "lift_test",
+        "lift_ascent"
+      ],
+      "region_required": 3,
+      "tier": "返程",
+      "unlock_seconds": 0,
+      "unlock_cost": 0,
+      "consume_unlock_items": false,
+      "notes": ""
+    }
+  },
+  "game_name": "喂——出来",
+  "competition_theme": "涌现"
+}

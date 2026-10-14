@@ -44,6 +44,12 @@ namespace CrazyRubbish.Editor
         {
             var game = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
             if (game == null || game.balance == null || game.appearance == null) return;
+            if (game.appearance.characters == null || game.appearance.characters.Length != 6)
+            {
+                DemoArtSetup.Apply(game.appearance);
+                EditorUtility.SetDirty(game.appearance);
+                AssetDatabase.SaveAssets();
+            }
             if (game.appearance.marker == null)
             {
                 game.appearance.marker = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");

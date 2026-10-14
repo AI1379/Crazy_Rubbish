@@ -1,0 +1,31 @@
+{
+  "mode": "内置 image_gen 工具",
+  "date": "2026-10-11",
+  "directory": "C:\\Users\\snowy_light\\Documents\\Codex\\2026-10-03\\x20\\outputs\\art\\npc_directions",
+  "assets": [
+    {
+      "direction": "down",
+      "filename": "chr_worker_down.png",
+      "source": "generated_images/exec-fb42ec35-55f2-4ba8-b0a8-1c6c3b47d90f.png",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ordinary resident NPC static sprite for a 2D top-down factory management game, DOWN direction. Create one full-body human adult worker in a neutral standing pose, arms resting by sides, empty hands, feet visible. Simple short dark brown hair, no hat, muted olive-gray shirt with rolled sleeves, plain brown work trousers (not bib overalls), dark gray work gloves and boots. Ordinary modest working clothes, friendly neutral expression, no weapons or carried tools. Match a chunky simple pixel-art game aesthetic with broad clearly aligned square pixels, dark pixel outlines, limited flat colors, only 2-3 shading tones per material. Stocky readable proportions, slightly enlarged head, slightly elevated camera suitable for top-down gameplay while still seeing full face and body. Direction DOWN / SOUTH: front view facing the bottom of the screen. Portrait 2:3 canvas, whole body centered, consistent foot baseline at about 94% of canvas height, useful transparent margin all around. Exactly one character, one static idle pose, not a spritesheet and not walking frames. TRUE transparent background, clean hard alpha edges, no floor, no ground shadow, no colored halo, no glow, no vignette, no backdrop, no lettering, no watermark. No smooth painting, no photorealism, no tiny intricate details. The sprite should visually read as a simple low-resolution pixel character enlarged with nearest-neighbor."
+    },
+    {
+      "direction": "up",
+      "source": "generated_images/exec-82d84834-cc6c-47c4-9bce-15debe80501a.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional resident NPC sprite for a 2D top-down factory game. The attached image is the exact identity and pixel-art style reference. Preserve this SAME worker's short dark brown hair, skin tone, muted olive-gray rolled-sleeve shirt, simple brown trousers with belt, dark gray gloves and work boots, stocky proportions, clearly square chunky pixel grid and limited palette. Standing upright idle, arms at sides, empty hands, no walking frames. Keep same slightly elevated game camera, full-body centered at same overall height, portrait 2:3 canvas, feet baseline at about 94% of canvas height, clear transparent margin. Genuine transparent background. Exactly ONE character, no spritesheet, no environment or floor, no ground shadow, no halo or glow, no lettering, no smooth gradients. Show correct clothing construction from this direction, no overalls, no hat. Direction: UP / NORTH: facing directly AWAY from viewer. Show back of head, back of olive-gray shirt and back of brown trousers. No face, no eyes, no front shirt buttons, no belt buckle.",
+      "filename": "chr_worker_up.png"
+    },
+    {
+      "direction": "left",
+      "source": "generated_images/exec-1f3b9211-ab16-4b71-b85f-b01464c8f9c3.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional resident NPC sprite for a 2D top-down factory game. The attached image is the exact identity and pixel-art style reference. Preserve this SAME worker's short dark brown hair, skin tone, muted olive-gray rolled-sleeve shirt, simple brown trousers with belt, dark gray gloves and work boots, stocky proportions, clearly square chunky pixel grid and limited palette. Standing upright idle, arms at sides, empty hands, no walking frames. Keep same slightly elevated game camera, full-body centered at same overall height, portrait 2:3 canvas, feet baseline at about 94% of canvas height, clear transparent margin. Genuine transparent background. Exactly ONE character, no spritesheet, no environment or floor, no ground shadow, no halo or glow, no lettering, no smooth gradients. Show correct clothing construction from this direction, no overalls, no hat. Direction: LEFT / WEST: clear LEFT-facing side profile. Nose and face point to LEFT edge of image. Not front-facing and not three-quarter; keep neutral idle stance.",
+      "filename": "chr_worker_left.png"
+    },
+    {
+      "direction": "right",
+      "source": "generated_images/exec-592018a2-021d-420b-a9ae-1533942c0c04.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional resident NPC sprite for a 2D top-down factory game. The attached image is the exact identity and pixel-art style reference. Preserve this SAME worker's short dark brown hair, skin tone, muted olive-gray rolled-sleeve shirt, simple brown trousers with belt, dark gray gloves and work boots, stocky proportions, clearly square chunky pixel grid and limited palette. Standing upright idle, arms at sides, empty hands, no walking frames. Keep same slightly elevated game camera, full-body centered at same overall height, portrait 2:3 canvas, feet baseline at about 94% of canvas height, clear transparent margin. Genuine transparent background. Exactly ONE character, no spritesheet, no environment or floor, no ground shadow, no halo or glow, no lettering, no smooth gradients. Show correct clothing construction from this direction, no overalls, no hat. Direction: RIGHT / EAST: clear RIGHT-facing side profile. Nose and face point to RIGHT edge of image. Not front-facing and not three-quarter; keep neutral idle stance.",
+      "filename": "chr_worker_right.png"
+    }
+  ]
+}

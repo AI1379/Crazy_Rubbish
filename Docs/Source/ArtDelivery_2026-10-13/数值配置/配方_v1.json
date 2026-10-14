@@ -1,0 +1,6382 @@
+{
+  "version": "balance-2026-10-11-v1",
+  "definitions": {
+    "wood_boards": {
+      "name": "手工锯木板",
+      "facility": "wood",
+      "inputs": {
+        "waste_wood": 4
+      },
+      "outputs": {
+        "boards": 3,
+        "wood_chips": 1
+      },
+      "human_seconds": 40,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "handsaw": 4
+      },
+      "technologies": [
+        "manual_wood"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 40,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 3.2,
+      "output_base_sell_equivalent": 9.15
+    },
+    "wood_handles": {
+      "name": "手工制木柄",
+      "facility": "wood",
+      "inputs": {
+        "waste_wood": 2
+      },
+      "outputs": {
+        "wood_handle": 2,
+        "wood_chips": 1
+      },
+      "human_seconds": 30,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "handsaw": 2
+      },
+      "technologies": [
+        "manual_wood"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 30,
+      "cycles_per_minute_ideal": 2.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 1.6,
+      "output_base_sell_equivalent": 4.15
+    },
+    "wood_sort": {
+      "name": "整理木料",
+      "facility": "wood",
+      "inputs": {
+        "waste_wood": 4
+      },
+      "outputs": {
+        "sorted_wood": 4
+      },
+      "human_seconds": 10,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "manual_wood"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 10,
+      "cycles_per_minute_ideal": 6.0,
+      "capacity_in_per_minute_ideal": 24.0,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 3.2,
+      "output_base_sell_equivalent": 1.6
+    },
+    "electric_boards": {
+      "name": "电动锯板",
+      "facility": "electric_wood",
+      "inputs": {
+        "waste_wood": 4
+      },
+      "outputs": {
+        "boards": 3,
+        "wood_chips": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 15,
+      "natural_seconds": 0,
+      "power": 1,
+      "tools": {},
+      "technologies": [
+        "electric_wood"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 9.6,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 15,
+      "input_buy_equivalent": 3.2,
+      "output_base_sell_equivalent": 9.15
+    },
+    "auto_boards": {
+      "name": "自动锯板",
+      "facility": "auto_wood",
+      "inputs": {
+        "sorted_wood": 4
+      },
+      "outputs": {
+        "boards": 3,
+        "wood_chips": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 15,
+      "natural_seconds": 0,
+      "power": 1.5,
+      "tools": {},
+      "technologies": [
+        "auto_wood"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 16.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 22.5,
+      "input_buy_equivalent": 4,
+      "output_base_sell_equivalent": 9.15
+    },
+    "patch": {
+      "name": "裁补丁",
+      "facility": "bench",
+      "inputs": {
+        "waste_textile": 2
+      },
+      "outputs": {
+        "patch": 2
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "scissors": 2
+      },
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 1.6,
+      "output_base_sell_equivalent": 1.0
+    },
+    "repair_clothes": {
+      "name": "修补旧衣",
+      "facility": "bench",
+      "inputs": {
+        "clean_old_clothes": 1,
+        "patch": 1
+      },
+      "outputs": {
+        "clothes": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "sewing": 1
+      },
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 3.6,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 5,
+      "output_base_sell_equivalent": 8
+    },
+    "make_hammer_wood": {
+      "name": "装配木柄锤",
+      "facility": "bench",
+      "inputs": {
+        "wood_handle": 1,
+        "hammer_head": 1
+      },
+      "outputs": {
+        "hammer_wood": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 8,
+      "output_base_sell_equivalent": 7
+    },
+    "make_hammer_plastic": {
+      "name": "装配塑料柄锤",
+      "facility": "bench",
+      "inputs": {
+        "plastic_handle": 1,
+        "hammer_head": 1
+      },
+      "outputs": {
+        "hammer_plastic": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 7,
+      "output_base_sell_equivalent": 7
+    },
+    "recycle_hammer_wood": {
+      "name": "拆解损坏木柄锤",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_hammer_wood": 2
+      },
+      "outputs": {
+        "tool_steel_scrap": 1,
+        "waste_wood": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "tongs": 2
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.3
+    },
+    "recycle_hammer_plastic": {
+      "name": "拆解损坏塑料柄锤",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_hammer_plastic": 2
+      },
+      "outputs": {
+        "tool_steel_scrap": 1,
+        "plastic_mix": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "tongs": 2
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.12
+    },
+    "make_handsaw_wood": {
+      "name": "装配木柄手锯",
+      "facility": "bench",
+      "inputs": {
+        "wood_handle": 1,
+        "handsaw_blade": 1
+      },
+      "outputs": {
+        "handsaw_wood": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 9,
+      "output_base_sell_equivalent": 10
+    },
+    "make_handsaw_plastic": {
+      "name": "装配塑料柄手锯",
+      "facility": "bench",
+      "inputs": {
+        "plastic_handle": 1,
+        "handsaw_blade": 1
+      },
+      "outputs": {
+        "handsaw_plastic": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 8,
+      "output_base_sell_equivalent": 10
+    },
+    "recycle_handsaw_wood": {
+      "name": "拆解损坏木柄手锯",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_handsaw_wood": 2
+      },
+      "outputs": {
+        "tool_steel_scrap": 1,
+        "waste_wood": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "tongs": 2
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.3
+    },
+    "recycle_handsaw_plastic": {
+      "name": "拆解损坏塑料柄手锯",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_handsaw_plastic": 2
+      },
+      "outputs": {
+        "tool_steel_scrap": 1,
+        "plastic_mix": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "tongs": 2
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.12
+    },
+    "make_screwdriver_wood": {
+      "name": "装配木柄螺丝刀",
+      "facility": "bench",
+      "inputs": {
+        "wood_handle": 1,
+        "screwdriver_shaft": 1
+      },
+      "outputs": {
+        "screwdriver_wood": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 7,
+      "output_base_sell_equivalent": 6
+    },
+    "make_screwdriver_plastic": {
+      "name": "装配塑料柄螺丝刀",
+      "facility": "bench",
+      "inputs": {
+        "plastic_handle": 1,
+        "screwdriver_shaft": 1
+      },
+      "outputs": {
+        "screwdriver_plastic": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 6
+    },
+    "recycle_screwdriver_wood": {
+      "name": "拆解损坏木柄螺丝刀",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_screwdriver_wood": 2
+      },
+      "outputs": {
+        "tool_steel_scrap": 1,
+        "waste_wood": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "tongs": 2
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.3
+    },
+    "recycle_screwdriver_plastic": {
+      "name": "拆解损坏塑料柄螺丝刀",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_screwdriver_plastic": 2
+      },
+      "outputs": {
+        "tool_steel_scrap": 1,
+        "plastic_mix": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "tongs": 2
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.12
+    },
+    "make_broom": {
+      "name": "装配扫帚",
+      "facility": "bench",
+      "inputs": {
+        "wood_handle": 1,
+        "broom_head": 1
+      },
+      "outputs": {
+        "broom": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "workbench"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 4
+    },
+    "recycle_wrench": {
+      "name": "拆解损坏扳手",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_wrench": 1
+      },
+      "outputs": {
+        "steel_scrap": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.6
+    },
+    "recycle_scissors": {
+      "name": "拆解损坏剪刀",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_scissors": 1
+      },
+      "outputs": {
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1
+    },
+    "recycle_sewing": {
+      "name": "拆解损坏针线工具",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_sewing": 1
+      },
+      "outputs": {
+        "steel_scrap": 0.25,
+        "waste_textile": 0.25
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.21
+    },
+    "recycle_tongs": {
+      "name": "拆解损坏夹钳",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_tongs": 1
+      },
+      "outputs": {
+        "steel_scrap": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.6
+    },
+    "recycle_file": {
+      "name": "拆解损坏锉刀",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_file": 1
+      },
+      "outputs": {
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 4.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1
+    },
+    "recycle_broom": {
+      "name": "拆解损坏扫帚",
+      "facility": "disassembly",
+      "inputs": {
+        "broken_broom": 1
+      },
+      "outputs": {
+        "waste_wood": 0.5,
+        "mixed_residue": 0.25
+      },
+      "human_seconds": 15,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 15,
+      "cycles_per_minute_ideal": 4.0,
+      "capacity_in_per_minute_ideal": 2.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.15
+    },
+    "wash_old_clothes": {
+      "name": "洗旧衣",
+      "facility": "washing",
+      "inputs": {
+        "old_clothes": 2,
+        "water": 1,
+        "soap": 0.02
+      },
+      "outputs": {
+        "clean_old_clothes": 2
+      },
+      "human_seconds": 40,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "washing"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 3.165,
+      "human_labor_seconds_per_batch": 40,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 6.58,
+      "output_base_sell_equivalent": 3.6
+    },
+    "wash_rags": {
+      "name": "制干净抹布",
+      "facility": "washing",
+      "inputs": {
+        "waste_textile": 2,
+        "water": 0.5,
+        "soap": 0.01
+      },
+      "outputs": {
+        "clean_rag": 2
+      },
+      "human_seconds": 30,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "washing"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 30,
+      "cycles_per_minute_ideal": 2.0,
+      "capacity_in_per_minute_ideal": 4.11,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 1.89,
+      "output_base_sell_equivalent": 2
+    },
+    "rewash_rags": {
+      "name": "洗脏抹布",
+      "facility": "washing",
+      "inputs": {
+        "dirty_rag": 2,
+        "water": 0.5,
+        "soap": 0.01
+      },
+      "outputs": {
+        "clean_rag": 2
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "washing"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 1.332,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 2
+    },
+    "wash_fabric": {
+      "name": "洗可裁剪纺织",
+      "facility": "washing",
+      "inputs": {
+        "cuttable_textile": 4,
+        "water": 1,
+        "soap": 0.02
+      },
+      "outputs": {
+        "washed_textile": 4
+      },
+      "human_seconds": 40,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "full_clothing"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 6.165,
+      "human_labor_seconds_per_batch": 40,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 4.58,
+      "output_base_sell_equivalent": 2.4
+    },
+    "cut_fabric": {
+      "name": "分级裁剪",
+      "facility": "bench",
+      "inputs": {
+        "washed_textile": 4
+      },
+      "outputs": {
+        "fabric_panel": 3,
+        "patch": 1
+      },
+      "human_seconds": 40,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "scissors": 4
+      },
+      "technologies": [
+        "full_clothing"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 40,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 4.8,
+      "output_base_sell_equivalent": 3.2
+    },
+    "sew_clothes": {
+      "name": "拼接衣服",
+      "facility": "bench",
+      "inputs": {
+        "fabric_panel": 3
+      },
+      "outputs": {
+        "clothes": 1
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "sewing": 3
+      },
+      "technologies": [
+        "full_clothing"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 1.5,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 8
+    },
+    "sort_plastic": {
+      "name": "人工塑料分选",
+      "facility": "sorting",
+      "inputs": {
+        "plastic_mix": 10
+      },
+      "outputs": {
+        "sorted_pp": 4,
+        "sorted_hdpe": 3,
+        "sorted_pet": 1,
+        "plastic_other": 2
+      },
+      "human_seconds": 90,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "actual_composition": true,
+      "composition_region2": {
+        "sorted_pp": 3,
+        "sorted_hdpe": 3,
+        "sorted_pet": 2,
+        "plastic_other": 2
+      },
+      "technologies": [
+        "sorting"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 90,
+      "cycles_per_minute_ideal": 0.6667,
+      "capacity_in_per_minute_ideal": 6.667,
+      "human_labor_seconds_per_batch": 90,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 4.0,
+      "output_base_sell_equivalent": 2.4
+    },
+    "wash_pp": {
+      "name": "清洗破碎PP",
+      "facility": "plastic_pre",
+      "inputs": {
+        "sorted_pp": 3,
+        "water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_pp": 3
+      },
+      "human_seconds": 30,
+      "machine_seconds": 30,
+      "natural_seconds": 0,
+      "power": 1.5,
+      "tools": {},
+      "addons": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "plastic_pre"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 45.0,
+      "input_buy_equivalent": 2.61,
+      "output_base_sell_equivalent": 1.5
+    },
+    "melt_pp": {
+      "name": "再生PP",
+      "facility": "plastic_remake",
+      "inputs": {
+        "flakes_pp": 3
+      },
+      "outputs": {
+        "resin_pp": 3
+      },
+      "human_seconds": 30,
+      "machine_seconds": 45,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "addons": {},
+      "technologies": [
+        "plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 75,
+      "cycles_per_minute_ideal": 0.8,
+      "capacity_in_per_minute_ideal": 2.4,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 90,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.4
+    },
+    "auto_wash_pp": {
+      "name": "自动清洗破碎PP",
+      "facility": "auto_plastic_pre",
+      "inputs": {
+        "sorted_pp": 3,
+        "water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_pp": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_plastic_pre"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 2.61,
+      "output_base_sell_equivalent": 1.5
+    },
+    "auto_melt_pp": {
+      "name": "自动再生PP",
+      "facility": "auto_plastic_remake",
+      "inputs": {
+        "flakes_pp": 3
+      },
+      "outputs": {
+        "resin_pp": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 75,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 75,
+      "cycles_per_minute_ideal": 0.8,
+      "capacity_in_per_minute_ideal": 2.4,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 225,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.4
+    },
+    "wash_hdpe": {
+      "name": "清洗破碎HDPE",
+      "facility": "plastic_pre",
+      "inputs": {
+        "sorted_hdpe": 3,
+        "water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_hdpe": 3
+      },
+      "human_seconds": 30,
+      "machine_seconds": 30,
+      "natural_seconds": 0,
+      "power": 1.5,
+      "tools": {},
+      "addons": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "plastic_pre"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 45.0,
+      "input_buy_equivalent": 2.61,
+      "output_base_sell_equivalent": 1.5
+    },
+    "melt_hdpe": {
+      "name": "再生HDPE",
+      "facility": "plastic_remake",
+      "inputs": {
+        "flakes_hdpe": 3
+      },
+      "outputs": {
+        "resin_hdpe": 3
+      },
+      "human_seconds": 30,
+      "machine_seconds": 45,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "addons": {},
+      "technologies": [
+        "plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 75,
+      "cycles_per_minute_ideal": 0.8,
+      "capacity_in_per_minute_ideal": 2.4,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 90,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.4
+    },
+    "auto_wash_hdpe": {
+      "name": "自动清洗破碎HDPE",
+      "facility": "auto_plastic_pre",
+      "inputs": {
+        "sorted_hdpe": 3,
+        "water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_hdpe": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_plastic_pre"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 2.61,
+      "output_base_sell_equivalent": 1.5
+    },
+    "auto_melt_hdpe": {
+      "name": "自动再生HDPE",
+      "facility": "auto_plastic_remake",
+      "inputs": {
+        "flakes_hdpe": 3
+      },
+      "outputs": {
+        "resin_hdpe": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 75,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 75,
+      "cycles_per_minute_ideal": 0.8,
+      "capacity_in_per_minute_ideal": 2.4,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 225,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.4
+    },
+    "wash_pet": {
+      "name": "清洗破碎PET",
+      "facility": "plastic_pre",
+      "inputs": {
+        "sorted_pet": 3,
+        "water": 0.5,
+        "soap": 0.03
+      },
+      "outputs": {
+        "flakes_pet": 3
+      },
+      "human_seconds": 20,
+      "machine_seconds": 70,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "addons": {
+        "dryer": 1
+      },
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 90,
+      "cycles_per_minute_ideal": 0.6667,
+      "capacity_in_per_minute_ideal": 2.0434,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 210,
+      "input_buy_equivalent": 2.77,
+      "output_base_sell_equivalent": 1.5
+    },
+    "melt_pet": {
+      "name": "再生PET",
+      "facility": "plastic_remake",
+      "inputs": {
+        "flakes_pet": 3
+      },
+      "outputs": {
+        "resin_pet": 3
+      },
+      "human_seconds": 20,
+      "machine_seconds": 100,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "addons": {
+        "pet_melter": 1
+      },
+      "technologies": [
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 1.5,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 300,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.4
+    },
+    "auto_wash_pet": {
+      "name": "自动清洗破碎PET",
+      "facility": "auto_plastic_pre",
+      "inputs": {
+        "sorted_pet": 3,
+        "water": 0.5,
+        "soap": 0.03
+      },
+      "outputs": {
+        "flakes_pet": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 90,
+      "natural_seconds": 0,
+      "power": 3.5,
+      "tools": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_plastic_pre",
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 90,
+      "cycles_per_minute_ideal": 0.6667,
+      "capacity_in_per_minute_ideal": 2.0434,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 315.0,
+      "input_buy_equivalent": 2.77,
+      "output_base_sell_equivalent": 1.5
+    },
+    "auto_melt_pet": {
+      "name": "自动再生PET",
+      "facility": "auto_plastic_remake",
+      "inputs": {
+        "flakes_pet": 3
+      },
+      "outputs": {
+        "resin_pet": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 120,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {},
+      "technologies": [
+        "auto_plastic_remake",
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 1.5,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 480,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.4
+    },
+    "plastic_handles": {
+      "name": "注塑握柄",
+      "facility": "plastic_remake",
+      "inputs": {
+        "resin_pp": 2
+      },
+      "outputs": {
+        "plastic_handle": 3
+      },
+      "human_seconds": 20,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "technologies": [
+        "plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 40,
+      "input_buy_equivalent": 3.0,
+      "output_base_sell_equivalent": 4.5
+    },
+    "auto_plastic_handles": {
+      "name": "自动注塑握柄",
+      "facility": "auto_plastic_remake",
+      "inputs": {
+        "resin_pp": 2
+      },
+      "outputs": {
+        "plastic_handle": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 120,
+      "input_buy_equivalent": 3.0,
+      "output_base_sell_equivalent": 4.5
+    },
+    "box_pp": {
+      "name": "注塑收纳盒PP",
+      "facility": "plastic_remake",
+      "inputs": {
+        "resin_pp": 3
+      },
+      "outputs": {
+        "storage_box": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "technologies": [
+        "plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 4.5,
+      "output_base_sell_equivalent": 5
+    },
+    "auto_box_pp": {
+      "name": "自动注塑收纳盒PP",
+      "facility": "auto_plastic_remake",
+      "inputs": {
+        "resin_pp": 3
+      },
+      "outputs": {
+        "storage_box": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 4.5,
+      "output_base_sell_equivalent": 5
+    },
+    "box_hdpe": {
+      "name": "注塑收纳盒HDPE",
+      "facility": "plastic_remake",
+      "inputs": {
+        "resin_hdpe": 3
+      },
+      "outputs": {
+        "storage_box": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "technologies": [
+        "plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 4.5,
+      "output_base_sell_equivalent": 5
+    },
+    "auto_box_hdpe": {
+      "name": "自动注塑收纳盒HDPE",
+      "facility": "auto_plastic_remake",
+      "inputs": {
+        "resin_hdpe": 3
+      },
+      "outputs": {
+        "storage_box": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_plastic_remake"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 4.5,
+      "output_base_sell_equivalent": 5
+    },
+    "pet_strap": {
+      "name": "制PET打包带",
+      "facility": "plastic_remake",
+      "inputs": {
+        "resin_pet": 3
+      },
+      "outputs": {
+        "pet_strap": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 45,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "addons": {
+        "pet_melter": 1,
+        "strap_mold": 1
+      },
+      "technologies": [
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 135,
+      "input_buy_equivalent": 4.5,
+      "output_base_sell_equivalent": 6
+    },
+    "auto_pet_strap": {
+      "name": "自动制PET打包带",
+      "facility": "auto_plastic_remake",
+      "inputs": {
+        "resin_pet": 3
+      },
+      "outputs": {
+        "pet_strap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {},
+      "technologies": [
+        "auto_plastic_remake",
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 240,
+      "input_buy_equivalent": 4.5,
+      "output_base_sell_equivalent": 6
+    },
+    "recognize_old_plastic": {
+      "name": "旧其他塑料重新识别",
+      "facility": "sorting",
+      "inputs": {
+        "plastic_other": 10
+      },
+      "outputs": {
+        "sorted_pet": 1,
+        "plastic_other": 9
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "actual_composition": true,
+      "requires_unrecognized_composition": true,
+      "human_seconds_per_input_unit": 6,
+      "effect": "仅提取旧实例记录中尚未识别PET，识别后的其他塑料标记已识别，不能反复套标准输出",
+      "technologies": [
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 10.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.3
+    },
+    "smelt_steel": {
+      "name": "处理钢铁材料",
+      "facility": "metal_raw",
+      "inputs": {
+        "steel_scrap": 5
+      },
+      "outputs": {
+        "steel_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 6,
+      "tools": {
+        "tongs": 5
+      },
+      "technologies": [
+        "metal_raw"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 5.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 240,
+      "input_buy_equivalent": 5,
+      "output_base_sell_equivalent": 4.8
+    },
+    "auto_smelt_steel": {
+      "name": "自动处理钢铁材料",
+      "facility": "auto_metal_raw",
+      "inputs": {
+        "steel_scrap": 5
+      },
+      "outputs": {
+        "steel_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 6,
+      "tools": {},
+      "technologies": [
+        "auto_metal"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 5.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 360,
+      "input_buy_equivalent": 5,
+      "output_base_sell_equivalent": 4.8
+    },
+    "smelt_copper": {
+      "name": "处理铜材料",
+      "facility": "metal_raw",
+      "inputs": {
+        "copper_scrap": 5
+      },
+      "outputs": {
+        "copper_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 25,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {
+        "tongs": 5
+      },
+      "technologies": [
+        "metal_raw"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 7.5,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 100,
+      "input_buy_equivalent": 7.5,
+      "output_base_sell_equivalent": 6.4
+    },
+    "auto_smelt_copper": {
+      "name": "自动处理铜材料",
+      "facility": "auto_metal_raw",
+      "inputs": {
+        "copper_scrap": 5
+      },
+      "outputs": {
+        "copper_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {},
+      "technologies": [
+        "auto_metal"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 40,
+      "cycles_per_minute_ideal": 1.5,
+      "capacity_in_per_minute_ideal": 7.5,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 160,
+      "input_buy_equivalent": 7.5,
+      "output_base_sell_equivalent": 6.4
+    },
+    "smelt_aluminum": {
+      "name": "处理铝材料",
+      "facility": "metal_raw",
+      "inputs": {
+        "aluminum_scrap": 5
+      },
+      "outputs": {
+        "aluminum_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "tongs": 5
+      },
+      "technologies": [
+        "metal_raw"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 8.5715,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 60,
+      "input_buy_equivalent": 5,
+      "output_base_sell_equivalent": 4.8
+    },
+    "auto_smelt_aluminum": {
+      "name": "自动处理铝材料",
+      "facility": "auto_metal_raw",
+      "inputs": {
+        "aluminum_scrap": 5
+      },
+      "outputs": {
+        "aluminum_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 35,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_metal"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 8.5715,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 105,
+      "input_buy_equivalent": 5,
+      "output_base_sell_equivalent": 4.8
+    },
+    "smelt_tool_steel": {
+      "name": "处理工具钢废料",
+      "facility": "metal_raw",
+      "inputs": {
+        "tool_steel_scrap": 5
+      },
+      "outputs": {
+        "tool_steel_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 45,
+      "natural_seconds": 0,
+      "power": 7,
+      "tools": {
+        "tongs": 5
+      },
+      "technologies": [
+        "tool_steel"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 70,
+      "cycles_per_minute_ideal": 0.8571,
+      "capacity_in_per_minute_ideal": 4.2855,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 315,
+      "input_buy_equivalent": 10,
+      "output_base_sell_equivalent": 8
+    },
+    "auto_smelt_tool_steel": {
+      "name": "自动处理工具钢废料",
+      "facility": "auto_metal_raw",
+      "inputs": {
+        "tool_steel_scrap": 5
+      },
+      "outputs": {
+        "tool_steel_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 70,
+      "natural_seconds": 0,
+      "power": 7,
+      "tools": {},
+      "technologies": [
+        "auto_metal",
+        "tool_steel"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 70,
+      "cycles_per_minute_ideal": 0.8571,
+      "capacity_in_per_minute_ideal": 4.2855,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 490,
+      "input_buy_equivalent": 10,
+      "output_base_sell_equivalent": 8
+    },
+    "parts_steel": {
+      "name": "制作钢铁零件",
+      "facility": "metal_parts",
+      "inputs": {
+        "steel_billet": 4
+      },
+      "outputs": {
+        "steel_parts": 3,
+        "steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "file": 4
+      },
+      "technologies": [
+        "metal_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 9.6,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 8,
+      "output_base_sell_equivalent": 12.6
+    },
+    "auto_parts_steel": {
+      "name": "自动制作钢铁零件",
+      "facility": "auto_parts",
+      "inputs": {
+        "steel_billet": 4
+      },
+      "outputs": {
+        "steel_parts": 3,
+        "steel_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 25,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 9.6,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 75,
+      "input_buy_equivalent": 8,
+      "output_base_sell_equivalent": 12.6
+    },
+    "parts_copper": {
+      "name": "制作铜零件",
+      "facility": "metal_parts",
+      "inputs": {
+        "copper_billet": 4
+      },
+      "outputs": {
+        "copper_parts": 3,
+        "copper_scrap": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "file": 4
+      },
+      "technologies": [
+        "metal_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 12.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 10.0,
+      "output_base_sell_equivalent": 15.8
+    },
+    "auto_parts_copper": {
+      "name": "自动制作铜零件",
+      "facility": "auto_parts",
+      "inputs": {
+        "copper_billet": 4
+      },
+      "outputs": {
+        "copper_parts": 3,
+        "copper_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 12.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 60,
+      "input_buy_equivalent": 10.0,
+      "output_base_sell_equivalent": 15.8
+    },
+    "parts_aluminum": {
+      "name": "制作铝零件",
+      "facility": "metal_parts",
+      "inputs": {
+        "aluminum_billet": 4
+      },
+      "outputs": {
+        "aluminum_parts": 3,
+        "aluminum_scrap": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "file": 4
+      },
+      "technologies": [
+        "metal_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 12.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 8,
+      "output_base_sell_equivalent": 12.6
+    },
+    "auto_parts_aluminum": {
+      "name": "自动制作铝零件",
+      "facility": "auto_parts",
+      "inputs": {
+        "aluminum_billet": 4
+      },
+      "outputs": {
+        "aluminum_parts": 3,
+        "aluminum_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 12.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 60,
+      "input_buy_equivalent": 8,
+      "output_base_sell_equivalent": 12.6
+    },
+    "make_hammer_head": {
+      "name": "制作锤头",
+      "facility": "metal_parts",
+      "inputs": {
+        "tool_steel_billet": 2
+      },
+      "outputs": {
+        "hammer_head": 1,
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 30,
+      "machine_seconds": 15,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "file": 2,
+        "tongs": 2
+      },
+      "technologies": [
+        "tool_steel"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 2.6666,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 30,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 3.25
+    },
+    "auto_hammer_head": {
+      "name": "自动制作锤头",
+      "facility": "auto_tool_parts",
+      "inputs": {
+        "tool_steel_billet": 2
+      },
+      "outputs": {
+        "hammer_head": 1,
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 45,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_tools"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 2.6666,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 135,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 3.25
+    },
+    "make_handsaw_blade": {
+      "name": "制作手锯锯片",
+      "facility": "metal_parts",
+      "inputs": {
+        "tool_steel_billet": 2
+      },
+      "outputs": {
+        "handsaw_blade": 1,
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 45,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "file": 2,
+        "tongs": 2
+      },
+      "technologies": [
+        "tool_steel"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 65,
+      "cycles_per_minute_ideal": 0.9231,
+      "capacity_in_per_minute_ideal": 1.8462,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 40,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 3.7
+    },
+    "auto_handsaw_blade": {
+      "name": "自动制作手锯锯片",
+      "facility": "auto_tool_parts",
+      "inputs": {
+        "tool_steel_billet": 2
+      },
+      "outputs": {
+        "handsaw_blade": 1,
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 65,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_tools"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 65,
+      "cycles_per_minute_ideal": 0.9231,
+      "capacity_in_per_minute_ideal": 1.8462,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 195,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 3.7
+    },
+    "make_screwdriver_shaft": {
+      "name": "制作螺丝刀金属杆",
+      "facility": "metal_parts",
+      "inputs": {
+        "tool_steel_billet": 2
+      },
+      "outputs": {
+        "screwdriver_shaft": 1,
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 10,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "file": 2,
+        "tongs": 2
+      },
+      "technologies": [
+        "tool_steel"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 3.4286,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 20,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 2.8
+    },
+    "auto_screwdriver_shaft": {
+      "name": "自动制作螺丝刀金属杆",
+      "facility": "auto_tool_parts",
+      "inputs": {
+        "tool_steel_billet": 2
+      },
+      "outputs": {
+        "screwdriver_shaft": 1,
+        "tool_steel_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 35,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "technologies": [
+        "auto_tools"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 3.4286,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 105,
+      "input_buy_equivalent": 6,
+      "output_base_sell_equivalent": 2.8
+    },
+    "make_wire": {
+      "name": "铜线与包覆",
+      "facility": "wire_maker",
+      "inputs": {
+        "copper_billet": 3,
+        "resin_hdpe": 2
+      },
+      "outputs": {
+        "wire": 8,
+        "copper_scrap": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 35,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "screwdriver": 1
+      },
+      "technologies": [
+        "wire"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 6.6665,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 70,
+      "input_buy_equivalent": 10.5,
+      "output_base_sell_equivalent": 8.0
+    },
+    "grow": {
+      "name": "种植与收获",
+      "facility": "growing",
+      "inputs": {
+        "seed": 1,
+        "substrate": 1,
+        "water": 1
+      },
+      "outputs": {
+        "sprouts": 3,
+        "spent_substrate": 1
+      },
+      "human_seconds": 50,
+      "machine_seconds": 0,
+      "natural_seconds": 540,
+      "power": 0,
+      "tools": {
+        "scissors": 3
+      },
+      "stages": [
+        {
+          "kind": "human",
+          "seconds": 20,
+          "water": 0.5
+        },
+        {
+          "kind": "lit_growth",
+          "seconds": 270
+        },
+        {
+          "kind": "human",
+          "seconds": 10,
+          "water": 0.5
+        },
+        {
+          "kind": "lit_growth",
+          "seconds": 270
+        },
+        {
+          "kind": "human",
+          "seconds": 20
+        }
+      ],
+      "requires_grow_lamp": true,
+      "technologies": [
+        "growing"
+      ],
+      "consumption": "staged_at_start",
+      "base_elapsed_seconds": 590,
+      "cycles_per_minute_ideal": 0.1017,
+      "capacity_in_per_minute_ideal": 0.1373,
+      "human_labor_seconds_per_batch": 50,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 1.5,
+      "output_base_sell_equivalent": 0.75
+    },
+    "wash_food": {
+      "name": "处理可食用芽苗",
+      "facility": "washing",
+      "inputs": {
+        "sprouts": 3,
+        "water": 0.25
+      },
+      "outputs": {
+        "food": 3
+      },
+      "human_seconds": 30,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "washing"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 30,
+      "cycles_per_minute_ideal": 2.0,
+      "capacity_in_per_minute_ideal": 6.05,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 2.22,
+      "output_base_sell_equivalent": 3
+    },
+    "organic_sort": {
+      "name": "有机垃圾分选",
+      "facility": "sorting",
+      "inputs": {
+        "organic_mix": 5
+      },
+      "outputs": {
+        "organic_feed": 4,
+        "organic_residual": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "actual_composition": true,
+      "technologies": [
+        "compost"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 12.0,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "compost": {
+      "name": "堆肥成熟",
+      "facility": "composting",
+      "inputs": {
+        "organic_feed": 4,
+        "wood_chips": 2
+      },
+      "outputs": {
+        "compost": 2,
+        "organic_residual": 1
+      },
+      "human_seconds": 50,
+      "machine_seconds": 0,
+      "natural_seconds": 600,
+      "power": 0,
+      "tools": {},
+      "stages": [
+        {
+          "kind": "human",
+          "seconds": 20
+        },
+        {
+          "kind": "natural",
+          "seconds": 300
+        },
+        {
+          "kind": "human",
+          "seconds": 10
+        },
+        {
+          "kind": "natural",
+          "seconds": 300
+        },
+        {
+          "kind": "human",
+          "seconds": 20
+        }
+      ],
+      "cancel_package": "immature_compost",
+      "technologies": [
+        "compost"
+      ],
+      "consumption": "feed_at_start",
+      "base_elapsed_seconds": 650,
+      "cycles_per_minute_ideal": 0.0923,
+      "capacity_in_per_minute_ideal": 0.5538,
+      "human_labor_seconds_per_batch": 50,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 1.6,
+      "output_base_sell_equivalent": 0.6
+    },
+    "resume_compost": {
+      "name": "未熟包重新入场",
+      "facility": "composting",
+      "inputs": {
+        "immature_compost": 1
+      },
+      "outputs": {
+        "compost": 2,
+        "organic_residual": 1
+      },
+      "human_seconds": 50,
+      "machine_seconds": 0,
+      "natural_seconds": 600,
+      "power": 0,
+      "tools": {},
+      "stages": [
+        {
+          "kind": "human",
+          "seconds": 20
+        },
+        {
+          "kind": "natural",
+          "seconds": 300
+        },
+        {
+          "kind": "human",
+          "seconds": 10
+        },
+        {
+          "kind": "natural",
+          "seconds": 300
+        },
+        {
+          "kind": "human",
+          "seconds": 20
+        }
+      ],
+      "cancel_package": "immature_compost",
+      "preserve_payload": true,
+      "technologies": [
+        "compost"
+      ],
+      "consumption": "feed_at_start",
+      "base_elapsed_seconds": 650,
+      "cycles_per_minute_ideal": 0.0923,
+      "capacity_in_per_minute_ideal": 0.5538,
+      "human_labor_seconds_per_batch": 50,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.6
+    },
+    "substrate": {
+      "name": "基质调配",
+      "facility": "substrate_mixer",
+      "inputs": {
+        "spent_substrate": 1,
+        "compost": 1,
+        "water": 0.25
+      },
+      "outputs": {
+        "substrate": 2
+      },
+      "human_seconds": 20,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 1.5,
+      "tools": {},
+      "technologies": [
+        "substrate"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 80,
+      "cycles_per_minute_ideal": 0.75,
+      "capacity_in_per_minute_ideal": 1.5187,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 90.0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.36
+    },
+    "diagnose_motor": {
+      "name": "诊断废旧回收／制造电机",
+      "facility": "refurbish",
+      "inputs": {
+        "old_motor": 1
+      },
+      "outputs": {
+        "repair_motor": 1,
+        "steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 1,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "requires_state": "repairable",
+      "technologies": [
+        "refurbish"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 14.4,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 1.8
+    },
+    "salvage_motor": {
+      "name": "拆待修回收／制造电机",
+      "facility": "disassembly",
+      "inputs": {
+        "repair_motor": 1
+      },
+      "outputs": {
+        "steel_scrap": 2,
+        "copper_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 9.6,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.0
+    },
+    "scrap_old_motor": {
+      "name": "整件拆废旧回收／制造电机",
+      "facility": "disassembly",
+      "inputs": {
+        "old_motor": 1
+      },
+      "outputs": {
+        "steel_scrap": 3,
+        "copper_scrap": 1
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 2.6
+    },
+    "diagnose_drive": {
+      "name": "诊断废旧驱动模块",
+      "facility": "refurbish",
+      "inputs": {
+        "old_drive": 1
+      },
+      "outputs": {
+        "repair_drive": 1,
+        "steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 1,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "requires_state": "repairable",
+      "technologies": [
+        "refurbish"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 14.4,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 4,
+      "output_base_sell_equivalent": 2.4
+    },
+    "salvage_drive": {
+      "name": "拆待修驱动模块",
+      "facility": "disassembly",
+      "inputs": {
+        "repair_drive": 1
+      },
+      "outputs": {
+        "steel_scrap": 2,
+        "copper_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 9.6,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 4,
+      "output_base_sell_equivalent": 2.0
+    },
+    "scrap_old_drive": {
+      "name": "整件拆废旧驱动模块",
+      "facility": "disassembly",
+      "inputs": {
+        "old_drive": 1
+      },
+      "outputs": {
+        "steel_scrap": 3,
+        "copper_scrap": 1
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 4,
+      "output_base_sell_equivalent": 2.6
+    },
+    "repair_motor": {
+      "name": "翻修电机",
+      "facility": "refurbish",
+      "inputs": {
+        "repair_motor": 1,
+        "steel_parts": 1,
+        "wire": 2
+      },
+      "outputs": {
+        "motor": 1,
+        "steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 1,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "refurbish"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.3331,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 20,
+      "input_buy_equivalent": 12,
+      "output_base_sell_equivalent": 6.0
+    },
+    "repair_drive": {
+      "name": "翻修驱动",
+      "facility": "refurbish",
+      "inputs": {
+        "repair_drive": 1,
+        "steel_parts": 1,
+        "copper_parts": 1,
+        "wire": 1
+      },
+      "outputs": {
+        "drive": 1,
+        "copper_scrap": 1
+      },
+      "human_seconds": 35,
+      "machine_seconds": 25,
+      "natural_seconds": 0,
+      "power": 1,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "refurbish"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 5.5,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 25,
+      "input_buy_equivalent": 18,
+      "output_base_sell_equivalent": 8.0
+    },
+    "open_old_cutter": {
+      "name": "拆解废旧木工设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_cutter": 1
+      },
+      "outputs": {
+        "motor": 1,
+        "machine_saw": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 17.0
+    },
+    "open_old_washer": {
+      "name": "拆解废旧清洗设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_washer": 1
+      },
+      "outputs": {
+        "motor": 1,
+        "container": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 15.2
+    },
+    "open_old_former": {
+      "name": "拆解废旧低温成型设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_former": 1
+      },
+      "outputs": {
+        "heater": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 12.5
+    },
+    "open_old_molds": {
+      "name": "拆解旧模具箱",
+      "facility": "disassembly",
+      "inputs": {
+        "old_molds": 1
+      },
+      "outputs": {
+        "handle_mold": 1,
+        "box_mold": 1
+      },
+      "human_seconds": 0.5,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 0.5,
+      "cycles_per_minute_ideal": 120.0,
+      "capacity_in_per_minute_ideal": 720.0,
+      "human_labor_seconds_per_batch": 0.5,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 6.3
+    },
+    "open_old_wires": {
+      "name": "拆解旧电线包",
+      "facility": "disassembly",
+      "inputs": {
+        "old_wires": 1
+      },
+      "outputs": {
+        "wire": 12
+      },
+      "human_seconds": 0.5,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 0.5,
+      "cycles_per_minute_ideal": 120.0,
+      "capacity_in_per_minute_ideal": 720.0,
+      "human_labor_seconds_per_batch": 0.5,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 10.8
+    },
+    "open_old_grow_light": {
+      "name": "拆解废旧种植照明",
+      "facility": "disassembly",
+      "inputs": {
+        "old_grow_light": 1
+      },
+      "outputs": {
+        "grow_light_module": 1,
+        "steel_parts": 1
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 7.6
+    },
+    "open_old_feeder": {
+      "name": "拆解废旧送料设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_feeder": 1
+      },
+      "outputs": {
+        "feeder": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 15.2
+    },
+    "open_old_furnace": {
+      "name": "拆解废旧高温炉",
+      "facility": "disassembly",
+      "inputs": {
+        "old_furnace": 1
+      },
+      "outputs": {
+        "furnace_module": 1,
+        "lining": 1,
+        "steel_scrap": 2
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 17.4
+    },
+    "open_old_fixture": {
+      "name": "拆解废旧金属操作台",
+      "facility": "disassembly",
+      "inputs": {
+        "old_fixture": 1
+      },
+      "outputs": {
+        "fixture": 1,
+        "aluminum_parts": 2,
+        "steel_scrap": 2
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 12.8
+    },
+    "open_old_control_basic": {
+      "name": "拆解废旧接线盒",
+      "facility": "disassembly",
+      "inputs": {
+        "old_control_basic": 1
+      },
+      "outputs": {
+        "copper_parts": 2,
+        "wire": 2,
+        "steel_scrap": 2
+      },
+      "human_seconds": 35,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 35,
+      "cycles_per_minute_ideal": 1.7143,
+      "capacity_in_per_minute_ideal": 10.2858,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 13.0
+    },
+    "open_old_controller": {
+      "name": "拆解废旧控制箱",
+      "facility": "disassembly",
+      "inputs": {
+        "old_controller": 1
+      },
+      "outputs": {
+        "controller": 1,
+        "motor": 1,
+        "copper_parts": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 26.5
+    },
+    "open_old_dryer": {
+      "name": "拆解废旧干燥设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_dryer": 1
+      },
+      "outputs": {
+        "dryer": 1,
+        "container": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 15.2
+    },
+    "open_old_pet_former": {
+      "name": "拆解废旧PET成型设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_pet_former": 1
+      },
+      "outputs": {
+        "pet_melter": 1,
+        "controller": 1,
+        "drive": 1,
+        "strap_mold": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 39.5
+    },
+    "open_old_drive_box": {
+      "name": "拆解废旧驱动箱",
+      "facility": "disassembly",
+      "inputs": {
+        "old_drive_box": 1
+      },
+      "outputs": {
+        "drive": 1,
+        "motor": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 20.6
+    },
+    "open_old_wire_maker": {
+      "name": "拆解废旧制线设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_wire_maker": 1
+      },
+      "outputs": {
+        "wire_die": 1,
+        "copper_parts": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 17.5
+    },
+    "open_old_survey": {
+      "name": "拆解废旧地质仪器",
+      "facility": "disassembly",
+      "inputs": {
+        "old_survey": 1
+      },
+      "outputs": {
+        "survey_module": 1,
+        "controller": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 26.9
+    },
+    "open_old_drill": {
+      "name": "拆解废旧采掘设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_drill": 1
+      },
+      "outputs": {
+        "drill_module": 1,
+        "motor": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 22.4
+    },
+    "open_old_separator": {
+      "name": "拆解废旧选矿设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_separator": 1
+      },
+      "outputs": {
+        "beneficiation_module": 1,
+        "separator_module": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 26.9
+    },
+    "open_old_kiln": {
+      "name": "拆解废旧陶瓷窑",
+      "facility": "disassembly",
+      "inputs": {
+        "old_kiln": 1
+      },
+      "outputs": {
+        "kiln_module": 1,
+        "lining": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 21.5
+    },
+    "open_old_structure": {
+      "name": "拆解废旧承重框架",
+      "facility": "disassembly",
+      "inputs": {
+        "old_structure": 1
+      },
+      "outputs": {
+        "reclaimed_structure": 4,
+        "steel_scrap": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.2
+    },
+    "open_old_boiler": {
+      "name": "拆解废旧锅炉",
+      "facility": "disassembly",
+      "inputs": {
+        "old_boiler": 1
+      },
+      "outputs": {
+        "boiler_module": 1,
+        "lining": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 25.1
+    },
+    "open_old_turbine": {
+      "name": "拆解废旧汽轮发电设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_turbine": 1
+      },
+      "outputs": {
+        "turbine_module": 1,
+        "generator_module": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 35.0
+    },
+    "open_old_condenser": {
+      "name": "拆解废旧冷凝器",
+      "facility": "disassembly",
+      "inputs": {
+        "old_condenser": 1
+      },
+      "outputs": {
+        "condenser_module": 1,
+        "container": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 18.8
+    },
+    "open_old_paper_machine": {
+      "name": "拆解废旧制纸设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_paper_machine": 1
+      },
+      "outputs": {
+        "paper_module": 1,
+        "press_module": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 22.4
+    },
+    "open_old_glass_mold": {
+      "name": "拆解旧玻璃模具箱",
+      "facility": "disassembly",
+      "inputs": {
+        "old_glass_mold": 1
+      },
+      "outputs": {
+        "glass_mold": 1,
+        "steel_parts": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 7.6
+    },
+    "open_old_water_filter": {
+      "name": "拆解废旧工业过滤设备",
+      "facility": "disassembly",
+      "inputs": {
+        "old_water_filter": 1
+      },
+      "outputs": {
+        "filter_module": 1,
+        "container": 1,
+        "steel_parts": 2
+      },
+      "human_seconds": 45,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 7.9998,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 14.3
+    },
+    "reuse_old_motor": {
+      "name": "取出可用电机",
+      "facility": "disassembly",
+      "inputs": {
+        "old_motor": 1
+      },
+      "outputs": {
+        "motor": 1,
+        "steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "requires_state": "usable",
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 14.4,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 3,
+      "output_base_sell_equivalent": 6.0
+    },
+    "reuse_old_drive": {
+      "name": "取出可用驱动",
+      "facility": "disassembly",
+      "inputs": {
+        "old_drive": 1
+      },
+      "outputs": {
+        "drive": 1,
+        "steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "screwdriver": 1,
+        "wrench": 1
+      },
+      "requires_state": "usable",
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 14.4,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 4,
+      "output_base_sell_equivalent": 7.8
+    },
+    "assemble_motor": {
+      "name": "组装回收／制造电机",
+      "facility": "electromechanical",
+      "inputs": {
+        "steel_parts": 3,
+        "copper_parts": 2,
+        "wire": 4
+      },
+      "outputs": {
+        "motor": 1
+      },
+      "human_seconds": 40,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "electromechanical"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 80,
+      "cycles_per_minute_ideal": 0.75,
+      "capacity_in_per_minute_ideal": 3.375,
+      "human_labor_seconds_per_batch": 40,
+      "power_load_seconds_per_batch_ideal": 120,
+      "input_buy_equivalent": 37,
+      "output_base_sell_equivalent": 5.4
+    },
+    "assemble_drive": {
+      "name": "组装驱动模块",
+      "facility": "electromechanical",
+      "inputs": {
+        "steel_parts": 3,
+        "copper_parts": 1,
+        "motor": 1
+      },
+      "outputs": {
+        "drive": 1
+      },
+      "human_seconds": 45,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "electromechanical"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 85,
+      "cycles_per_minute_ideal": 0.7059,
+      "capacity_in_per_minute_ideal": 4.2354,
+      "human_labor_seconds_per_batch": 45,
+      "power_load_seconds_per_batch_ideal": 120,
+      "input_buy_equivalent": 34,
+      "output_base_sell_equivalent": 7.2
+    },
+    "assemble_controller": {
+      "name": "组装控制模块",
+      "facility": "electromechanical",
+      "inputs": {
+        "steel_parts": 1,
+        "copper_parts": 2,
+        "wire": 4,
+        "ceramic_insulator": 2
+      },
+      "outputs": {
+        "controller": 1
+      },
+      "human_seconds": 40,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "control_assembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 90,
+      "cycles_per_minute_ideal": 0.6667,
+      "capacity_in_per_minute_ideal": 3.0001,
+      "human_labor_seconds_per_batch": 40,
+      "power_load_seconds_per_batch_ideal": 150,
+      "input_buy_equivalent": 33,
+      "output_base_sell_equivalent": 8.1
+    },
+    "assemble_generator_module": {
+      "name": "组装发电组件",
+      "facility": "electromechanical",
+      "inputs": {
+        "steel_parts": 4,
+        "copper_parts": 3,
+        "wire": 6
+      },
+      "outputs": {
+        "generator_module": 1
+      },
+      "human_seconds": 50,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "electromechanical"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 110,
+      "cycles_per_minute_ideal": 0.5455,
+      "capacity_in_per_minute_ideal": 3.5457,
+      "human_labor_seconds_per_batch": 50,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 53,
+      "output_base_sell_equivalent": 10.8
+    },
+    "assemble_feeder": {
+      "name": "组装回收送料组件",
+      "facility": "electromechanical",
+      "inputs": {
+        "steel_parts": 3,
+        "motor": 1,
+        "controller": 1
+      },
+      "outputs": {
+        "feeder": 1
+      },
+      "human_seconds": 35,
+      "machine_seconds": 35,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "electromechanical"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 70,
+      "cycles_per_minute_ideal": 0.8571,
+      "capacity_in_per_minute_ideal": 6.4283,
+      "human_labor_seconds_per_batch": 35,
+      "power_load_seconds_per_batch_ideal": 105,
+      "input_buy_equivalent": 45,
+      "output_base_sell_equivalent": 7.2
+    },
+    "assemble_coil": {
+      "name": "组装铜绕组",
+      "facility": "electromechanical",
+      "inputs": {
+        "copper_parts": 2,
+        "wire": 4
+      },
+      "outputs": {
+        "coil": 1
+      },
+      "human_seconds": 30,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "technologies": [
+        "electromechanical"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 3.6,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 60,
+      "input_buy_equivalent": 22,
+      "output_base_sell_equivalent": 3.6
+    },
+    "survey_iron": {
+      "name": "勘探铁矿点",
+      "facility": "survey",
+      "inputs": {},
+      "outputs": {},
+      "human_seconds": 30,
+      "machine_seconds": 90,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "wrench": 1
+      },
+      "region_required": 3,
+      "one_time_per_vein": true,
+      "effect": "揭示对应矿脉的指定采掘锚点；矿石首次出矿才解锁加工科技",
+      "technologies": [
+        "survey"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "extract_iron": {
+      "name": "开采铁矿石",
+      "facility": "mine",
+      "inputs": {},
+      "outputs": {
+        "iron_ore": 4
+      },
+      "human_seconds": 10,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "region_required": 3,
+      "vein": "iron",
+      "infinite_source": true,
+      "technologies": [
+        "mine"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 100,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "auto_extract_iron": {
+      "name": "送料辅助开采铁矿石",
+      "facility": "mine",
+      "inputs": {},
+      "outputs": {
+        "iron_ore": 4
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 2.5,
+      "tools": {},
+      "region_required": 3,
+      "vein": "iron",
+      "addons": {
+        "feeder": 1,
+        "controller": 1
+      },
+      "infinite_source": true,
+      "technologies": [
+        "auto_mine"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 150.0,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "survey_copper": {
+      "name": "勘探铜矿点",
+      "facility": "survey",
+      "inputs": {},
+      "outputs": {},
+      "human_seconds": 30,
+      "machine_seconds": 90,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "wrench": 1
+      },
+      "region_required": 3,
+      "one_time_per_vein": true,
+      "effect": "揭示对应矿脉的指定采掘锚点；矿石首次出矿才解锁加工科技",
+      "technologies": [
+        "survey"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "extract_copper": {
+      "name": "开采铜矿石",
+      "facility": "mine",
+      "inputs": {},
+      "outputs": {
+        "copper_ore": 4
+      },
+      "human_seconds": 10,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "region_required": 3,
+      "vein": "copper",
+      "infinite_source": true,
+      "technologies": [
+        "mine"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 100,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "auto_extract_copper": {
+      "name": "送料辅助开采铜矿石",
+      "facility": "mine",
+      "inputs": {},
+      "outputs": {
+        "copper_ore": 4
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 2.5,
+      "tools": {},
+      "region_required": 3,
+      "vein": "copper",
+      "addons": {
+        "feeder": 1,
+        "controller": 1
+      },
+      "infinite_source": true,
+      "technologies": [
+        "auto_mine"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 150.0,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "survey_clay": {
+      "name": "勘探陶土点",
+      "facility": "survey",
+      "inputs": {},
+      "outputs": {},
+      "human_seconds": 30,
+      "machine_seconds": 90,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "wrench": 1
+      },
+      "region_required": 3,
+      "one_time_per_vein": true,
+      "effect": "揭示对应矿脉的指定采掘锚点；矿石首次出矿才解锁加工科技",
+      "technologies": [
+        "survey"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "extract_clay": {
+      "name": "开采陶土矿",
+      "facility": "mine",
+      "inputs": {},
+      "outputs": {
+        "clay_ore": 4
+      },
+      "human_seconds": 10,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "region_required": 3,
+      "vein": "clay",
+      "infinite_source": true,
+      "technologies": [
+        "mine"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 100,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "auto_extract_clay": {
+      "name": "送料辅助开采陶土矿",
+      "facility": "mine",
+      "inputs": {},
+      "outputs": {
+        "clay_ore": 4
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 2.5,
+      "tools": {},
+      "region_required": 3,
+      "vein": "clay",
+      "addons": {
+        "feeder": 1,
+        "controller": 1
+      },
+      "infinite_source": true,
+      "technologies": [
+        "auto_mine"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 150.0,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "ore_sort_iron": {
+      "name": "选铁矿石",
+      "facility": "ore_pre",
+      "inputs": {
+        "iron_ore": 6,
+        "water": 0.5
+      },
+      "outputs": {
+        "iron_concentrate": 4,
+        "mine_tailings": 2
+      },
+      "human_seconds": 20,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "ore_pre"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 80,
+      "cycles_per_minute_ideal": 0.75,
+      "capacity_in_per_minute_ideal": 4.5375,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "ore_sort_copper": {
+      "name": "选铜矿石",
+      "facility": "ore_pre",
+      "inputs": {
+        "copper_ore": 6,
+        "water": 0.5
+      },
+      "outputs": {
+        "copper_concentrate": 4,
+        "mine_tailings": 2
+      },
+      "human_seconds": 20,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "ore_pre"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 80,
+      "cycles_per_minute_ideal": 0.75,
+      "capacity_in_per_minute_ideal": 4.5375,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "ore_sort_clay": {
+      "name": "净陶土",
+      "facility": "ore_pre",
+      "inputs": {
+        "clay_ore": 5,
+        "water": 0.5
+      },
+      "outputs": {
+        "clean_clay": 4,
+        "mine_tailings": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "ore_pre"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 70,
+      "cycles_per_minute_ideal": 0.8571,
+      "capacity_in_per_minute_ideal": 4.3284,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 150,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "ore_steel": {
+      "name": "矿料制钢铁坯料",
+      "facility": "ore_furnace",
+      "inputs": {
+        "iron_concentrate": 5,
+        "wood_chips": 2
+      },
+      "outputs": {
+        "mined_steel_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 95,
+      "natural_seconds": 0,
+      "power": 6,
+      "tools": {
+        "tongs": 5
+      },
+      "technologies": [
+        "ore_furnace"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 3.5,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 570,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 4.8
+    },
+    "ore_copper": {
+      "name": "矿料制铜坯料",
+      "facility": "ore_furnace",
+      "inputs": {
+        "copper_concentrate": 5
+      },
+      "outputs": {
+        "mined_copper_billet": 4,
+        "slag": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 75,
+      "natural_seconds": 0,
+      "power": 5,
+      "tools": {
+        "tongs": 5
+      },
+      "technologies": [
+        "ore_furnace"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 100,
+      "cycles_per_minute_ideal": 0.6,
+      "capacity_in_per_minute_ideal": 3.0,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 375,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 6.4
+    },
+    "ceramics": {
+      "name": "烧陶瓷绝缘件",
+      "facility": "ceramic_kiln",
+      "inputs": {
+        "clean_clay": 4
+      },
+      "outputs": {
+        "ceramic_insulator": 3,
+        "ceramic_scrap": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 80,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {},
+      "technologies": [
+        "ceramics"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 100,
+      "cycles_per_minute_ideal": 0.6,
+      "capacity_in_per_minute_ideal": 2.4,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 320,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 3.6
+    },
+    "parts_steel_mined": {
+      "name": "制作钢铁零件（矿产坯料）",
+      "facility": "metal_parts",
+      "inputs": {
+        "mined_steel_billet": 4
+      },
+      "outputs": {
+        "steel_parts": 3,
+        "steel_scrap": 1
+      },
+      "human_seconds": 25,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "file": 4
+      },
+      "source_variant_of": "parts_steel",
+      "technologies": [
+        "metal_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 9.6,
+      "human_labor_seconds_per_batch": 25,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 12.6
+    },
+    "auto_parts_steel_mined": {
+      "name": "自动制作钢铁零件（矿产坯料）",
+      "facility": "auto_parts",
+      "inputs": {
+        "mined_steel_billet": 4
+      },
+      "outputs": {
+        "steel_parts": 3,
+        "steel_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 25,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "source_variant_of": "auto_parts_steel",
+      "technologies": [
+        "auto_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 25,
+      "cycles_per_minute_ideal": 2.4,
+      "capacity_in_per_minute_ideal": 9.6,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 75,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 12.6
+    },
+    "parts_copper_mined": {
+      "name": "制作铜零件（矿产坯料）",
+      "facility": "metal_parts",
+      "inputs": {
+        "mined_copper_billet": 4
+      },
+      "outputs": {
+        "copper_parts": 3,
+        "copper_scrap": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {
+        "file": 4
+      },
+      "source_variant_of": "parts_copper",
+      "technologies": [
+        "metal_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 12.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 15.8
+    },
+    "auto_parts_copper_mined": {
+      "name": "自动制作铜零件（矿产坯料）",
+      "facility": "auto_parts",
+      "inputs": {
+        "mined_copper_billet": 4
+      },
+      "outputs": {
+        "copper_parts": 3,
+        "copper_scrap": 1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 20,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "source_variant_of": "auto_parts_copper",
+      "technologies": [
+        "auto_parts"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 12.0,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 60,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 15.8
+    },
+    "make_wire_mined": {
+      "name": "铜线与包覆（矿产坯料）",
+      "facility": "wire_maker",
+      "inputs": {
+        "mined_copper_billet": 3,
+        "resin_hdpe": 2
+      },
+      "outputs": {
+        "wire": 8,
+        "copper_scrap": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 35,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {
+        "screwdriver": 1
+      },
+      "source_variant_of": "make_wire",
+      "technologies": [
+        "wire"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 45,
+      "cycles_per_minute_ideal": 1.3333,
+      "capacity_in_per_minute_ideal": 6.6665,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 70,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 8.0
+    },
+    "complex_recovery": {
+      "name": "复合料拆分再利用",
+      "facility": "complex_recovery",
+      "inputs": {
+        "plastic_other": 6,
+        "water": 0.5
+      },
+      "outputs": {
+        "flakes_pp": 2,
+        "flakes_hdpe": 1,
+        "mechanical_filler": 1,
+        "mixed_residue": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 120,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "tongs": 6
+      },
+      "quality_required": "适用的可机械分离复合料",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "complex"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 180,
+      "cycles_per_minute_ideal": 0.3333,
+      "capacity_in_per_minute_ideal": 2.0165,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 360,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.95
+    },
+    "auto_complex_recovery": {
+      "name": "自动复合料拆分",
+      "facility": "auto_complex",
+      "inputs": {
+        "plastic_other": 6,
+        "water": 0.5
+      },
+      "outputs": {
+        "flakes_pp": 2,
+        "flakes_hdpe": 1,
+        "mechanical_filler": 1,
+        "mixed_residue": 2
+      },
+      "human_seconds": 0,
+      "machine_seconds": 180,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {},
+      "quality_required": "适用的可机械分离复合料",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_complex"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 180,
+      "cycles_per_minute_ideal": 0.3333,
+      "capacity_in_per_minute_ideal": 2.0165,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 720,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.95
+    },
+    "paper_pulp": {
+      "name": "废纸制浆",
+      "facility": "paper_pulper",
+      "inputs": {
+        "waste_paper": 6,
+        "water": 1
+      },
+      "outputs": {
+        "paper_pulp": 5,
+        "mixed_residue": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "quality_required": "无危险污染的合格纸料",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "paper_pulp"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 70,
+      "cycles_per_minute_ideal": 0.8571,
+      "capacity_in_per_minute_ideal": 5.2283,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 100,
+      "input_buy_equivalent": 3.5,
+      "output_base_sell_equivalent": 1.75
+    },
+    "paperboard": {
+      "name": "压制纸板",
+      "facility": "paper_press",
+      "inputs": {
+        "paper_pulp": 5
+      },
+      "outputs": {
+        "paperboard": 4,
+        "mixed_residue": 1
+      },
+      "human_seconds": 15,
+      "machine_seconds": 75,
+      "natural_seconds": 0,
+      "power": 2.5,
+      "tools": {},
+      "technologies": [
+        "paperboard"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 90,
+      "cycles_per_minute_ideal": 0.6667,
+      "capacity_in_per_minute_ideal": 3.3335,
+      "human_labor_seconds_per_batch": 15,
+      "power_load_seconds_per_batch_ideal": 187.5,
+      "input_buy_equivalent": 5,
+      "output_base_sell_equivalent": 7.2
+    },
+    "carton": {
+      "name": "折制纸箱",
+      "facility": "bench",
+      "inputs": {
+        "paperboard": 2
+      },
+      "outputs": {
+        "carton": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "technologies": [
+        "paperboard"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 5.0,
+      "output_base_sell_equivalent": 3
+    },
+    "clean_glass": {
+      "name": "筛洗碎玻璃",
+      "facility": "washing",
+      "inputs": {
+        "waste_glass": 5,
+        "water": 0.5
+      },
+      "outputs": {
+        "cullet": 4,
+        "mixed_residue": 1
+      },
+      "human_seconds": 30,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "quality_required": "不混入陶瓷及耐热玻璃的适用普通玻璃",
+      "technologies": [
+        "glass"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 30,
+      "cycles_per_minute_ideal": 2.0,
+      "capacity_in_per_minute_ideal": 10.1,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": 3.25,
+      "output_base_sell_equivalent": 1.6
+    },
+    "glass_product": {
+      "name": "熔融玻璃成型",
+      "facility": "glass_furnace",
+      "inputs": {
+        "cullet": 4
+      },
+      "outputs": {
+        "glass_product": 3,
+        "mixed_residue": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 100,
+      "natural_seconds": 0,
+      "power": 5,
+      "tools": {
+        "tongs": 4
+      },
+      "technologies": [
+        "glass"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 2.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 500,
+      "input_buy_equivalent": 4,
+      "output_base_sell_equivalent": 10.5
+    },
+    "water_recovery": {
+      "name": "工业水过滤回用",
+      "facility": "water_recovery",
+      "inputs": {
+        "industrial_effluent": 5
+      },
+      "outputs": {
+        "industrial_water": 4,
+        "sludge": 0.1
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "quality_required": "本版指定非危险水性工艺废水；绝不作为饮用水",
+      "technologies": [
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 0.5,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 120,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.0
+    },
+    "wash_pp_reuse": {
+      "name": "清洗破碎PP（回用水）",
+      "facility": "plastic_pre",
+      "inputs": {
+        "sorted_pp": 3,
+        "industrial_water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_pp": 3
+      },
+      "human_seconds": 30,
+      "machine_seconds": 30,
+      "natural_seconds": 0,
+      "power": 1.5,
+      "tools": {},
+      "addons": {},
+      "source_variant_of": "wash_pp",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "plastic_pre",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 45.0,
+      "input_buy_equivalent": 2.54,
+      "output_base_sell_equivalent": 1.5
+    },
+    "wash_hdpe_reuse": {
+      "name": "清洗破碎HDPE（回用水）",
+      "facility": "plastic_pre",
+      "inputs": {
+        "sorted_hdpe": 3,
+        "industrial_water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_hdpe": 3
+      },
+      "human_seconds": 30,
+      "machine_seconds": 30,
+      "natural_seconds": 0,
+      "power": 1.5,
+      "tools": {},
+      "addons": {},
+      "source_variant_of": "wash_hdpe",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "plastic_pre",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 30,
+      "power_load_seconds_per_batch_ideal": 45.0,
+      "input_buy_equivalent": 2.54,
+      "output_base_sell_equivalent": 1.5
+    },
+    "wash_pet_reuse": {
+      "name": "清洗破碎PET（回用水）",
+      "facility": "plastic_pre",
+      "inputs": {
+        "sorted_pet": 3,
+        "industrial_water": 0.5,
+        "soap": 0.03
+      },
+      "outputs": {
+        "flakes_pet": 3
+      },
+      "human_seconds": 20,
+      "machine_seconds": 70,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "addons": {
+        "dryer": 1
+      },
+      "source_variant_of": "wash_pet",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "pet",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 90,
+      "cycles_per_minute_ideal": 0.6667,
+      "capacity_in_per_minute_ideal": 2.0434,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 210,
+      "input_buy_equivalent": 2.65,
+      "output_base_sell_equivalent": 1.5
+    },
+    "auto_wash_pp_reuse": {
+      "name": "自动清洗破碎PP（回用水）",
+      "facility": "auto_plastic_pre",
+      "inputs": {
+        "sorted_pp": 3,
+        "industrial_water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_pp": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "source_variant_of": "auto_wash_pp",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_plastic_pre",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 2.54,
+      "output_base_sell_equivalent": 1.5
+    },
+    "auto_wash_hdpe_reuse": {
+      "name": "自动清洗破碎HDPE（回用水）",
+      "facility": "auto_plastic_pre",
+      "inputs": {
+        "sorted_hdpe": 3,
+        "industrial_water": 0.25,
+        "soap": 0.02
+      },
+      "outputs": {
+        "flakes_hdpe": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "source_variant_of": "auto_wash_hdpe",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_plastic_pre",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 60,
+      "cycles_per_minute_ideal": 1.0,
+      "capacity_in_per_minute_ideal": 3.035,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": 2.54,
+      "output_base_sell_equivalent": 1.5
+    },
+    "auto_wash_pet_reuse": {
+      "name": "自动清洗破碎PET（回用水）",
+      "facility": "auto_plastic_pre",
+      "inputs": {
+        "sorted_pet": 3,
+        "industrial_water": 0.5,
+        "soap": 0.03
+      },
+      "outputs": {
+        "flakes_pet": 3
+      },
+      "human_seconds": 0,
+      "machine_seconds": 90,
+      "natural_seconds": 0,
+      "power": 3.5,
+      "tools": {},
+      "source_variant_of": "auto_wash_pet",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_plastic_pre",
+        "pet",
+        "water_recovery",
+        "pet"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 90,
+      "cycles_per_minute_ideal": 0.6667,
+      "capacity_in_per_minute_ideal": 2.0434,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 315.0,
+      "input_buy_equivalent": 2.65,
+      "output_base_sell_equivalent": 1.5
+    },
+    "paper_pulp_reuse": {
+      "name": "废纸制浆（回用水）",
+      "facility": "paper_pulper",
+      "inputs": {
+        "waste_paper": 6,
+        "industrial_water": 1
+      },
+      "outputs": {
+        "paper_pulp": 5,
+        "mixed_residue": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "quality_required": "无危险污染的合格纸料",
+      "source_variant_of": "paper_pulp",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "paper_pulp",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 70,
+      "cycles_per_minute_ideal": 0.8571,
+      "capacity_in_per_minute_ideal": 5.2283,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 100,
+      "input_buy_equivalent": 3.25,
+      "output_base_sell_equivalent": 1.75
+    },
+    "ore_sort_iron_reuse": {
+      "name": "选铁矿石（回用水）",
+      "facility": "ore_pre",
+      "inputs": {
+        "iron_ore": 6,
+        "industrial_water": 0.5
+      },
+      "outputs": {
+        "iron_concentrate": 4,
+        "mine_tailings": 2
+      },
+      "human_seconds": 20,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "source_variant_of": "ore_sort_iron",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "ore_pre",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 80,
+      "cycles_per_minute_ideal": 0.75,
+      "capacity_in_per_minute_ideal": 4.5375,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "ore_sort_copper_reuse": {
+      "name": "选铜矿石（回用水）",
+      "facility": "ore_pre",
+      "inputs": {
+        "copper_ore": 6,
+        "industrial_water": 0.5
+      },
+      "outputs": {
+        "copper_concentrate": 4,
+        "mine_tailings": 2
+      },
+      "human_seconds": 20,
+      "machine_seconds": 60,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "source_variant_of": "ore_sort_copper",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "ore_pre",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 80,
+      "cycles_per_minute_ideal": 0.75,
+      "capacity_in_per_minute_ideal": 4.5375,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 180,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "ore_sort_clay_reuse": {
+      "name": "净陶土（回用水）",
+      "facility": "ore_pre",
+      "inputs": {
+        "clay_ore": 5,
+        "industrial_water": 0.5
+      },
+      "outputs": {
+        "clean_clay": 4,
+        "mine_tailings": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 50,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {},
+      "source_variant_of": "ore_sort_clay",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "ore_pre",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 70,
+      "cycles_per_minute_ideal": 0.8571,
+      "capacity_in_per_minute_ideal": 4.3284,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 150,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "complex_recovery_reuse": {
+      "name": "复合料拆分再利用（回用水）",
+      "facility": "complex_recovery",
+      "inputs": {
+        "plastic_other": 6,
+        "industrial_water": 0.5
+      },
+      "outputs": {
+        "flakes_pp": 2,
+        "flakes_hdpe": 1,
+        "mechanical_filler": 1,
+        "mixed_residue": 2
+      },
+      "human_seconds": 60,
+      "machine_seconds": 120,
+      "natural_seconds": 0,
+      "power": 3,
+      "tools": {
+        "tongs": 6
+      },
+      "quality_required": "适用的可机械分离复合料",
+      "source_variant_of": "complex_recovery",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "complex",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 180,
+      "cycles_per_minute_ideal": 0.3333,
+      "capacity_in_per_minute_ideal": 2.0165,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 360,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.95
+    },
+    "auto_complex_recovery_reuse": {
+      "name": "自动复合料拆分（回用水）",
+      "facility": "auto_complex",
+      "inputs": {
+        "plastic_other": 6,
+        "industrial_water": 0.5
+      },
+      "outputs": {
+        "flakes_pp": 2,
+        "flakes_hdpe": 1,
+        "mechanical_filler": 1,
+        "mixed_residue": 2
+      },
+      "human_seconds": 0,
+      "machine_seconds": 180,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {},
+      "quality_required": "适用的可机械分离复合料",
+      "source_variant_of": "auto_complex_recovery",
+      "optional_effluent_capture": {
+        "addon": {
+          "container": 1,
+          "wire": 1
+        },
+        "yield_water_fraction": 0.8
+      },
+      "technologies": [
+        "auto_complex",
+        "water_recovery"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 180,
+      "cycles_per_minute_ideal": 0.3333,
+      "capacity_in_per_minute_ideal": 2.0165,
+      "human_labor_seconds_per_batch": 0,
+      "power_load_seconds_per_batch_ideal": 720,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.95
+    },
+    "build_lift_frame": {
+      "name": "制作升降舱结构架",
+      "facility": "lift_assembly",
+      "inputs": {
+        "reclaimed_structure": 4,
+        "mined_steel_billet": 6,
+        "steel_parts": 8
+      },
+      "outputs": {
+        "lift_frame": 1
+      },
+      "human_seconds": 40,
+      "machine_seconds": 80,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "region_required": 3,
+      "technologies": [
+        "lift_frame"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 9.0,
+      "human_labor_seconds_per_batch": 80,
+      "power_load_seconds_per_batch_ideal": 320,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "build_lift_drive": {
+      "name": "制作爬升驱动总成",
+      "facility": "lift_assembly",
+      "inputs": {
+        "motor": 1,
+        "drive": 1,
+        "mined_copper_billet": 4,
+        "steel_parts": 4,
+        "ceramic_insulator": 2
+      },
+      "outputs": {
+        "lift_drive": 1
+      },
+      "human_seconds": 50,
+      "machine_seconds": 100,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "region_required": 3,
+      "technologies": [
+        "lift_drive"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 150,
+      "cycles_per_minute_ideal": 0.4,
+      "capacity_in_per_minute_ideal": 6.0,
+      "human_labor_seconds_per_batch": 100,
+      "power_load_seconds_per_batch_ideal": 400,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "build_lift_brake": {
+      "name": "制作制动安全总成",
+      "facility": "lift_assembly",
+      "inputs": {
+        "tool_steel_billet": 4,
+        "steel_parts": 4,
+        "ceramic_insulator": 2
+      },
+      "outputs": {
+        "lift_brake": 1
+      },
+      "human_seconds": 50,
+      "machine_seconds": 70,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "region_required": 3,
+      "technologies": [
+        "lift_safety"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 3.5,
+      "human_labor_seconds_per_batch": 100,
+      "power_load_seconds_per_batch_ideal": 280,
+      "input_buy_equivalent": 38,
+      "output_base_sell_equivalent": 0
+    },
+    "build_lift_control": {
+      "name": "制作舱内控制总成",
+      "facility": "lift_assembly",
+      "inputs": {
+        "controller": 2,
+        "wire": 8,
+        "ceramic_insulator": 6
+      },
+      "outputs": {
+        "lift_control": 1
+      },
+      "human_seconds": 45,
+      "machine_seconds": 75,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "region_required": 3,
+      "technologies": [
+        "lift_safety"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 5.5,
+      "human_labor_seconds_per_batch": 90,
+      "power_load_seconds_per_batch_ideal": 300,
+      "input_buy_equivalent": 70,
+      "output_base_sell_equivalent": 0
+    },
+    "build_lift_cable": {
+      "name": "制作随行供电卷缆",
+      "facility": "lift_assembly",
+      "inputs": {
+        "wire": 40,
+        "mined_copper_billet": 8,
+        "ceramic_insulator": 6
+      },
+      "outputs": {
+        "lift_cable": 1
+      },
+      "human_seconds": 30,
+      "machine_seconds": 90,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "region_required": 3,
+      "technologies": [
+        "lift_safety"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 120,
+      "cycles_per_minute_ideal": 0.5,
+      "capacity_in_per_minute_ideal": 15.5,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 360,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "build_lift": {
+      "name": "升降舱总装",
+      "facility": "lift_launch",
+      "inputs": {
+        "lift_frame": 5,
+        "lift_drive": 2,
+        "lift_brake": 2,
+        "lift_control": 1,
+        "lift_cable": 1
+      },
+      "outputs": {
+        "lift_cabin": 1
+      },
+      "human_seconds": 120,
+      "machine_seconds": 180,
+      "natural_seconds": 0,
+      "power": 4,
+      "tools": {
+        "screwdriver": 2,
+        "wrench": 2
+      },
+      "region_required": 3,
+      "unique_vehicle_on_platform": true,
+      "technologies": [
+        "lift_final"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 300,
+      "cycles_per_minute_ideal": 0.2,
+      "capacity_in_per_minute_ideal": 8.0,
+      "human_labor_seconds_per_batch": 240,
+      "power_load_seconds_per_batch_ideal": 720,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "lift_test": {
+      "name": "升降舱带载测试",
+      "facility": "lift_launch",
+      "inputs": {
+        "lift_cabin": 1
+      },
+      "outputs": {},
+      "human_seconds": 30,
+      "machine_seconds": 150,
+      "natural_seconds": 0,
+      "power": 12,
+      "tools": {
+        "wrench": 1
+      },
+      "preserve_unique_vehicle": true,
+      "effect": "完成制动与供电测试；仍未通关",
+      "technologies": [
+        "lift_final"
+      ],
+      "consumption": "unique_vehicle_state_only",
+      "base_elapsed_seconds": 180,
+      "cycles_per_minute_ideal": 0.3333,
+      "capacity_in_per_minute_ideal": 7.9992,
+      "human_labor_seconds_per_batch": 60,
+      "power_load_seconds_per_batch_ideal": 1800,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "lift_ascent": {
+      "name": "主角登舱返程",
+      "facility": "lift_launch",
+      "inputs": {},
+      "outputs": {},
+      "human_seconds": 10,
+      "machine_seconds": 180,
+      "natural_seconds": 0,
+      "power": 12,
+      "tools": {},
+      "region_required": 3,
+      "requires_tested_vehicle": true,
+      "effect": "主角登舱并到达上层后，按结局规则结算；载具不可复制、出售或在载人时拆除",
+      "technologies": [
+        "lift_final"
+      ],
+      "consumption": "unique_vehicle_state_only",
+      "base_elapsed_seconds": 190,
+      "cycles_per_minute_ideal": 0.3158,
+      "capacity_in_per_minute_ideal": 0.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 2160,
+      "input_buy_equivalent": 0,
+      "output_base_sell_equivalent": 0
+    },
+    "pack_waste_wood": {
+      "name": "打包废木料",
+      "facility": "baler",
+      "inputs": {
+        "waste_wood": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_waste_wood": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 17.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_waste_wood": {
+      "name": "解包废木料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_waste_wood": 1
+      },
+      "outputs": {
+        "waste_wood": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 3.3
+    },
+    "pack_sorted_wood": {
+      "name": "打包已整理木料",
+      "facility": "baler",
+      "inputs": {
+        "sorted_wood": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_sorted_wood": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 19,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_sorted_wood": {
+      "name": "解包已整理木料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_sorted_wood": 1
+      },
+      "outputs": {
+        "sorted_wood": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 4.3
+    },
+    "pack_steel_scrap": {
+      "name": "打包钢铁材料",
+      "facility": "baler",
+      "inputs": {
+        "steel_scrap": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_steel_scrap": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 19,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_steel_scrap": {
+      "name": "解包钢铁材料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_steel_scrap": 1
+      },
+      "outputs": {
+        "steel_scrap": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 6.3
+    },
+    "pack_copper_scrap": {
+      "name": "打包铜材料",
+      "facility": "baler",
+      "inputs": {
+        "copper_scrap": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_copper_scrap": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 24.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_copper_scrap": {
+      "name": "解包铜材料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_copper_scrap": 1
+      },
+      "outputs": {
+        "copper_scrap": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 8.3
+    },
+    "pack_aluminum_scrap": {
+      "name": "打包铝材料",
+      "facility": "baler",
+      "inputs": {
+        "aluminum_scrap": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_aluminum_scrap": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 19,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_aluminum_scrap": {
+      "name": "解包铝材料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_aluminum_scrap": 1
+      },
+      "outputs": {
+        "aluminum_scrap": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 6.3
+    },
+    "pack_tool_steel_scrap": {
+      "name": "打包工具钢废料",
+      "facility": "baler",
+      "inputs": {
+        "tool_steel_scrap": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_tool_steel_scrap": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 29,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_tool_steel_scrap": {
+      "name": "解包工具钢废料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_tool_steel_scrap": 1
+      },
+      "outputs": {
+        "tool_steel_scrap": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 10.3
+    },
+    "pack_plastic_mix": {
+      "name": "打包混杂／受污染塑料",
+      "facility": "baler",
+      "inputs": {
+        "plastic_mix": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_plastic_mix": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 13.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_plastic_mix": {
+      "name": "解包混杂／受污染塑料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_plastic_mix": 1
+      },
+      "outputs": {
+        "plastic_mix": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.5
+    },
+    "pack_sorted_pp": {
+      "name": "打包PP分选",
+      "facility": "baler",
+      "inputs": {
+        "sorted_pp": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_sorted_pp": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 17.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_sorted_pp": {
+      "name": "解包PP分选",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_sorted_pp": 1
+      },
+      "outputs": {
+        "sorted_pp": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 3.3
+    },
+    "pack_sorted_hdpe": {
+      "name": "打包HDPE分选",
+      "facility": "baler",
+      "inputs": {
+        "sorted_hdpe": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_sorted_hdpe": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 17.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_sorted_hdpe": {
+      "name": "解包HDPE分选",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_sorted_hdpe": 1
+      },
+      "outputs": {
+        "sorted_hdpe": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 3.3
+    },
+    "pack_sorted_pet": {
+      "name": "打包PET分选",
+      "facility": "baler",
+      "inputs": {
+        "sorted_pet": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_sorted_pet": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 17.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_sorted_pet": {
+      "name": "解包PET分选",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_sorted_pet": 1
+      },
+      "outputs": {
+        "sorted_pet": 11
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 3.3
+    },
+    "pack_plastic_other": {
+      "name": "打包其他适用复合塑料",
+      "facility": "baler",
+      "inputs": {
+        "plastic_other": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_plastic_other": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_plastic_other": {
+      "name": "解包其他适用复合塑料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_plastic_other": 1
+      },
+      "outputs": {
+        "plastic_other": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.3
+    },
+    "pack_waste_textile": {
+      "name": "打包低等级废纺织物",
+      "facility": "baler",
+      "inputs": {
+        "waste_textile": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_waste_textile": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 17.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_waste_textile": {
+      "name": "解包低等级废纺织物",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_waste_textile": 1
+      },
+      "outputs": {
+        "waste_textile": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 2.8
+    },
+    "pack_cuttable_textile": {
+      "name": "打包可裁剪废纺织物",
+      "facility": "baler",
+      "inputs": {
+        "cuttable_textile": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_cuttable_textile": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 19,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_cuttable_textile": {
+      "name": "解包可裁剪废纺织物",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_cuttable_textile": 1
+      },
+      "outputs": {
+        "cuttable_textile": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 4.3
+    },
+    "pack_waste_paper": {
+      "name": "打包合格废纸",
+      "facility": "baler",
+      "inputs": {
+        "waste_paper": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_waste_paper": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 14.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_waste_paper": {
+      "name": "解包合格废纸",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_waste_paper": 1
+      },
+      "outputs": {
+        "waste_paper": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 1.8
+    },
+    "pack_waste_glass": {
+      "name": "打包合格废玻璃",
+      "facility": "baler",
+      "inputs": {
+        "waste_glass": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_waste_glass": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": 15.0,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_waste_glass": {
+      "name": "解包合格废玻璃",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_waste_glass": 1
+      },
+      "outputs": {
+        "waste_glass": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 2.3
+    },
+    "pack_slag": {
+      "name": "打包熔炼残渣",
+      "facility": "baler",
+      "inputs": {
+        "slag": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_slag": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_slag": {
+      "name": "解包熔炼残渣",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_slag": 1
+      },
+      "outputs": {
+        "slag": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.3
+    },
+    "pack_mixed_residue": {
+      "name": "打包回收处理残余",
+      "facility": "baler",
+      "inputs": {
+        "mixed_residue": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_mixed_residue": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_mixed_residue": {
+      "name": "解包回收处理残余",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_mixed_residue": 1
+      },
+      "outputs": {
+        "mixed_residue": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.3
+    },
+    "pack_organic_residual": {
+      "name": "打包有机处理残余",
+      "facility": "baler",
+      "inputs": {
+        "organic_residual": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_organic_residual": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_organic_residual": {
+      "name": "解包有机处理残余",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_organic_residual": 1
+      },
+      "outputs": {
+        "organic_residual": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.3
+    },
+    "pack_mine_tailings": {
+      "name": "打包选矿尾料",
+      "facility": "baler",
+      "inputs": {
+        "mine_tailings": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_mine_tailings": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_mine_tailings": {
+      "name": "解包选矿尾料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_mine_tailings": 1
+      },
+      "outputs": {
+        "mine_tailings": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.3
+    },
+    "pack_ceramic_scrap": {
+      "name": "打包陶瓷废料",
+      "facility": "baler",
+      "inputs": {
+        "ceramic_scrap": 10,
+        "pet_strap": 1
+      },
+      "outputs": {
+        "pack_ceramic_scrap": 1
+      },
+      "human_seconds": 10,
+      "machine_seconds": 40,
+      "natural_seconds": 0,
+      "power": 2,
+      "tools": {},
+      "preserve_payload": true,
+      "technologies": [
+        "baler"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 50,
+      "cycles_per_minute_ideal": 1.2,
+      "capacity_in_per_minute_ideal": 13.2,
+      "human_labor_seconds_per_batch": 10,
+      "power_load_seconds_per_batch_ideal": 80,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0
+    },
+    "unpack_ceramic_scrap": {
+      "name": "解包陶瓷废料",
+      "facility": "disassembly",
+      "inputs": {
+        "pack_ceramic_scrap": 1
+      },
+      "outputs": {
+        "ceramic_scrap": 10,
+        "sorted_pet": 1
+      },
+      "human_seconds": 20,
+      "machine_seconds": 0,
+      "natural_seconds": 0,
+      "power": 0,
+      "tools": {},
+      "preserve_payload": true,
+      "binding_strap_becomes_damaged_pet": true,
+      "technologies": [
+        "disassembly"
+      ],
+      "consumption": "reserved_then_commit_on_completion",
+      "base_elapsed_seconds": 20,
+      "cycles_per_minute_ideal": 3.0,
+      "capacity_in_per_minute_ideal": 18.0,
+      "human_labor_seconds_per_batch": 20,
+      "power_load_seconds_per_batch_ideal": 0,
+      "input_buy_equivalent": null,
+      "output_base_sell_equivalent": 0.3
+    }
+  },
+  "game_name": "喂——出来",
+  "competition_theme": "涌现"
+}

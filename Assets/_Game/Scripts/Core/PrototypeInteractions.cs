@@ -7,16 +7,18 @@ namespace CrazyRubbish.Core
         private ActionResult lastInteraction=new ActionResult(true,"就绪。");
         private Func<ActionResult> pendingInteraction;
         private double interactionRemaining;
+        private bool pickupInteraction;
         public bool Interacting=>pendingInteraction!=null;
+        public bool PickingUp=>Interacting&&pickupInteraction;
         public int InteractionRevision {get;private set;}
         public ActionResult LastInteraction=>lastInteraction;
         private bool AtFront(int x,int y)=>(int)Math.Floor(PlayerY+0.5)==y&&((int)Math.Floor(PlayerX+0.5)==x||(int)Math.Floor(PlayerX+0.5)==x+1);
         public void LeaveManualRole(){manualStation=0;CancelInteraction();RefreshState();}
-        private ActionResult QueueInteraction(Func<ActionResult> action)
+        private ActionResult QueueInteraction(Func<ActionResult> action,bool pickup=false)
         {
             if(Paused)return Fail("恢复运行后进行交互。");
             if(Interacting)return Fail("正在交互，请等待或按Esc取消。");
-            manualStation=0;ReleaseUnusedTools();pendingInteraction=action;interactionRemaining=Settings.interactionSeconds;
+            manualStation=0;ReleaseUnusedTools();pendingInteraction=action;pickupInteraction=pickup;interactionRemaining=Settings.interactionSeconds;
             return Ok("交互中…");
         }
         public void CancelInteraction(){if(pendingInteraction==null)return;pendingInteraction=null;lastInteraction=Fail("交互取消，物品未转移。");InteractionRevision++;}
@@ -47,7 +49,7 @@ namespace CrazyRubbish.Core
                 if(count<=0)return Fail("背包容量不足或物品已被预约。");
                 Carry.TryAdd(pile.Item,count);MoveInstances("ground:"+pile.Id,"carry",pile.Item,count);RemoveGround(pile,count);discovered.Add(pile.Item);
                 return Ok("拾取完成。",count);
-            });
+            },true);
         }
         public ActionResult Deposit()
         {

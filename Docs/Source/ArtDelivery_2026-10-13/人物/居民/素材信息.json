@@ -1,0 +1,354 @@
+[
+  {
+    "id": "01",
+    "name": "原有灰绿上衣男居民",
+    "direction": "up",
+    "path": "worker_01/chr_worker_up.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      192,
+      55,
+      832,
+      1473
+    ],
+    "sha256": "9d21c86094df3cd04b3bda1a19c0b89784069cdb68cdc0d372dd509758f7d086"
+  },
+  {
+    "id": "01",
+    "name": "原有灰绿上衣男居民",
+    "direction": "down",
+    "path": "worker_01/chr_worker_down.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      192,
+      74,
+      832,
+      1472
+    ],
+    "sha256": "3183a53d4782be2d8106d5e4d8eb1d3cc5b6d8dad9265922e16420525f331626"
+  },
+  {
+    "id": "01",
+    "name": "原有灰绿上衣男居民",
+    "direction": "left",
+    "path": "worker_01/chr_worker_left.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      305,
+      87,
+      714,
+      1476
+    ],
+    "sha256": "f574e3e5c737c82d5a605472c9f3b02a7963cd1a609e194576413ce71fb93746"
+  },
+  {
+    "id": "01",
+    "name": "原有灰绿上衣男居民",
+    "direction": "right",
+    "path": "worker_01/chr_worker_right.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      315,
+      69,
+      709,
+      1468
+    ],
+    "sha256": "9305299f93d1cfb6d1eb335c01077dce00899fae9a4bfb6057d1687fab790f5e"
+  },
+  {
+    "id": "02",
+    "name": "红棕上衣女居民",
+    "direction": "up",
+    "path": "worker_02/chr_worker_02_up.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      212,
+      80,
+      812,
+      1462
+    ],
+    "sha256": "e928d066c1ccc1734893b2d362b25a8d8a8aa7e59455c12726047e5a67305d31"
+  },
+  {
+    "id": "02",
+    "name": "红棕上衣女居民",
+    "direction": "down",
+    "path": "worker_02/chr_worker_02_down.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      210,
+      73,
+      813,
+      1473
+    ],
+    "sha256": "824390e7c551f0112c7ab4a1e7657ea302975ec05a8e1ca57606e25573d3435b"
+  },
+  {
+    "id": "02",
+    "name": "红棕上衣女居民",
+    "direction": "left",
+    "path": "worker_02/chr_worker_02_left.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      282,
+      73,
+      719,
+      1480
+    ],
+    "sha256": "2b70ba1bcfa97771154bc8ef529d15952f650d1f61d257e2a893b1a67743be9e"
+  },
+  {
+    "id": "02",
+    "name": "红棕上衣女居民",
+    "direction": "right",
+    "path": "worker_02/chr_worker_02_right.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      317,
+      83,
+      724,
+      1472
+    ],
+    "sha256": "c1511d6702e7e3e609ad3653ebab72f1803d92be4a9029f8a464033a561d69c9"
+  },
+  {
+    "id": "03",
+    "name": "灰蓝外套男居民",
+    "direction": "up",
+    "path": "worker_03/chr_worker_03_up.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      165,
+      71,
+      859,
+      1472
+    ],
+    "sha256": "c7222cbe3ffb82eae6a4f95246e1489a9651b942a9734f3a32686c71272b657b"
+  },
+  {
+    "id": "03",
+    "name": "灰蓝外套男居民",
+    "direction": "down",
+    "path": "worker_03/chr_worker_03_down.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      176,
+      71,
+      849,
+      1471
+    ],
+    "sha256": "e6d6b9a17c933c2b8e5c1a15963273dfd026e531897cafdc19dca6b1e1600c87"
+  },
+  {
+    "id": "03",
+    "name": "灰蓝外套男居民",
+    "direction": "left",
+    "path": "worker_03/chr_worker_03_left.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      316,
+      69,
+      716,
+      1474
+    ],
+    "sha256": "f8d380d6b877bea0fcfb15174b77b3a2c9e82454b4d0b2f4115f90768c4e0d4a"
+  },
+  {
+    "id": "03",
+    "name": "灰蓝外套男居民",
+    "direction": "right",
+    "path": "worker_03/chr_worker_03_right.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      329,
+      69,
+      696,
+      1476
+    ],
+    "sha256": "ff9ce61cf4a1c76844be36169d6a844eb726003d2c808491b9e486d0d101677f"
+  },
+  {
+    "id": "04",
+    "name": "浅褐上衣年长女居民",
+    "direction": "up",
+    "path": "worker_04/chr_worker_04_up.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      197,
+      80,
+      829,
+      1464
+    ],
+    "sha256": "293f13b28d852e278a8fccb069952e435d23ad4a7a59fbbc3c3085a362f9c3a3"
+  },
+  {
+    "id": "04",
+    "name": "浅褐上衣年长女居民",
+    "direction": "down",
+    "path": "worker_04/chr_worker_04_down.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      193,
+      72,
+      830,
+      1464
+    ],
+    "sha256": "1aa98c88aaca95ac13e740e26c7b519613ff412afb59898b6d588e91d42fa4df"
+  },
+  {
+    "id": "04",
+    "name": "浅褐上衣年长女居民",
+    "direction": "left",
+    "path": "worker_04/chr_worker_04_left.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      289,
+      66,
+      731,
+      1502
+    ],
+    "sha256": "2df88dfd7a0ca6aa74953ed771c6906b651ef0828a305077250e44d37cec49d0"
+  },
+  {
+    "id": "04",
+    "name": "浅褐上衣年长女居民",
+    "direction": "right",
+    "path": "worker_04/chr_worker_04_right.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "body_bbox_alpha128": [
+      304,
+      65,
+      700,
+      1486
+    ],
+    "sha256": "44d30da166bd0f6a1bd94614db58035df150769188110596903d1f060a6387e3"
+  }
+]

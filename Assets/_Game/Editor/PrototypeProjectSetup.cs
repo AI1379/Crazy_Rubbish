@@ -19,22 +19,6 @@ namespace CrazyRubbish.Editor
         public static void Setup()
         {
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            string art = "Assets/_Game/Art/Prototype/";
-            string[] names = { "Worker", "WasteWood", "MixedPlastic", "Fastener", "Saw", "Plank", "WoodHandle", "Warehouse", "Workbench", "Tile" };
-            foreach (string name in names)
-            {
-                string path = art + name + ".png";
-                if (!File.Exists(path)) throw new FileNotFoundException("Run Tools/PreparePrototypeArt.py first.", path);
-                var importer = (TextureImporter)AssetImporter.GetAtPath(path);
-                importer.textureType = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Single;
-                importer.spritePixelsPerUnit = 64;
-                importer.filterMode = FilterMode.Point;
-                importer.mipmapEnabled = false;
-                importer.alphaIsTransparency = true;
-                importer.textureCompression = TextureImporterCompression.Uncompressed;
-                importer.SaveAndReimport();
-            }
             const string fontPath = "Assets/_Game/Art/Fonts/RubbishPrototypeSans.ttf";
             if (!File.Exists(fontPath)) throw new FileNotFoundException("Run Tools/PreparePrototypeFont.py first.", fontPath);
             var fontImporter = (TrueTypeFontImporter)AssetImporter.GetAtPath(fontPath);
@@ -56,32 +40,7 @@ namespace CrazyRubbish.Editor
                 AssetDatabase.CreateAsset(appearance, AppearancePath);
             }
             appearance.font = AssetDatabase.LoadAssetAtPath<Font>(fontPath);
-            appearance.worker = LoadSprite(art, "Worker");
-            appearance.wasteWood = LoadSprite(art, "WasteWood");
-            appearance.mixedPlastic = LoadSprite(art, "MixedPlastic");
-            appearance.fastener = LoadSprite(art, "Fastener");
-            appearance.saw = LoadSprite(art, "Saw");
-            appearance.plank = LoadSprite(art, "Plank");
-            appearance.woodHandle = LoadSprite(art, "WoodHandle");
-            appearance.warehouse = LoadSprite(art, "Warehouse");
-            appearance.workbench = LoadSprite(art, "Workbench");
-            appearance.tile = LoadSprite(art, "Tile");
-            appearance.itemIcons = new Sprite[Enum.GetValues(typeof(CrazyRubbish.Core.ItemId)).Length];
-            foreach (CrazyRubbish.Core.ItemId item in Enum.GetValues(typeof(CrazyRubbish.Core.ItemId)))
-            {
-                string path = art + "Items/" + item + ".png";
-                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                if (importer == null) continue;
-                importer.textureType = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Single;
-                importer.spritePixelsPerUnit = 64;
-                importer.filterMode = FilterMode.Point;
-                importer.mipmapEnabled = false;
-                importer.alphaIsTransparency = true;
-                importer.textureCompression = TextureImporterCompression.Uncompressed;
-                importer.SaveAndReimport();
-                appearance.itemIcons[(int)item] = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-            }
+            DemoArtSetup.Apply(appearance);
             EditorUtility.SetDirty(appearance);
             AssetDatabase.SaveAssets();
 
@@ -101,7 +60,6 @@ namespace CrazyRubbish.Editor
             Debug.Log("M2 starting prototype setup complete. Main scene and balance are ready.");
         }
 
-        private static Sprite LoadSprite(string folder, string name) => AssetDatabase.LoadAssetAtPath<Sprite>(folder + name + ".png");
 
         private static void CreateScene(PrototypeBalance balance, PrototypeAppearance appearance)
         {

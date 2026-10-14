@@ -55,6 +55,7 @@ namespace CrazyRubbish.Core
         public decimal Cash => CashCents / 100m;
         public UnitInventory Cargo { get; } = new UnitInventory(8);
         public string Activity { get; internal set; } = "空闲";
+        public bool PickingUp => Delivery!=null&&!Delivery.Picked&&Delivery.Ground!=null&&PrototypeSimulation.Distance(X,Y,Delivery.SourceX,Delivery.SourceY)<0.001;
         public LivingNeeds Needs { get; internal set; } = new LivingNeeds();
         internal DeliveryTask Delivery;
         internal int[] Path; internal int PathIndex,PathTargetX,PathTargetY,PathRevision;

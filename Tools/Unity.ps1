@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('Import', 'Open', 'Setup', 'Test', 'Build', 'Release', 'Smoke')]
+    [ValidateSet('Import', 'ArtImport', 'ArtValidate', 'ArtScene', 'Open', 'Setup', 'Test', 'Build', 'Release', 'Smoke')]
     [string]$Action = 'Import',
     [string]$UnityPath,
     [ValidatePattern('^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$')]
@@ -39,6 +39,9 @@ $runPath = $editorPath
 $resultFile = $null
 switch ($Action) {
     'Import' { $editorArguments += @('-nographics', '-quit') }
+    'ArtImport' { $editorArguments += @('-nographics', '-quit', '-executeMethod', 'CrazyRubbish.Editor.ArtDeliveryImporter.ImportAndValidate') }
+    'ArtValidate' { $editorArguments += @('-nographics', '-quit', '-executeMethod', 'CrazyRubbish.Editor.ArtDeliveryImporter.Validate') }
+    'ArtScene' { $editorArguments += @('-nographics', '-quit', '-executeMethod', 'CrazyRubbish.Editor.DemoArtSetup.ApplyToScene') }
     'Setup' { $editorArguments += @('-nographics', '-quit', '-executeMethod', 'CrazyRubbish.Editor.PrototypeProjectSetup.Setup') }
     'Test' {
         $resultDirectory = Join-Path $projectRoot 'TestResults'

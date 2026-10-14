@@ -1,0 +1,378 @@
+fileFormatVersion: 2
+guid: 296fab87172f0054da0a9537211922bb
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.010373444}
+  spritePixelsToUnits: 335.7143
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: chr_hero_male_carry_up
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 962
+        width: 245
+        height: 482
+      alignment: 9
+      pivot: {x: 0.5, y: 0.010373444}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd5ea29f0d085b1fbb7077e058a3608b
+      internalID: 99841555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_carry_down
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 962
+        width: 240
+        height: 482
+      alignment: 9
+      pivot: {x: 0.49791667, y: 0.010373444}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 438cca0f114153efbd7ea8b3121cb7be
+      internalID: 169622083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_carry_left
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 962
+        width: 201
+        height: 482
+      alignment: 9
+      pivot: {x: 0.6442786, y: 0.012448133}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1821a86a85155009a88b78f42d46e527
+      internalID: 1341682637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_carry_right
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 962
+        width: 202
+        height: 482
+      alignment: 9
+      pivot: {x: 0.3490099, y: 0.012448133}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95228092b0c258ec95a504f438d7f3ba
+      internalID: 1668165664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_pickup_up
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 547
+        width: 253
+        height: 333
+      alignment: 9
+      pivot: {x: 0.5, y: 0.018018018}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 164bb68c7c7d54bab3ef0e1b6d449dba
+      internalID: 846612371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_pickup_down
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 537
+        width: 217
+        height: 353
+      alignment: 9
+      pivot: {x: 0.40092167, y: 0.016997168}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93950f80bc2d5e559a0629b4c9f45214
+      internalID: 385743727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_pickup_left
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 543
+        width: 241
+        height: 339
+      alignment: 9
+      pivot: {x: 0.43360996, y: 0.017699115}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f75462f91a655aa875f39b00d2b38b8
+      internalID: -2121057248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_pickup_right
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 543
+        width: 241
+        height: 339
+      alignment: 9
+      pivot: {x: 0.56224066, y: 0.017699115}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f449b64a03f756978cbceda660dd6dc7
+      internalID: -2114505387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_saw_up
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 46
+        width: 253
+        height: 439
+      alignment: 9
+      pivot: {x: 0.5, y: 0.013667426}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37f75400c23e53728cfc7878c1d229dc
+      internalID: 346092183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_saw_down
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 50
+        width: 245
+        height: 435
+      alignment: 9
+      pivot: {x: 0.51428574, y: 0.011494253}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74262ec0bfc1566cac175200766503d9
+      internalID: 1512745925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_saw_left
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 42
+        width: 235
+        height: 444
+      alignment: 9
+      pivot: {x: 0.70425534, y: 0.013513514}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4013a387c6105c4283def5ba5c7517a5
+      internalID: -1895648891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_hero_male_saw_right
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 42
+        width: 232
+        height: 443
+      alignment: 9
+      pivot: {x: 0.28879312, y: 0.013544018}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71e1af6de2a957f3ac043a31cfbe31c4
+      internalID: -1720429709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 02b02b716402b224aa02d15406b23fba
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      chr_hero_male_carry_down: 169622083
+      chr_hero_male_carry_left: 1341682637
+      chr_hero_male_carry_right: 1668165664
+      chr_hero_male_carry_up: 99841555
+      chr_hero_male_pickup_down: 385743727
+      chr_hero_male_pickup_left: -2121057248
+      chr_hero_male_pickup_right: -2114505387
+      chr_hero_male_pickup_up: 846612371
+      chr_hero_male_saw_down: 1512745925
+      chr_hero_male_saw_left: -1895648891
+      chr_hero_male_saw_right: -1720429709
+      chr_hero_male_saw_up: 346092183
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

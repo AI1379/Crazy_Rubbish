@@ -11,8 +11,9 @@
 *.meta text eol=lf whitespace=-blank-at-eol
 *.mat text eol=lf whitespace=-blank-at-eol
 
-# Preserve the supplied original document snapshots byte-for-byte.
+# Preserve supplied source snapshots byte-for-byte after removing machine-local path prefixes.
 /Docs/Source/*.md -text
+/Docs/Source/ArtDelivery_2026-10-13/** -text
 /Assets/_Game/Art/Fonts/OFL.txt -text whitespace=-blank-at-eol
 
 # Binary art, models, audio, video, and fonts use Git LFS.

@@ -1,0 +1,115 @@
+[
+  {
+    "id": "bld_old_warehouse_south_idle",
+    "name": "旧仓库",
+    "footprint": [
+      3,
+      3
+    ],
+    "prompt": "Asset type: one standalone transparent PNG game sprite for the 2D top-down grid factory game 涌现. Input image is STYLE AND CAMERA REFERENCE ONLY; do not copy its generator machinery. Match the simple chunky square-pixel sprite style, dark outlines, muted brown/gray industrial colors, limited 2-3 shading tones, no gradients or fine realistic details. Camera slightly elevated from south, north at the image top, south at bottom, east right, west left. Footprint axes remain screen-horizontal and screen-vertical, never isometric diamond. ONE isolated object centered, entirely visible, with generous transparent outer padding. True transparent alpha around object. No floor tile or scene background, no cast shadow, no people, no captions, no grid, no labels, no watermark. Crisp coarse pixel blocks as if enlarged nearest-neighbor. Subject: a small old WAREHOUSE for storing recycled goods, rectangular broad squat 3x3-grid building. Repaired slate-gray corrugated-metal roof, brown wooden reinforced wall beams, ONE WIDE DARK STORAGE DOOR centered on SOUTH/front wall at bottom, a hint of wooden crate shelving visible through the doorway. Clearly a storage shed, no chimney or domestic windows. Entry side easy to identify. Closed structure except open entrance, roof not a separate image. No outside scattered crates. Square 1024x1024 canvas.",
+    "ref": "C:\\Users\\snowy_light\\Desktop\\喂——出来游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+    "source": "generated_images/exec-c189a349-7061-48e2-9763-9ce725d7d64a.png"
+  },
+  {
+    "id": "bld_old_housing_south_unpowered",
+    "name": "旧住房（未通电）",
+    "footprint": [
+      3,
+      3
+    ],
+    "prompt": "Asset type: one standalone transparent PNG game sprite for the 2D top-down grid factory game 涌现. Input image is STYLE AND CAMERA REFERENCE ONLY; do not copy its generator machinery. Match the simple chunky square-pixel sprite style, dark outlines, muted brown/gray industrial colors, limited 2-3 shading tones, no gradients or fine realistic details. Camera slightly elevated from south, north at the image top, south at bottom, east right, west left. Footprint axes remain screen-horizontal and screen-vertical, never isometric diamond. ONE isolated object centered, entirely visible, with generous transparent outer padding. True transparent alpha around object. No floor tile or scene background, no cast shadow, no people, no captions, no grid, no labels, no watermark. Crisp coarse pixel blocks as if enlarged nearest-neighbor. Subject: a small old HOUSING building for people, rectangular compact 3x3-grid building. Muted brown patched wooden walls, simple gray metal pitched roof with broad roof plane visible from above, ONE narrow closed human door centered on SOUTH/front wall at bottom, two small dark unlit windows either side of front door. Clearly modest human residence, different from warehouse: narrow door and domestic windows. No illuminated windows, no porch occupying extra tiles, no chimney smoke. Square 1024x1024 canvas.",
+    "ref": "C:\\Users\\snowy_light\\Desktop\\喂——出来游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+    "source": "generated_images/exec-fa60b9b7-ae10-49b6-997a-3ff0ddbb5f54.png"
+  },
+  {
+    "id": "bld_streetlamp_unpowered",
+    "name": "路灯（未通电）",
+    "footprint": [
+      1,
+      1
+    ],
+    "prompt": "Asset type: one standalone transparent PNG game sprite for the 2D top-down grid factory game 涌现. Input image is STYLE AND CAMERA REFERENCE ONLY; do not copy its generator machinery. Match the simple chunky square-pixel sprite style, dark outlines, muted brown/gray industrial colors, limited 2-3 shading tones, no gradients or fine realistic details. Camera slightly elevated from south, north at the image top, south at bottom, east right, west left. Footprint axes remain screen-horizontal and screen-vertical, never isometric diamond. ONE isolated object centered, entirely visible, with generous transparent outer padding. True transparent alpha around object. No floor tile or scene background, no cast shadow, no people, no captions, no grid, no labels, no watermark. Crisp coarse pixel blocks as if enlarged nearest-neighbor. Subject: one simple UNLIT STREET LAMP for a 1x1-grid ground footprint. Thin straight dark-gray metal pole, small square bolted foot at bottom, short arm with a single downward-facing rectangular industrial lamp shade near top. Lamp lens gray, entirely unlit, no glow, no light halo. Small reused industrial details, minimal silhouette. Pole stays visible, isolated whole object. Vertical 1024x1536 canvas. Narrow base anchored at the bottom center.",
+    "ref": "C:\\Users\\snowy_light\\Desktop\\喂——出来游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+    "source": "generated_images/exec-e91550c1-a173-4237-89d3-ff99c7d8204e.png"
+  },
+  {
+    "id": "env_hole_east",
+    "name": "洞口",
+    "footprint": [
+      2,
+      2
+    ],
+    "prompt": "Asset type: one standalone transparent PNG game sprite for the 2D top-down grid factory game 涌现. Input image is STYLE AND CAMERA REFERENCE ONLY; do not copy its generator machinery. Match the simple chunky square-pixel sprite style, dark outlines, muted brown/gray industrial colors, limited 2-3 shading tones, no gradients or fine realistic details. Camera slightly elevated from south, north at the image top, south at bottom, east right, west left. Footprint axes remain screen-horizontal and screen-vertical, never isometric diamond. ONE isolated object centered, entirely visible, with generous transparent outer padding. True transparent alpha around object. No floor tile or scene background, no cast shadow, no people, no captions, no grid, no labels, no watermark. Crisp coarse pixel blocks as if enlarged nearest-neighbor. Subject: ONE mysterious dark HOLE in the ground with irregular nearly round outline fitting within a 2x2-grid footprint. Rough muted gray-brown broken earth and stone rim, narrow rim, no raised walls. Deep opaque almost-black interior, center is a solid dark void feature, NOT transparent. No visible bottom, contents, cables, stairs, technology, people or another civilization. Eastern/right lower edge has a small flatter rim lip readable as the dumping interaction side, without an added walkway. Centered square 1024x1024 canvas, seen more from above so opening easy to read.",
+    "ref": "C:\\Users\\snowy_light\\Desktop\\喂——出来游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+    "source": "generated_images/exec-892bd08e-4940-49a2-ac31-0727bb6fb0b5.png"
+  },
+  {
+    "id": "env_waste_wood_low",
+    "name": "废木料低堆",
+    "footprint": [
+      1,
+      1
+    ],
+    "material": "a small LOW sparse heap of 5-7 short broken WOOD scraps and damaged old planks, dull brown, splintered ends, visible open spaces, irregular lengths, no clean new boards, no full trees, no furniture",
+    "prompt": "Asset type: one standalone transparent PNG game sprite for the 2D top-down grid factory game 涌现. Input image is STYLE AND CAMERA REFERENCE ONLY; do not copy its generator machinery. Match the simple chunky square-pixel sprite style, dark outlines, muted brown/gray industrial colors, limited 2-3 shading tones, no gradients or fine realistic details. Camera slightly elevated from south, north at the image top, south at bottom, east right, west left. Footprint axes remain screen-horizontal and screen-vertical, never isometric diamond. ONE isolated object centered, entirely visible, with generous transparent outer padding. True transparent alpha around object. No floor tile or scene background, no cast shadow, no people, no captions, no grid, no labels, no watermark. Crisp coarse pixel blocks as if enlarged nearest-neighbor. Subject: a small LOW sparse heap of 5-7 short broken WOOD scraps and damaged old planks, dull brown, splintered ends, visible open spaces, irregular lengths, no clean new boards, no full trees, no furniture. A single small modular waste pile fitting ONE SQUARE GROUND TILE. From mostly overhead with a little object side visible. Cluster horizontally at lower-middle of canvas, distinct low flat height, no pedestal or dirt base, pieces form one group, full silhouette contained with at least 15% transparent padding. Muted colors to stay behind characters. Square 1024x1024 canvas, no inventory slot frame, no icon badge. Ground-tile footprint is a logical placement size, not a drawn grid.",
+    "ref": "C:\\Users\\snowy_light\\Desktop\\喂——出来游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+    "source": "generated_images/exec-fe00479b-fb9f-4ec8-8879-154a89419c80.png"
+  },
+  {
+    "id": "env_waste_metal_low",
+    "name": "废金属低堆",
+    "footprint": [
+      1,
+      1
+    ],
+    "material": "a small LOW sparse heap of scrap METAL, bent gray sheet fragments, a short broken pipe and a couple of rusty bolts, steel gray with muted rust-brown, no precious metals, no complete modern machine, no electronics display",
+    "prompt": "Asset type: one standalone transparent PNG game sprite for the 2D top-down grid factory game 涌现. Input image is STYLE AND CAMERA REFERENCE ONLY; do not copy its generator machinery. Match the simple chunky square-pixel sprite style, dark outlines, muted brown/gray industrial colors, limited 2-3 shading tones, no gradients or fine realistic details. Camera slightly elevated from south, north at the image top, south at bottom, east right, west left. Footprint axes remain screen-horizontal and screen-vertical, never isometric diamond. ONE isolated object centered, entirely visible, with generous transparent outer padding. True transparent alpha around object. No floor tile or scene background, no cast shadow, no people, no captions, no grid, no labels, no watermark. Crisp coarse pixel blocks as if enlarged nearest-neighbor. Subject: a small LOW sparse heap of scrap METAL, bent gray sheet fragments, a short broken pipe and a couple of rusty bolts, steel gray with muted rust-brown, no precious metals, no complete modern machine, no electronics display. A single small modular waste pile fitting ONE SQUARE GROUND TILE. From mostly overhead with a little object side visible. Cluster horizontally at lower-middle of canvas, distinct low flat height, no pedestal or dirt base, pieces form one group, full silhouette contained with at least 15% transparent padding. Muted colors to stay behind characters. Square 1024x1024 canvas, no inventory slot frame, no icon badge. Ground-tile footprint is a logical placement size, not a drawn grid.",
+    "ref": "C:\\Users\\snowy_light\\Desktop\\喂——出来游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+    "source": "generated_images/exec-a0075409-6c95-4b45-ba1b-30965f244b50.png"
+  },
+  {
+    "id": "env_waste_mixed_low",
+    "name": "混合垃圾低堆",
+    "footprint": [
+      1,
+      1
+    ],
+    "material": "a small LOW sparse heap of MIXED everyday waste, one dented tin can, dull blue discarded plastic bottle, crumpled paper or packaging, gray torn cloth scrap, a tiny brown carton, all unbranded, modest identifiable chunks not tiny noise",
+    "prompt": "Asset type: one standalone transparent PNG game sprite for the 2D top-down grid factory game 涌现. Input image is STYLE AND CAMERA REFERENCE ONLY; do not copy its generator machinery. Match the simple chunky square-pixel sprite style, dark outlines, muted brown/gray industrial colors, limited 2-3 shading tones, no gradients or fine realistic details. Camera slightly elevated from south, north at the image top, south at bottom, east right, west left. Footprint axes remain screen-horizontal and screen-vertical, never isometric diamond. ONE isolated object centered, entirely visible, with generous transparent outer padding. True transparent alpha around object. No floor tile or scene background, no cast shadow, no people, no captions, no grid, no labels, no watermark. Crisp coarse pixel blocks as if enlarged nearest-neighbor. Subject: a small LOW sparse heap of MIXED everyday waste, one dented tin can, dull blue discarded plastic bottle, crumpled paper or packaging, gray torn cloth scrap, a tiny brown carton, all unbranded, modest identifiable chunks not tiny noise. A single small modular waste pile fitting ONE SQUARE GROUND TILE. From mostly overhead with a little object side visible. Cluster horizontally at lower-middle of canvas, distinct low flat height, no pedestal or dirt base, pieces form one group, full silhouette contained with at least 15% transparent padding. Muted colors to stay behind characters. Square 1024x1024 canvas, no inventory slot frame, no icon badge. Ground-tile footprint is a logical placement size, not a drawn grid.",
+    "ref": "C:\\Users\\snowy_light\\Desktop\\喂——出来游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+    "source": "generated_images/exec-f0ea7c56-0dbc-45ed-8145-83c40ce309cd.png"
+  },
+  {
+    "id": "env_waste_wood_high",
+    "name": "废木料高堆",
+    "footprint": [
+      1,
+      1
+    ],
+    "ref": "generated_images/exec-fe00479b-fb9f-4ec8-8879-154a89419c80.png",
+    "prompt": "Use case: precise-object-edit. Asset type: standalone transparent HIGH-PILE pixel-art waste sprite for 2D top-down grid factory game. Input image is low-pile reference and edit target. Create its HIGH dense counterpart, retaining the SAME material category, muted colors, coarse square pixel size, dark outlines, camera angle, canvas proportions and horizontal ground footprint. Existing low pile: a small LOW sparse heap of 5-7 short broken WOOD scraps and damaged old planks, dull brown, splintered ends, visible open spaces, irregular lengths, no clean new boards, no full trees, no furniture. Make the pile visibly much TALLER and approximately three times denser by stacking more of these same kinds of broken scraps above the base. Keep base centered at the same approximate lower position and similar width as the reference; added height rises toward top of canvas. It still occupies ONE logical ground tile, with no drawn tile. Ensure high pile reads as a stacked mound rather than flat scattered trash. Preserve simple blocky pixel art, 2-3 shading tones per material. Fully isolated one object, true transparent background, no floor base, no background, no cast shadow or glows, no characters, no labels or numbers or watermark. Complete silhouette must fit within frame with transparent padding, never cropped. Do not add other categories of waste, functional machines, precious metals, or tiny realistic texture. Keep final PNG square with same canvas size as reference.",
+    "source": "generated_images/exec-f36e4242-3f95-4d84-adf8-1539688a0c0d.png"
+  },
+  {
+    "id": "env_waste_metal_high",
+    "name": "废金属高堆",
+    "footprint": [
+      1,
+      1
+    ],
+    "ref": "generated_images/exec-a0075409-6c95-4b45-ba1b-30965f244b50.png",
+    "prompt": "Use case: precise-object-edit. Asset type: standalone transparent HIGH-PILE pixel-art waste sprite for 2D top-down grid factory game. Input image is low-pile reference and edit target. Create its HIGH dense counterpart, retaining the SAME material category, muted colors, coarse square pixel size, dark outlines, camera angle, canvas proportions and horizontal ground footprint. Existing low pile: a small LOW sparse heap of scrap METAL, bent gray sheet fragments, a short broken pipe and a couple of rusty bolts, steel gray with muted rust-brown, no precious metals, no complete modern machine, no electronics display. Make the pile visibly much TALLER and approximately three times denser by stacking more of these same kinds of broken scraps above the base. Keep base centered at the same approximate lower position and similar width as the reference; added height rises toward top of canvas. It still occupies ONE logical ground tile, with no drawn tile. Ensure high pile reads as a stacked mound rather than flat scattered trash. Preserve simple blocky pixel art, 2-3 shading tones per material. Fully isolated one object, true transparent background, no floor base, no background, no cast shadow or glows, no characters, no labels or numbers or watermark. Complete silhouette must fit within frame with transparent padding, never cropped. Do not add other categories of waste, functional machines, precious metals, or tiny realistic texture. Keep final PNG square with same canvas size as reference.",
+    "source": "generated_images/exec-7999c70f-7c25-42f3-8757-5b749d2e94ca.png"
+  },
+  {
+    "id": "env_waste_mixed_high",
+    "name": "混合垃圾高堆",
+    "footprint": [
+      1,
+      1
+    ],
+    "ref": "generated_images/exec-f0ea7c56-0dbc-45ed-8145-83c40ce309cd.png",
+    "prompt": "Use case: precise-object-edit. Asset type: standalone transparent HIGH-PILE pixel-art waste sprite for 2D top-down grid factory game. Input image is low-pile reference and edit target. Create its HIGH dense counterpart, retaining the SAME material category, muted colors, coarse square pixel size, dark outlines, camera angle, canvas proportions and horizontal ground footprint. Existing low pile: a small LOW sparse heap of MIXED everyday waste, one dented tin can, dull blue discarded plastic bottle, crumpled paper or packaging, gray torn cloth scrap, a tiny brown carton, all unbranded, modest identifiable chunks not tiny noise. Make the pile visibly much TALLER and approximately three times denser by stacking more of these same kinds of broken scraps above the base. Keep base centered at the same approximate lower position and similar width as the reference; added height rises toward top of canvas. It still occupies ONE logical ground tile, with no drawn tile. Ensure high pile reads as a stacked mound rather than flat scattered trash. Preserve simple blocky pixel art, 2-3 shading tones per material. Fully isolated one object, true transparent background, no floor base, no background, no cast shadow or glows, no characters, no labels or numbers or watermark. Complete silhouette must fit within frame with transparent padding, never cropped. Do not add other categories of waste, functional machines, precious metals, or tiny realistic texture. Keep final PNG square with same canvas size as reference.",
+    "source": "generated_images/exec-44da62f1-a27c-4c86-bf5d-b2e23c94565e.png"
+  }
+]

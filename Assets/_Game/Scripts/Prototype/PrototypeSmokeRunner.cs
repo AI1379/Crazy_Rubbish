@@ -53,7 +53,7 @@ namespace CrazyRubbish.Prototype
             }
             try
             {
-                if (FindObjectsOfType<Button>().Length < 20 || Camera.main == null)
+                if (game.GetComponent<PrototypeHud>().VisualRoot.GetComponentsInChildren<Button>(true).Length < 20 || Camera.main == null)
                     throw new InvalidOperationException("Scene HUD or camera was not initialized.");
                 VerifyHudBindings(screenshot);
                 VerifyWorldPresentation(screenshot);
@@ -114,7 +114,7 @@ namespace CrazyRubbish.Prototype
             {
                 string completed = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(screenshot)),
                     Path.GetFileNameWithoutExtension(screenshot) + "-completed.png");
-                try { CapturePreview(completed); }
+                try { VerifyManagementLayout(screenshot); CapturePreview(completed); }
                 catch (Exception exception) { failed = true; Debug.LogException(exception); }
             }
             if(!failed&&!string.IsNullOrEmpty(screenshot))
@@ -134,6 +134,8 @@ namespace CrazyRubbish.Prototype
                     || game.Model.Warehouse.Used != 0 || visiblePiles != game.Model.Ground.Count)
                     throw new InvalidOperationException("Restart did not reset state and visible ground piles.");
                 if (failed) throw new InvalidOperationException("Runtime emitted an error or exception.");
+                if (game.GetComponent<PrototypeHud>().ManagementOpen || game.GetComponent<PrototypeHud>().SelectedFacility != 0 || game.GetComponent<PrototypeHud>().ZonesVisible)
+                    throw new InvalidOperationException("New game retained open panels or area overlays.");
                 string resultPath = Argument("-prototypeResults");
                 if (!string.IsNullOrEmpty(resultPath))
                 {
@@ -163,6 +165,13 @@ namespace CrazyRubbish.Prototype
                 throw new InvalidOperationException("Runtime duplicated or lost the saved presentation.");
             Button[] buttons = root.GetComponentsInChildren<Button>(true);
             Button Find(string name) => Array.Find(buttons, button => button.name == name);
+            var hud = game.GetComponent<PrototypeHud>();
+            if (hud.ManagementOpen || hud.SelectedFacility != 0)
+                throw new InvalidOperationException("Management or facility panel is open by default.");
+            Find("Tab0").onClick.Invoke();
+            Canvas.ForceUpdateCanvases();
+            if (root.Find("Management/现场 Page").GetComponent<ScrollRect>().verticalNormalizedPosition < 0.99f)
+                throw new InvalidOperationException("The first visit to the onsite page does not start at the top.");
             Find("Menu").onClick.Invoke();game.GetComponent<PrototypeHud>().RefreshView(game.Model);
             if(!game.MenuOpen||!root.Find("Demo Menu").gameObject.activeSelf)throw new InvalidOperationException("Demo menu is inaccessible.");
             if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+"-menu.png"));
@@ -215,11 +224,134 @@ namespace CrazyRubbish.Prototype
             return index >= 0 && index + 1 < arguments.Length ? arguments[index + 1] : null;
         }
 
+        // Exercise long, populated pages and scrollbar navigation at the actual player resolution.
+        private void VerifyManagementLayout(string screenshot)
+        {
+            var hud = game.GetComponent<PrototypeHud>();
+            var root = hud.VisualRoot;
+            var model = game.Model;
+            hud.RefreshView(model);
+            Button[] buttons = root.GetComponentsInChildren<Button>(true);
+            Button Find(string name) => Array.Find(buttons, button => button.name == name);
+            void Capture(string suffix) => CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + suffix + ".png"));
+            Canvas.ForceUpdateCanvases();
+            Rect map = game.GetComponent<PrototypeWorld>().worldCamera.pixelRect;
+            if (Mathf.Abs(map.width - Screen.width) > 1 || Mathf.Abs(map.height - Screen.height) > 1)
+                throw new InvalidOperationException("The world does not occupy the full screen.");
+            if (root.Find("Header/Food").GetComponent<Text>().text != model.Warehouse.Count(ItemId.Food).ToString())
+                throw new InvalidOperationException("Resource bar is not showing live warehouse quantities.");
+
+            Find("Tab0").onClick.Invoke();
+            Find("OnsiteJump3").onClick.Invoke();
+            Canvas.ForceUpdateCanvases();
+            var onsite = root.Find("Management/现场 Page").GetComponent<ScrollRect>();
+            if (onsite.verticalNormalizedPosition > 0.5f) throw new InvalidOperationException("Trading shortcut did not scroll to its section.");
+            Capture("-trading");
+            Find("OnsiteJump0").onClick.Invoke();
+
+            Find("Tab1").onClick.Invoke();
+            var people = root.Find("Management/人员 Page").GetComponent<ScrollRect>();
+            Canvas.ForceUpdateCanvases();
+            people.verticalScrollbar.value = 0;
+            Canvas.ForceUpdateCanvases();
+            if (people.verticalNormalizedPosition > 0.01f) throw new InvalidOperationException("Resident scrollbar cannot reach the end of the roster.");
+            int portraits = people.content.GetComponentsInChildren<Image>().Count(image => image.name == "Portrait");
+            if (portraits != model.Residents.Count) throw new InvalidOperationException("Resident cards do not match the recruited population.");
+            Capture("-residents");
+
+            Find("Tab2").onClick.Invoke();
+            var inventory = root.Find("Management/仓库 Page").GetComponent<ScrollRect>();
+            inventory.verticalNormalizedPosition = 1;
+            Canvas.ForceUpdateCanvases();
+            Capture("-stock");
+            Find("InventoryFilter").onClick.Invoke();
+            Canvas.ForceUpdateCanvases();
+            inventory.verticalScrollbar.value = 0;
+            Canvas.ForceUpdateCanvases();
+            var finalItem = Find("Sell" + (Enum.GetValues(typeof(ItemId)).Length - 1));
+            Vector3 point = inventory.viewport.InverseTransformPoint(finalItem.transform.position);
+            if (!finalItem.gameObject.activeInHierarchy || !inventory.viewport.rect.Contains(point))
+                throw new InvalidOperationException("The final inventory row is unreachable by scrollbar.");
+            Capture("-catalogue");
+            Find("InventoryFilter").onClick.Invoke();
+            inventory.verticalNormalizedPosition = 1;
+            Find("Tab0").onClick.Invoke();
+            Find("OnsiteJump0").onClick.Invoke();
+            Capture("-building");
+            VerifyOverlayInteraction(screenshot);
+            hud.ClosePanels();
+            root.Find("Action Notice").gameObject.SetActive(false);
+        }
+
+        private void VerifyOverlayInteraction(string screenshot)
+        {
+            var hud = game.GetComponent<PrototypeHud>();
+            var world = game.GetComponent<PrototypeWorld>();
+            var root = hud.VisualRoot;
+            Button[] buttons = root.GetComponentsInChildren<Button>(true);
+            Button Find(string name) => Array.Find(buttons, button => button.name == name);
+            var camera = world.worldCamera;
+            Vector3 position = camera.transform.position;
+            float zoom = camera.orthographicSize;
+            Rect viewport = camera.rect;
+            hud.ClosePanels();
+            Find("OpenTab2").onClick.Invoke();
+            if (!hud.ManagementOpen) throw new InvalidOperationException("Inventory launcher did not open management.");
+            Canvas.ForceUpdateCanvases();
+            var panel = root.Find("Management").GetComponent<RectTransform>();
+            var eventData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current) { position = panel.TransformPoint(panel.rect.center) };
+            var hits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+            UnityEngine.EventSystems.EventSystem.current.RaycastAll(eventData, hits);
+            if (!hits.Any(h => h.gameObject.transform == panel || h.gameObject.transform.IsChildOf(panel)))
+                throw new InvalidOperationException("Overlay does not intercept map input.");
+            Find("OpenTab2").onClick.Invoke();
+            if (hud.ManagementOpen) throw new InvalidOperationException("Clicking the same launcher did not close management.");
+            for (int facility = 1; facility <= 4; facility++)
+            {
+                hud.ShowFacility(facility);
+                if (hud.SelectedFacility != facility || hud.ManagementOpen)
+                    throw new InvalidOperationException("Facility inspection did not replace management.");
+                var group = root.Find("Facility Panel/" + (facility == 1 ? "Woodwork" : "Facility " + facility));
+                if (!group.gameObject.activeInHierarchy) throw new InvalidOperationException("Facility controls are not visible.");
+                if (facility == 1) CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + "-woodwork.png"));
+            }
+            game.HandleEscape();
+            if (hud.SelectedFacility != 0 || game.MenuOpen) throw new InvalidOperationException("Escape did not close the inspection first.");
+            if (camera.rect != viewport || camera.orthographicSize != zoom || camera.transform.position != position)
+                throw new InvalidOperationException("Opening a panel moved or resized the camera.");
+            Vector2 building = world.VisualRoot.Find("WoodworkBench").GetComponent<SpriteRenderer>().bounds.center;
+            world.HandleMapClick(building, false);
+            if (hud.SelectedFacility != 1) throw new InvalidOperationException("Clicking a building did not select its controls.");
+            world.HandleMapClick(building, true);
+            if (!game.Walking || game.WalkTargetX != PrototypeSimulation.BenchX || game.WalkTargetY != PrototypeSimulation.BenchY)
+                throw new InvalidOperationException("Right-click did not navigate to the building's reachable front.");
+            game.HandleEscape(); // Close inspection first, then cancel the movement order.
+            game.HandleEscape();
+            if (game.Walking || game.MenuOpen) throw new InvalidOperationException("Escape did not cancel the pending walk after closing inspection.");
+            game.HandleEscape();
+            if (!game.MenuOpen) throw new InvalidOperationException("Escape without a panel or action did not open the menu.");
+            game.HandleEscape();
+            if (game.MenuOpen) throw new InvalidOperationException("Escape did not return from the menu.");
+            hud.ShowFacility(3);
+            ItemId recipe = game.Model.AssemblyProduct;
+            Find("FacilityCommand30").onClick.Invoke();
+            if (game.Model.AssemblyProduct == recipe) throw new InvalidOperationException("Contextual assembly recipe control is unbound.");
+            Find("FacilityCommand29").onClick.Invoke();
+            hud.ClosePanels();
+            Find("Zones").onClick.Invoke(); world.RefreshView(game.Model);
+            if (!world.VisualRoot.Find("Construction Boundary South").GetComponent<SpriteRenderer>().enabled)
+                throw new InvalidOperationException("Area overlay cannot be enabled.");
+            Find("Zones").onClick.Invoke(); world.RefreshView(game.Model);
+            if (world.VisualRoot.Find("Construction Boundary South").GetComponent<SpriteRenderer>().enabled)
+                throw new InvalidOperationException("Area overlay cannot be hidden.");
+        }
+
         private void VerifyWorldPresentation(string screenshot)
         {
             var world = game.GetComponent<PrototypeWorld>();
             var hud = game.GetComponent<PrototypeHud>();
             var model = game.Model;
+            hud.ClosePanels();
             var camera = world.worldCamera;
             float zoom = camera.orthographicSize;
             Vector3 position = camera.transform.position;
@@ -240,12 +372,19 @@ namespace CrazyRubbish.Prototype
             world.RefreshView(model);
             Vector3 targetPoint = camera.WorldToViewportPoint(new Vector3(crowded.Key.X, crowded.Key.Y, 0));
             if (!new Rect(0, 0, 1, 1).Contains(targetPoint)) throw new InvalidOperationException("Focused inspection target is outside the map viewport.");
-            if (items.GetComponentsInChildren<TextMesh>().Count(t => t.name == "Quantity") != cellCount)
-                throw new InvalidOperationException("Detailed zoom lost cell summaries.");
-            world.InspectAt(new Vector2(crowded.Key.X, crowded.Key.Y));
+            if (world.VisualRoot.GetComponentsInChildren<TextMesh>().Any())
+                throw new InvalidOperationException("World text or quantities are visible at detailed zoom.");
+            var inspectPoint = new Vector2(crowded.Key.X, crowded.Key.Y);
+            world.UpdateHover(null, 10);
+            world.UpdateHover(inspectPoint, 10);
+            world.UpdateHover(inspectPoint, 10.39);
+            var premature = hud.VisualRoot.Find("Map Inspection");
+            if (premature != null && premature.gameObject.activeSelf)
+                throw new InvalidOperationException("Hover tooltip appears before the dwell delay.");
+            world.UpdateHover(inspectPoint, 10.41);
             Transform inspection = hud.VisualRoot.Find("Map Inspection");
             string details = inspection.Find("Contents").GetComponent<Text>().text;
-            foreach (var item in crowded.Select(p => p.Item).Distinct())
+            foreach (var item in crowded.Select(p => p.Item).Distinct().OrderBy(i => i).Take(3))
                 if (!details.Contains(ItemCatalog.Name(item))) throw new InvalidOperationException("Inspection lost a mixed-cell item.");
             if (inspection.GetComponentsInChildren<Graphic>().Any(g => g.raycastTarget))
                 throw new InvalidOperationException("Map inspection blocks movement clicks.");
@@ -255,7 +394,7 @@ namespace CrazyRubbish.Prototype
             if (tooltipCorners.Any(p => p.x < viewport.xMin || p.x > viewport.xMax || p.y < viewport.yMin || p.y > viewport.yMax))
                 throw new InvalidOperationException("Map inspection extends outside the map viewport.");
             if (!string.IsNullOrEmpty(screenshot)) CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + "-inspection.png"));
-            world.InspectAt(null);
+            world.UpdateHover(null, 11);
             if (inspection.gameObject.activeSelf) throw new InvalidOperationException("Map inspection remains after pointer exit.");
             camera.orthographicSize = zoom; camera.transform.position = position; world.RefreshView(model);
             if (piles != model.Ground.Count || units != model.Ground.Sum(p => (long)p.Amount))

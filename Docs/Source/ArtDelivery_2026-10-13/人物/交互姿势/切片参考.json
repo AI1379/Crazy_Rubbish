@@ -1,0 +1,1625 @@
+{
+  "tool": "built-in image_gen",
+  "sheet_count": 6,
+  "pose_count": 72,
+  "animation_frames_per_pose": 1,
+  "unity_validation": false,
+  "slice_method": "Read-only alpha>=200 projections, six-pixel padding; manual calibration required",
+  "coordinate_note": "rect_top_left uses PNG origin; unity_rect_bottom_left uses Unity texture origin",
+  "characters": [
+    {
+      "character": "男主",
+      "id": "hero_male",
+      "file": "chr_hero_male_interactions.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "65f8191ec20cdb1a5ea9ce6755e35750b237b05245eba96a82acc7cd336b2c15",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "pose_count": 12,
+      "slices": [
+        {
+          "name": "chr_hero_male_carry_up",
+          "action": "carry",
+          "direction": "up",
+          "row": 1,
+          "column": 1,
+          "rect_top_left": {
+            "x": 17,
+            "y": 92,
+            "width": 245,
+            "height": 482
+          },
+          "unity_rect_bottom_left": {
+            "x": 17,
+            "y": 962,
+            "width": 245,
+            "height": 482
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_carry_down",
+          "action": "carry",
+          "direction": "down",
+          "row": 1,
+          "column": 2,
+          "rect_top_left": {
+            "x": 273,
+            "y": 92,
+            "width": 240,
+            "height": 482
+          },
+          "unity_rect_bottom_left": {
+            "x": 273,
+            "y": 962,
+            "width": 240,
+            "height": 482
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_carry_left",
+          "action": "carry",
+          "direction": "left",
+          "row": 1,
+          "column": 3,
+          "rect_top_left": {
+            "x": 530,
+            "y": 92,
+            "width": 201,
+            "height": 482
+          },
+          "unity_rect_bottom_left": {
+            "x": 530,
+            "y": 962,
+            "width": 201,
+            "height": 482
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_carry_right",
+          "action": "carry",
+          "direction": "right",
+          "row": 1,
+          "column": 4,
+          "rect_top_left": {
+            "x": 797,
+            "y": 92,
+            "width": 202,
+            "height": 482
+          },
+          "unity_rect_bottom_left": {
+            "x": 797,
+            "y": 962,
+            "width": 202,
+            "height": 482
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_pickup_up",
+          "action": "pickup",
+          "direction": "up",
+          "row": 2,
+          "column": 1,
+          "rect_top_left": {
+            "x": 16,
+            "y": 656,
+            "width": 253,
+            "height": 333
+          },
+          "unity_rect_bottom_left": {
+            "x": 16,
+            "y": 547,
+            "width": 253,
+            "height": 333
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_pickup_down",
+          "action": "pickup",
+          "direction": "down",
+          "row": 2,
+          "column": 2,
+          "rect_top_left": {
+            "x": 293,
+            "y": 646,
+            "width": 217,
+            "height": 353
+          },
+          "unity_rect_bottom_left": {
+            "x": 293,
+            "y": 537,
+            "width": 217,
+            "height": 353
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_pickup_left",
+          "action": "pickup",
+          "direction": "left",
+          "row": 2,
+          "column": 3,
+          "rect_top_left": {
+            "x": 521,
+            "y": 654,
+            "width": 241,
+            "height": 339
+          },
+          "unity_rect_bottom_left": {
+            "x": 521,
+            "y": 543,
+            "width": 241,
+            "height": 339
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_pickup_right",
+          "action": "pickup",
+          "direction": "right",
+          "row": 2,
+          "column": 4,
+          "rect_top_left": {
+            "x": 773,
+            "y": 654,
+            "width": 241,
+            "height": 339
+          },
+          "unity_rect_bottom_left": {
+            "x": 773,
+            "y": 543,
+            "width": 241,
+            "height": 339
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_saw_up",
+          "action": "saw",
+          "direction": "up",
+          "row": 3,
+          "column": 1,
+          "rect_top_left": {
+            "x": 16,
+            "y": 1051,
+            "width": 253,
+            "height": 439
+          },
+          "unity_rect_bottom_left": {
+            "x": 16,
+            "y": 46,
+            "width": 253,
+            "height": 439
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_saw_down",
+          "action": "saw",
+          "direction": "down",
+          "row": 3,
+          "column": 2,
+          "rect_top_left": {
+            "x": 273,
+            "y": 1051,
+            "width": 245,
+            "height": 435
+          },
+          "unity_rect_bottom_left": {
+            "x": 273,
+            "y": 50,
+            "width": 245,
+            "height": 435
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_saw_left",
+          "action": "saw",
+          "direction": "left",
+          "row": 3,
+          "column": 3,
+          "rect_top_left": {
+            "x": 523,
+            "y": 1050,
+            "width": 235,
+            "height": 444
+          },
+          "unity_rect_bottom_left": {
+            "x": 523,
+            "y": 42,
+            "width": 235,
+            "height": 444
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_male_saw_right",
+          "action": "saw",
+          "direction": "right",
+          "row": 3,
+          "column": 4,
+          "rect_top_left": {
+            "x": 778,
+            "y": 1051,
+            "width": 232,
+            "height": 443
+          },
+          "unity_rect_bottom_left": {
+            "x": 778,
+            "y": 42,
+            "width": 232,
+            "height": 443
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        }
+      ]
+    },
+    {
+      "character": "女主",
+      "id": "hero_female",
+      "file": "chr_hero_female_interactions.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "530d34d610080447eeefc3c051698c3c28bbf309f7b3f7df7c519129de2d4e1a",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "pose_count": 12,
+      "slices": [
+        {
+          "name": "chr_hero_female_carry_up",
+          "action": "carry",
+          "direction": "up",
+          "row": 1,
+          "column": 1,
+          "rect_top_left": {
+            "x": 33,
+            "y": 75,
+            "width": 224,
+            "height": 472
+          },
+          "unity_rect_bottom_left": {
+            "x": 33,
+            "y": 989,
+            "width": 224,
+            "height": 472
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_carry_down",
+          "action": "carry",
+          "direction": "down",
+          "row": 1,
+          "column": 2,
+          "rect_top_left": {
+            "x": 285,
+            "y": 75,
+            "width": 229,
+            "height": 474
+          },
+          "unity_rect_bottom_left": {
+            "x": 285,
+            "y": 987,
+            "width": 229,
+            "height": 474
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_carry_left",
+          "action": "carry",
+          "direction": "left",
+          "row": 1,
+          "column": 3,
+          "rect_top_left": {
+            "x": 530,
+            "y": 75,
+            "width": 221,
+            "height": 476
+          },
+          "unity_rect_bottom_left": {
+            "x": 530,
+            "y": 985,
+            "width": 221,
+            "height": 476
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_carry_right",
+          "action": "carry",
+          "direction": "right",
+          "row": 1,
+          "column": 4,
+          "rect_top_left": {
+            "x": 766,
+            "y": 75,
+            "width": 227,
+            "height": 476
+          },
+          "unity_rect_bottom_left": {
+            "x": 766,
+            "y": 985,
+            "width": 227,
+            "height": 476
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_pickup_up",
+          "action": "pickup",
+          "direction": "up",
+          "row": 2,
+          "column": 1,
+          "rect_top_left": {
+            "x": 31,
+            "y": 652,
+            "width": 243,
+            "height": 336
+          },
+          "unity_rect_bottom_left": {
+            "x": 31,
+            "y": 548,
+            "width": 243,
+            "height": 336
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_pickup_down",
+          "action": "pickup",
+          "direction": "down",
+          "row": 2,
+          "column": 2,
+          "rect_top_left": {
+            "x": 299,
+            "y": 627,
+            "width": 210,
+            "height": 369
+          },
+          "unity_rect_bottom_left": {
+            "x": 299,
+            "y": 540,
+            "width": 210,
+            "height": 369
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_pickup_left",
+          "action": "pickup",
+          "direction": "left",
+          "row": 2,
+          "column": 3,
+          "rect_top_left": {
+            "x": 509,
+            "y": 636,
+            "width": 249,
+            "height": 358
+          },
+          "unity_rect_bottom_left": {
+            "x": 509,
+            "y": 542,
+            "width": 249,
+            "height": 358
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_pickup_right",
+          "action": "pickup",
+          "direction": "right",
+          "row": 2,
+          "column": 4,
+          "rect_top_left": {
+            "x": 774,
+            "y": 630,
+            "width": 235,
+            "height": 366
+          },
+          "unity_rect_bottom_left": {
+            "x": 774,
+            "y": 540,
+            "width": 235,
+            "height": 366
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_saw_up",
+          "action": "saw",
+          "direction": "up",
+          "row": 3,
+          "column": 1,
+          "rect_top_left": {
+            "x": 12,
+            "y": 1038,
+            "width": 255,
+            "height": 441
+          },
+          "unity_rect_bottom_left": {
+            "x": 12,
+            "y": 57,
+            "width": 255,
+            "height": 441
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_saw_down",
+          "action": "saw",
+          "direction": "down",
+          "row": 3,
+          "column": 2,
+          "rect_top_left": {
+            "x": 279,
+            "y": 1043,
+            "width": 236,
+            "height": 432
+          },
+          "unity_rect_bottom_left": {
+            "x": 279,
+            "y": 61,
+            "width": 236,
+            "height": 432
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_saw_left",
+          "action": "saw",
+          "direction": "left",
+          "row": 3,
+          "column": 3,
+          "rect_top_left": {
+            "x": 521,
+            "y": 1044,
+            "width": 216,
+            "height": 438
+          },
+          "unity_rect_bottom_left": {
+            "x": 521,
+            "y": 54,
+            "width": 216,
+            "height": 438
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_hero_female_saw_right",
+          "action": "saw",
+          "direction": "right",
+          "row": 3,
+          "column": 4,
+          "rect_top_left": {
+            "x": 778,
+            "y": 1043,
+            "width": 231,
+            "height": 441
+          },
+          "unity_rect_bottom_left": {
+            "x": 778,
+            "y": 52,
+            "width": 231,
+            "height": 441
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        }
+      ]
+    },
+    {
+      "character": "灰绿上衣居民",
+      "id": "worker_01",
+      "file": "chr_worker_01_interactions.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "25414e3df97a002972d8330345c5f30f9197f1516f6d8ff13112f5da90a169b5",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "pose_count": 12,
+      "slices": [
+        {
+          "name": "chr_worker_01_carry_up",
+          "action": "carry",
+          "direction": "up",
+          "row": 1,
+          "column": 1,
+          "rect_top_left": {
+            "x": 30,
+            "y": 88,
+            "width": 211,
+            "height": 452
+          },
+          "unity_rect_bottom_left": {
+            "x": 30,
+            "y": 996,
+            "width": 211,
+            "height": 452
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_carry_down",
+          "action": "carry",
+          "direction": "down",
+          "row": 1,
+          "column": 2,
+          "rect_top_left": {
+            "x": 272,
+            "y": 88,
+            "width": 219,
+            "height": 452
+          },
+          "unity_rect_bottom_left": {
+            "x": 272,
+            "y": 996,
+            "width": 219,
+            "height": 452
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_carry_left",
+          "action": "carry",
+          "direction": "left",
+          "row": 1,
+          "column": 3,
+          "rect_top_left": {
+            "x": 528,
+            "y": 87,
+            "width": 193,
+            "height": 454
+          },
+          "unity_rect_bottom_left": {
+            "x": 528,
+            "y": 995,
+            "width": 193,
+            "height": 454
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_carry_right",
+          "action": "carry",
+          "direction": "right",
+          "row": 1,
+          "column": 4,
+          "rect_top_left": {
+            "x": 813,
+            "y": 87,
+            "width": 194,
+            "height": 454
+          },
+          "unity_rect_bottom_left": {
+            "x": 813,
+            "y": 995,
+            "width": 194,
+            "height": 454
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_pickup_up",
+          "action": "pickup",
+          "direction": "up",
+          "row": 2,
+          "column": 1,
+          "rect_top_left": {
+            "x": 23,
+            "y": 632,
+            "width": 248,
+            "height": 306
+          },
+          "unity_rect_bottom_left": {
+            "x": 23,
+            "y": 598,
+            "width": 248,
+            "height": 306
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_pickup_down",
+          "action": "pickup",
+          "direction": "down",
+          "row": 2,
+          "column": 2,
+          "rect_top_left": {
+            "x": 303,
+            "y": 618,
+            "width": 211,
+            "height": 333
+          },
+          "unity_rect_bottom_left": {
+            "x": 303,
+            "y": 585,
+            "width": 211,
+            "height": 333
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_pickup_left",
+          "action": "pickup",
+          "direction": "left",
+          "row": 2,
+          "column": 3,
+          "rect_top_left": {
+            "x": 519,
+            "y": 616,
+            "width": 237,
+            "height": 334
+          },
+          "unity_rect_bottom_left": {
+            "x": 519,
+            "y": 586,
+            "width": 237,
+            "height": 334
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_pickup_right",
+          "action": "pickup",
+          "direction": "right",
+          "row": 2,
+          "column": 4,
+          "rect_top_left": {
+            "x": 774,
+            "y": 616,
+            "width": 238,
+            "height": 334
+          },
+          "unity_rect_bottom_left": {
+            "x": 774,
+            "y": 586,
+            "width": 238,
+            "height": 334
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_saw_up",
+          "action": "saw",
+          "direction": "up",
+          "row": 3,
+          "column": 1,
+          "rect_top_left": {
+            "x": 10,
+            "y": 1008,
+            "width": 245,
+            "height": 446
+          },
+          "unity_rect_bottom_left": {
+            "x": 10,
+            "y": 82,
+            "width": 245,
+            "height": 446
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_saw_down",
+          "action": "saw",
+          "direction": "down",
+          "row": 3,
+          "column": 2,
+          "rect_top_left": {
+            "x": 265,
+            "y": 1009,
+            "width": 241,
+            "height": 440
+          },
+          "unity_rect_bottom_left": {
+            "x": 265,
+            "y": 87,
+            "width": 241,
+            "height": 440
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_saw_left",
+          "action": "saw",
+          "direction": "left",
+          "row": 3,
+          "column": 3,
+          "rect_top_left": {
+            "x": 519,
+            "y": 1008,
+            "width": 220,
+            "height": 447
+          },
+          "unity_rect_bottom_left": {
+            "x": 519,
+            "y": 81,
+            "width": 220,
+            "height": 447
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_01_saw_right",
+          "action": "saw",
+          "direction": "right",
+          "row": 3,
+          "column": 4,
+          "rect_top_left": {
+            "x": 793,
+            "y": 1008,
+            "width": 218,
+            "height": 447
+          },
+          "unity_rect_bottom_left": {
+            "x": 793,
+            "y": 81,
+            "width": 218,
+            "height": 447
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        }
+      ]
+    },
+    {
+      "character": "红棕上衣居民",
+      "id": "worker_02",
+      "file": "chr_worker_02_interactions.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e56bbd8add78a3b5d6935a1b401ed676add15af0dc2e5128f589968afd9031fb",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "pose_count": 12,
+      "slices": [
+        {
+          "name": "chr_worker_02_carry_up",
+          "action": "carry",
+          "direction": "up",
+          "row": 1,
+          "column": 1,
+          "rect_top_left": {
+            "x": 16,
+            "y": 57,
+            "width": 214,
+            "height": 474
+          },
+          "unity_rect_bottom_left": {
+            "x": 16,
+            "y": 1005,
+            "width": 214,
+            "height": 474
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_carry_down",
+          "action": "carry",
+          "direction": "down",
+          "row": 1,
+          "column": 2,
+          "rect_top_left": {
+            "x": 272,
+            "y": 55,
+            "width": 222,
+            "height": 477
+          },
+          "unity_rect_bottom_left": {
+            "x": 272,
+            "y": 1004,
+            "width": 222,
+            "height": 477
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_carry_left",
+          "action": "carry",
+          "direction": "left",
+          "row": 1,
+          "column": 3,
+          "rect_top_left": {
+            "x": 530,
+            "y": 58,
+            "width": 210,
+            "height": 474
+          },
+          "unity_rect_bottom_left": {
+            "x": 530,
+            "y": 1004,
+            "width": 210,
+            "height": 474
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_carry_right",
+          "action": "carry",
+          "direction": "right",
+          "row": 1,
+          "column": 4,
+          "rect_top_left": {
+            "x": 807,
+            "y": 62,
+            "width": 206,
+            "height": 470
+          },
+          "unity_rect_bottom_left": {
+            "x": 807,
+            "y": 1004,
+            "width": 206,
+            "height": 470
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_pickup_up",
+          "action": "pickup",
+          "direction": "up",
+          "row": 2,
+          "column": 1,
+          "rect_top_left": {
+            "x": 15,
+            "y": 606,
+            "width": 237,
+            "height": 340
+          },
+          "unity_rect_bottom_left": {
+            "x": 15,
+            "y": 590,
+            "width": 237,
+            "height": 340
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_pickup_down",
+          "action": "pickup",
+          "direction": "down",
+          "row": 2,
+          "column": 2,
+          "rect_top_left": {
+            "x": 283,
+            "y": 594,
+            "width": 219,
+            "height": 363
+          },
+          "unity_rect_bottom_left": {
+            "x": 283,
+            "y": 579,
+            "width": 219,
+            "height": 363
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_pickup_left",
+          "action": "pickup",
+          "direction": "left",
+          "row": 2,
+          "column": 3,
+          "rect_top_left": {
+            "x": 507,
+            "y": 606,
+            "width": 244,
+            "height": 345
+          },
+          "unity_rect_bottom_left": {
+            "x": 507,
+            "y": 585,
+            "width": 244,
+            "height": 345
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_pickup_right",
+          "action": "pickup",
+          "direction": "right",
+          "row": 2,
+          "column": 4,
+          "rect_top_left": {
+            "x": 776,
+            "y": 600,
+            "width": 237,
+            "height": 346
+          },
+          "unity_rect_bottom_left": {
+            "x": 776,
+            "y": 590,
+            "width": 237,
+            "height": 346
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_saw_up",
+          "action": "saw",
+          "direction": "up",
+          "row": 3,
+          "column": 1,
+          "rect_top_left": {
+            "x": 16,
+            "y": 1009,
+            "width": 240,
+            "height": 458
+          },
+          "unity_rect_bottom_left": {
+            "x": 16,
+            "y": 69,
+            "width": 240,
+            "height": 458
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_saw_down",
+          "action": "saw",
+          "direction": "down",
+          "row": 3,
+          "column": 2,
+          "rect_top_left": {
+            "x": 272,
+            "y": 1007,
+            "width": 222,
+            "height": 459
+          },
+          "unity_rect_bottom_left": {
+            "x": 272,
+            "y": 70,
+            "width": 222,
+            "height": 459
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_saw_left",
+          "action": "saw",
+          "direction": "left",
+          "row": 3,
+          "column": 3,
+          "rect_top_left": {
+            "x": 514,
+            "y": 1015,
+            "width": 221,
+            "height": 457
+          },
+          "unity_rect_bottom_left": {
+            "x": 514,
+            "y": 64,
+            "width": 221,
+            "height": 457
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_02_saw_right",
+          "action": "saw",
+          "direction": "right",
+          "row": 3,
+          "column": 4,
+          "rect_top_left": {
+            "x": 792,
+            "y": 1015,
+            "width": 221,
+            "height": 457
+          },
+          "unity_rect_bottom_left": {
+            "x": 792,
+            "y": 64,
+            "width": 221,
+            "height": 457
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        }
+      ]
+    },
+    {
+      "character": "灰蓝外套居民",
+      "id": "worker_03",
+      "file": "chr_worker_03_interactions.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a09e80de582c70b524055684f65c11e6568fd965235ffd3f3fd7503979e84955",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "pose_count": 12,
+      "slices": [
+        {
+          "name": "chr_worker_03_carry_up",
+          "action": "carry",
+          "direction": "up",
+          "row": 1,
+          "column": 1,
+          "rect_top_left": {
+            "x": 30,
+            "y": 75,
+            "width": 213,
+            "height": 443
+          },
+          "unity_rect_bottom_left": {
+            "x": 30,
+            "y": 1018,
+            "width": 213,
+            "height": 443
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_carry_down",
+          "action": "carry",
+          "direction": "down",
+          "row": 1,
+          "column": 2,
+          "rect_top_left": {
+            "x": 261,
+            "y": 76,
+            "width": 237,
+            "height": 445
+          },
+          "unity_rect_bottom_left": {
+            "x": 261,
+            "y": 1015,
+            "width": 237,
+            "height": 445
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_carry_left",
+          "action": "carry",
+          "direction": "left",
+          "row": 1,
+          "column": 3,
+          "rect_top_left": {
+            "x": 518,
+            "y": 75,
+            "width": 191,
+            "height": 449
+          },
+          "unity_rect_bottom_left": {
+            "x": 518,
+            "y": 1012,
+            "width": 191,
+            "height": 449
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_carry_right",
+          "action": "carry",
+          "direction": "right",
+          "row": 1,
+          "column": 4,
+          "rect_top_left": {
+            "x": 807,
+            "y": 75,
+            "width": 192,
+            "height": 449
+          },
+          "unity_rect_bottom_left": {
+            "x": 807,
+            "y": 1012,
+            "width": 192,
+            "height": 449
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_pickup_up",
+          "action": "pickup",
+          "direction": "up",
+          "row": 2,
+          "column": 1,
+          "rect_top_left": {
+            "x": 24,
+            "y": 659,
+            "width": 244,
+            "height": 326
+          },
+          "unity_rect_bottom_left": {
+            "x": 24,
+            "y": 551,
+            "width": 244,
+            "height": 326
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_pickup_down",
+          "action": "pickup",
+          "direction": "down",
+          "row": 2,
+          "column": 2,
+          "rect_top_left": {
+            "x": 295,
+            "y": 652,
+            "width": 204,
+            "height": 338
+          },
+          "unity_rect_bottom_left": {
+            "x": 295,
+            "y": 546,
+            "width": 204,
+            "height": 338
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_pickup_left",
+          "action": "pickup",
+          "direction": "left",
+          "row": 2,
+          "column": 3,
+          "rect_top_left": {
+            "x": 525,
+            "y": 659,
+            "width": 226,
+            "height": 324
+          },
+          "unity_rect_bottom_left": {
+            "x": 525,
+            "y": 553,
+            "width": 226,
+            "height": 324
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_pickup_right",
+          "action": "pickup",
+          "direction": "right",
+          "row": 2,
+          "column": 4,
+          "rect_top_left": {
+            "x": 768,
+            "y": 659,
+            "width": 226,
+            "height": 324
+          },
+          "unity_rect_bottom_left": {
+            "x": 768,
+            "y": 553,
+            "width": 226,
+            "height": 324
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_saw_up",
+          "action": "saw",
+          "direction": "up",
+          "row": 3,
+          "column": 1,
+          "rect_top_left": {
+            "x": 7,
+            "y": 1087,
+            "width": 253,
+            "height": 395
+          },
+          "unity_rect_bottom_left": {
+            "x": 7,
+            "y": 54,
+            "width": 253,
+            "height": 395
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_saw_down",
+          "action": "saw",
+          "direction": "down",
+          "row": 3,
+          "column": 2,
+          "rect_top_left": {
+            "x": 263,
+            "y": 1073,
+            "width": 254,
+            "height": 409
+          },
+          "unity_rect_bottom_left": {
+            "x": 263,
+            "y": 54,
+            "width": 254,
+            "height": 409
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_saw_right",
+          "action": "saw",
+          "direction": "right",
+          "row": 3,
+          "column": 3,
+          "rect_top_left": {
+            "x": 524,
+            "y": 1079,
+            "width": 240,
+            "height": 404
+          },
+          "unity_rect_bottom_left": {
+            "x": 524,
+            "y": 53,
+            "width": 240,
+            "height": 404
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_03_saw_left",
+          "action": "saw",
+          "direction": "left",
+          "row": 3,
+          "column": 4,
+          "rect_top_left": {
+            "x": 786,
+            "y": 1079,
+            "width": 231,
+            "height": 404
+          },
+          "unity_rect_bottom_left": {
+            "x": 786,
+            "y": 53,
+            "width": 231,
+            "height": 404
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        }
+      ]
+    },
+    {
+      "character": "浅褐上衣年长居民",
+      "id": "worker_04",
+      "file": "chr_worker_04_interactions.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "486b36ddc286b3dd3aa436dee915a74436bdbafcf8ce06a30eb01704bdbd362b",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "pose_count": 12,
+      "slices": [
+        {
+          "name": "chr_worker_04_carry_up",
+          "action": "carry",
+          "direction": "up",
+          "row": 1,
+          "column": 1,
+          "rect_top_left": {
+            "x": 19,
+            "y": 68,
+            "width": 225,
+            "height": 476
+          },
+          "unity_rect_bottom_left": {
+            "x": 19,
+            "y": 992,
+            "width": 225,
+            "height": 476
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_carry_down",
+          "action": "carry",
+          "direction": "down",
+          "row": 1,
+          "column": 2,
+          "rect_top_left": {
+            "x": 277,
+            "y": 63,
+            "width": 225,
+            "height": 482
+          },
+          "unity_rect_bottom_left": {
+            "x": 277,
+            "y": 991,
+            "width": 225,
+            "height": 482
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_carry_left",
+          "action": "carry",
+          "direction": "left",
+          "row": 1,
+          "column": 3,
+          "rect_top_left": {
+            "x": 525,
+            "y": 63,
+            "width": 209,
+            "height": 483
+          },
+          "unity_rect_bottom_left": {
+            "x": 525,
+            "y": 990,
+            "width": 209,
+            "height": 483
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_carry_right",
+          "action": "carry",
+          "direction": "right",
+          "row": 1,
+          "column": 4,
+          "rect_top_left": {
+            "x": 808,
+            "y": 64,
+            "width": 204,
+            "height": 482
+          },
+          "unity_rect_bottom_left": {
+            "x": 808,
+            "y": 990,
+            "width": 204,
+            "height": 482
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_pickup_up",
+          "action": "pickup",
+          "direction": "up",
+          "row": 2,
+          "column": 1,
+          "rect_top_left": {
+            "x": 15,
+            "y": 642,
+            "width": 241,
+            "height": 331
+          },
+          "unity_rect_bottom_left": {
+            "x": 15,
+            "y": 563,
+            "width": 241,
+            "height": 331
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_pickup_down",
+          "action": "pickup",
+          "direction": "down",
+          "row": 2,
+          "column": 2,
+          "rect_top_left": {
+            "x": 300,
+            "y": 628,
+            "width": 216,
+            "height": 356
+          },
+          "unity_rect_bottom_left": {
+            "x": 300,
+            "y": 552,
+            "width": 216,
+            "height": 356
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_pickup_left",
+          "action": "pickup",
+          "direction": "left",
+          "row": 2,
+          "column": 3,
+          "rect_top_left": {
+            "x": 519,
+            "y": 622,
+            "width": 239,
+            "height": 349
+          },
+          "unity_rect_bottom_left": {
+            "x": 519,
+            "y": 565,
+            "width": 239,
+            "height": 349
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_pickup_right",
+          "action": "pickup",
+          "direction": "right",
+          "row": 2,
+          "column": 4,
+          "rect_top_left": {
+            "x": 779,
+            "y": 624,
+            "width": 237,
+            "height": 347
+          },
+          "unity_rect_bottom_left": {
+            "x": 779,
+            "y": 565,
+            "width": 237,
+            "height": 347
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_saw_up",
+          "action": "saw",
+          "direction": "up",
+          "row": 3,
+          "column": 1,
+          "rect_top_left": {
+            "x": 10,
+            "y": 1039,
+            "width": 253,
+            "height": 445
+          },
+          "unity_rect_bottom_left": {
+            "x": 10,
+            "y": 52,
+            "width": 253,
+            "height": 445
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_saw_down",
+          "action": "saw",
+          "direction": "down",
+          "row": 3,
+          "column": 2,
+          "rect_top_left": {
+            "x": 282,
+            "y": 1039,
+            "width": 234,
+            "height": 444
+          },
+          "unity_rect_bottom_left": {
+            "x": 282,
+            "y": 53,
+            "width": 234,
+            "height": 444
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_saw_left",
+          "action": "saw",
+          "direction": "left",
+          "row": 3,
+          "column": 3,
+          "rect_top_left": {
+            "x": 525,
+            "y": 1038,
+            "width": 229,
+            "height": 446
+          },
+          "unity_rect_bottom_left": {
+            "x": 525,
+            "y": 52,
+            "width": 229,
+            "height": 446
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        },
+        {
+          "name": "chr_worker_04_saw_right",
+          "action": "saw",
+          "direction": "right",
+          "row": 3,
+          "column": 4,
+          "rect_top_left": {
+            "x": 787,
+            "y": 1037,
+            "width": 226,
+            "height": 447
+          },
+          "unity_rect_bottom_left": {
+            "x": 787,
+            "y": 52,
+            "width": 226,
+            "height": 447
+          },
+          "pivot": "Manual: align the supporting feet with the existing idle sprite",
+          "status": "Suggested bounds; inspect soft edges and calibrate in Unity"
+        }
+      ]
+    }
+  ]
+}

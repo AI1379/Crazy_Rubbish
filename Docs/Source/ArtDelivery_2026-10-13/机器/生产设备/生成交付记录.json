@@ -1,0 +1,199 @@
+{
+  "delivery": {
+    "directory": "C:\\Users\\snowy_light\\Documents\\Codex\\2026-10-03\\x20\\outputs\\art\\all_machines",
+    "version": 1,
+    "reused": 2
+  },
+  "assets": [
+    {
+      "id": "disassembly",
+      "name": "拆解地点",
+      "footprint": [
+        2,
+        2
+      ],
+      "filename": "bld_disassembly_idle.png",
+      "source": "generated_images/exec-6a6fe071-a734-4fb1-be28-9fe8b95681ca.png"
+    },
+    {
+      "id": "electric_woodwork",
+      "name": "电动木工地点",
+      "footprint": [
+        3,
+        2
+      ],
+      "filename": "bld_electric_woodwork_idle.png",
+      "source": "generated_images/exec-5945bc3b-7d26-444e-b5be-a6d912d9f5bb.png"
+    },
+    {
+      "id": "automatic_woodwork",
+      "name": "自动木工地点",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_automatic_woodwork_idle.png",
+      "source": "generated_images/exec-09b9124f-ee47-4600-81ad-d72b407af7a4.png"
+    },
+    {
+      "id": "plastic_sorting",
+      "name": "塑料分选地点",
+      "footprint": [
+        2,
+        2
+      ],
+      "filename": "bld_plastic_sorting_idle.png",
+      "source": "generated_images/exec-456cf827-a365-4527-9642-020cb53b443b.png"
+    },
+    {
+      "id": "plastic_preprocessing",
+      "name": "塑料预处理地点",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_plastic_preprocessing_idle.png",
+      "source": "generated_images/exec-609a4b94-468b-433d-a468-18f3c1bb8289.png"
+    },
+    {
+      "id": "plastic_reprocessing",
+      "name": "塑料再加工地点",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_plastic_reprocessing_idle.png",
+      "source": "generated_images/exec-f45c2a3b-61c5-435e-b8a1-5b4c9357a50f.png"
+    },
+    {
+      "id": "workbench",
+      "name": "通用工作台",
+      "footprint": [
+        2,
+        2
+      ],
+      "filename": "bld_workbench_idle.png",
+      "source": "generated_images/exec-e2ef97ac-0bb0-47b1-9dab-eb629f745150.png"
+    },
+    {
+      "id": "washing",
+      "name": "清洗地点",
+      "footprint": [
+        2,
+        2
+      ],
+      "filename": "bld_washing_idle.png",
+      "source": "generated_images/exec-98bc8ce4-efae-425a-9d92-cb61587f0ccb.png"
+    },
+    {
+      "id": "growing_bed",
+      "name": "小型种植地",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_growing_bed_idle.png",
+      "source": "generated_images/exec-bcf84a67-8b1d-4fea-8dc0-f0b2873412f1.png"
+    },
+    {
+      "id": "metal_processing",
+      "name": "原料处理地点（金属）",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_metal_processing_idle.png",
+      "source": "generated_images/exec-ea804d32-fcf7-4f90-9d15-84b5d71366d0.png"
+    },
+    {
+      "id": "grow_light",
+      "name": "太阳灯",
+      "footprint": [
+        1,
+        1
+      ],
+      "filename": "bld_grow_light_idle.png",
+      "source": "generated_images/exec-942601d8-29c8-42ab-a2bc-c2babfa91661.png"
+    },
+    {
+      "id": "metal_parts",
+      "name": "零件制造地点（金属）",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_metal_parts_idle.png",
+      "source": "generated_images/exec-c082095f-b0ae-4436-9e36-ddc5089ba040.png"
+    },
+    {
+      "id": "auto_plastic_preprocessing",
+      "name": "自动塑料预处理",
+      "footprint": [
+        3,
+        4
+      ],
+      "filename": "bld_auto_plastic_preprocessing_idle.png",
+      "source": "generated_images/exec-3bd95be5-e2e8-4485-8e53-ed6d6bb289c1.png"
+    },
+    {
+      "id": "auto_plastic_reprocessing",
+      "name": "自动塑料再加工",
+      "footprint": [
+        3,
+        4
+      ],
+      "filename": "bld_auto_plastic_reprocessing_idle.png",
+      "source": "generated_images/exec-5c1fca28-29fa-4287-9658-526dfbb8502c.png"
+    },
+    {
+      "id": "auto_structural_parts",
+      "name": "自动结构零件地点",
+      "footprint": [
+        3,
+        4
+      ],
+      "filename": "bld_auto_structural_parts_idle.png",
+      "source": "generated_images/exec-e23e77de-0254-46a5-bdd3-8dc63daef193.png"
+    },
+    {
+      "id": "wire_manufacturing",
+      "name": "制线地点",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_wire_manufacturing_idle.png",
+      "source": "generated_images/exec-a5e487fd-40b3-4aae-9a04-92396f9e1b1d.png"
+    },
+    {
+      "id": "substrate_mixing",
+      "name": "基质调配设备",
+      "footprint": [
+        2,
+        2
+      ],
+      "filename": "bld_substrate_mixing_idle.png",
+      "source": "generated_images/exec-94fc21d4-d912-441c-91c6-6e298d88ddbf.png"
+    },
+    {
+      "id": "refurbishment",
+      "name": "翻修测试台",
+      "footprint": [
+        3,
+        2
+      ],
+      "filename": "bld_refurbishment_idle.png",
+      "source": "generated_images/exec-14df7987-f805-4800-a5fd-afa86d8cf0f0.png"
+    },
+    {
+      "id": "composting",
+      "name": "堆肥场",
+      "footprint": [
+        3,
+        3
+      ],
+      "filename": "bld_composting_idle.png",
+      "source": "generated_images/exec-2b7d5c2a-b0d4-46f0-beba-c2685a64b1c8.png"
+    }
+  ]
+}

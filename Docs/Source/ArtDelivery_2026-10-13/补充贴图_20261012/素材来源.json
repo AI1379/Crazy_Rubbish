@@ -1,0 +1,45 @@
+{
+  "mode": "built-in image_gen",
+  "cleanup_prompt": "Use case: background-extraction. This is an existing pixel-art game asset to clean for use in Unity. Preserve the existing object silhouettes, internal colors, steel/rust textures, sprite identities, exact positions, dimensions, camera, proportions and arrangements. Remove ALL broad soft ambient glows, smoky vignette backgrounds, large drop shadows, and any thin atlas grid lines. Outside the crisp pixel-art objects make pixels genuinely fully alpha-transparent. Only keep the objects themselves and their crisp outlines, including dark rubber surfaces and holes inside structures. No checkerboard, solid background, added content, text or resizing of the composition. Do not introduce lights or redraw the art. The pixel outlines must remain sharp. Output transparent PNG.",
+  "files": [
+    {
+      "id": "env_ground_plain_v1",
+      "path": "generated_images/exec-10c13a4d-b443-435c-a45e-dd12f4ff8329.png"
+    },
+    {
+      "id": "atlas_logistics_v1",
+      "path": "generated_images/exec-7775f901-8152-40ae-b404-5b54795ac901.png",
+      "source_before_cleanup": "generated_images/exec-caa3d200-09b4-48ce-9f2a-820e196b1bfb.png"
+    },
+    {
+      "id": "atlas_power_lines_v1",
+      "path": "generated_images/exec-7df5becd-2355-4405-8b80-63f61892e082.png",
+      "source_before_cleanup": "generated_images/exec-897d3cb7-ac04-4c02-b738-420ad113786e.png"
+    },
+    {
+      "id": "atlas_items_core_v1",
+      "path": "generated_images/exec-5456c87c-2896-4f42-b697-514b6ef3ff92.png"
+    },
+    {
+      "id": "atlas_items_extra_v1",
+      "path": "generated_images/exec-b7badd78-9973-4913-984c-59412f1558e5.png"
+    },
+    {
+      "id": "atlas_work_status_v1",
+      "path": "generated_images/exec-403c0924-d902-4a3e-aec0-37aa8b532c15.png"
+    },
+    {
+      "id": "bld_survey_idle_v1",
+      "path": "generated_images/exec-5f2e339c-b87c-4f33-aff5-2a24fc44c337.png"
+    },
+    {
+      "id": "bld_mine_idle_v1",
+      "path": "generated_images/exec-b48ab5b5-578c-41f3-90d8-fe1ad68a3f5c.png"
+    },
+    {
+      "id": "veh_return_lift_idle_v1",
+      "path": "generated_images/exec-1664cf04-b5c3-470d-ae91-ebc7ddd78158.png",
+      "source_before_cleanup": "generated_images/exec-8dbcfeb1-9972-42b0-a7e4-aecb3bbb3651.png"
+    }
+  ]
+}

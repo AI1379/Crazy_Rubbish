@@ -1,0 +1,1928 @@
+{
+  "version": "balance-2026-10-11-v1",
+  "definitions": {
+    "waste_wood": {
+      "name": "废木料",
+      "capacity": 1,
+      "buy": 0.8,
+      "sell_base": 0.3,
+      "sell_floor": 0.1,
+      "category": "材料",
+      "market_group": "waste_wood"
+    },
+    "wood_chips": {
+      "name": "木料碎屑",
+      "capacity": 1,
+      "buy": 0.4,
+      "sell_base": 0.15,
+      "sell_floor": 0.05,
+      "category": "材料",
+      "market_group": "wood_chips"
+    },
+    "sorted_wood": {
+      "name": "已整理木料",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.4,
+      "sell_floor": 0.15,
+      "category": "材料",
+      "market_group": "sorted_wood"
+    },
+    "boards": {
+      "name": "木板",
+      "capacity": 1,
+      "buy": 4,
+      "sell_base": 3,
+      "sell_floor": 1,
+      "category": "材料",
+      "market_group": "boards"
+    },
+    "wood_handle": {
+      "name": "木制握柄",
+      "capacity": 0.5,
+      "buy": 3,
+      "sell_base": 2,
+      "sell_floor": 0.7,
+      "category": "材料",
+      "market_group": "wood_handle"
+    },
+    "fasteners": {
+      "name": "回收紧固件",
+      "capacity": 0.5,
+      "buy": 1,
+      "sell_base": 0.45,
+      "sell_floor": 0.2,
+      "category": "材料",
+      "market_group": "fasteners"
+    },
+    "steel_scrap": {
+      "name": "钢铁材料",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.6,
+      "sell_floor": 0.2,
+      "category": "材料",
+      "market_group": "steel_scrap"
+    },
+    "copper_scrap": {
+      "name": "铜材料",
+      "capacity": 1,
+      "buy": 1.5,
+      "sell_base": 0.8,
+      "sell_floor": 0.25,
+      "category": "材料",
+      "market_group": "copper_scrap"
+    },
+    "aluminum_scrap": {
+      "name": "铝材料",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.6,
+      "sell_floor": 0.2,
+      "category": "材料",
+      "market_group": "aluminum_scrap"
+    },
+    "tool_steel_scrap": {
+      "name": "工具钢废料",
+      "capacity": 1,
+      "buy": 2,
+      "sell_base": 1,
+      "sell_floor": 0.3,
+      "category": "材料",
+      "market_group": "tool_steel_scrap"
+    },
+    "steel_billet": {
+      "name": "钢铁坯料",
+      "capacity": 1,
+      "buy": 2,
+      "sell_base": 1.2,
+      "sell_floor": 0.4,
+      "category": "材料",
+      "market_group": "steel_billet"
+    },
+    "copper_billet": {
+      "name": "铜坯料",
+      "capacity": 1,
+      "buy": 2.5,
+      "sell_base": 1.6,
+      "sell_floor": 0.5,
+      "category": "材料",
+      "market_group": "copper_billet"
+    },
+    "aluminum_billet": {
+      "name": "铝坯料",
+      "capacity": 1,
+      "buy": 2,
+      "sell_base": 1.2,
+      "sell_floor": 0.4,
+      "category": "材料",
+      "market_group": "aluminum_billet"
+    },
+    "tool_steel_billet": {
+      "name": "工具钢坯料",
+      "capacity": 1,
+      "buy": 3,
+      "sell_base": 2,
+      "sell_floor": 0.6,
+      "category": "材料",
+      "market_group": "tool_steel_billet"
+    },
+    "steel_parts": {
+      "name": "钢铁零件",
+      "capacity": 0.5,
+      "buy": 5,
+      "sell_base": 4,
+      "sell_floor": 1.2,
+      "category": "材料",
+      "market_group": "steel_parts"
+    },
+    "copper_parts": {
+      "name": "铜零件",
+      "capacity": 0.5,
+      "buy": 7,
+      "sell_base": 5,
+      "sell_floor": 1.5,
+      "category": "材料",
+      "market_group": "copper_parts"
+    },
+    "aluminum_parts": {
+      "name": "铝零件",
+      "capacity": 0.5,
+      "buy": 6,
+      "sell_base": 4,
+      "sell_floor": 1.2,
+      "category": "材料",
+      "market_group": "aluminum_parts"
+    },
+    "wire": {
+      "name": "可用电线",
+      "capacity": 0.5,
+      "buy": 2,
+      "sell_base": 0.9,
+      "sell_floor": 0.4,
+      "category": "材料",
+      "market_group": "wire"
+    },
+    "motor": {
+      "name": "回收／制造电机",
+      "capacity": 4,
+      "buy": 12,
+      "sell_base": 5.4,
+      "sell_floor": 2.4,
+      "category": "材料",
+      "market_group": "motor"
+    },
+    "machine_saw": {
+      "name": "机器锯片",
+      "capacity": 0.5,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "machine_saw"
+    },
+    "heater": {
+      "name": "回收加热元件",
+      "capacity": 2,
+      "buy": 10,
+      "sell_base": 4.5,
+      "sell_floor": 2,
+      "category": "材料",
+      "market_group": "heater"
+    },
+    "container": {
+      "name": "回收容器",
+      "capacity": 2,
+      "buy": 4,
+      "sell_base": 1.8,
+      "sell_floor": 0.8,
+      "category": "材料",
+      "market_group": "container"
+    },
+    "handle_mold": {
+      "name": "握柄模具",
+      "capacity": 0.5,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "handle_mold"
+    },
+    "box_mold": {
+      "name": "收纳盒模具",
+      "capacity": 0.5,
+      "buy": 6,
+      "sell_base": 2.7,
+      "sell_floor": 1.2,
+      "category": "材料",
+      "market_group": "box_mold"
+    },
+    "feeder": {
+      "name": "回收送料组件",
+      "capacity": 4,
+      "buy": 16,
+      "sell_base": 7.2,
+      "sell_floor": 3.2,
+      "category": "材料",
+      "market_group": "feeder"
+    },
+    "grow_light_module": {
+      "name": "种植灯组件",
+      "capacity": 2,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "grow_light_module"
+    },
+    "light_module": {
+      "name": "普通照明部件",
+      "capacity": 2,
+      "buy": 6,
+      "sell_base": 2.7,
+      "sell_floor": 1.2,
+      "category": "材料",
+      "market_group": "light_module"
+    },
+    "furnace_module": {
+      "name": "高温电炉组件",
+      "capacity": 4,
+      "buy": 28,
+      "sell_base": 12.6,
+      "sell_floor": 5.6,
+      "category": "材料",
+      "market_group": "furnace_module"
+    },
+    "lining": {
+      "name": "炉衬组件",
+      "capacity": 2,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "lining"
+    },
+    "fixture": {
+      "name": "回收夹具",
+      "capacity": 2,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "fixture"
+    },
+    "thermal_module": {
+      "name": "回收热动力组件",
+      "capacity": 4,
+      "buy": 18,
+      "sell_base": 8.1,
+      "sell_floor": 3.6,
+      "category": "材料",
+      "market_group": "thermal_module"
+    },
+    "generator_module": {
+      "name": "发电组件",
+      "capacity": 4,
+      "buy": 24,
+      "sell_base": 10.8,
+      "sell_floor": 4.8,
+      "category": "材料",
+      "market_group": "generator_module"
+    },
+    "hammer_head": {
+      "name": "锤头",
+      "capacity": 0.5,
+      "buy": 5,
+      "sell_base": 2.25,
+      "sell_floor": 1,
+      "category": "材料",
+      "market_group": "hammer_head"
+    },
+    "handsaw_blade": {
+      "name": "手锯锯片",
+      "capacity": 0.5,
+      "buy": 6,
+      "sell_base": 2.7,
+      "sell_floor": 1.2,
+      "category": "材料",
+      "market_group": "handsaw_blade"
+    },
+    "screwdriver_shaft": {
+      "name": "螺丝刀金属杆",
+      "capacity": 0.5,
+      "buy": 4,
+      "sell_base": 1.8,
+      "sell_floor": 0.8,
+      "category": "材料",
+      "market_group": "screwdriver_shaft"
+    },
+    "broom_head": {
+      "name": "回收扫帚头",
+      "capacity": 0.5,
+      "buy": 3,
+      "sell_base": 1.35,
+      "sell_floor": 0.6,
+      "category": "材料",
+      "market_group": "broom_head"
+    },
+    "waste_textile": {
+      "name": "低等级废纺织物",
+      "capacity": 1,
+      "buy": 0.8,
+      "sell_base": 0.25,
+      "sell_floor": 0.08,
+      "category": "材料",
+      "market_group": "waste_textile"
+    },
+    "old_clothes": {
+      "name": "旧衣服",
+      "capacity": 1,
+      "buy": 3,
+      "sell_base": 1,
+      "sell_floor": 0.3,
+      "category": "材料",
+      "market_group": "old_clothes"
+    },
+    "clean_old_clothes": {
+      "name": "洗净旧衣",
+      "capacity": 1,
+      "buy": 4,
+      "sell_base": 1.8,
+      "sell_floor": 0.6,
+      "category": "材料",
+      "market_group": "clean_old_clothes"
+    },
+    "patch": {
+      "name": "补丁布",
+      "capacity": 0.5,
+      "buy": 1,
+      "sell_base": 0.5,
+      "sell_floor": 0.15,
+      "category": "材料",
+      "market_group": "patch"
+    },
+    "clothes": {
+      "name": "可穿衣服",
+      "capacity": 1,
+      "buy": 10,
+      "sell_base": 8,
+      "sell_floor": 3,
+      "category": "材料",
+      "market_group": "clothes"
+    },
+    "clean_rag": {
+      "name": "干净抹布",
+      "capacity": 0.25,
+      "buy": 2,
+      "sell_base": 1,
+      "sell_floor": 0.3,
+      "category": "材料",
+      "market_group": "clean_rag"
+    },
+    "food": {
+      "name": "可食用食物",
+      "capacity": 1,
+      "buy": 1.5,
+      "sell_base": 1,
+      "sell_floor": 0.3,
+      "category": "材料",
+      "market_group": "food"
+    },
+    "water": {
+      "name": "饮用水（升）",
+      "capacity": 0.1,
+      "buy": 0.5,
+      "sell_base": 0.25,
+      "sell_floor": 0.1,
+      "category": "材料",
+      "market_group": "water"
+    },
+    "soap": {
+      "name": "肥皂（100清洁单位）",
+      "capacity": 0.5,
+      "buy": 4,
+      "sell_base": 2,
+      "sell_floor": 0.6,
+      "category": "材料",
+      "market_group": "soap"
+    },
+    "plastic_mix": {
+      "name": "混杂／受污染塑料",
+      "capacity": 1,
+      "buy": 0.4,
+      "sell_base": 0.12,
+      "sell_floor": 0.04,
+      "category": "材料",
+      "market_group": "plastic_mix"
+    },
+    "plastic_handle": {
+      "name": "塑料握柄",
+      "capacity": 0.5,
+      "buy": 2,
+      "sell_base": 1.5,
+      "sell_floor": 0.5,
+      "category": "材料",
+      "market_group": "plastic_handle"
+    },
+    "storage_box": {
+      "name": "普通收纳盒",
+      "capacity": 1,
+      "buy": 7,
+      "sell_base": 5,
+      "sell_floor": 1.5,
+      "category": "材料",
+      "market_group": "storage_box"
+    },
+    "seed": {
+      "name": "萝卜种子包",
+      "capacity": 0.25,
+      "buy": 0.6,
+      "sell_base": 0.2,
+      "sell_floor": 0.06,
+      "category": "材料",
+      "market_group": "seed"
+    },
+    "substrate": {
+      "name": "栽培基质",
+      "capacity": 1,
+      "buy": 0.4,
+      "sell_base": 0.18,
+      "sell_floor": 0.06,
+      "category": "材料",
+      "market_group": "substrate"
+    },
+    "sprouts": {
+      "name": "萝卜芽苗",
+      "capacity": 1,
+      "buy": 0.7,
+      "sell_base": 0.25,
+      "sell_floor": 0.08,
+      "category": "材料",
+      "market_group": "sprouts"
+    },
+    "controller": {
+      "name": "控制模块",
+      "capacity": 2,
+      "buy": 18,
+      "sell_base": 8.1,
+      "sell_floor": 3.6,
+      "category": "材料",
+      "market_group": "controller"
+    },
+    "drive": {
+      "name": "驱动模块",
+      "capacity": 4,
+      "buy": 16,
+      "sell_base": 7.2,
+      "sell_floor": 3.2,
+      "category": "材料",
+      "market_group": "drive"
+    },
+    "dryer": {
+      "name": "干燥组件",
+      "capacity": 4,
+      "buy": 12,
+      "sell_base": 5.4,
+      "sell_floor": 2.4,
+      "category": "材料",
+      "market_group": "dryer"
+    },
+    "pet_melter": {
+      "name": "PET熔融组件",
+      "capacity": 4,
+      "buy": 28,
+      "sell_base": 12.6,
+      "sell_floor": 5.6,
+      "category": "材料",
+      "market_group": "pet_melter"
+    },
+    "strap_mold": {
+      "name": "打包带模具",
+      "capacity": 0.5,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "strap_mold"
+    },
+    "wire_die": {
+      "name": "制线模头",
+      "capacity": 0.5,
+      "buy": 10,
+      "sell_base": 4.5,
+      "sell_floor": 2,
+      "category": "材料",
+      "market_group": "wire_die"
+    },
+    "pet_strap": {
+      "name": "PET打包带",
+      "capacity": 1,
+      "buy": 9,
+      "sell_base": 6,
+      "sell_floor": 1.8,
+      "category": "材料",
+      "market_group": "pet_strap"
+    },
+    "cuttable_textile": {
+      "name": "可裁剪废纺织物",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.4,
+      "sell_floor": 0.12,
+      "category": "材料",
+      "market_group": "cuttable_textile"
+    },
+    "washed_textile": {
+      "name": "已清洗纺织物",
+      "capacity": 0.5,
+      "buy": 1.2,
+      "sell_base": 0.6,
+      "sell_floor": 0.18,
+      "category": "材料",
+      "market_group": "washed_textile"
+    },
+    "fabric_panel": {
+      "name": "可用布片",
+      "capacity": 0.5,
+      "buy": 2,
+      "sell_base": 0.9,
+      "sell_floor": 0.3,
+      "category": "材料",
+      "market_group": "fabric_panel"
+    },
+    "repair_motor": {
+      "name": "待修电机",
+      "capacity": 4,
+      "buy": 3,
+      "sell_base": 1.2,
+      "sell_floor": 0.4,
+      "category": "材料",
+      "market_group": "repair_motor"
+    },
+    "repair_drive": {
+      "name": "待修驱动模块",
+      "capacity": 4,
+      "buy": 4,
+      "sell_base": 1.8,
+      "sell_floor": 0.6,
+      "category": "材料",
+      "market_group": "repair_drive"
+    },
+    "organic_feed": {
+      "name": "合格有机料",
+      "capacity": 1,
+      "buy": 0.2,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "材料",
+      "market_group": "organic_feed"
+    },
+    "compost": {
+      "name": "成熟堆肥",
+      "capacity": 1,
+      "buy": 0.6,
+      "sell_base": 0.3,
+      "sell_floor": 0.1,
+      "category": "材料",
+      "market_group": "compost"
+    },
+    "waste_paper": {
+      "name": "合格废纸",
+      "capacity": 1,
+      "buy": 0.5,
+      "sell_base": 0.15,
+      "sell_floor": 0.05,
+      "category": "材料",
+      "market_group": "waste_paper"
+    },
+    "paper_pulp": {
+      "name": "纸浆",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.35,
+      "sell_floor": 0.1,
+      "category": "材料",
+      "market_group": "paper_pulp"
+    },
+    "paperboard": {
+      "name": "再生纸板",
+      "capacity": 1,
+      "buy": 2.5,
+      "sell_base": 1.8,
+      "sell_floor": 0.6,
+      "category": "材料",
+      "market_group": "paperboard"
+    },
+    "carton": {
+      "name": "包装纸箱",
+      "capacity": 1,
+      "buy": 4,
+      "sell_base": 3,
+      "sell_floor": 1,
+      "category": "材料",
+      "market_group": "carton"
+    },
+    "waste_glass": {
+      "name": "合格废玻璃",
+      "capacity": 1,
+      "buy": 0.6,
+      "sell_base": 0.2,
+      "sell_floor": 0.06,
+      "category": "材料",
+      "market_group": "waste_glass"
+    },
+    "cullet": {
+      "name": "干净碎玻璃",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.4,
+      "sell_floor": 0.12,
+      "category": "材料",
+      "market_group": "cullet"
+    },
+    "glass_product": {
+      "name": "普通玻璃制品",
+      "capacity": 0.5,
+      "buy": 5,
+      "sell_base": 3.5,
+      "sell_floor": 1.1,
+      "category": "材料",
+      "market_group": "glass_product"
+    },
+    "industrial_water": {
+      "name": "合格工业回用水（升）",
+      "capacity": 0.1,
+      "buy": 0.25,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "材料",
+      "market_group": "industrial_water"
+    },
+    "survey_module": {
+      "name": "回收勘探组件",
+      "capacity": 4,
+      "buy": 24,
+      "sell_base": 10.8,
+      "sell_floor": 4.8,
+      "category": "材料",
+      "market_group": "survey_module"
+    },
+    "drill_module": {
+      "name": "回收采掘组件",
+      "capacity": 4,
+      "buy": 20,
+      "sell_base": 9,
+      "sell_floor": 4,
+      "category": "材料",
+      "market_group": "drill_module"
+    },
+    "beneficiation_module": {
+      "name": "选矿组件",
+      "capacity": 4,
+      "buy": 18,
+      "sell_base": 8.1,
+      "sell_floor": 3.6,
+      "category": "材料",
+      "market_group": "beneficiation_module"
+    },
+    "kiln_module": {
+      "name": "陶瓷烧成组件",
+      "capacity": 4,
+      "buy": 22,
+      "sell_base": 9.9,
+      "sell_floor": 4.4,
+      "category": "材料",
+      "market_group": "kiln_module"
+    },
+    "coil": {
+      "name": "铜绕组",
+      "capacity": 1,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "coil"
+    },
+    "ceramic_insulator": {
+      "name": "陶瓷绝缘件",
+      "capacity": 0.5,
+      "buy": 3,
+      "sell_base": 1.2,
+      "sell_floor": 0.4,
+      "category": "材料",
+      "market_group": "ceramic_insulator"
+    },
+    "mechanical_filler": {
+      "name": "再生混合填充料",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.45,
+      "sell_floor": 0.15,
+      "category": "材料",
+      "market_group": "mechanical_filler"
+    },
+    "boiler_module": {
+      "name": "锅炉组件",
+      "capacity": 4,
+      "buy": 30,
+      "sell_base": 13.5,
+      "sell_floor": 6,
+      "category": "材料",
+      "market_group": "boiler_module"
+    },
+    "turbine_module": {
+      "name": "汽轮机组件",
+      "capacity": 4,
+      "buy": 36,
+      "sell_base": 16.2,
+      "sell_floor": 7.2,
+      "category": "材料",
+      "market_group": "turbine_module"
+    },
+    "condenser_module": {
+      "name": "冷凝组件",
+      "capacity": 4,
+      "buy": 20,
+      "sell_base": 9,
+      "sell_floor": 4,
+      "category": "材料",
+      "market_group": "condenser_module"
+    },
+    "paper_module": {
+      "name": "制浆组件",
+      "capacity": 4,
+      "buy": 16,
+      "sell_base": 7.2,
+      "sell_floor": 3.2,
+      "category": "材料",
+      "market_group": "paper_module"
+    },
+    "glass_mold": {
+      "name": "玻璃模具",
+      "capacity": 0.5,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "材料",
+      "market_group": "glass_mold"
+    },
+    "filter_module": {
+      "name": "过滤组件",
+      "capacity": 2,
+      "buy": 10,
+      "sell_base": 4.5,
+      "sell_floor": 2,
+      "category": "材料",
+      "market_group": "filter_module"
+    },
+    "press_module": {
+      "name": "压制组件",
+      "capacity": 4,
+      "buy": 16,
+      "sell_base": 7.2,
+      "sell_floor": 3.2,
+      "category": "材料",
+      "market_group": "press_module"
+    },
+    "separator_module": {
+      "name": "复合料分离组件",
+      "capacity": 4,
+      "buy": 24,
+      "sell_base": 10.8,
+      "sell_floor": 4.8,
+      "category": "材料",
+      "market_group": "separator_module"
+    },
+    "sorted_pp": {
+      "name": "PP分选",
+      "capacity": 1,
+      "buy": 0.8,
+      "sell_base": 0.3,
+      "sell_floor": 0.1,
+      "category": "材料",
+      "market_group": "sorted_pp"
+    },
+    "flakes_pp": {
+      "name": "PP干净碎片",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.5,
+      "sell_floor": 0.15,
+      "category": "材料",
+      "market_group": "flakes_pp"
+    },
+    "resin_pp": {
+      "name": "PP再生料",
+      "capacity": 1,
+      "buy": 1.5,
+      "sell_base": 0.8,
+      "sell_floor": 0.25,
+      "category": "材料",
+      "market_group": "resin_pp"
+    },
+    "sorted_hdpe": {
+      "name": "HDPE分选",
+      "capacity": 1,
+      "buy": 0.8,
+      "sell_base": 0.3,
+      "sell_floor": 0.1,
+      "category": "材料",
+      "market_group": "sorted_hdpe"
+    },
+    "flakes_hdpe": {
+      "name": "HDPE干净碎片",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.5,
+      "sell_floor": 0.15,
+      "category": "材料",
+      "market_group": "flakes_hdpe"
+    },
+    "resin_hdpe": {
+      "name": "HDPE再生料",
+      "capacity": 1,
+      "buy": 1.5,
+      "sell_base": 0.8,
+      "sell_floor": 0.25,
+      "category": "材料",
+      "market_group": "resin_hdpe"
+    },
+    "sorted_pet": {
+      "name": "PET分选",
+      "capacity": 1,
+      "buy": 0.8,
+      "sell_base": 0.3,
+      "sell_floor": 0.1,
+      "category": "材料",
+      "market_group": "sorted_pet"
+    },
+    "flakes_pet": {
+      "name": "PET干净碎片",
+      "capacity": 1,
+      "buy": 1,
+      "sell_base": 0.5,
+      "sell_floor": 0.15,
+      "category": "材料",
+      "market_group": "flakes_pet"
+    },
+    "resin_pet": {
+      "name": "PET再生料",
+      "capacity": 1,
+      "buy": 1.5,
+      "sell_base": 0.8,
+      "sell_floor": 0.25,
+      "category": "材料",
+      "market_group": "resin_pet"
+    },
+    "plastic_other": {
+      "name": "其他适用复合塑料",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "plastic_other",
+      "definition": "本版允许机械分离的复合料；不表示现实所有PVC、热固性塑料或危险混合物都可这样回收"
+    },
+    "slag": {
+      "name": "熔炼残渣",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "slag"
+    },
+    "ash": {
+      "name": "发电灰渣",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "ash",
+      "pressure_exempt": true
+    },
+    "dirty_rag": {
+      "name": "脏抹布",
+      "capacity": 0.25,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "dirty_rag"
+    },
+    "spent_substrate": {
+      "name": "用过基质",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "spent_substrate"
+    },
+    "organic_mix": {
+      "name": "混杂有机垃圾",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "organic_mix"
+    },
+    "organic_residual": {
+      "name": "有机处理残余",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "organic_residual"
+    },
+    "immature_compost": {
+      "name": "未熟堆肥包",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "immature_compost"
+    },
+    "mixed_residue": {
+      "name": "回收处理残余",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "mixed_residue"
+    },
+    "industrial_effluent": {
+      "name": "可回用工艺废水（升）",
+      "capacity": 0.1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "industrial_effluent"
+    },
+    "sludge": {
+      "name": "工艺处理污泥",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "sludge"
+    },
+    "mine_tailings": {
+      "name": "选矿尾料",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "mine_tailings"
+    },
+    "ceramic_scrap": {
+      "name": "陶瓷废料",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "ceramic_scrap"
+    },
+    "iron_ore": {
+      "name": "铁矿石",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "iron_ore"
+    },
+    "copper_ore": {
+      "name": "铜矿石",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "copper_ore"
+    },
+    "clay_ore": {
+      "name": "陶土矿",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "clay_ore"
+    },
+    "iron_concentrate": {
+      "name": "铁矿精料",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "iron_concentrate"
+    },
+    "copper_concentrate": {
+      "name": "铜矿精料",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "copper_concentrate"
+    },
+    "clean_clay": {
+      "name": "净陶土",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "clean_clay"
+    },
+    "reclaimed_structure": {
+      "name": "合格回收承力件",
+      "capacity": 2,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "reclaimed_structure"
+    },
+    "lift_frame": {
+      "name": "升降舱结构架",
+      "capacity": 4,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "lift_frame"
+    },
+    "lift_drive": {
+      "name": "爬升驱动总成",
+      "capacity": 4,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "lift_drive"
+    },
+    "lift_brake": {
+      "name": "制动安全总成",
+      "capacity": 2,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "lift_brake"
+    },
+    "lift_control": {
+      "name": "舱内控制总成",
+      "capacity": 2,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "lift_control"
+    },
+    "lift_cable": {
+      "name": "随行供电卷缆",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "lift_cable"
+    },
+    "lift_cabin": {
+      "name": "完整升降舱",
+      "capacity": 24,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "非普通交易物",
+      "market_group": "lift_cabin"
+    },
+    "mined_steel_billet": {
+      "name": "矿产来源钢铁坯料",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": 1.2,
+      "sell_floor": 0.4,
+      "category": "材料",
+      "market_group": "steel_billet",
+      "provenance": "矿产专用；不能商店购买或来源改写"
+    },
+    "mined_copper_billet": {
+      "name": "矿产来源铜坯料",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": 1.6,
+      "sell_floor": 0.5,
+      "category": "材料",
+      "market_group": "copper_billet",
+      "provenance": "矿产专用；不能商店购买或来源改写"
+    },
+    "hammer_wood": {
+      "name": "木柄锤",
+      "capacity": 1,
+      "buy": 12,
+      "sell_base": 7,
+      "sell_floor": 2.4,
+      "category": "工具",
+      "market_group": "hammer_wood",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "hammer"
+    },
+    "broken_hammer_wood": {
+      "name": "损坏的木柄锤",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_hammer_wood",
+      "tool_family": "hammer"
+    },
+    "hammer_plastic": {
+      "name": "塑料柄锤",
+      "capacity": 1,
+      "buy": 12,
+      "sell_base": 7,
+      "sell_floor": 2.4,
+      "category": "工具",
+      "market_group": "hammer_plastic",
+      "durability": 220,
+      "efficiency": 1.25,
+      "tool_family": "hammer"
+    },
+    "broken_hammer_plastic": {
+      "name": "损坏的塑料柄锤",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_hammer_plastic",
+      "tool_family": "hammer"
+    },
+    "handsaw_wood": {
+      "name": "木柄手锯",
+      "capacity": 1,
+      "buy": 16,
+      "sell_base": 10,
+      "sell_floor": 3.2,
+      "category": "工具",
+      "market_group": "handsaw_wood",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "handsaw"
+    },
+    "broken_handsaw_wood": {
+      "name": "损坏的木柄手锯",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_handsaw_wood",
+      "tool_family": "handsaw"
+    },
+    "handsaw_plastic": {
+      "name": "塑料柄手锯",
+      "capacity": 1,
+      "buy": 16,
+      "sell_base": 10,
+      "sell_floor": 3.2,
+      "category": "工具",
+      "market_group": "handsaw_plastic",
+      "durability": 220,
+      "efficiency": 1.25,
+      "tool_family": "handsaw"
+    },
+    "broken_handsaw_plastic": {
+      "name": "损坏的塑料柄手锯",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_handsaw_plastic",
+      "tool_family": "handsaw"
+    },
+    "screwdriver_wood": {
+      "name": "木柄螺丝刀",
+      "capacity": 1,
+      "buy": 10,
+      "sell_base": 6,
+      "sell_floor": 2,
+      "category": "工具",
+      "market_group": "screwdriver_wood",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "screwdriver"
+    },
+    "broken_screwdriver_wood": {
+      "name": "损坏的木柄螺丝刀",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_screwdriver_wood",
+      "tool_family": "screwdriver"
+    },
+    "screwdriver_plastic": {
+      "name": "塑料柄螺丝刀",
+      "capacity": 1,
+      "buy": 10,
+      "sell_base": 6,
+      "sell_floor": 2,
+      "category": "工具",
+      "market_group": "screwdriver_plastic",
+      "durability": 220,
+      "efficiency": 1.25,
+      "tool_family": "screwdriver"
+    },
+    "broken_screwdriver_plastic": {
+      "name": "损坏的塑料柄螺丝刀",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_screwdriver_plastic",
+      "tool_family": "screwdriver"
+    },
+    "wrench": {
+      "name": "扳手",
+      "capacity": 1,
+      "buy": 12,
+      "sell_base": 5.4,
+      "sell_floor": 2.4,
+      "category": "工具",
+      "market_group": "wrench",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "wrench"
+    },
+    "broken_wrench": {
+      "name": "损坏的扳手",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_wrench"
+    },
+    "scissors": {
+      "name": "剪刀",
+      "capacity": 1,
+      "buy": 8,
+      "sell_base": 3.6,
+      "sell_floor": 1.6,
+      "category": "工具",
+      "market_group": "scissors",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "scissors"
+    },
+    "broken_scissors": {
+      "name": "损坏的剪刀",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_scissors"
+    },
+    "sewing": {
+      "name": "针线工具",
+      "capacity": 1,
+      "buy": 6,
+      "sell_base": 2.7,
+      "sell_floor": 1.2,
+      "category": "工具",
+      "market_group": "sewing",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "sewing"
+    },
+    "broken_sewing": {
+      "name": "损坏的针线工具",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_sewing"
+    },
+    "tongs": {
+      "name": "夹钳",
+      "capacity": 1,
+      "buy": 12,
+      "sell_base": 5.4,
+      "sell_floor": 2.4,
+      "category": "工具",
+      "market_group": "tongs",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "tongs"
+    },
+    "broken_tongs": {
+      "name": "损坏的夹钳",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_tongs"
+    },
+    "file": {
+      "name": "锉刀",
+      "capacity": 1,
+      "buy": 10,
+      "sell_base": 4.5,
+      "sell_floor": 2.0,
+      "category": "工具",
+      "market_group": "file",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "file"
+    },
+    "broken_file": {
+      "name": "损坏的锉刀",
+      "capacity": 1,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_file"
+    },
+    "broom": {
+      "name": "扫帚",
+      "capacity": 0.5,
+      "buy": 6,
+      "sell_base": 4,
+      "sell_floor": 1.2,
+      "category": "工具",
+      "market_group": "broom",
+      "durability": 300,
+      "efficiency": 1,
+      "tool_family": "broom"
+    },
+    "broken_broom": {
+      "name": "损坏的扫帚",
+      "capacity": 0.5,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "损坏工具",
+      "market_group": "broken_broom"
+    },
+    "old_motor": {
+      "name": "可诊断废旧回收／制造电机",
+      "capacity": 6,
+      "buy": 3,
+      "sell_base": 1.5,
+      "sell_floor": 0.5,
+      "category": "废旧设备",
+      "market_group": "old_motor",
+      "instance_state": "可直接用／可修复／仅可拆解，在生成时固定；商购保证可修复"
+    },
+    "old_drive": {
+      "name": "可诊断废旧驱动模块",
+      "capacity": 6,
+      "buy": 4,
+      "sell_base": 2.1,
+      "sell_floor": 0.7,
+      "category": "废旧设备",
+      "market_group": "old_drive",
+      "instance_state": "可直接用／可修复／仅可拆解，在生成时固定；商购保证可修复"
+    },
+    "old_cutter": {
+      "name": "废旧木工设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_cutter"
+    },
+    "old_washer": {
+      "name": "废旧清洗设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_washer"
+    },
+    "old_former": {
+      "name": "废旧低温成型设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_former"
+    },
+    "old_molds": {
+      "name": "旧模具箱",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_molds"
+    },
+    "old_wires": {
+      "name": "旧电线包",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_wires"
+    },
+    "old_grow_light": {
+      "name": "废旧种植照明",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_grow_light"
+    },
+    "old_feeder": {
+      "name": "废旧送料设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_feeder"
+    },
+    "old_furnace": {
+      "name": "废旧高温炉",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_furnace"
+    },
+    "old_fixture": {
+      "name": "废旧金属操作台",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_fixture"
+    },
+    "old_control_basic": {
+      "name": "废旧接线盒",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_control_basic"
+    },
+    "old_controller": {
+      "name": "废旧控制箱",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_controller"
+    },
+    "old_dryer": {
+      "name": "废旧干燥设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_dryer"
+    },
+    "old_pet_former": {
+      "name": "废旧PET成型设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_pet_former"
+    },
+    "old_drive_box": {
+      "name": "废旧驱动箱",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_drive_box"
+    },
+    "old_wire_maker": {
+      "name": "废旧制线设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_wire_maker"
+    },
+    "old_survey": {
+      "name": "废旧地质仪器",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_survey"
+    },
+    "old_drill": {
+      "name": "废旧采掘设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_drill"
+    },
+    "old_separator": {
+      "name": "废旧选矿设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_separator"
+    },
+    "old_kiln": {
+      "name": "废旧陶瓷窑",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_kiln"
+    },
+    "old_structure": {
+      "name": "废旧承重框架",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_structure"
+    },
+    "old_boiler": {
+      "name": "废旧锅炉",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_boiler"
+    },
+    "old_turbine": {
+      "name": "废旧汽轮发电设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_turbine"
+    },
+    "old_condenser": {
+      "name": "废旧冷凝器",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_condenser"
+    },
+    "old_paper_machine": {
+      "name": "废旧制纸设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_paper_machine"
+    },
+    "old_glass_mold": {
+      "name": "旧玻璃模具箱",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_glass_mold"
+    },
+    "old_water_filter": {
+      "name": "废旧工业过滤设备",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "废旧设备",
+      "market_group": "old_water_filter"
+    },
+    "pack_waste_wood": {
+      "name": "压缩包：废木料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_waste_wood",
+      "payload": {
+        "waste_wood": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_sorted_wood": {
+      "name": "压缩包：已整理木料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_sorted_wood",
+      "payload": {
+        "sorted_wood": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_steel_scrap": {
+      "name": "压缩包：钢铁材料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_steel_scrap",
+      "payload": {
+        "steel_scrap": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_copper_scrap": {
+      "name": "压缩包：铜材料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_copper_scrap",
+      "payload": {
+        "copper_scrap": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_aluminum_scrap": {
+      "name": "压缩包：铝材料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_aluminum_scrap",
+      "payload": {
+        "aluminum_scrap": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_tool_steel_scrap": {
+      "name": "压缩包：工具钢废料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_tool_steel_scrap",
+      "payload": {
+        "tool_steel_scrap": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_plastic_mix": {
+      "name": "压缩包：混杂／受污染塑料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_plastic_mix",
+      "payload": {
+        "plastic_mix": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_sorted_pp": {
+      "name": "压缩包：PP分选",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_sorted_pp",
+      "payload": {
+        "sorted_pp": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_sorted_hdpe": {
+      "name": "压缩包：HDPE分选",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_sorted_hdpe",
+      "payload": {
+        "sorted_hdpe": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_sorted_pet": {
+      "name": "压缩包：PET分选",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_sorted_pet",
+      "payload": {
+        "sorted_pet": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_plastic_other": {
+      "name": "压缩包：其他适用复合塑料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_plastic_other",
+      "payload": {
+        "plastic_other": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_waste_textile": {
+      "name": "压缩包：低等级废纺织物",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_waste_textile",
+      "payload": {
+        "waste_textile": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_cuttable_textile": {
+      "name": "压缩包：可裁剪废纺织物",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_cuttable_textile",
+      "payload": {
+        "cuttable_textile": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_waste_paper": {
+      "name": "压缩包：合格废纸",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_waste_paper",
+      "payload": {
+        "waste_paper": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_waste_glass": {
+      "name": "压缩包：合格废玻璃",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_waste_glass",
+      "payload": {
+        "waste_glass": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_slag": {
+      "name": "压缩包：熔炼残渣",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_slag",
+      "payload": {
+        "slag": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_mixed_residue": {
+      "name": "压缩包：回收处理残余",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_mixed_residue",
+      "payload": {
+        "mixed_residue": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_organic_residual": {
+      "name": "压缩包：有机处理残余",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_organic_residual",
+      "payload": {
+        "organic_residual": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_mine_tailings": {
+      "name": "压缩包：选矿尾料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_mine_tailings",
+      "payload": {
+        "mine_tailings": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    },
+    "pack_ceramic_scrap": {
+      "name": "压缩包：陶瓷废料",
+      "capacity": 6,
+      "buy": null,
+      "sell_base": null,
+      "sell_floor": null,
+      "category": "压缩包",
+      "market_group": "pack_ceramic_scrap",
+      "payload": {
+        "ceramic_scrap": 10,
+        "pet_strap": 1
+      },
+      "disposal_capacity": 11
+    }
+  },
+  "game_name": "喂——出来",
+  "competition_theme": "涌现"
+}

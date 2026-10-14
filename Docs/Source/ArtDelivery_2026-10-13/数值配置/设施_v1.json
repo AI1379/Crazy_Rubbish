@@ -1,0 +1,1205 @@
+{
+  "version": "balance-2026-10-11-v1",
+  "definitions": {
+    "wood": {
+      "name": "手工木料地点",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "waste_wood": 4,
+        "fasteners": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "manual_wood",
+      "build_purchase_equivalent": 5.2,
+      "sell_at_full_durability": 2.34
+    },
+    "disassembly": {
+      "name": "拆解地点",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "waste_wood": 4,
+        "fasteners": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "disassembly",
+      "build_purchase_equivalent": 5.2,
+      "sell_at_full_durability": 2.34
+    },
+    "bench": {
+      "name": "通用工作台",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "boards": 4,
+        "steel_parts": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "workbench",
+      "build_purchase_equivalent": 26,
+      "sell_at_full_durability": 11.7
+    },
+    "washing": {
+      "name": "清洗地点",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "boards": 4,
+        "steel_parts": 2,
+        "container": 1
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "washing",
+      "build_purchase_equivalent": 30,
+      "sell_at_full_durability": 13.5
+    },
+    "generator": {
+      "name": "简陋发电机",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "steel_parts": 6,
+        "thermal_module": 1,
+        "generator_module": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "output_power": 4,
+      "fuel_buffer": 10,
+      "technology": "generator",
+      "build_purchase_equivalent": 76,
+      "sell_at_full_durability": 34.2
+    },
+    "electric_wood": {
+      "name": "电动木工地点",
+      "size": [
+        3,
+        2
+      ],
+      "build": {
+        "boards": 6,
+        "steel_parts": 4,
+        "motor": 1,
+        "machine_saw": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 1,
+      "durability": 100,
+      "ports": 6,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "electric_wood",
+      "build_purchase_equivalent": 68,
+      "sell_at_full_durability": 30.6
+    },
+    "auto_wood": {
+      "name": "自动木工地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "boards": 8,
+        "steel_parts": 8,
+        "motor": 1,
+        "machine_saw": 1,
+        "feeder": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 1.5,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "auto_wood",
+      "build_purchase_equivalent": 112,
+      "sell_at_full_durability": 50.4
+    },
+    "sorting": {
+      "name": "人工分选地点",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "boards": 4,
+        "steel_parts": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "sorting",
+      "build_purchase_equivalent": 26,
+      "sell_at_full_durability": 11.7
+    },
+    "plastic_pre": {
+      "name": "塑料预处理地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 6,
+        "motor": 1,
+        "container": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 1.5,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "plastic_pre",
+      "build_purchase_equivalent": 50,
+      "sell_at_full_durability": 22.5
+    },
+    "plastic_remake": {
+      "name": "塑料再加工地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 6,
+        "heater": 1,
+        "handle_mold": 1,
+        "box_mold": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 2,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "plastic_remake",
+      "build_purchase_equivalent": 58,
+      "sell_at_full_durability": 26.1
+    },
+    "metal_raw": {
+      "name": "金属原料处理地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 8,
+        "copper_parts": 2,
+        "furnace_module": 1,
+        "lining": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 0,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "metal_raw",
+      "build_purchase_equivalent": 94,
+      "sell_at_full_durability": 42.3
+    },
+    "metal_parts": {
+      "name": "金属零件制造地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "boards": 4,
+        "steel_parts": 6,
+        "aluminum_parts": 2,
+        "fixture": 1,
+        "furnace_module": 1
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 0,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "metal_parts",
+      "build_purchase_equivalent": 94,
+      "sell_at_full_durability": 42.3
+    },
+    "warehouse": {
+      "name": "新仓库",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "boards": 6,
+        "steel_parts": 4
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "capacity": 240,
+      "technology": "housing",
+      "build_purchase_equivalent": 44,
+      "sell_at_full_durability": 19.8
+    },
+    "housing": {
+      "name": "新住房",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "boards": 12,
+        "steel_parts": 2
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0.2,
+      "durability": null,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "beds": 4,
+      "technology": "housing",
+      "build_purchase_equivalent": 58,
+      "sell_at_full_durability": 26.1
+    },
+    "streetlamp": {
+      "name": "普通路灯",
+      "size": [
+        1,
+        1
+      ],
+      "build": {
+        "steel_parts": 2,
+        "light_module": 1,
+        "wire": 1
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0.1,
+      "durability": null,
+      "ports": 2,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "radius": 6,
+      "technology": "lighting",
+      "build_purchase_equivalent": 18,
+      "sell_at_full_durability": 8.1
+    },
+    "growing": {
+      "name": "小型种植地",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "boards": 6,
+        "steel_parts": 2,
+        "container": 1
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "growing",
+      "build_purchase_equivalent": 38,
+      "sell_at_full_durability": 17.1
+    },
+    "grow_lamp": {
+      "name": "太阳灯",
+      "size": [
+        1,
+        1
+      ],
+      "build": {
+        "steel_parts": 2,
+        "copper_parts": 1,
+        "grow_light_module": 1,
+        "wire": 1
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0.8,
+      "durability": null,
+      "ports": 2,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "growing_beds_supported": 1,
+      "technology": "growing",
+      "build_purchase_equivalent": 27,
+      "sell_at_full_durability": 12.15
+    },
+    "auto_plastic_pre": {
+      "name": "自动塑料预处理",
+      "size": [
+        3,
+        4
+      ],
+      "build": {
+        "steel_parts": 8,
+        "motor": 1,
+        "controller": 1,
+        "drive": 1,
+        "dryer": 1,
+        "container": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 3,
+      "durability": 100,
+      "ports": 10,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "auto_plastic_pre",
+      "build_purchase_equivalent": 108,
+      "sell_at_full_durability": 48.6
+    },
+    "auto_plastic_remake": {
+      "name": "自动塑料再加工",
+      "size": [
+        3,
+        4
+      ],
+      "build": {
+        "steel_parts": 10,
+        "controller": 1,
+        "drive": 1,
+        "pet_melter": 1,
+        "handle_mold": 1,
+        "box_mold": 1,
+        "strap_mold": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 3,
+      "durability": 100,
+      "ports": 10,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "auto_plastic_remake",
+      "build_purchase_equivalent": 140,
+      "sell_at_full_durability": 63.0
+    },
+    "auto_parts": {
+      "name": "自动结构零件地点",
+      "size": [
+        3,
+        4
+      ],
+      "build": {
+        "steel_parts": 10,
+        "copper_parts": 2,
+        "motor": 1,
+        "controller": 1,
+        "drive": 1,
+        "fixture": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 3,
+      "durability": 100,
+      "ports": 10,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "auto_parts",
+      "build_purchase_equivalent": 124,
+      "sell_at_full_durability": 55.8
+    },
+    "wire_maker": {
+      "name": "制线地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 6,
+        "copper_parts": 2,
+        "motor": 1,
+        "heater": 1,
+        "wire_die": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 2,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "wire",
+      "build_purchase_equivalent": 80,
+      "sell_at_full_durability": 36.0
+    },
+    "refurbish": {
+      "name": "翻修测试台",
+      "size": [
+        3,
+        2
+      ],
+      "build": {
+        "boards": 6,
+        "steel_parts": 4,
+        "copper_parts": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 1,
+      "durability": 100,
+      "ports": 6,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "refurbish",
+      "build_purchase_equivalent": 55,
+      "sell_at_full_durability": 24.75
+    },
+    "composting": {
+      "name": "堆肥场",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "boards": 6,
+        "steel_parts": 2,
+        "container": 1
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "compost",
+      "build_purchase_equivalent": 38,
+      "sell_at_full_durability": 17.1
+    },
+    "substrate_mixer": {
+      "name": "基质调配设备",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "boards": 4,
+        "steel_parts": 4,
+        "container": 1,
+        "heater": 1,
+        "wire": 1
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 1.5,
+      "durability": 100,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "substrate",
+      "build_purchase_equivalent": 52,
+      "sell_at_full_durability": 23.4
+    },
+    "electromechanical": {
+      "name": "机电组装台",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "boards": 6,
+        "steel_parts": 6,
+        "copper_parts": 2,
+        "fixture": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 3,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "electromechanical",
+      "build_purchase_equivalent": 80,
+      "sell_at_full_durability": 36.0
+    },
+    "survey": {
+      "name": "地质勘探站",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "steel_parts": 6,
+        "copper_parts": 1,
+        "survey_module": 1,
+        "controller": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 2,
+      "durability": 100,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "survey",
+      "build_purchase_equivalent": 83,
+      "sell_at_full_durability": 37.35
+    },
+    "mine": {
+      "name": "持续采掘机",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 10,
+        "motor": 1,
+        "drill_module": 1,
+        "wire": 3
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 2,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "region_required": 3,
+      "technology": "mine",
+      "build_purchase_equivalent": 88,
+      "sell_at_full_durability": 39.6
+    },
+    "ore_pre": {
+      "name": "选矿处理地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 8,
+        "motor": 1,
+        "beneficiation_module": 1,
+        "container": 1,
+        "wire": 3
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 3,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "ore_pre",
+      "build_purchase_equivalent": 80,
+      "sell_at_full_durability": 36.0
+    },
+    "ore_furnace": {
+      "name": "矿料加工炉",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 10,
+        "copper_parts": 2,
+        "furnace_module": 1,
+        "lining": 1,
+        "wire": 3
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 6,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "ore_furnace",
+      "build_purchase_equivalent": 106,
+      "sell_at_full_durability": 47.7
+    },
+    "ceramic_kiln": {
+      "name": "陶瓷烧成地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 8,
+        "kiln_module": 1,
+        "lining": 1,
+        "wire": 3
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 4,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "ceramics",
+      "build_purchase_equivalent": 76,
+      "sell_at_full_durability": 34.2
+    },
+    "complex_recovery": {
+      "name": "复合塑料处理",
+      "size": [
+        3,
+        4
+      ],
+      "build": {
+        "steel_parts": 10,
+        "motor": 1,
+        "separator_module": 1,
+        "container": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 3,
+      "durability": 100,
+      "ports": 10,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "complex",
+      "build_purchase_equivalent": 96,
+      "sell_at_full_durability": 43.2
+    },
+    "lift_assembly": {
+      "name": "返程装配场",
+      "size": [
+        4,
+        4
+      ],
+      "build": {
+        "steel_parts": 16,
+        "copper_parts": 4,
+        "fixture": 1,
+        "controller": 1,
+        "wire": 8
+      },
+      "builders": 2,
+      "operators": 2,
+      "maintainers": 1,
+      "power": 4,
+      "durability": 100,
+      "ports": 12,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "lift_frame",
+      "build_purchase_equivalent": 150,
+      "sell_at_full_durability": 67.5
+    },
+    "lift_launch": {
+      "name": "升降舱检修平台",
+      "size": [
+        4,
+        4
+      ],
+      "build": {
+        "steel_parts": 20,
+        "copper_parts": 4,
+        "controller": 1,
+        "wire": 12
+      },
+      "builders": 2,
+      "operators": 2,
+      "maintainers": 1,
+      "power": 12,
+      "durability": 100,
+      "ports": 12,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "interaction_offset": [
+        2,
+        -1
+      ],
+      "technology": "lift_final",
+      "build_purchase_equivalent": 170,
+      "sell_at_full_durability": 76.5
+    },
+    "paper_pulper": {
+      "name": "纸料制浆地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 6,
+        "motor": 1,
+        "paper_module": 1,
+        "container": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 2,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "paper_pulp",
+      "build_purchase_equivalent": 66,
+      "sell_at_full_durability": 29.7
+    },
+    "paper_press": {
+      "name": "纸板压制干燥",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 6,
+        "heater": 1,
+        "press_module": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 2.5,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "paperboard",
+      "build_purchase_equivalent": 60,
+      "sell_at_full_durability": 27.0
+    },
+    "glass_furnace": {
+      "name": "玻璃再加工地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 8,
+        "furnace_module": 1,
+        "lining": 1,
+        "glass_mold": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 5,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "glass",
+      "build_purchase_equivalent": 88,
+      "sell_at_full_durability": 39.6
+    },
+    "water_recovery": {
+      "name": "工业水回用地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 6,
+        "motor": 1,
+        "filter_module": 1,
+        "container": 2,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 2,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "water_recovery",
+      "build_purchase_equivalent": 64,
+      "sell_at_full_durability": 28.8
+    },
+    "baler": {
+      "name": "压缩打包地点",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 8,
+        "motor": 1,
+        "press_module": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 1,
+      "power": 2,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "baler",
+      "build_purchase_equivalent": 72,
+      "sell_at_full_durability": 32.4
+    },
+    "boiler": {
+      "name": "集中火电锅炉",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 12,
+        "boiler_module": 1,
+        "lining": 1,
+        "wire": 2
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 0,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "heat_output": 18,
+      "technology": "thermal_power",
+      "build_purchase_equivalent": 102,
+      "sell_at_full_durability": 45.9
+    },
+    "turbine": {
+      "name": "汽轮发电机",
+      "size": [
+        3,
+        3
+      ],
+      "build": {
+        "steel_parts": 10,
+        "copper_parts": 3,
+        "turbine_module": 1,
+        "generator_module": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 0,
+      "durability": 100,
+      "ports": 8,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "output_power": 16,
+      "technology": "thermal_power",
+      "build_purchase_equivalent": 137,
+      "sell_at_full_durability": 61.65
+    },
+    "condenser": {
+      "name": "循环冷凝设备",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "steel_parts": 6,
+        "condenser_module": 1,
+        "container": 1,
+        "wire": 2
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 1,
+      "durability": 100,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "thermal_power",
+      "build_purchase_equivalent": 58,
+      "sell_at_full_durability": 26.1
+    },
+    "auto_metal_raw": {
+      "name": "自动金属原料处理",
+      "size": [
+        3,
+        4
+      ],
+      "build": {
+        "steel_parts": 12,
+        "controller": 1,
+        "drive": 1,
+        "furnace_module": 1,
+        "lining": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 0,
+      "durability": 100,
+      "ports": 10,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "auto_metal",
+      "build_purchase_equivalent": 136,
+      "sell_at_full_durability": 61.2
+    },
+    "auto_complex": {
+      "name": "自动复合塑料处理",
+      "size": [
+        3,
+        4
+      ],
+      "build": {
+        "steel_parts": 12,
+        "controller": 1,
+        "drive": 1,
+        "separator_module": 1,
+        "container": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 4,
+      "durability": 100,
+      "ports": 10,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "auto_complex",
+      "build_purchase_equivalent": 128,
+      "sell_at_full_durability": 57.6
+    },
+    "auto_tool_parts": {
+      "name": "自动工具部件加工",
+      "size": [
+        3,
+        4
+      ],
+      "build": {
+        "steel_parts": 12,
+        "controller": 1,
+        "drive": 1,
+        "furnace_module": 1,
+        "fixture": 1,
+        "wire": 3
+      },
+      "builders": 2,
+      "operators": 0,
+      "maintainers": 1,
+      "power": 3,
+      "durability": 100,
+      "ports": 10,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "auto_tools",
+      "build_purchase_equivalent": 136,
+      "sell_at_full_durability": 61.2
+    },
+    "belt": {
+      "name": "传送带（单格）",
+      "size": [
+        1,
+        1
+      ],
+      "build": {
+        "boards": 0.5,
+        "steel_parts": 0.5
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0.005,
+      "durability": null,
+      "ports": 0,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "buffer_entities": 1,
+      "technology": "belts",
+      "build_purchase_equivalent": 4.5,
+      "sell_at_full_durability": 2.02
+    },
+    "port": {
+      "name": "输送接口",
+      "size": [
+        1,
+        1
+      ],
+      "build": {
+        "steel_parts": 1
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 1,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "belts",
+      "build_purchase_equivalent": 5,
+      "sell_at_full_durability": 2.25
+    },
+    "power_line": {
+      "name": "电线（单格）",
+      "size": [
+        1,
+        1
+      ],
+      "build": {
+        "wire": 0.25
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 0,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "technology": "generator",
+      "build_purchase_equivalent": 0.5,
+      "sell_at_full_durability": 0.23
+    },
+    "steam_pipe": {
+      "name": "动力管线（单格）",
+      "size": [
+        1,
+        1
+      ],
+      "build": {
+        "steel_parts": 0.5
+      },
+      "builders": 1,
+      "operators": 0,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 0,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "max_connected_length": 12,
+      "technology": "thermal_power",
+      "build_purchase_equivalent": 2.5,
+      "sell_at_full_durability": 1.12
+    },
+    "landfill": {
+      "name": "填埋标记区",
+      "size": [
+        2,
+        2
+      ],
+      "build": {
+        "boards": 2,
+        "steel_parts": 1
+      },
+      "builders": 1,
+      "operators": 1,
+      "maintainers": 0,
+      "power": 0,
+      "durability": null,
+      "ports": 4,
+      "buffers_batches_in": 2,
+      "buffers_batches_out": 2,
+      "capacity": 80,
+      "technology": "landfill",
+      "build_purchase_equivalent": 13,
+      "sell_at_full_durability": 5.85
+    }
+  },
+  "game_name": "喂——出来",
+  "competition_theme": "涌现"
+}

@@ -1,0 +1,11 @@
+﻿ID,名称,文件,宽,高,占地宽格,占地高格,状态
+bld_old_warehouse_south_idle,旧仓库,bld_old_warehouse_south_idle.png,1254,1254,3,3,静态主体，Unity待接入
+bld_old_housing_south_unpowered,旧住房（未通电）,bld_old_housing_south_unpowered.png,1254,1254,3,3,静态主体，Unity待接入
+bld_streetlamp_unpowered,路灯（未通电）,bld_streetlamp_unpowered.png,1024,1536,1,1,静态主体，Unity待接入
+env_hole_east,洞口,env_hole_east.png,1254,1254,2,2,静态主体，Unity待接入
+env_waste_wood_low,废木料低堆,env_waste_wood_low.png,1254,1254,1,1,静态主体，Unity待接入
+env_waste_metal_low,废金属低堆,env_waste_metal_low.png,1254,1254,1,1,静态主体，Unity待接入
+env_waste_mixed_low,混合垃圾低堆,env_waste_mixed_low.png,1254,1254,1,1,静态主体，Unity待接入
+env_waste_wood_high,废木料高堆,env_waste_wood_high.png,1254,1254,1,1,静态主体，Unity待接入
+env_waste_metal_high,废金属高堆,env_waste_metal_high.png,1254,1254,1,1,静态主体，Unity待接入
+env_waste_mixed_high,混合垃圾高堆,env_waste_mixed_high.png,1254,1254,1,1,静态主体，Unity待接入

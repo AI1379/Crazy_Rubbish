@@ -8,12 +8,14 @@ using UnityEngine.UI;
 
 namespace CrazyRubbish.Prototype
 {
-    public sealed class PrototypeHud : MonoBehaviour
+    public sealed partial class PrototypeHud : MonoBehaviour
     {
         public PrototypeGame game;
-        private static readonly Color Ink = new Color32(235, 234, 216, 255), Muted = new Color32(157, 178, 174, 255);
-        private static readonly Color Accent = new Color32(236, 182, 104, 255), Green = new Color32(151, 198, 161, 255);
-        private static readonly Color Panel = new Color32(29, 45, 48, 255), ButtonColor = new Color32(47, 68, 70, 255);
+        private static readonly Color Ink = new Color32(235, 235, 227, 255), Muted = new Color32(165, 173, 173, 255);
+        private static readonly Color Accent = new Color32(239, 183, 94, 255), Green = new Color32(155, 196, 158, 255);
+        private static readonly Color Panel = new Color32(37, 43, 46, 255), ButtonColor = new Color32(55, 63, 67, 255);
+        private static readonly Color Inset = new Color32(26, 31, 34, 255), Border = new Color32(73, 82, 85, 255);
+        private static readonly Color Danger = new Color32(237, 143, 123, 255);
         private static readonly int ItemCount = Enum.GetValues(typeof(ItemId)).Length;
         [SerializeField] private Text clock, objective, capacity, money, pressure, workState, message, target, recipeInfo, community, residentsInfo, inventoryEmpty;
         [SerializeField] private Text[] carryCounts = new Text[ItemCount], warehouseCounts = new Text[ItemCount];
@@ -43,7 +45,7 @@ namespace CrazyRubbish.Prototype
         private bool showAllItems;
         private RectTransform inspection;
         private Text inspectionTitle, inspectionBody;
-        public bool HasLayout => root != null && clock != null && layoutVersion==5;
+        public bool HasLayout => root != null && clock != null && menuNotice != null && layoutVersion == CurrentLayoutVersion;
         public RectTransform VisualRoot => root;
         public void ShowInspection(string title, string body, Vector2 screenPoint)
         {
@@ -56,7 +58,8 @@ namespace CrazyRubbish.Prototype
             if (inspection == null)
             {
                 inspection = At(root, "Map Inspection", 0, 0, 330, 120);
-                inspection.gameObject.AddComponent<Image>().color = new Color32(24, 38, 40, 250);
+                inspection.gameObject.AddComponent<Image>().color = Inset;
+                Frame(inspection);
                 Stripe(inspection, "Accent", 0, 0, 3, 120, Accent);
                 inspectionTitle = TextAt(inspection, "Title", "", 14, 10, 300, 26, 17, Accent);
                 inspectionBody = TextAt(inspection, "Contents", "", 14, 43, 300, 400, 15, Ink);
@@ -73,6 +76,8 @@ namespace CrazyRubbish.Prototype
             inspection.Find("Accent").GetComponent<RectTransform>().sizeDelta = new Vector2(3, height);
             float scale = root.GetComponent<Canvas>().scaleFactor;
             Rect map = game.GetComponent<PrototypeWorld>().worldCamera.pixelRect;
+            map.yMin += 80 * scale; map.yMax -= 78 * scale;
+            if (ManagementOpen || SelectedFacility != 0) map.xMax = Mathf.Min(map.xMax, Screen.width - 424 * scale);
             float px = screenPoint.x + 18;
             if (px + 330 * scale > map.xMax) px = screenPoint.x - 330 * scale - 18;
             px = Mathf.Clamp(px, map.xMin + 8, Mathf.Max(map.xMin + 8, map.xMax - 330 * scale - 8));
@@ -98,136 +103,30 @@ namespace CrazyRubbish.Prototype
                 string command = binding.command;
                 binding.button.onClick.AddListener(() => { Execute(command); if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null); });
             }
-            SelectTab(game.Model.Tutorial.active?3:0);
+            ClosePanels();
             RefreshView(game.Model);
         }
 
-        public void BuildLayout()
+        public void BuildLayout() => BuildInterface();
+
+        private void RefreshItemArtwork()
         {
-            if (HasLayout) return;
-            if(root!=null){if(Application.isPlaying)Destroy(root.gameObject);else DestroyImmediate(root.gameObject);}
-            buttonBindings.Clear();
-            layoutVersion=5;pages=new RectTransform[4];tabs=new Button[4];
-            var canvas = new GameObject("Interface", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            canvas.transform.SetParent(transform, false); root = canvas.GetComponent<RectTransform>();
-            canvas.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvas.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1600, 900); scaler.matchWidthOrHeight = 0;
-            if (GetComponentInChildren<EventSystem>(true) == null && EventSystem.current == null)
-                new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule)).transform.SetParent(transform, false);
-            var header = StretchPanel(root, "Header", new Vector2(0, 1), Vector2.one, new Vector2(24, -94), new Vector2(-24, -20), Panel);
-            Stripe(header, "Brand Accent", 0, 0, 4, 74, Accent);
-            TextAt(header, "Title", "涌现 / 废料工坊", 20, 7, 360, 36, 29, Ink);
-            TextAt(header, "Subtitle", "拾起废料，建起你的工坊。", 22, 43, 350, 22, 15, Muted);
-            clock = TextAt(header, "Clock", "00:00 · 1×", 394, 20, 150, 32, 21, Ink);
-            TextAt(header, "Cash Caption", "经营现金", 568, 9, 155, 20, 14, Muted);
-            money = TextAt(header, "Money", "0.00", 568, 30, 175, 32, 25, Accent);
-            ButtonAt(header, "Menu", "目标 / 菜单", 760, 19, 174, 38);
-            pause = ButtonAt(header, "Pause", "暂停", 946, 19, 74, 38);
-            for (int i = 1; i <= 3; i++) speedButtons[i - 1] = ButtonAt(header, "Speed" + i, i + "×", 1030 + (i - 1) * 50, 19, 44, 38);
-            ButtonAt(header, "Save", "保存", 1186, 19, 104, 38); ButtonAt(header, "Load", "读取", 1300, 19, 104, 38);
-            ButtonAt(header, "Restart", "重开", 1414, 19, 112, 38);
-            objective = TextAt(root, "Objective", "先拾取手锯，再收集木料和连接件。", 38, 108, 1110, 34, 18, Ink);
-            target = TextAt(root, "Hint", "", 38, 146, 1110, 23, 14, Muted);
-
-            var sidebar = StretchPanel(root, "Management", new Vector2(1, 0), Vector2.one, new Vector2(-420, 22), new Vector2(-24, -110), Panel);
-            Stripe(sidebar, "Management Accent", 0, 0, 396, 3, Green);
-            TextAt(sidebar, "Title", "工坊管理", 20, 18, 355, 32, 25, Ink);
-            community = TextAt(sidebar, "Community", "", 20, 61, 355, 96, 16, Muted);
-            string[] tabNames = { "现场", "人员", "仓库", "教程" };
-            for (int i = 0; i < 4; i++) tabs[i] = ButtonAt(sidebar, "Tab" + i, tabNames[i], 20 + i * 90, 173, 84, 40);
-            for (int i = 0; i < pages.Length; i++) pages[i] = StretchPanel(sidebar, tabNames[i] + " Page", Vector2.zero, Vector2.one, new Vector2(8, 14), new Vector2(-8, -228), Color.clear);
-            var onsite = ScrollContent(pages[0], 920);
-            float y = CommandGroup(onsite, "建设", 10, new[] { 0, 1, 2 });
-            y = CommandGroup(onsite, "现场投料与搬运", y, new[] { 10, 11, 12, 13, 14, 15, 6, 7, 24, 25 });
-            y = CommandGroup(onsite, "拆解与批次", y, new[] { 8, 9, 16, 17, 18 });
-            y = CommandGroup(onsite, "工作台：握柄1 + 对应工作端1", y, new[] { 29,30,31,32,33,34,35,36 });
-            assemblyInfo=TextAt(onsite,"Assembly Info","",12,y,352,72,15,Muted);y+=80;
-            y = CommandGroup(onsite, "采购与交易", y, new[] { 19, 20, 21, 28, 40, 41, 22, 37, 38, 39, 23 });
-            TextAt(onsite, "Onsite Help", "投料、取物和交接工具，需要主角到场。", 12, y + 4, 352, 48, 15, Muted);
-            onsite.sizeDelta = new Vector2(0, y + 72);
-            var people = ScrollContent(pages[1], 1550);
-            float peopleY = CommandGroup(people, "居民与工资", 10, new[] { 3, 4, 5 });
-            TextAt(people,"Supply Caption","生活供应 / 共用仓库",12,peopleY,352,32,21,Ink);peopleY+=42;
-            foodPolicy=ButtonAt(people,"FoodPolicy","食物：收费",12,peopleY,166,38);
-            waterPolicy=ButtonAt(people,"WaterPolicy","饮水：收费",186,peopleY,166,38);peopleY+=48;
-            externalSupply=ButtonAt(people,"ExternalSupply","个人外购：开",12,peopleY,166,38);
-            emergencyWater=ButtonAt(people,"EmergencyWater","紧急水：开",186,peopleY,166,38);peopleY+=48;
-            autoTools=ButtonAt(people,"AutoTools","替补工具自动采购：关",12,peopleY,340,38);peopleY+=48;
-            lifeInfo=TextAt(people,"Life Info","",12,peopleY,352,192,15,Muted);lifeInfo.alignment=TextAnchor.UpperLeft;peopleY+=200;
-            peopleY=CommandGroup(people,"生活及工具采购",peopleY,new[]{26,27,28});
-            residentsInfo = TextAt(people, "Residents", "暂无居民", 12, peopleY + 8, 352, 510, 16, Ink);
-            residentsInfo.alignment = TextAnchor.UpperLeft;
-            TextAt(people, "People Help", "食物 / 水每300秒实际消耗，首期发薪前免费。\n居民外购用个人钱包；免费供给仍扣实物。\n工具自动采购优先保护欠薪和下期工资。", 12, peopleY + 530, 352, 100, 15, Muted);
-            people.sizeDelta=new Vector2(0,peopleY+650);
-            BuildTutorialPage();
-
-            inventoryContent = ScrollContent(pages[2], 250 + ItemCount * 40);
-            TextAt(inventoryContent, "Inventory Title", "背包与仓库", 12, 10, 200, 32, 21, Ink);
-            inventoryFilter = ButtonAt(inventoryContent, "InventoryFilter", "全部物品", 244, 8, 110, 34);
-            capacity = TextAt(inventoryContent, "Capacity", "", 12, 51, 352, 28, 15, Muted);
-            capacityFill = Bar(inventoryContent, "CapacityBar", 12, 88, 340, 6, Green);
-            TextAt(inventoryContent, "Columns", "物品               背包  仓库    拾 / 取 / 放 / 卖", 12, 106, 352, 25, 13, Muted);
-            inventoryEmpty = TextAt(inventoryContent, "Empty Inventory", "背包和仓库还是空的。\n走近来料区，按 E 拾取物品。\n点击“全部物品”可查看完整目录。", 12, 157, 350, 120, 17, Muted);
-            inventoryEmpty.alignment = TextAnchor.UpperLeft;
-            for (int i = 0; i < ItemCount; i++)
+            for (int index = 0; index < inventoryRows.Length; index++)
             {
-                ItemId item = (ItemId)i;
-                var row = At(inventoryContent, "ItemRow" + i, 8, 143 + i * 40, 356, 38); inventoryRows[i] = row;
-                var background = row.gameObject.AddComponent<Image>(); background.raycastTarget = false;
-                background.color = i % 2 == 0 ? new Color32(37, 54, 56, 255) : new Color32(32, 49, 51, 255);
-                var icon = At(row, "Icon", 5, 7, 24, 24).gameObject.AddComponent<Image>(); icon.sprite = game.appearance.ItemSprite(item); icon.raycastTarget = false;
-                TextAt(row, "Item", PrototypeGame.ItemName(item), 35, 0, 107, 38, 14, Ink);
-                carryCounts[i] = TextAt(row, "Carry", "0", 144, 0, 30, 38, 14, Accent);
-                warehouseCounts[i] = TextAt(row, "Stock", "0", 180, 0, 48, 38, 14, Ink);
-                ButtonAt(row, "Pick" + i, "拾", 229, 5, 28, 28); ButtonAt(row, "Take" + i, "取", 260, 5, 28, 28);
-                ButtonAt(row, "Drop" + i, "放", 291, 5, 28, 28); ButtonAt(row, "Sell" + i, "卖", 322, 5, 28, 28);
+                if (inventoryRows[index] == null) continue;
+                var icon = inventoryRows[index].Find("Icon").GetComponent<Image>();
+                icon.sprite = game.appearance.ItemSprite((ItemId)index);
+                icon.preserveAspect = true;
             }
-            var actions = StretchPanel(root, "Woodwork", Vector2.zero, new Vector2(0.725f, 0), new Vector2(24, 22), new Vector2(0, 166), Panel);
-            Stripe(actions, "Woodwork Accent", 0, 0, 1136, 3, Accent);
-            ButtonAt(actions, "Interact", "交互  E", 18, 17, 106, 38); ButtonAt(actions, "Deposit", "入库  Q", 134, 17, 106, 38);
-            build = ButtonAt(actions, "Build", "搭建木工台", 250, 17, 152, 38, true);
-            plankRecipe = ButtonAt(actions, "Plank", "木板", 418, 17, 77, 38); handleRecipe = ButtonAt(actions, "Handle", "木柄", 503, 17, 77, 38);
-            sortedRecipe = ButtonAt(actions, "Sorted", "整理", 588, 17, 77, 38); work = ButtonAt(actions, "Work", "木工  F", 681, 17, 125, 38, true);
-            pressure = TextAt(actions, "Pressure", "", 824, 13, 294, 46, 16, Green);
-            workState = TextAt(actions, "State", "等待搭建", 18, 65, 380, 34, 17, Ink);
-            progressFill = Bar(actions, "Progress", 418, 80, 388, 7, Accent);
-            recipeInfo = TextAt(actions, "Recipe", "", 824, 63, 294, 45, 14, Muted);
-            message = TextAt(actions, "Notice", "", 18, 110, 1098, 28, 16, Muted);
-            BuildMenu();
-            foreach (Transform child in root.GetComponentsInChildren<Transform>(true)) child.gameObject.layer = 5;
-            SelectTab(0);
         }
 
-        private void BuildMenu()
-        {
-            modal=StretchPanel(root,"Demo Menu",Vector2.zero,Vector2.one,Vector2.zero,Vector2.zero,new Color(0.04f,0.08f,0.09f,0.94f));
-            var card=At(modal,"Card",0,0,920,680);card.anchorMin=card.anchorMax=new Vector2(0.5f,0.5f);card.pivot=new Vector2(0.5f,0.5f);card.anchoredPosition=Vector2.zero;
-            card.gameObject.AddComponent<Image>().color=Panel;
-            Stripe(card,"Accent",0,0,920,4,Accent);
-            modalTitle=TextAt(card,"Title","涌现 / 首区 Demo",36,24,848,48,34,Ink);
-            modalInfo=TextAt(card,"Info","",36,82,848,82,18,Muted);modalInfo.alignment=TextAnchor.UpperLeft;
-            goals=TextAt(card,"Goals","",36,184,848,330,20,Ink);goals.alignment=TextAnchor.UpperLeft;
-            menuResume=ButtonAt(card,"Resume","开始试玩",36,530,190,46,true);
-            ButtonAt(card,"MenuLoad","继续存档",242,530,190,46);ButtonAt(card,"MenuSave","保存进度",448,530,190,46);
-            ButtonAt(card,"MenuNew","新游戏",654,530,230,46);
-            TextAt(card,"Controls","WASD / 点击地图行走 · E交互 · Shift+E整堆 · Q入库 · F木工\n空格暂停 · 1/2/3倍速 · 滚轮缩放 · Esc菜单 / 取消行动",36,592,700,66,16,Muted);
-            ButtonAt(card,"Quit","退出",774,605,110,38);
-            modal.gameObject.SetActive(false);
-            tradeConfirmation=At(root,"Trade Confirmation",0,0,720,252);tradeConfirmation.anchorMin=tradeConfirmation.anchorMax=new Vector2(0.5f,0.5f);tradeConfirmation.pivot=new Vector2(0.5f,0.5f);tradeConfirmation.anchoredPosition=Vector2.zero;
-            tradeConfirmation.gameObject.AddComponent<Image>().color=Panel;
-            Stripe(tradeConfirmation,"Accent",0,0,720,4,Accent);
-            tradeInfo=TextAt(tradeConfirmation,"Info","",26,22,668,152,20,Ink);tradeInfo.alignment=TextAnchor.UpperLeft;
-            ButtonAt(tradeConfirmation,"ConfirmTrade","确认出售",26,184,230,42,true);ButtonAt(tradeConfirmation,"CancelTrade","取消",274,184,230,42);
-            tradeConfirmation.gameObject.SetActive(false);
-        }
+        private void BuildMenu() => BuildWorkshopMenu();
         private void Update() { if (HasLayout && game.Model != null) RefreshView(game.Model); }
 
         private void BuildTutorialPage()
         {
             var content=ScrollContent(pages[3],810);tutorialContent=content;
-            TextAt(content,"Tutorial Caption","新手教程 / 边玩边学",12,10,352,32,21,Green);
+            SectionHeading(content,"边玩边学","01",4);
             tutorialProgress=TextAt(content,"Tutorial Progress","",12,48,352,24,15,Muted);
             tutorialTitle=TextAt(content,"Tutorial Title","",12,82,352,58,22,Ink);tutorialTitle.alignment=TextAnchor.UpperLeft;
             tutorialLesson=TextAt(content,"Tutorial Lesson","",12,148,352,160,16,Ink);tutorialLesson.alignment=TextAnchor.UpperLeft;
@@ -245,33 +144,69 @@ namespace CrazyRubbish.Prototype
         {
             if (!HasLayout) return;
             if (inspection != null && (game.MenuOpen || game.ResultVisible)) inspection.gameObject.SetActive(false);
-            clock.text = $"{(int)m.GameSeconds / 60:00}:{(int)m.GameSeconds % 60:00} · {(m.Paused ? "暂停" : m.Speed + "×")}";
+            clock.text = $"{(int)m.GameSeconds / 60:00}:{(int)m.GameSeconds % 60:00}";
+            clock.color = m.Paused ? Accent : Ink;
             pause.GetComponentInChildren<Text>().text = m.Paused ? "继续" : "暂停";
             capacity.text = $"仓库 {m.Warehouse.Used:0.##}/{m.Warehouse.Capacity}    背包 {m.Carry.Used:0.##}/{m.Carry.Capacity}";
             capacityFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01((float)m.Warehouse.Used / m.Warehouse.Capacity), 1);
-            community.text = $"电力 {m.AvailablePower:0.#}    居民 {m.Residents.Count}/5    已配送 {m.DeliveredTrips} 趟\n" +
-                (m.Residents.Count == 0 ? "工资：招募后开始计时" : $"下次发薪 {m.SecondsToWage:0} 秒    欠薪 {m.UnpaidWages:0.00}") +
-                $"\n食物 {m.Warehouse.Count(ItemId.Food)} / 水 {m.Warehouse.Count(ItemId.DrinkingWater)}（保护{m.DrinkingReserve}）\n"+(m.RiotActive?$"暴动补款 {Math.Max(0,m.RiotTargetCents-m.RiotPaidCents)/100m:0.00} / {m.RiotSeconds:0}秒":$"生活缺供 {m.MissingSupplyPeople} 人 · 拆解 {m.DismantledBatches} 批");
+            powerValue.text = m.AvailablePower.ToString("0.#");
+            populationValue.text = $"{m.Residents.Count} / 5";
+            foodValue.text = m.Warehouse.Count(ItemId.Food).ToString();
+            waterValue.text = m.Warehouse.Count(ItemId.DrinkingWater).ToString();
+            foodValue.color = m.Warehouse.Count(ItemId.Food) == 0 ? Accent : Ink;
+            waterValue.color = m.Warehouse.Count(ItemId.DrinkingWater) < m.DrinkingReserve ? Accent : Ink;
+            community.text = m.RiotActive ? $"欠薪暴动 · 剩余 {m.RiotSeconds:0} 秒\n还需补发 {Math.Max(0, m.RiotTargetCents - m.RiotPaidCents) / 100m:0.00} 钱" :
+                (m.Residents.Count == 0 ? "工资周期将在招募后开始" : m.UnpaidWageCents > 0 ? $"待付工资 {m.UnpaidWages:0.00} · 请前往人员页" : $"下次发薪 {m.SecondsToWage:0} 秒 · 无欠薪") +
+                $"\n已配送 {m.DeliveredTrips} 趟  /  生活缺供 {m.MissingSupplyPeople} 人";
+            community.color = m.RiotActive || m.UnpaidWageCents > 0 || m.MissingSupplyPeople > 0 ? Danger : Muted;
             money.text = m.Money.ToString("0.00");
             pressure.text = $"人工效率 {m.HumanEfficiency:P0}\n现场木料 {m.WoodInputStock.Count(ItemId.WasteWood)} / 预约 {m.WoodInputStock.Reserved(ItemId.WasteWood)}";
             workState.text = PrototypeGame.StateName(m.State) + (m.JobActive ? $" · {m.Progress:P0}" : "");
             progressFill.rectTransform.anchorMax = new Vector2(m.Progress, 1);
-            recipeInfo.text = $"{m.WoodInput(m.SelectedRecipe)}木料 → {m.ProductAmount(m.SelectedRecipe)}{ItemCatalog.Name(m.Product(m.SelectedRecipe))}\n基础 {m.Duration(m.SelectedRecipe)} 秒 · 成品需搬运";
-            message.text = m.Interacting ? "交互进行中，移动或 Esc 可取消。" : game.Notice; message.color = game.LastActionSucceeded ? Muted : Accent;
+            recipeInfo.text = $"{m.WoodInput(m.SelectedRecipe)} 木料 → {m.ProductAmount(m.SelectedRecipe)} {ItemCatalog.Name(m.Product(m.SelectedRecipe))}\n基础 {m.Duration(m.SelectedRecipe)} 秒 · 成品需搬运";
+            message.text = m.Interacting ? "交互进行中，移动或 Esc 可取消。" : game.Notice; message.color = game.LastActionSucceeded ? Muted : Danger;
             build.interactable = !m.BenchBuilt && !m.BuildPending;
+            build.GetComponentInChildren<Text>().text = m.BenchBuilt ? "木工台已建" : m.BuildPending ? "已预约建设" : "搭建木工台";
+            build.GetComponentInChildren<Text>().color = build.interactable ? Ink : Muted;
+            foreach (ButtonBinding binding in buttonBindings)
+            {
+                bool built;
+                switch (binding.command)
+                {
+                    case "Command0": built = m.DismantleBuilt; break;
+                    case "Command1": built = m.TableBuilt; break;
+                    case "Command2": built = m.GeneratorBuilt; break;
+                    default: continue;
+                }
+                binding.button.interactable = !built;
+                var label = binding.button.GetComponentInChildren<Text>();
+                label.text = built ? "已建成" : binding.command == "Command2" ? "组装" : "搭建";
+                label.color = built ? Muted : Ink;
+            }
             SetSelected(plankRecipe, m.SelectedRecipe == WoodRecipe.Plank); SetSelected(handleRecipe, m.SelectedRecipe == WoodRecipe.WoodHandle);
             SetSelected(sortedRecipe, m.SelectedRecipe == WoodRecipe.SortedWood);
             for (int i = 1; i <= 3; i++) SetSelected(speedButtons[i - 1], !m.Paused && m.Speed == i);
-            target.text = "点击地图行走 · WASD 移动 · E 交互 · Shift+E 整堆 · Q 入库 · 滚轮缩放";
-            var nearest = m.NearestPickup(); if (nearest != null) target.text += "    附近：" + ItemCatalog.Name(nearest.Item);
+            SetSelected(pause, m.Paused);
+            target.text = "左键查看设施 · WASD / 右键移动 · 滚轮缩放";
             objective.text = m.CurrentDemoHint;
             var low = m.Tools.FirstOrDefault(t => ItemCatalog.IsTool(t.Item) && t.Durability > 0 && t.Durability <= 60 && !m.Tools.Any(other => other.Item == t.Item && other.Id != t.Id && other.Durability > 60));
+            toolWarningLabel = low == null ? null : ItemCatalog.Name(low.Item);
             if (low != null) objective.text = "工具预警：" + ItemCatalog.Name(low.Item) + "耐久低于 20%，准备替补并送到岗位。";
-            residentsInfo.text = m.Residents.Count == 0 ? "暂无居民\n\n发电取得认可后，可招募首批居民。\n居民会实际搬运原料和成品。" :
-                string.Join("\n\n", m.Residents.Select(r => $"居民 {r.Id:00}    钱包 {r.Cash:0.00} / 保留4\n{r.Activity}\n食物：{r.Needs.foodReason} · 水：{r.Needs.waterReason}"));
+            residentsInfo.text = m.Residents.Count == 0 ? "暂无居民\n发电取得认可后，可招募首批居民。" : $"居民名册  /  {m.Residents.Count} 人";
+            for (int i = 0; i < residentCards.Length; i++)
+            {
+                bool present = i < m.Residents.Count;
+                residentCards[i].gameObject.SetActive(present);
+                if (!present) continue;
+                var resident = m.Residents[i];
+                residentCards[i].Find("Portrait").GetComponent<Image>().sprite = game.appearance.characters[2 + (resident.Id - 1) % 4].idle[1];
+                residentLabels[i].text = $"<color=#EFB75E>居民 {resident.Id:00}</color>     钱包 {resident.Cash:0.00}\n{resident.Activity}\n食物：{resident.Needs.foodReason}\n饮水：{resident.Needs.waterReason}";
+            }
+            peopleContent.sizeDelta = new Vector2(0, residentStart + m.Residents.Count * 112 + 12);
             RefreshDemo(m);
             RefreshInventory(m);
             RefreshTutorial(m);
+            RefreshOverlay(m);
         }
 
         private void RefreshDemo(PrototypeSimulation m)
@@ -285,17 +220,37 @@ namespace CrazyRubbish.Prototype
             assemblyInfo.text=$"木柄1 + {ItemCatalog.Name(m.AssemblyEnd)}1 → {ItemCatalog.Name(m.AssemblyProduct)}1\n{m.AssemblySeconds:0}秒人工 / 进度 {m.AssemblyProgress:P0}\n已制作 {m.AssembledTools} 把 · 需到工作台正面";
             modal.gameObject.SetActive(game.MenuOpen||game.ResultVisible);
             if(!modal.gameObject.activeSelf)return;
-            modalTitle.text=m.Failed?"经营失败":game.ResultVisible?"首区 Demo 达成":"涌现 / 首区 Demo";
-            modalInfo.text=m.Failed?m.FailureReason+"\n可读取失败前存档，或新游戏重试。":game.ResultVisible?$"完成用时 {m.DemoCompletedAt/60:0.0} 分钟 · 现金 {m.Money:0.00} · 工资已付 {m.TotalWagesPaidCents/100m:0.00}\n可以继续经营或保存。这是首区阶段目标，后续扩区及返程仍在制作。":"从零现金起步，让回收、生产、运输和生活供给运转起来。\n八个目标可自由安排顺序；新局使用独立存档槽。";
+            modalTitle.text=m.Failed?"工坊暂时停下了。":game.ResultVisible?"第一座工坊，已经运转起来。":!game.SessionStarted?"从废料开始，建起一座工坊。":"工坊经营 / 阶段目标";
+            modalInfo.text=m.Failed?m.FailureReason+"\n可读取失败前存档，或新游戏重试。":game.ResultVisible?$"完成用时 {m.DemoCompletedAt/60:0.0} 分钟 · 现金 {m.Money:0.00} · 工资已付 {m.TotalWagesPaidCents/100m:0.00}\n可以继续经营或保存。这是首区阶段目标，后续扩区及返程仍在制作。":"从零现金起步，让回收、生产、运输和生活供给运转起来。\n随时保存，按自己的节奏完成八个目标。";
+            menuNotice.text = game.Notice;
+            menuNotice.color = game.LastActionSucceeded ? Muted : Danger;
             bool[] flags=m.DemoMilestones;
-            goals.text=string.Join("\n",PrototypeSimulation.DemoGoalNames.Select((name,i)=>flags[i]?"<color=#97C6A1>[完成] "+name+"</color>":"[待办] "+name))+"\n\n"+game.Notice;
+            goals.text = $"阶段目标    {flags.Count(done => done)} / {flags.Length} 已完成";
+            for (int i = 0; i < milestoneLabels.Length; i++)
+            {
+                milestoneLabels[i].text = PrototypeSimulation.DemoGoalNames[i];
+                milestoneLabels[i].color = flags[i] ? Green : Ink;
+                milestoneMarks[i].color = flags[i] ? Green : Border;
+            }
             menuResume.GetComponentInChildren<Text>().text=!game.SessionStarted?"开始试玩":game.ResultVisible?"继续经营":"返回工坊";
             menuResume.interactable=!m.Failed;
         }
 
         private void RefreshTutorial(PrototypeSimulation m)
         {
-            if(tutorialModel!=m){tutorialModel=m;reviewLesson=-1;displayedLesson=-1;}
+            if(tutorialModel!=m)
+            {
+                tutorialModel=m;reviewLesson=-1;displayedLesson=-1;
+                Canvas.ForceUpdateCanvases();
+                foreach (var page in pages)
+                {
+                    var scroll = page.GetComponent<ScrollRect>();
+                    scroll.StopMovement();
+                    scroll.content.anchoredPosition = Vector2.zero;
+                    scroll.verticalNormalizedPosition = 1;
+                    scroll.verticalScrollbar.SetValueWithoutNotify(1);
+                }
+            }
             m.Tutorial.Refresh(m);
             int lesson=reviewLesson>=0?reviewLesson:m.Tutorial.step;
             tutorialTitle.text=PrototypeTutorial.Titles[lesson];tutorialLesson.text=PrototypeTutorial.Lessons[lesson];
@@ -320,11 +275,11 @@ namespace CrazyRubbish.Prototype
                 if(outline!=null)
                 {
                     bool highlighted=live && m.Tutorial.started && !m.Tutorial.Completed && binding.command==action.button;
-                    outline.effectColor=highlighted?Accent:new Color32(149,180,167,38);outline.effectDistance=highlighted?new Vector2(2,-2):new Vector2(1,-1);
+                    outline.effectColor=highlighted?Accent:Border;outline.effectDistance=highlighted?new Vector2(2,-2):new Vector2(1,-1);
                 }
             }
             if(live && m.Tutorial.started && !m.Tutorial.Completed && m.MissingSupplyPeople==0 && m.UnpaidWageCents==0 && !m.RiotActive)
-                objective.text=$"教程 {m.Tutorial.step}/{TutorialProgress.LastStep-1} · {PrototypeTutorial.Titles[m.Tutorial.step]} —— 查看右侧“教程”页";
+                objective.text=$"教程 {m.Tutorial.step}/{TutorialProgress.LastStep-1} · {PrototypeTutorial.Titles[m.Tutorial.step]}";
         }
 
         private void LayoutTutorialText(int lesson)
@@ -353,6 +308,11 @@ namespace CrazyRubbish.Prototype
             SelectTab(action.page);
             var binding=buttonBindings.FirstOrDefault(b=>b.command==action.button);
             if(binding==null)return;
+            if (binding.button.transform.IsChildOf(facilityPanel))
+            {
+                int facility = action.button == "Command0" ? 2 : action.button == "Command1" ? 3 : action.button == "Command2" ? 4 : 1;
+                ShowFacility(facility);
+            }
             var scroll=binding.button.GetComponentInParent<ScrollRect>();
             if(scroll!=null)
             {
@@ -374,10 +334,10 @@ namespace CrazyRubbish.Prototype
                 ItemId item = (ItemId)i; int carry = m.Carry.Count(item), stock = m.Warehouse.Count(item), reserved = m.Warehouse.Reserved(item);
                 carryCounts[i].text = carry.ToString(); warehouseCounts[i].text = stock + (reserved > 0 ? "/" + reserved : "");
                 bool show = showAllItems || carry > 0 || stock > 0; inventoryRows[i].gameObject.SetActive(show);
-                if (show) inventoryRows[i].anchoredPosition = new Vector2(8, -(143 + visible++ * 40));
+                if (show) inventoryRows[i].anchoredPosition = new Vector2(8, -(140 + visible++ * 76));
             }
             inventoryEmpty.gameObject.SetActive(visible == 0);
-            inventoryContent.sizeDelta = new Vector2(0, Mathf.Max(300, 163 + visible * 40));
+            inventoryContent.sizeDelta = new Vector2(0, Mathf.Max(380, 152 + visible * 76));
             inventoryFilter.GetComponentInChildren<Text>().text = showAllItems ? "仅持有物品" : "全部物品";
         }
 
@@ -385,6 +345,9 @@ namespace CrazyRubbish.Prototype
         {
             var m = game.Model;
             if((game.MenuOpen||game.ResultVisible)&&command!="Resume"&&command!="MenuLoad"&&command!="MenuSave"&&command!="MenuNew"&&command!="Quit")return;
+            if (command.StartsWith("FacilityCommand")) { Execute("Command" + command.Substring(15)); return; }
+            if (command.StartsWith("OpenFacility") && int.TryParse(command.Substring(12), out int facility)) { ShowFacility(facility); return; }
+            if (command.StartsWith("OpenTab") && int.TryParse(command.Substring(7), out int openTab)) { ToggleManagement(openTab); return; }
             if (command.StartsWith("Command") && int.TryParse(command.Substring(7), out int index))
             {
                 Action[] commands = {
@@ -406,6 +369,15 @@ namespace CrazyRubbish.Prototype
                 if (index >= 0 && index < commands.Length) commands[index](); return;
             }
             if (command.StartsWith("Tab") && int.TryParse(command.Substring(3), out int tab)) { SelectTab(tab); return; }
+            if (command.StartsWith("OnsiteJump") && int.TryParse(command.Substring(10), out int section))
+            {
+                if (section < 0 || section >= onsiteSectionY.Length) return;
+                var scroll = pages[0].GetComponent<ScrollRect>();
+                Canvas.ForceUpdateCanvases();
+                scroll.StopMovement();
+                scroll.verticalNormalizedPosition = 1 - Mathf.Clamp01(onsiteSectionY[section] / Mathf.Max(1, scroll.content.rect.height - scroll.viewport.rect.height));
+                return;
+            }
             if (command.StartsWith("Speed") && int.TryParse(command.Substring(5), out int speed)) { m.SetSpeed(speed); return; }
             foreach (string action in new[] { "Pick", "Take", "Drop", "Sell" })
             {
@@ -417,14 +389,23 @@ namespace CrazyRubbish.Prototype
             switch (command)
             {
                 case "Menu": game.OpenMenu();break;
-                case "Resume": if(!game.SessionStarted){game.StartNewGame();SelectTab(3);}else if(game.ResultVisible)game.ContinueAfterResult();else game.ResumeGame();break;
-                case "MenuLoad": game.LoadLatest();break;case "MenuSave": game.SaveGame();break;case "MenuNew": game.StartNewGame();SelectTab(3);break;case "Quit": game.QuitGame();break;
+                case "Resume": if(!game.SessionStarted){game.StartNewGame();ClosePanels();}else if(game.ResultVisible)game.ContinueAfterResult();else game.ResumeGame();break;
+                case "MenuLoad": game.LoadLatest();break;case "MenuSave": game.SaveGame();break;case "MenuNew": game.StartNewGame();ClosePanels();break;case "Quit": game.QuitGame();break;
+                case "CloseManagement": case "CloseFacility": ClosePanels(); break;
+                case "GoToFacility": GoToSelectedFacility(); break;
+                case "OpenGuide": if(m.Tutorial.IntroOpen)game.BeginTutorial();ShowTutorial();break;
+                case "DismissGuide": game.SkipTutorial();ClosePanels();break;
+                case "Zones": showZones = !showZones; break;
+                case "Alerts":
+                    if (m.RiotActive || m.UnpaidWageCents > 0 || m.MissingSupplyPeople > 0) SelectTab(1);
+                    else { SelectTab(0); Execute("OnsiteJump3"); }
+                    break;
                 case "TutorialAction":
                     if(reviewLesson>=0 || !m.Tutorial.active || !m.Tutorial.started){reviewLesson=-1;game.BeginTutorial();}
-                    else if(m.Tutorial.Completed)game.SkipTutorial();else game.ExecuteTutorialAction();break;
+                    else if(m.Tutorial.Completed){game.SkipTutorial();ClosePanels();}else game.ExecuteTutorialAction();break;
                 case "TutorialStart":reviewLesson=-1;game.BeginTutorial();break;
                 case "TutorialLocate":ShowTutorialControl();break;
-                case "TutorialSkip":game.SkipTutorial();break;
+                case "TutorialSkip":game.SkipTutorial();ClosePanels();break;
                 case "TutorialPrevious":reviewLesson=Mathf.Max(0,(reviewLesson>=0?reviewLesson:m.Tutorial.step)-1);break;
                 case "TutorialNext":reviewLesson=Mathf.Min(TutorialProgress.LastStep,(reviewLesson>=0?reviewLesson:m.Tutorial.step)+1);break;
                 case "FoodPolicy": game.Report(m.SetSupplyPolicy(ItemId.Food,(SupplyPolicy)(((int)m.FoodPolicy+1)%3)));break;
@@ -444,7 +425,12 @@ namespace CrazyRubbish.Prototype
         private void SelectTab(int index)
         {
             if (index < 0 || index >= pages.Length) return;
+            if (facilityPanel != null) facilityPanel.gameObject.SetActive(false);
+            selectedFacility = 0; activeTab = index;
+            management.gameObject.SetActive(true);
             for (int i = 0; i < pages.Length; i++) { pages[i].gameObject.SetActive(i == index); SetSelected(tabs[i], i == index); }
+            UpdateLaunchers();
+            if (inspection != null) inspection.gameObject.SetActive(false);
         }
         private void AskTrade(Technology technology)
         {
@@ -457,8 +443,10 @@ namespace CrazyRubbish.Prototype
         }
         private static void SetSelected(Button button, bool selected)
         {
-            button.GetComponent<Image>().color = selected ? new Color32(72, 101, 87, 255) : ButtonColor;
-            button.GetComponentInChildren<Text>().color = selected ? Green : Ink;
+            button.GetComponent<Image>().color = selected ? new Color32(95, 76, 46, 255) : ButtonColor;
+            button.GetComponentInChildren<Text>().color = selected ? Accent : Ink;
+            Transform marker = button.transform.Find("Selected");
+            if (marker != null) marker.gameObject.SetActive(selected);
         }
         private void CycleDevice()
         {
@@ -467,7 +455,7 @@ namespace CrazyRubbish.Prototype
         }
         private float CommandGroup(Transform parent, string caption, float y, int[] indices)
         {
-            TextAt(parent, caption, caption, 12, y, 352, 30, 18, Green); y += 39;
+            SectionHeading(parent, caption, " / ", y); y += 46;
             for (int i = 0; i < indices.Length; i++) ButtonAt(parent, "Command" + indices[i], CommandLabels[indices[i]], 12 + (i % 2) * 178, y + (i / 2) * 48, 168, 40);
             return y + ((indices.Length + 1) / 2) * 48 + 20;
         }
@@ -486,12 +474,22 @@ namespace CrazyRubbish.Prototype
             var viewport = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(RectMask2D));
             var viewportRect = viewport.GetComponent<RectTransform>(); viewportRect.SetParent(panel, false);
             viewportRect.anchorMin = Vector2.zero; viewportRect.anchorMax = Vector2.one; viewportRect.offsetMin = viewportRect.offsetMax = Vector2.zero;
+            viewportRect.offsetMax = new Vector2(-12, 0);
             viewport.GetComponent<Image>().color = Color.clear;
             var contentRect = new GameObject("Content", typeof(RectTransform)).GetComponent<RectTransform>(); contentRect.SetParent(viewportRect, false);
             contentRect.anchorMin = new Vector2(0, 1); contentRect.anchorMax = new Vector2(1, 1); contentRect.pivot = new Vector2(0.5f, 1);
             contentRect.anchoredPosition = Vector2.zero; contentRect.sizeDelta = new Vector2(0, height);
             var scroll = panel.gameObject.AddComponent<ScrollRect>(); scroll.content = contentRect; scroll.viewport = viewportRect;
-            scroll.horizontal = false; scroll.vertical = true; scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 35; return contentRect;
+            scroll.horizontal = false; scroll.vertical = true; scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 38;
+            var rail = StretchPanel(panel, "Scrollbar", new Vector2(1, 0), Vector2.one, new Vector2(-7, 2), new Vector2(-2, -2), Inset);
+            rail.GetComponent<Image>().raycastTarget = true;
+            var handle = StretchPanel(rail, "Handle", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Border);
+            handle.GetComponent<Image>().raycastTarget = true;
+            var scrollbar = rail.gameObject.AddComponent<Scrollbar>(); scrollbar.handleRect = handle;
+            scrollbar.targetGraphic = handle.GetComponent<Image>(); scrollbar.direction = Scrollbar.Direction.BottomToTop;
+            scrollbar.navigation = new Navigation { mode = Navigation.Mode.None };
+            scroll.verticalScrollbar = scrollbar; scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
+            return contentRect;
         }
         private RectTransform StretchPanel(Transform parent, string objectName, Vector2 min, Vector2 max, Vector2 offsetMin, Vector2 offsetMax, Color color)
         {
@@ -502,25 +500,31 @@ namespace CrazyRubbish.Prototype
         private Text TextAt(Transform parent, string objectName, string value, float x, float y, float width, float height, int size, Color color)
         {
             var text = At(parent, objectName, x, y, width, height).gameObject.AddComponent<Text>(); text.font = game.appearance.font;
-            text.fontSize = size; text.lineSpacing = 1; text.color = color; text.text = value; text.alignment = TextAnchor.MiddleLeft;
+            text.fontSize = size; text.lineSpacing = 1.12f; text.color = color; text.text = value; text.alignment = TextAnchor.MiddleLeft;
             text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Overflow; text.raycastTarget = false; return text;
         }
         private Button ButtonAt(Transform parent, string objectName, string caption, float x, float y, float width, float height, bool primary = false)
         {
             var rect = At(parent, objectName, x, y, width, height); var image = rect.gameObject.AddComponent<Image>();
-            image.color = primary ? new Color32(153, 109, 63, 255) : ButtonColor;
-            var border = rect.gameObject.AddComponent<Outline>(); border.effectColor = primary ? new Color32(224, 170, 98, 90) : new Color32(149, 180, 167, 38);
+            image.color = primary ? Accent : ButtonColor;
+            var border = rect.gameObject.AddComponent<Outline>(); border.effectColor = Border;
             border.effectDistance = new Vector2(1, -1); border.useGraphicAlpha = false;
             var button = rect.gameObject.AddComponent<Button>(); button.targetGraphic = image; button.navigation = new Navigation { mode = Navigation.Mode.None };
-            var colors = button.colors; colors.highlightedColor = new Color(1.16f, 1.16f, 1.16f); colors.pressedColor = new Color(0.78f, 0.85f, 0.82f);
-            colors.disabledColor = new Color(0.5f, 0.5f, 0.5f, 0.6f); button.colors = colors;
+            var colors = button.colors; colors.highlightedColor = new Color(1.2f, 1.2f, 1.2f); colors.pressedColor = new Color(0.73f, 0.73f, 0.73f);
+            colors.disabledColor = new Color(0.46f, 0.46f, 0.46f, 0.65f); colors.fadeDuration = 0.08f; button.colors = colors;
             buttonBindings.Add(new ButtonBinding { button = button, command = objectName });
-            var label = TextAt(rect, "Label", caption, 4, 0, width - 8, height, height < 34 ? 14 : 16, Ink); label.alignment = TextAnchor.MiddleCenter; return button;
+            Stripe(rect, "Bevel", 0, 0, width, 1, new Color(1, 1, 1, primary ? 0.22f : 0.10f));
+            Stripe(rect, "Selected", 0, height - 3, width, 3, Accent);
+            rect.Find("Selected").gameObject.SetActive(false);
+            var label = TextAt(rect, "Label", caption, 6, 0, width - 12, height, height < 34 ? 13 : 16, primary ? Inset : Ink);
+            label.alignment = TextAnchor.MiddleCenter;
+            label.resizeTextForBestFit = true; label.resizeTextMinSize = height < 34 ? 11 : 13; label.resizeTextMaxSize = height < 34 ? 13 : 16;
+            return button;
         }
         private Image Bar(Transform parent, string objectName, float x, float y, float width, float height, Color color)
         {
             var background = At(parent, objectName, x, y, width, height); var track = background.gameObject.AddComponent<Image>();
-            track.color = new Color32(49, 65, 65, 255); track.raycastTarget = false;
+            track.color = Inset; track.raycastTarget = false;
             var fillRect = new GameObject("Fill", typeof(RectTransform), typeof(Image)).GetComponent<RectTransform>(); fillRect.SetParent(background, false);
             fillRect.anchorMin = Vector2.zero; fillRect.anchorMax = Vector2.one; fillRect.offsetMin = fillRect.offsetMax = Vector2.zero;
             var fill = fillRect.GetComponent<Image>(); fill.color = color; fill.raycastTarget = false; return fill;

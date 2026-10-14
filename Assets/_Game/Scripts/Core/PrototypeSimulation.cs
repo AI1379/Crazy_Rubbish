@@ -78,6 +78,7 @@ namespace CrazyRubbish.Core
         public long IncomingUnits=>0;
         public long SpawnedUnits {get;private set;}
         public bool JobActive=>jobActive;
+        public bool PlayerSawing=>manualStation==1&&State==WorkState.Working&&SelectedRecipe!=WoodRecipe.SortedWood;
         public int ReservedWood=>jobActive?WoodInput(activeRecipe):0;
         public float Progress=>jobActive?(float)Math.Min(1,jobProgress/Duration(activeRecipe)):0;
         public float DismantleProgress=>(float)(dismantleProgress/35);

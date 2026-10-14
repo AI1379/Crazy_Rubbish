@@ -1,0 +1,18 @@
+{
+  "mode": "内置 image_gen 工具",
+  "down": "沿用已生成的 chr_hero.png 正面静态贴图",
+  "prompts": [
+    {
+      "direction": "up",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional sprite for a 2D top-down factory game. Use the attached image as the exact character identity and style reference. Preserve the blue work cap, blue-gray shirt with rolled sleeves, brown bib overalls, dark gray work gloves and boots, skin tone, stocky proportions, full-body size, coarse square pixel grid and simple pixel-art shading. Arms rest at the sides; stand upright, neutral idle pose, both feet visible. Match the reference's slightly elevated game camera and keep the full-body character centered at the same scale with transparent margin and consistent feet baseline. Crisp simple pixel art, limited flat colors, no photorealism. Genuine transparent background, no environment, no ground shadow, no glow or halo, no lettering, no labels, no other character, no sheet, no walking frames. Generate only ONE character in the requested direction. Direction: UP / NORTH, facing AWAY from the viewer. Show the back of the cap, back of the shirt and the rear straps of the brown overalls. The face and the front bib pocket must not be visible. A clean back-view idle sprite."
+    },
+    {
+      "direction": "left",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional sprite for a 2D top-down factory game. Use the attached image as the exact character identity and style reference. Preserve the blue work cap, blue-gray shirt with rolled sleeves, brown bib overalls, dark gray work gloves and boots, skin tone, stocky proportions, full-body size, coarse square pixel grid and simple pixel-art shading. Arms rest at the sides; stand upright, neutral idle pose, both feet visible. Match the reference's slightly elevated game camera and keep the full-body character centered at the same scale with transparent margin and consistent feet baseline. Crisp simple pixel art, limited flat colors, no photorealism. Genuine transparent background, no environment, no ground shadow, no glow or halo, no lettering, no labels, no other character, no sheet, no walking frames. Generate only ONE character in the requested direction. Direction: LEFT / WEST. Show a clear left-facing side profile, with the face, nose and cap visor pointing to the LEFT edge of the image. Not a front view and not a three-quarter portrait. Keep the body standing still. A clean left-profile idle sprite."
+    },
+    {
+      "direction": "right",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional sprite for a 2D top-down factory game. Use the attached image as the exact character identity and style reference. Preserve the blue work cap, blue-gray shirt with rolled sleeves, brown bib overalls, dark gray work gloves and boots, skin tone, stocky proportions, full-body size, coarse square pixel grid and simple pixel-art shading. Arms rest at the sides; stand upright, neutral idle pose, both feet visible. Match the reference's slightly elevated game camera and keep the full-body character centered at the same scale with transparent margin and consistent feet baseline. Crisp simple pixel art, limited flat colors, no photorealism. Genuine transparent background, no environment, no ground shadow, no glow or halo, no lettering, no labels, no other character, no sheet, no walking frames. Generate only ONE character in the requested direction. Direction: RIGHT / EAST. Show a clear right-facing side profile, with the face, nose and cap visor pointing to the RIGHT edge of the image. Not a front view and not a three-quarter portrait. Keep the body standing still. A clean right-profile idle sprite."
+    }
+  ]
+}

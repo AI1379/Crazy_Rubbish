@@ -1,0 +1,286 @@
+{
+  "tool": "built-in image_gen",
+  "png_count": 10,
+  "assets": [
+    {
+      "id": "bld_old_warehouse_south_idle",
+      "name": "旧仓库",
+      "file": "bld_old_warehouse_south_idle.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        3,
+        3
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        140,
+        184,
+        1115,
+        1112
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "584ce4a919936e44fb1abc258aa533a24ba6069e065c74036b2511cf5b8abd32",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "bld_old_housing_south_unpowered",
+      "name": "旧住房（未通电）",
+      "file": "bld_old_housing_south_unpowered.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        3,
+        3
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        196,
+        175,
+        1059,
+        1105
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "78afe7ae5a79029f2f3c980b7c64665365172e6802bbf11cd3db6a12176ac72e",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "bld_streetlamp_unpowered",
+      "name": "路灯（未通电）",
+      "file": "bld_streetlamp_unpowered.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "core_bbox_top_left": [
+        352,
+        193,
+        841,
+        1415
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "1376c1fe4fc23c74859c7e82bc1963af33029b0602aa83750ee4e546e9bc454d",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "env_hole_east",
+      "name": "洞口",
+      "file": "env_hole_east.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        2,
+        2
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        236,
+        291,
+        1028,
+        990
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "db6108278f591e97d4a7d5dbe61ebb0975a2075bc5f69da85bd467d4b2f83910",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "env_waste_wood_low",
+      "name": "废木料低堆",
+      "file": "env_waste_wood_low.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        267,
+        490,
+        999,
+        901
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "3f178dfe5cc7a4df2382f98504b7519b7065a7b88d48e935cecdc57efd72847c",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "env_waste_metal_low",
+      "name": "废金属低堆",
+      "file": "env_waste_metal_low.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        241,
+        440,
+        1042,
+        932
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "8659867bfa259b6957d9bd2058db717f60f4a1c7117eac6c678be80e3bb86015",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "env_waste_mixed_low",
+      "name": "混合垃圾低堆",
+      "file": "env_waste_mixed_low.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        235,
+        420,
+        1057,
+        945
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "f1b8ca528a6c4dda11d65c55ef7bf96315813ebf8f7b1209de53010524c8d87f",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "env_waste_wood_high",
+      "name": "废木料高堆",
+      "file": "env_waste_wood_high.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        208,
+        343,
+        1046,
+        994
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "02bfe412189ce52a3dac2781215b208c902675ce44a12e1c7425f1ddeb1b62ed",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "env_waste_metal_high",
+      "name": "废金属高堆",
+      "file": "env_waste_metal_high.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        143,
+        289,
+        1136,
+        1078
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "66d2bf401176a1c4aba4c490bb98846265ccfc0c0a6bbaeb71ad0c4b76026f08",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    },
+    {
+      "id": "env_waste_mixed_high",
+      "name": "混合垃圾高堆",
+      "file": "env_waste_mixed_high.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "core_bbox_top_left": [
+        117,
+        204,
+        1169,
+        1097
+      ],
+      "core_bbox_note": "alpha>=200 read-only bound, not a collision or footprint rectangle",
+      "sha256": "0f0aa74479c78a10e4f6cfb039f1421ba852c08b508aa80351906a18ca1f05a0",
+      "pivot": "Calibrate the ground contact point in Unity; use the base of the pole for the streetlamp",
+      "unity_validated": false
+    }
+  ]
+}

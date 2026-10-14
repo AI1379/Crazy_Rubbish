@@ -1,0 +1,209 @@
+using System;
+using System.Linq;
+using CrazyRubbish.Core;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace CrazyRubbish.Prototype
+{
+    public sealed partial class PrototypeHud
+    {
+        [SerializeField] private RectTransform management, facilityPanel, guidePrompt, toast;
+        [SerializeField] private RectTransform[] facilityPages = new RectTransform[4];
+        [SerializeField] private Button[] launchers = new Button[4];
+        [SerializeField] private Button alerts, guideOpen, zones;
+        [SerializeField] private Text facilityTitle, facilitySummary;
+        [SerializeField] private Image facilityArtwork;
+        private int activeTab, selectedFacility;
+        private bool showZones;
+        private int lastNoticeRevision;
+        private float noticeUntil;
+        private string toolWarningLabel;
+        public bool ManagementOpen => management != null && management.gameObject.activeSelf;
+        public int SelectedFacility => facilityPanel != null && facilityPanel.gameObject.activeSelf ? selectedFacility : 0;
+        public bool ZonesVisible => showZones || ManagementOpen && activeTab == 0;
+
+        private void BuildWorldOverlay()
+        {
+            var navigation = Surface(root, "Navigation", 16, 0, 574, 54, new Color32(26, 31, 34, 242));
+            navigation.anchorMin = navigation.anchorMax = Vector2.zero;
+            navigation.anchoredPosition = new Vector2(16, 70);
+            string[] captions = { "建造  B", "人员  P", "仓库  I", "教程  H" };
+            for (int i = 0; i < 4; i++) launchers[i] = ButtonAt(navigation, "OpenTab" + i, captions[i], 8 + 112 * i, 8, 104, 38);
+            zones = ButtonAt(navigation, "Zones", "区域", 456, 8, 110, 38);
+
+            guidePrompt = Surface(root, "Guide Prompt", 16, 0, 392, 126, new Color32(26, 31, 34, 240));
+            guidePrompt.anchorMin = guidePrompt.anchorMax = Vector2.zero;
+            guidePrompt.GetComponent<Image>().raycastTarget = true;
+            guidePrompt.anchoredPosition = new Vector2(16, 214);
+            TextAt(guidePrompt, "Caption", "从废料开始", 16, 10, 360, 24, 18, Accent);
+            objective = TextAt(guidePrompt, "Objective", "", 16, 38, 360, 34, 14, Ink);
+            objective.resizeTextForBestFit = true; objective.resizeTextMinSize = 12; objective.resizeTextMaxSize = 14;
+            guideOpen = ButtonAt(guidePrompt, "OpenGuide", "开始教程", 16, 82, 174, 32, true);
+            ButtonAt(guidePrompt, "DismissGuide", "自由经营", 202, 82, 174, 32);
+
+            alerts = ButtonAt(root, "Alerts", "", 16, 80, 410, 36);
+            alerts.GetComponent<Image>().color = new Color32(73, 38, 32, 245);
+            alerts.GetComponentInChildren<Text>().color = Danger;
+            alerts.gameObject.SetActive(false);
+
+            toast = Surface(root, "Action Notice", 0, 0, 740, 36, new Color32(26, 31, 34, 242));
+            toast.anchorMin = toast.anchorMax = new Vector2(0.5f, 0);
+            toast.pivot = new Vector2(0.5f, 0);
+            toast.anchoredPosition = new Vector2(-130, 84);
+            message = TextAt(toast, "Notice", "", 14, 0, 712, 36, 15, Ink);
+            message.resizeTextForBestFit = true; message.resizeTextMinSize = 12; message.resizeTextMaxSize = 15;
+            toast.gameObject.SetActive(false);
+
+            target = TextAt(root, "Hint", "点击设施查看 · 右键移动 · 滚轮缩放", 0, 0, 520, 24, 13, Muted);
+            target.rectTransform.anchorMin = target.rectTransform.anchorMax = new Vector2(1, 0);
+            target.rectTransform.anchoredPosition = new Vector2(-540, 46);
+            target.alignment = TextAnchor.MiddleRight;
+        }
+
+        private void BuildFacilityPanel()
+        {
+            facilityPanel = Surface(root, "Facility Panel", 0, 86, 396, 604, Panel);
+            facilityPanel.anchorMin = facilityPanel.anchorMax = Vector2.one;
+            facilityPanel.anchoredPosition = new Vector2(-412, -86);
+            facilityPanel.GetComponent<Image>().raycastTarget = true;
+            Artwork(facilityPanel, "Artwork", game.appearance.woodwork, 18, 14, 50, 50);
+            facilityArtwork = facilityPanel.Find("Artwork").GetComponent<Image>();
+            facilityTitle = TextAt(facilityPanel, "Title", "木工台", 82, 20, 240, 32, 24, Ink);
+            ButtonAt(facilityPanel, "CloseFacility", "×", 350, 18, 28, 30);
+            facilitySummary = TextAt(facilityPanel, "Summary", "", 20, 80, 356, 64, 15, Muted);
+            ButtonAt(facilityPanel, "GoToFacility", "前往作业点", 20, 150, 356, 38, true);
+            for (int i = 0; i < 4; i++) facilityPages[i] = At(facilityPanel, i == 0 ? "Woodwork" : "Facility " + (i + 1), 0, 204, 396, 384);
+
+            var wood = facilityPages[0];
+            build = ButtonAt(wood, "Build", "搭建木工台", 20, 0, 356, 38);
+            workState = TextAt(wood, "State", "", 20, 46, 356, 26, 16, Ink);
+            progressFill = Bar(wood, "Progress", 20, 80, 356, 5, Accent);
+            plankRecipe = ButtonAt(wood, "Plank", "木板", 20, 98, 112, 38);
+            handleRecipe = ButtonAt(wood, "Handle", "木柄", 142, 98, 112, 38);
+            sortedRecipe = ButtonAt(wood, "Sorted", "整理", 264, 98, 112, 38);
+            recipeInfo = TextAt(wood, "Recipe", "", 20, 145, 356, 44, 14, Muted);
+            work = ButtonAt(wood, "Work", "进入 / 退出木工岗位  F", 20, 198, 356, 38, true);
+            FacilityCommands(wood, 246, new[] { 10, 11, 12, 16 });
+            pressure = TextAt(wood, "Pressure", "", 20, 342, 356, 42, 14, Green);
+
+            ButtonAt(facilityPages[1], "Command0", "搭建拆解地点", 20, 0, 356, 38);
+            FacilityCommands(facilityPages[1], 54, new[] { 14, 15, 13, 8, 9, 17 });
+            TextAt(facilityPages[1], "Help", "把设备与螺丝刀带到正面，再投料作业。\n成品需取出并运回仓库。", 20, 222, 356, 64, 15, Muted);
+            ButtonAt(facilityPages[2], "Command1", "搭建工作台", 20, 0, 356, 38);
+            FacilityCommands(facilityPages[2], 54, new[] { 29, 30, 31, 32, 33, 34, 35, 36 });
+            TextAt(facilityPages[2], "Help", "木柄 1 + 对应工作端 1 → 工具 1\n需要主角到场投料和作业。", 20, 260, 356, 64, 15, Muted);
+            ButtonAt(facilityPages[3], "Command2", "组装发电机", 20, 0, 356, 38);
+            FacilityCommands(facilityPages[3], 54, new[] { 6, 7, 25, 23 });
+            TextAt(facilityPages[3], "Help", "投入木料或木料碎屑作为燃料。\n发电取得认可后，可以招募居民。", 20, 164, 356, 64, 15, Muted);
+            facilityPanel.gameObject.SetActive(false);
+        }
+
+        private void FacilityCommands(Transform parent, float y, int[] commands)
+        {
+            for (int i = 0; i < commands.Length; i++)
+                ButtonAt(parent, "FacilityCommand" + commands[i], CommandLabels[commands[i]], 20 + i % 2 * 184, y + i / 2 * 48, 172, 38);
+        }
+
+        public void ClosePanels()
+        {
+            if (management != null) management.gameObject.SetActive(false);
+            if (facilityPanel != null) facilityPanel.gameObject.SetActive(false);
+            selectedFacility = 0;
+            if (inspection != null) inspection.gameObject.SetActive(false);
+            UpdateLaunchers();
+        }
+
+        public void ResetForSession()
+        {
+            ClosePanels(); showZones = false; showAllItems = false; noticeUntil = 0;
+            lastNoticeRevision = game.NoticeRevision;
+            tutorialModel = null; reviewLesson = -1; displayedLesson = -1;
+            if (toast != null) toast.gameObject.SetActive(false);
+        }
+
+        public bool TryCloseTopPanel()
+        {
+            if (tradeConfirmation != null && tradeConfirmation.gameObject.activeSelf)
+            { pendingTechnology = -1; tradeConfirmation.gameObject.SetActive(false); return true; }
+            if (!ManagementOpen && SelectedFacility == 0) return false;
+            ClosePanels(); return true;
+        }
+
+        public void ToggleManagement(int page)
+        {
+            if (ManagementOpen && activeTab == page) ClosePanels();
+            else SelectTab(page);
+        }
+
+        public void OpenManagement(int page) => SelectTab(page);
+
+        public void HandlePanelShortcuts()
+        {
+            if (Input.GetKeyDown(KeyCode.B)) ToggleManagement(0);
+            if (Input.GetKeyDown(KeyCode.P)) ToggleManagement(1);
+            if (Input.GetKeyDown(KeyCode.I)) ToggleManagement(2);
+            if (Input.GetKeyDown(KeyCode.H)) ToggleManagement(3);
+        }
+
+        public void ShowFacility(int facility)
+        {
+            if (facility < 1 || facility > 4 || facilityPanel == null) return;
+            ClosePanels(); selectedFacility = facility;
+            facilityPanel.gameObject.SetActive(true);
+            for (int i = 0; i < facilityPages.Length; i++) facilityPages[i].gameObject.SetActive(i == facility - 1);
+            string[] names = { "木工台", "拆解地点", "工作台", "发电机" };
+            facilityTitle.text = names[facility - 1];
+            Sprite[] artwork = { game.appearance.woodwork, game.appearance.dismantle, game.appearance.workbench, game.appearance.generator };
+            facilityArtwork.sprite = artwork[facility - 1];
+            if (game.Model != null) RefreshOverlay(game.Model);
+        }
+
+        private void UpdateLaunchers()
+        {
+            for (int i = 0; i < launchers.Length; i++)
+                if (launchers[i] != null) SetSelected(launchers[i], ManagementOpen && activeTab == i);
+        }
+
+        private void RefreshOverlay(PrototypeSimulation m)
+        {
+            bool blocked = game.MenuOpen || game.ResultVisible;
+            guidePrompt.gameObject.SetActive(!blocked && m.Tutorial.active && !m.Tutorial.Completed && !(ManagementOpen && activeTab == 3));
+            guideOpen.GetComponentInChildren<Text>().text = m.Tutorial.IntroOpen ? "开始教程" : "打开教程";
+            if (m.Tutorial.IntroOpen) objective.text = "时间暂停中。跟着引导开始，或自由经营。";
+            bool warning = m.RiotActive || m.UnpaidWageCents > 0 || m.MissingSupplyPeople > 0 || toolWarningLabel != null;
+            alerts.gameObject.SetActive(!blocked && warning);
+            alerts.GetComponentInChildren<Text>().text = m.RiotActive ? $"!  欠薪暴动 · 剩余 {m.RiotSeconds:0} 秒  >" :
+                m.MissingSupplyPeople > 0 ? $"!  {m.MissingSupplyPeople} 人缺少生活供应  >" : m.UnpaidWageCents > 0 ? $"!  待付工资 {m.UnpaidWages:0.00}  >" : $"!  {toolWarningLabel}耐久低，请准备替补  >";
+            SetSelected(zones, showZones);
+            if (lastNoticeRevision != game.NoticeRevision)
+            { lastNoticeRevision = game.NoticeRevision; noticeUntil = Time.unscaledTime + 4.5f; }
+            toast.gameObject.SetActive(!blocked && Time.unscaledTime < noticeUntil);
+            target.gameObject.SetActive(!blocked && !ManagementOpen && SelectedFacility == 0);
+            switch (SelectedFacility)
+            {
+                case 1:
+                    facilitySummary.text = m.BenchBuilt ? "木料加工\n选择配方，运入原料后开始作业。" : "待建设\n需要废木料 4 + 紧固件 2"; break;
+                case 2:
+                    facilitySummary.text = m.DismantleBuilt ? $"{PrototypeGame.StateName(m.DismantleState)}\n当前拆解：{ItemCatalog.Name(m.SelectedDevice)}" : "待建设\n需要废木料 4 + 紧固件 2"; break;
+                case 3:
+                    facilitySummary.text = m.TableBuilt ? $"装配：{ItemCatalog.Name(m.AssemblyProduct)} · {m.AssemblyProgress:P0}\n木柄 1 + {ItemCatalog.Name(m.AssemblyEnd)} 1" : "待建设\n需要木板 4 + 钢铁零件 2"; break;
+                case 4:
+                    facilitySummary.text = m.GeneratorBuilt ? $"可用电力 {m.AvailablePower:0.#} · 燃料 {m.FuelCount}\n{(m.FuelCount > 0 ? "燃料已就绪" : "缺少燃料，请前往补充")}" : "待建设 · 钢铁零件 6 + 电线 2\n热动力组件 1 + 发电组件 1"; break;
+            }
+        }
+
+        public void GoToSelectedFacility()
+        {
+            if (game.Model.Tutorial.IntroOpen)
+            { game.Report(new ActionResult(false, "先选择开始教程或自由经营，再前往作业点。")); return; }
+            switch (SelectedFacility)
+            {
+                case 1: game.GoTo(PrototypeSimulation.BenchX, PrototypeSimulation.BenchY); break;
+                case 2: game.GoTo(PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY); break;
+                case 3: game.GoTo(PrototypeSimulation.TableX, PrototypeSimulation.TableY); break;
+                case 4: game.GoTo(PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY); break;
+            }
+        }
+    }
+}

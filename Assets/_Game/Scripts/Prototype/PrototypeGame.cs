@@ -14,6 +14,7 @@ namespace CrazyRubbish.Prototype
         public PrototypeSimulation Model { get; private set; }
         public string Notice { get; private set; } = "先拾取手锯，再把木料和连接件送进仓库。";
         public bool LastActionSucceeded { get; private set; } = true;
+        public int NoticeRevision { get; private set; }
         public bool SmokeMode { get; private set; }
         public bool MenuOpen { get; private set; }
         public bool SessionStarted { get; private set; }
@@ -57,6 +58,7 @@ namespace CrazyRubbish.Prototype
             interactionRevision = 0;
             saveSlot = Guid.NewGuid().ToString("N"); autoIndex = 0;
             walkPath=null;resultSeen=false;ResultVisible=false;
+            GetComponent<PrototypeHud>()?.ResetForSession();
         }
 
         public void StartNewGame(){ResetGame();SessionStarted=true;MenuOpen=false;}
@@ -107,16 +109,16 @@ namespace CrazyRubbish.Prototype
         private void Update()
         {
             if (SmokeMode) return;
+            if (Input.GetKeyDown(KeyCode.Escape)) HandleEscape();
             if(MenuOpen||ResultVisible)return;
             if(Model.Failed){ResultVisible=true;return;}
-            if(Model.Tutorial.IntroOpen){if(Input.GetKeyDown(KeyCode.Escape))OpenMenu();return;}
+            GetComponent<PrototypeHud>().HandlePanelShortcuts();
+            if(Model.Tutorial.IntroOpen)return;
             double delta = Math.Min(Time.unscaledDeltaTime, 0.25f);
             if (Input.GetKeyDown(KeyCode.Space)) Model.SetPaused(!Model.Paused);
             if (Input.GetKeyDown(KeyCode.Alpha1)) Model.SetSpeed(1);
             if (Input.GetKeyDown(KeyCode.Alpha2)) Model.SetSpeed(2);
             if (Input.GetKeyDown(KeyCode.Alpha3)) Model.SetSpeed(3);
-            if (Input.GetKeyDown(KeyCode.Escape)) { if(Walking||Model.Interacting){walkPath=null;Model.LeaveManualRole();}else OpenMenu(); }
-            if(MenuOpen)return;
             double x = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1 : 0)
                 - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1 : 0);
             double y = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) ? 1 : 0)
@@ -125,7 +127,7 @@ namespace CrazyRubbish.Prototype
             if(walkPath!=null)TickWalk(delta);else Model.MovePlayer(x, y, delta);
             if (Input.GetKeyDown(KeyCode.E)) Interact();
             if (Input.GetKeyDown(KeyCode.Q)) Report(Model.Deposit());
-            if (Input.GetKeyDown(KeyCode.F)) Report(Model.ToggleWork());
+            if (Input.GetKeyDown(KeyCode.F)) { if(Model.NearBench)GetComponent<PrototypeHud>().ShowFacility(1); Report(Model.ToggleWork()); }
             Model.Advance(delta);
             if(Model.Failed||Model.DemoCompleted&&!resultSeen){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
             if (interactionRevision != Model.InteractionRevision) { interactionRevision = Model.InteractionRevision; Report(Model.LastInteraction); }
@@ -136,8 +138,17 @@ namespace CrazyRubbish.Prototype
             }
         }
 
+        public void HandleEscape()
+        {
+            if (ResultVisible) return;
+            if (MenuOpen) { if (SessionStarted) ResumeGame(); return; }
+            if (GetComponent<PrototypeHud>().TryCloseTopPanel()) return;
+            if (Walking || Model.Interacting) { walkPath = null; Model.LeaveManualRole(); }
+            else OpenMenu();
+        }
+
         public void Report(ActionResult result)
-        { Notice = result.Message; LastActionSucceeded = result.Success; }
+        { Notice = result.Message; LastActionSucceeded = result.Success; NoticeRevision++; }
 
         public void SaveGame()
         {
@@ -179,8 +190,9 @@ namespace CrazyRubbish.Prototype
                         if(restored.Failed){lastError="跳过失败后的存档。";continue;}
                         Model=restored;saveSlot=snapshot.slot;autoIndex=snapshot.autoIndex;
                         walkPath=null;SessionStarted=true;MenuOpen=false;ResultVisible=false;resultSeen=Model.DemoCompleted;
-                        interactionRevision=Model.InteractionRevision;Report(new ActionResult(true,lastError==null?"已读取最近存档，生活、工资、预约和工具状态保留。":"最近存档不可读，已恢复较早的有效存档。"));
-                        if(Model.Tutorial.active)GetComponent<PrototypeHud>().ShowTutorial();return;
+                        interactionRevision=Model.InteractionRevision;
+                        GetComponent<PrototypeHud>().ResetForSession();
+                        Report(new ActionResult(true,lastError==null?"已读取最近存档，生活、工资、预约和工具状态保留。":"最近存档不可读，已恢复较早的有效存档。"));return;
                     }
                     catch(Exception error){lastError=error.Message;}
                 }
@@ -206,15 +218,17 @@ namespace CrazyRubbish.Prototype
             if (Model.NearWarehouse && Model.Carry.Used > Model.Carry.Count(ItemId.WoodHandSaw)) { Report(Model.Deposit()); return; }
             if (Model.NearBench && Model.BenchBuilt)
             {
+                GetComponent<PrototypeHud>().ShowFacility(1);
                 if (Model.Carry.Available(ItemId.WasteWood)>0 && Model.WoodInputStock.FreeTicks>0) Report(Model.DeliverInput());
                 else if (Model.Output.UsedTicks>0) Report(Model.TakeOutput());
                 else Report(Model.ToggleWork());
                 return;
             }
             if (Model.NearGenerator && Model.GeneratorBuilt)
-            { Report(Model.AddFuel(Model.Carry.Available(ItemId.WoodChips)>0?ItemId.WoodChips:ItemId.WasteWood,int.MaxValue)); return; }
+            { GetComponent<PrototypeHud>().ShowFacility(4); Report(Model.AddFuel(Model.Carry.Available(ItemId.WoodChips)>0?ItemId.WoodChips:ItemId.WasteWood,int.MaxValue)); return; }
             if (Model.DismantleBuilt && PrototypeSimulation.Distance(Model.PlayerX, Model.PlayerY, PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY) <= Model.Settings.interactionRadius)
             {
+                GetComponent<PrototypeHud>().ShowFacility(2);
                 if (Model.Carry.Available(Model.SelectedDevice)>0) Report(Model.DeliverInput(true));
                 else if (Model.DismantleOutput.UsedTicks>0) Report(Model.TakeOutput(true));
                 else Report(Model.ToggleDismantle());
@@ -222,6 +236,7 @@ namespace CrazyRubbish.Prototype
             }
             if(Model.TableBuilt&&PrototypeSimulation.Distance(Model.PlayerX,Model.PlayerY,PrototypeSimulation.TableX,PrototypeSimulation.TableY)<=Model.Settings.interactionRadius)
             {
+                GetComponent<PrototypeHud>().ShowFacility(3);
                 if(Model.Carry.Available(ItemId.WoodHandle)>0||Model.Carry.Available(Model.AssemblyEnd)>0)Report(Model.FeedAssembly());
                 else if(Model.TableOutput.UsedTicks>0)Report(Model.TakeAssembly());
                 else Report(Model.ToggleAssembly());return;

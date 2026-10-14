@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CrazyRubbish.Prototype
 {
-    public sealed class PrototypeWorld : MonoBehaviour
+    public sealed partial class PrototypeWorld : MonoBehaviour
     {
         public PrototypeGame game;
         public Camera worldCamera;
@@ -24,9 +24,8 @@ namespace CrazyRubbish.Prototype
         private int screenWidth, screenHeight;
         private Transform tutorialTarget;
         private readonly List<CellView> cells = new List<CellView>();
-        private readonly List<TextMesh> secondaryLabels = new List<TextMesh>();
         [SerializeField] private int layoutVersion;
-        public bool HasCurrentLayout => HasLayout && layoutVersion == 2;
+        public bool HasCurrentLayout => HasLayout && layoutVersion == 4;
 
         private sealed class PileView
         { public GameObject Root; public SpriteRenderer Icon, Highlight, Badge; public TextMesh Count; }
@@ -49,14 +48,23 @@ namespace CrazyRubbish.Prototype
 
         public void BuildLayout(PrototypeSimulation model)
         {
-            if (HasLayout) { ConfigureLabels(); return; }
-            layoutVersion = 2;
+            if (HasCurrentLayout) { ConfigureLabels(); return; }
+            if (HasLayout)
+            {
+                if (layoutVersion < 3) ApplyDeliveryToExistingLayout();
+                FitCamera(model);
+                ConfigureLabels();
+                return;
+            }
+            if (visualRoot != null) RemoveView(visualRoot.gameObject);
+            piles.Clear(); cells.Clear(); residentViews.Clear(); previousModel = null; lastRevision = -1;
+            layoutVersion = 3;
             visualRoot = new GameObject("World").transform;
             visualRoot.SetParent(transform, false);
             pileRoot = new GameObject("Ground Items").transform;
             pileRoot.SetParent(visualRoot, false);
             floor.Clear();
-            worldCamera.backgroundColor = new Color32(17, 27, 30, 255);
+            worldCamera.backgroundColor = new Color32(30, 29, 27, 255);
             worldCamera.clearFlags = CameraClearFlags.SolidColor;
             worldCamera.orthographic = true;
             FitCamera(model);
@@ -65,7 +73,7 @@ namespace CrazyRubbish.Prototype
             for (int x = 0; x < model.Settings.mapWidth; x++)
                 for (int y = 0; y < model.Settings.mapHeight; y++)
                 {
-                    var tile = Sprite($"Ground {x},{y}", game.appearance.tile, x, y, 1, -20);
+                    var tile = Sprite($"Ground {x},{y}", game.appearance.tile, x, y, 1, -2000);
                     tile.color = GroundColor(x, y);
                     floor.Add(tile);
                 }
@@ -75,33 +83,29 @@ namespace CrazyRubbish.Prototype
             StationPad("Dismantle Pad", PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY, new Color32(87, 138, 153, 255));
             StationPad("Workbench Pad", PrototypeSimulation.TableX, PrototypeSimulation.TableY, new Color32(135, 160, 113, 255));
             StationPad("Generator Pad", PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY, new Color32(192, 150, 76, 255));
-            SpriteRenderer depot = Sprite("WarehouseWhitebox", game.appearance.warehouse,
-                PrototypeSimulation.WarehouseX, 3, 2.8f, 4);
-            depot.color = new Color32(165, 194, 174, 255);
-            bench = Sprite("WoodworkBench", game.appearance.workbench,
-                PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 1.5f, 1.7f, 5);
+            Sprite("Warehouse", game.appearance.warehouse, PrototypeSimulation.WarehouseX, 1.65f, 0.94f, SortAt(4.5f));
+            Line("Warehouse Interaction Front", PrototypeSimulation.WarehouseX, PrototypeSimulation.WarehouseY, 0.9f, 0.12f, new Color32(230, 179, 102, 190));
+            bench = Sprite("WoodworkBench", game.appearance.woodwork,
+                PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 0.5f, 0.92f, SortAt(PrototypeSimulation.BenchY + 0.5f));
             benchLabel = StationLabel("BenchLabel", "木工台", PrototypeSimulation.BenchX, PrototypeSimulation.BenchY);
-            generator = Sprite("GeneratorWhitebox", game.appearance.workbench, PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 1.5f, 1.8f, 5);
+            generator = Sprite("Generator", game.appearance.generator, PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 0.5f, 0.92f, SortAt(PrototypeSimulation.GeneratorY + 0.5f));
             generatorLabel = StationLabel("GeneratorLabel", "发电机", PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY);
-            table = Sprite("TableWhitebox", game.appearance.workbench, PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 1.5f, 1.8f, 5);
+            table = Sprite("Workbench", game.appearance.workbench, PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 0.5f, 0.92f, SortAt(PrototypeSimulation.TableY + 0.5f));
             tableLabel = StationLabel("TableLabel", "工作台", PrototypeSimulation.TableX, PrototypeSimulation.TableY);
-            dismantle = Sprite("DismantleWhitebox", game.appearance.workbench, PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 1.5f, 1.8f, 5);
+            dismantle = Sprite("Dismantle", game.appearance.dismantle, PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 0.5f, 0.92f, SortAt(PrototypeSimulation.DismantleY + 0.5f));
             dismantleLabel = StationLabel("DismantleLabel", "拆解台", PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY);
-            var housing = Sprite("OldHousingWhitebox", game.appearance.warehouse, PrototypeSimulation.HousingX, 3, 2.8f, 4);
-            housing.color = new Color32(214, 177, 136, 255);
+            Sprite("OldHousing", game.appearance.housing, PrototypeSimulation.HousingX, 1.65f, 0.94f, SortAt(4.5f));
             Label("HousingLabel", "旧住房 · 6人", PrototypeSimulation.HousingX, 1.5f, 0.13f);
             Label("OwnedLandLabel", "建设区 / 18×18", 20, 23.8f, 0.18f, new Color32(166, 199, 169, 255));
-            var hole = Sprite("HoleWhitebox", game.appearance.tile, 2.5f, 20.5f, 1.8f, -5);
-            hole.color = new Color32(38, 43, 43, 255);
+            Sprite("Hole", game.appearance.hole, 2.5f, 20.5f, 1, -1500);
             Label("HoleLabel", "洞 · 去向不明", 2.5f, 19.2f, 0.12f);
             Label("WarehouseLabel", "仓库", PrototypeSimulation.WarehouseX, 5.8f, 0.13f);
             Label("DropLabel", "来料区 / 8×6", 3.5f, 12.3f, 0.15f, new Color32(232, 185, 121, 255));
 
-            var lamp = Sprite("CommunityLamp", game.appearance.fastener, 20, 5, 0.8f, 5);
-            lamp.color = new Color32(143, 142, 112, 255);
+            Sprite("CommunityLamp", game.appearance.streetlamp, 20, 4.6f, 1, SortAt(5));
             Label("LampLabel", "社区路灯", 20, 6, 0.11f);
             Label("MeetingPoint", "会面点", 16, -0.5f, 0.11f);
-            worker = Sprite("Protagonist", game.appearance.worker, (float)model.PlayerX, (float)model.PlayerY, 1.25f, 40).transform;
+            worker = Actor("Protagonist", 0).transform;
             playerLabel = Label("PlayerLabel", "主角", (float)model.PlayerX, (float)model.PlayerY - 0.8f, 0.10f, new Color32(255, 206, 123, 255));
             ConfigureLabels();
             RefreshView(model);
@@ -109,22 +113,16 @@ namespace CrazyRubbish.Prototype
 
         private void LateUpdate()
         {
-            PrototypeSimulation model = game.Model;
+            var model = game.Model;
             if (!HasLayout || model == null) return;
             if (screenWidth != Screen.width || screenHeight != Screen.height) FitCamera(model);
-            float scroll = Input.mouseScrollDelta.y;
+            bool overUi = UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
             Vector2 mouse = new Vector2(Input.mousePosition.x / Mathf.Max(1, Screen.width), Input.mousePosition.y / Mathf.Max(1, Screen.height));
-            if(Input.GetMouseButtonDown(0)&&worldCamera.rect.Contains(mouse)&&!game.MenuOpen&&!game.ResultVisible&&(UnityEngine.EventSystems.EventSystem.current==null||!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()))
-            {
-                Vector3 point=worldCamera.ScreenToWorldPoint(Input.mousePosition);
-                int x=Mathf.RoundToInt(point.x),y=Mathf.RoundToInt(point.y);
-                // Facility sprites sit above their reachable interaction fronts.
-                foreach(var station in new[]{(PrototypeSimulation.BenchX,PrototypeSimulation.BenchY),(PrototypeSimulation.DismantleX,PrototypeSimulation.DismantleY),(PrototypeSimulation.TableX,PrototypeSimulation.TableY),(PrototypeSimulation.GeneratorX,PrototypeSimulation.GeneratorY)})
-                    if(x>=station.Item1&&x<station.Item1+2&&y>station.Item2&&y<=station.Item2+2){x=station.Item1;y=station.Item2;break;}
-                if(x>=11&&x<=13&&y>=2&&y<=4){x=PrototypeSimulation.WarehouseX;y=PrototypeSimulation.WarehouseY;}
-                game.GoTo(x,y);
-            }
-            if (scroll != 0 && worldCamera.rect.Contains(mouse))
+            bool available = worldCamera.rect.Contains(mouse) && !overUi && !game.MenuOpen && !game.ResultVisible;
+            float scroll = Input.mouseScrollDelta.y;
+            if (available && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+                HandleMapClick(worldCamera.ScreenToWorldPoint(Input.mousePosition), Input.GetMouseButtonDown(1));
+            if (available && scroll != 0)
             {
                 Vector3 before = worldCamera.ScreenToWorldPoint(Input.mousePosition);
                 worldCamera.orthographicSize = Mathf.Clamp(worldCamera.orthographicSize * Mathf.Pow(0.85f, scroll), 4, FullMapSize(model));
@@ -132,16 +130,14 @@ namespace CrazyRubbish.Prototype
                 worldCamera.transform.position += before - after;
                 ClampCamera(model);
             }
-            if (Input.GetMouseButton(2) && worldCamera.rect.Contains(mouse))
+            if (available && Input.GetMouseButton(2))
             {
                 float units = worldCamera.orthographicSize * 2 / Mathf.Max(1, Screen.height * worldCamera.rect.height);
                 worldCamera.transform.position -= new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0) * units * 12;
                 ClampCamera(model);
             }
             RefreshView(model);
-            bool overUi = UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
-            InspectAt(worldCamera.rect.Contains(mouse) && !overUi && !game.MenuOpen && !game.ResultVisible
-                ? (Vector2?)worldCamera.ScreenToWorldPoint(Input.mousePosition) : null);
+            UpdateHover(available && scroll == 0 && !Input.GetMouseButton(2) ? (Vector2?)worldCamera.ScreenToWorldPoint(Input.mousePosition) : null, Time.unscaledTimeAsDouble);
         }
 
         public void RefreshView(PrototypeSimulation model)
@@ -155,6 +151,7 @@ namespace CrazyRubbish.Prototype
                 residentViews.Clear();
                 previousModel = model;
                 lastRevision = -1;
+                worker.GetComponent<PrototypeActorView>().ResetMotion();
             }
             if (lastRevision != model.GroundRevision)
             {
@@ -172,41 +169,39 @@ namespace CrazyRubbish.Prototype
                     }
             }
             GroundPile nearest = model.NearestPickup();
-            float pixelsPerCell = Screen.height * worldCamera.rect.height / (worldCamera.orthographicSize * 2);
             foreach (CellView cell in cells)
             {
                 cell.View.Highlight.enabled = nearest != null && nearest.X == cell.X && nearest.Y == cell.Y;
-                bool detailed = pixelsPerCell >= 42;
-                cell.View.Count.gameObject.SetActive(detailed);
-                cell.View.Badge.enabled = detailed || cell.Types > 1;
-                cell.View.Badge.color = detailed ? new Color32(29, 45, 48, 255) : new Color32(221, 180, 109, 255);
-                SetSpriteSize(cell.View.Badge, detailed ? 0.42f : 0.15f, detailed ? 0.24f : 0.15f);
+                cell.View.Count.gameObject.SetActive(false);
+                cell.View.Badge.enabled = false;
             }
-            foreach (TextMesh label in secondaryLabels) label.gameObject.SetActive(pixelsPerCell >= 26 && LabelFitsViewport(label));
-            worker.position = new Vector3((float)model.PlayerX, (float)model.PlayerY, 0);
+            RefreshMapOverlays();
+            int playerPose = model.PlayerSawing ? 3 : model.PickingUp ? 2 : model.Carry.UsedTicks > 0 ? 1 : 0;
+            worker.GetComponent<PrototypeActorView>().Refresh(new Vector2((float)model.PlayerX, (float)model.PlayerY), playerPose, model.Paused, model.GameSeconds);
             playerLabel.transform.position = worker.position + new Vector3(0, -0.75f, 0);
             bench.color = model.BenchBuilt ? Color.white : new Color32(195, 180, 155, 130);
             benchLabel.text = "木工台";
             benchLabel.color = model.BenchBuilt ? Color.white : new Color32(212, 187, 137, 255);
-            generator.color = model.GeneratorBuilt ? new Color32(226, 165, 91, 255) : new Color32(226, 165, 91, 130);
+            generator.color = model.GeneratorBuilt ? Color.white : new Color32(195, 180, 155, 130);
             table.color = model.TableBuilt ? Color.white : new Color32(195, 180, 155, 130);
-            dismantle.color = model.DismantleBuilt ? new Color32(147, 184, 201, 255) : new Color32(147, 184, 201, 130);
+            dismantle.color = model.DismantleBuilt ? Color.white : new Color32(195, 180, 155, 130);
             generatorLabel.text = "发电机";
             tableLabel.text = "工作台";
             dismantleLabel.text = "拆解台";
             foreach (TextMesh label in new[] { benchLabel, generatorLabel, tableLabel, dismantleLabel })
-                label.gameObject.SetActive(LabelFitsViewport(label));
+                label.gameObject.SetActive(false);
             foreach(int id in residentViews.Keys.Where(id=>!model.Residents.Any(r=>r.Id==id)).ToArray())
             {RemoveView(residentViews[id].gameObject);residentViews.Remove(id);}
             foreach (Resident resident in model.Residents)
             {
                 if (!residentViews.TryGetValue(resident.Id, out Transform view))
                 {
-                    view = Sprite("Resident_" + resident.Id, game.appearance.worker, (float)resident.X, (float)resident.Y, 1, 35).transform;
-                    view.GetComponent<SpriteRenderer>().color = new Color32(143, 200, 179, 255);
+                    view = Actor("Resident_" + resident.Id, 2 + (resident.Id - 1) % 4).transform;
                     residentViews.Add(resident.Id, view);
                 }
-                view.position = new Vector3((float)resident.X, (float)resident.Y, 0);
+                bool sawing = resident.Job == WorkerJob.Woodwork && model.WorkerAtBench && model.State == WorkState.Working && model.SelectedRecipe != WoodRecipe.SortedWood;
+                int pose = sawing ? 3 : resident.PickingUp ? 2 : resident.Cargo.UsedTicks > 0 ? 1 : 0;
+                view.GetComponent<PrototypeActorView>().Refresh(new Vector2((float)resident.X, (float)resident.Y), pose, model.Paused, model.GameSeconds);
             }
             if(Application.isPlaying)RefreshTutorialTarget(model);
         }
@@ -225,7 +220,7 @@ namespace CrazyRubbish.Prototype
                 var marker=game.appearance.marker!=null?game.appearance.marker:game.appearance.tile;
                 foreach(var edge in new[]{new Vector4(-0.49f,0,0.045f,1),new Vector4(0.49f,0,0.045f,1),new Vector4(0,-0.49f,1,0.045f),new Vector4(0,0.49f,1,0.045f)})
                 {
-                    var part=Sprite("Tutorial Target Edge",marker,0,0,1,45);part.transform.SetParent(tutorialTarget,false);part.transform.localPosition=new Vector3(edge.x,edge.y,0);
+                    var part=Sprite("Tutorial Target Edge",marker,0,0,1,2200);part.transform.SetParent(tutorialTarget,false);part.transform.localPosition=new Vector3(edge.x,edge.y,0);
                     part.transform.localScale=new Vector3(edge.z/marker.bounds.size.x,edge.w/marker.bounds.size.y,1);part.color=new Color32(255,196,98,255);
                 }
             }
@@ -237,11 +232,13 @@ namespace CrazyRubbish.Prototype
         private void FitCamera(PrototypeSimulation model)
         {
             screenWidth = Screen.width; screenHeight = Screen.height;
-            float canvasHeight = 1600f * Mathf.Max(1, Screen.height) / Mathf.Max(1, Screen.width);
-            worldCamera.rect = new Rect(24 / 1600f, 188 / canvasHeight, 1136 / 1600f,
-                Mathf.Max(1, canvasHeight - 366) / canvasHeight);
-            worldCamera.orthographicSize = FullMapSize(model);
-            worldCamera.transform.position = new Vector3((model.Settings.mapWidth - 1) / 2f, (model.Settings.mapHeight - 1) / 2f, -10);
+            float canvasHeight = PrototypeHud.ReferenceWidth * Mathf.Max(1, Screen.height) / Mathf.Max(1, Screen.width);
+            worldCamera.rect = new Rect(PrototypeHud.MapLeft / PrototypeHud.ReferenceWidth, PrototypeHud.MapBottom / canvasHeight,
+                PrototypeHud.MapWidth / PrototypeHud.ReferenceWidth,
+                Mathf.Max(1, canvasHeight - PrototypeHud.MapTop - PrototypeHud.MapBottom) / canvasHeight);
+            worldCamera.orthographicSize = Mathf.Min(10, FullMapSize(model));
+            worldCamera.transform.position = new Vector3((model.Settings.mapWidth - 1) / 2f, Mathf.Min(9.5f, (model.Settings.mapHeight - 1) / 2f), -10);
+            ClampCamera(model);
         }
 
         private float FullMapSize(PrototypeSimulation model)
@@ -264,10 +261,10 @@ namespace CrazyRubbish.Prototype
 
         private static Color GroundColor(int x, int y)
         {
-            if (x <= 7 && y >= 6 && y <= 11) return new Color32(255, 221, 163, 255);
-            if (x >= 10 && x <= 27 && y >= 6 && y <= 23) return new Color32(217, 248, 221, 255);
-            if (y >= 3 && y <= 5 && x >= 8 && x <= 23) return new Color32(238, 230, 205, 255);
-            return (x + y) % 2 == 0 ? new Color32(131, 171, 157, 255) : new Color32(138, 178, 163, 255);
+            if (x <= 7 && y >= 6 && y <= 11) return new Color32(238, 221, 191, 255);
+            if (x >= 10 && x <= 27 && y >= 6 && y <= 23) return new Color32(238, 237, 218, 255);
+            if (y >= 3 && y <= 5 && x >= 8 && x <= 23) return new Color32(250, 241, 224, 255);
+            return new Color32(205, 209, 205, 255);
         }
 
         private void ZoneOutline(string name, float x, float y, float width, float height, Color color)
@@ -281,7 +278,7 @@ namespace CrazyRubbish.Prototype
         private void Line(string name, float x, float y, float width, float height, Color color)
         {
             var marker = game.appearance.marker != null ? game.appearance.marker : game.appearance.tile;
-            var line = Sprite(name, marker, x, y, 1, -12);
+            var line = Sprite(name, marker, x, y, 1, -1400);
             line.transform.localScale = new Vector3(width / marker.bounds.size.x, height / marker.bounds.size.y, 1);
             line.color = color;
         }
@@ -295,7 +292,7 @@ namespace CrazyRubbish.Prototype
         private TextMesh StationLabel(string name, string caption, int x, int y)
         {
             TextMesh label = Label(name, caption, x + 0.5f, y + 2.15f, 0.095f);
-            var plate = Sprite(name + " Plate", game.appearance.marker, x + 0.5f, y + 2.15f, 1, 48);
+            var plate = Sprite(name + " Plate", game.appearance.marker, x + 0.5f, y + 2.15f, 1, 1998);
             SetSpriteSize(plate, 1.9f, 0.48f);
             plate.color = new Color32(24, 38, 40, 240);
             plate.transform.SetParent(label.transform, true);
@@ -304,90 +301,17 @@ namespace CrazyRubbish.Prototype
 
         private void ConfigureLabels()
         {
-            // Also migrate older saved scenes without destroying hand-authored scenery.
-            playerLabel.gameObject.SetActive(false);
-            secondaryLabels.Clear();
-            foreach (string name in new[] { "HousingLabel", "HoleLabel", "WarehouseLabel", "LampLabel", "MeetingPoint" })
-            {
-                Transform label = visualRoot.Find(name);
-                if (label != null) secondaryLabels.Add(label.GetComponent<TextMesh>());
-            }
-            Transform warehouseName = visualRoot.Find("WarehouseLabel");
-            warehouseName.position = new Vector3(PrototypeSimulation.WarehouseX, 3.9f, -0.1f);
-            warehouseName.GetComponent<TextMesh>().characterSize = 0.09f;
-            if (warehouseName.childCount == 0)
-            {
-                var plate = Sprite("Warehouse Name Plate", game.appearance.marker, PrototypeSimulation.WarehouseX, 3.9f, 1, 48);
-                SetSpriteSize(plate, 1.45f, 0.44f); plate.color = new Color32(24, 38, 40, 240);
-                plate.transform.SetParent(warehouseName, true);
-            }
-            visualRoot.Find("LampLabel").position = new Vector3(20, 4.2f, -0.1f);
-            foreach (var station in new[] { (benchLabel, PrototypeSimulation.BenchX, PrototypeSimulation.BenchY),
-                (tableLabel, PrototypeSimulation.TableX, PrototypeSimulation.TableY),
-                (dismantleLabel, PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY),
-                (generatorLabel, PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY) })
-            {
-                station.Item1.characterSize = 0.095f;
-                station.Item1.transform.position = new Vector3(station.Item2 + 0.5f, station.Item3 + 2.15f, -0.1f);
-                if (station.Item1.transform.childCount == 0)
-                {
-                    var plate = Sprite(station.Item1.name + " Plate", game.appearance.marker, station.Item2 + 0.5f, station.Item3 + 2.15f, 1, 48);
-                    SetSpriteSize(plate, 1.9f, 0.48f); plate.color = new Color32(24, 38, 40, 240);
-                    plate.transform.SetParent(station.Item1.transform, true);
-                }
-            }
-            layoutVersion = 2;
+            // Preserve saved object IDs while retiring all world-space typography and name plates.
+            foreach (var label in visualRoot.GetComponentsInChildren<TextMesh>(true)) label.gameObject.SetActive(false);
+            overlayLines = visualRoot.GetComponentsInChildren<SpriteRenderer>(true).Where(r =>
+                r.name.Contains("Boundary ") || r.name.Contains(" Pad ") || r.name == "Warehouse Interaction Front").ToArray();
+            foreach (var line in overlayLines) line.enabled = false;
+            layoutVersion = 4;
         }
 
         private static void SetSpriteSize(SpriteRenderer renderer, float width, float height)
         {
             renderer.transform.localScale = new Vector3(width / renderer.sprite.bounds.size.x, height / renderer.sprite.bounds.size.y, 1);
-        }
-
-        private bool LabelFitsViewport(TextMesh label)
-        {
-            Bounds bounds = label.GetComponent<MeshRenderer>().bounds;
-            Vector3 min = worldCamera.WorldToViewportPoint(bounds.min);
-            Vector3 max = worldCamera.WorldToViewportPoint(bounds.max);
-            return min.x >= 0.01f && min.y >= 0.01f && max.x <= 0.99f && max.y <= 0.99f;
-        }
-
-        public void InspectAt(Vector2? point)
-        {
-            var hud = game.GetComponent<PrototypeHud>();
-            if (hud == null) return;
-            if (!point.HasValue || game.MenuOpen || game.ResultVisible) { hud.ShowInspection(null, null, Vector2.zero); return; }
-            int x = Mathf.RoundToInt(point.Value.x), y = Mathf.RoundToInt(point.Value.y);
-            var model = game.Model;
-            string title = null, body = null;
-            foreach (var station in new[] { ("木工台", PrototypeSimulation.BenchX, PrototypeSimulation.BenchY, model.BenchBuilt),
-                ("拆解台", PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY, model.DismantleBuilt),
-                ("工作台", PrototypeSimulation.TableX, PrototypeSimulation.TableY, model.TableBuilt),
-                ("发电机", PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY, model.GeneratorBuilt) })
-                if (x >= station.Item2 && x < station.Item2 + 2 && y > station.Item3 && y <= station.Item3 + 2)
-                {
-                    title = station.Item1;
-                    body = station.Item4 ? "已建成 · 点击前往操作点" : "待建设 · 在现场页安排建设";
-                    if (station.Item1 == "发电机" && station.Item4) body += $"\n当前电力 {model.AvailablePower:0.#} · 燃料 {model.FuelCount}";
-                    break;
-                }
-            var content = model.Ground.Where(p => y == p.Y && x >= p.X && x < p.X + p.Width).ToArray();
-            if (content.Length > 0)
-            {
-                if (title == null) title = $"地面物品 · ({x}, {y})";
-                var lines = content.GroupBy(p => p.Item).OrderBy(g => g.Key).Select(g =>
-                {
-                    int unavailable = ItemCatalog.IsTool(g.Key) || ItemCatalog.IsDevice(g.Key) || ItemCatalog.IsOpenable(g.Key)
-                        ? g.Where(p => !p.Usable).Sum(p => p.Amount) : 0;
-                    int reserved = g.Sum(p => p.Reserved);
-                    return ItemCatalog.Name(g.Key) + " ×" + g.Sum(p => p.Amount)
-                        + (reserved > 0 ? $" · 预约 {reserved}" : "")
-                        + (unavailable > 0 ? $" · 损坏 {unavailable}" : "");
-                });
-                body = (body == null ? "" : body + "\n") + string.Join("\n", lines);
-                body += "\n走近后拾取 · 仓库页可指定物品";
-            }
-            hud.ShowInspection(title, body, worldCamera.WorldToScreenPoint(point.Value));
         }
 
         private static void RemoveView(GameObject obj)
@@ -410,12 +334,12 @@ namespace CrazyRubbish.Prototype
                     root.transform.SetParent(pileRoot, false);
                     root.transform.position = new Vector3(pile.X, pile.Y, 0);
                     view = new PileView { Root = root };
-                    view.Highlight = Sprite("PickupHighlight", game.appearance.marker, pile.X, pile.Y, 1, -3);
+                    view.Highlight = Sprite("PickupHighlight", game.appearance.marker, pile.X, pile.Y, 1, -1300);
                     SetSpriteSize(view.Highlight, 0.92f, 0.92f);
                     view.Highlight.color = new Color32(230, 177, 86, 55);
-                    view.Icon = Sprite("Item", game.appearance.ItemSprite(pile.Item), pile.X, pile.Y, 0.74f, 6);
+                    view.Icon = Sprite("Item", game.appearance.ItemSprite(pile.Item), pile.X, pile.Y, 1, SortAt(pile.Y - 0.3f));
                     view.Count = Label("Quantity", "", pile.X + 0.24f, pile.Y - 0.24f, 0.055f);
-                    view.Badge = Sprite("Cell Badge", game.appearance.marker, pile.X + 0.24f, pile.Y - 0.24f, 1, 49);
+                    view.Badge = Sprite("Cell Badge", game.appearance.marker, pile.X + 0.24f, pile.Y - 0.24f, 1, 1999);
                     view.Badge.color = new Color32(29, 45, 48, 255);
                     view.Highlight.transform.SetParent(root.transform, true);
                     view.Icon.transform.SetParent(root.transform, true);
@@ -443,11 +367,71 @@ namespace CrazyRubbish.Prototype
                 PileView view = piles[primary.Id];
                 int types = content.Select(p => p.Item).Distinct().Count();
                 int amount = content.Sum(p => p.Amount);
+                bool high = model.GroundCapacityAt(primary.X, primary.Y) > model.Settings.pileCapacity * 0.5m;
+                Sprite image = game.appearance.GroundSprite(primary.Item, high);
+                view.Icon.sprite = image;
+                bool heap = primary.Item == ItemId.WasteWood || primary.Item == ItemId.SortedWood || primary.Item == ItemId.MixedPlastic ||
+                    primary.Item == ItemId.PowerAsh || primary.Item == ItemId.SteelMaterial || primary.Item == ItemId.CopperMaterial || primary.Item == ItemId.ToolSteelWaste;
+                // Supplied pile textures use ground pivots and one-cell visible widths;
+                // atlas icons instead use centered, tightly sliced rectangles.
+                float size = heap ? 0.88f : 0.78f / Mathf.Max(image.bounds.size.x, image.bounds.size.y);
+                view.Icon.transform.localScale = new Vector3(size, size, 1);
+                view.Icon.transform.position = new Vector3(primary.X, primary.Y - (heap ? 0.34f : 0), 0);
                 view.Icon.enabled = true;
                 view.Icon.color = Color.white;
                 view.Count.text = types > 1 ? "+" + (types - 1) : amount.ToString();
                 cells.Add(new CellView { X = primary.X, Y = primary.Y, Types = types, View = view });
             }
+        }
+
+        private static int SortAt(float y) => 1000 - Mathf.RoundToInt(y * 10);
+
+        private void ApplyDeliveryToExistingLayout()
+        {
+            // Preserve authored object IDs and UI references while upgrading the saved whitebox.
+            worldCamera.backgroundColor = new Color32(30, 29, 27, 255);
+            foreach (var tile in floor)
+            {
+                tile.sprite = game.appearance.tile;
+                tile.sortingOrder = -2000;
+                tile.transform.localScale = Vector3.one;
+                tile.color = GroundColor(Mathf.RoundToInt(tile.transform.position.x), Mathf.RoundToInt(tile.transform.position.y));
+            }
+            void Replace(string oldName, string newName, Sprite image, float x, float y, float scale, int order)
+            {
+                var renderer = visualRoot.Find(oldName).GetComponent<SpriteRenderer>();
+                renderer.name = newName; renderer.sprite = image; renderer.color = Color.white;
+                renderer.transform.position = new Vector3(x, y, 0);
+                renderer.transform.localScale = Vector3.one * scale;
+                renderer.sortingOrder = order;
+            }
+            Replace("WarehouseWhitebox", "Warehouse", game.appearance.warehouse, PrototypeSimulation.WarehouseX, 1.65f, 0.94f, SortAt(4.5f));
+            Replace("OldHousingWhitebox", "OldHousing", game.appearance.housing, PrototypeSimulation.HousingX, 1.65f, 0.94f, SortAt(4.5f));
+            Replace("HoleWhitebox", "Hole", game.appearance.hole, 2.5f, 20.5f, 1, -1500);
+            Replace("CommunityLamp", "CommunityLamp", game.appearance.streetlamp, 20, 4.6f, 1, SortAt(5));
+            Replace("WoodworkBench", "WoodworkBench", game.appearance.woodwork, PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 0.5f, 0.92f, SortAt(PrototypeSimulation.BenchY + 0.5f));
+            Replace("GeneratorWhitebox", "Generator", game.appearance.generator, PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 0.5f, 0.92f, SortAt(PrototypeSimulation.GeneratorY + 0.5f));
+            Replace("TableWhitebox", "Workbench", game.appearance.workbench, PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 0.5f, 0.92f, SortAt(PrototypeSimulation.TableY + 0.5f));
+            Replace("DismantleWhitebox", "Dismantle", game.appearance.dismantle, PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 0.5f, 0.92f, SortAt(PrototypeSimulation.DismantleY + 0.5f));
+            foreach (var renderer in visualRoot.GetComponentsInChildren<SpriteRenderer>(true).Where(renderer => renderer.sprite == game.appearance.marker))
+                renderer.sortingOrder = renderer.name.Contains("Plate") ? 1998 : -1400;
+            foreach (var label in visualRoot.GetComponentsInChildren<TextMesh>(true)) label.GetComponent<MeshRenderer>().sortingOrder = 2000;
+            Line("Warehouse Interaction Front", PrototypeSimulation.WarehouseX, PrototypeSimulation.WarehouseY, 0.9f, 0.12f, new Color32(230, 179, 102, 190));
+            var oldRenderer = worker.GetComponent<SpriteRenderer>();
+            if (Application.isPlaying) Destroy(oldRenderer); else DestroyImmediate(oldRenderer);
+            worker.localScale = Vector3.one;
+            worker.gameObject.AddComponent<PrototypeActorView>().Configure(game.appearance, 0);
+            piles.Clear(); cells.Clear(); residentViews.Clear(); previousModel = null; lastRevision = -1;
+            layoutVersion = 3;
+        }
+
+        private PrototypeActorView Actor(string objectName, int skin)
+        {
+            var obj = new GameObject(objectName);
+            obj.transform.SetParent(visualRoot, false);
+            var actor = obj.AddComponent<PrototypeActorView>();
+            actor.Configure(game.appearance, skin);
+            return actor;
         }
 
         private SpriteRenderer Sprite(string objectName, Sprite image, float x, float y, float scale, int order)
@@ -478,7 +462,7 @@ namespace CrazyRubbish.Prototype
             mesh.text = value;
             var renderer = obj.GetComponent<MeshRenderer>();
             renderer.sharedMaterial = mesh.font.material;
-            renderer.sortingOrder = 50;
+            renderer.sortingOrder = 2000;
             return mesh;
         }
     }

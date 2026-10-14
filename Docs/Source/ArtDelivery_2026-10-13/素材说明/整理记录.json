@@ -1,0 +1,608 @@
+{
+  "target": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材",
+  "plan": [
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\男主",
+      "mode": "move",
+      "isDirectory": true,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图\\生成提示词.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\男主\\生成提示词.json",
+          "sha256": "20F52851EEDBAB650E423D2A5B0D3539753D40D4A8431743D1036BB2BCA1ACD0",
+          "bytes": 3780
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图\\使用说明.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\男主\\使用说明.txt",
+          "sha256": "49E78E5081C86C31C04F6676F21E55E12F0E71FF8F8D0F8FA85712DA593C86B3",
+          "bytes": 487
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图\\chr_hero_down.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\男主\\chr_hero_down.png",
+          "sha256": "302A1671A85A5A9AEBD72A2E0B7797ECC6A31AFD8695A3E71359C6E84C003001",
+          "bytes": 1117359
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图\\chr_hero_left.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\男主\\chr_hero_left.png",
+          "sha256": "E87C6D813785C17BEB37869F14788861CBC47954F4203F23F80E2DC0D4C46572",
+          "bytes": 1008545
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图\\chr_hero_right.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\男主\\chr_hero_right.png",
+          "sha256": "70FE9048DD0EA6823EA86504A3858B13F7B5855702B5A9D0A5FBEB1CBF6F4696",
+          "bytes": 1000024
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图\\chr_hero_up.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\男主\\chr_hero_up.png",
+          "sha256": "3822D06460248909CB8D5726F18077DAC265F688E5F2CC20378E5E0C6D7AD451",
+          "bytes": 1102002
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\女主",
+      "mode": "move",
+      "isDirectory": true,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图\\生成提示词.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\女主\\生成提示词.json",
+          "sha256": "8633BCA4ED6A2F2635A1DECFC0CEB1B9BCB331102FD9C6934D8175EBAFCFD2BD",
+          "bytes": 5155
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图\\使用说明.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\女主\\使用说明.txt",
+          "sha256": "A4F803283D36000D895F5DF75980FE5F18C84F91C35F639C163ACD92131570FA",
+          "bytes": 516
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图\\chr_hero_female_down.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\女主\\chr_hero_female_down.png",
+          "sha256": "07653FB45025962AFB50E20293D79DB9A97BDEB9E1553E0DE620C5F07EE8CFEC",
+          "bytes": 1120910
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图\\chr_hero_female_left.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\女主\\chr_hero_female_left.png",
+          "sha256": "D678C8D8DACA5D1A72D7611ECDD3E76ABDA8BCB002B031D8652B232972B8A47C",
+          "bytes": 1081476
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图\\chr_hero_female_right.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\女主\\chr_hero_female_right.png",
+          "sha256": "05014F7ED6FA570D47604E8DB0CF1D8C3713480FF9B08568F97C598404F0EA1F",
+          "bytes": 1018826
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图\\chr_hero_female_up.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\女主\\chr_hero_female_up.png",
+          "sha256": "972D42A88F701E8E90F67D2F74507F244095B9B0C5323BA15BEB00A8722267B8",
+          "bytes": 1106383
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民",
+      "mode": "move",
+      "isDirectory": true,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\素材信息.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\素材信息.json",
+          "sha256": "090751A6F5A96C2A876016BC8CB94E8649B93B24557FC365DA51EA767AB1B8F6",
+          "bytes": 6895
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\新增造型生成提示词.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\新增造型生成提示词.json",
+          "sha256": "2328CF7BC8CFD8F59514C67593E25F2D6054BD4F5D16218D48F77A1F37E3EEE8",
+          "bytes": 16395
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\NPC造型清单与使用说明.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\NPC造型清单与使用说明.txt",
+          "sha256": "930BAA2B8652E8A3451B5AA27276E964EC68FFFA8EDE9E6368EE0B15E9F726D8",
+          "bytes": 893
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_01\\生成提示词.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_01\\生成提示词.json",
+          "sha256": "55CCA438523A08A05621B09D861644EBCEFDD1E5CF4E8F7F2C8A28882D064012",
+          "bytes": 5942
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_01\\使用说明.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_01\\使用说明.txt",
+          "sha256": "589B7EE3786E14995F34F91410CC71B2B310A13D303E825D60D1A863BC5D8A26",
+          "bytes": 604
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_01\\素材信息.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_01\\素材信息.json",
+          "sha256": "EC597330D7128640D07548AA987F0D8136A7787BDD17E6F597FA86A5D4808905",
+          "bytes": 1477
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_01\\chr_worker_down.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_01\\chr_worker_down.png",
+          "sha256": "3183A53D4782BE2D8106D5E4D8EB1D3CC5B6D8DAD9265922E16420525F331626",
+          "bytes": 1048167
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_01\\chr_worker_left.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_01\\chr_worker_left.png",
+          "sha256": "F574E3E5C737C82D5A605472C9F3B02A7963CD1A609E194576413CE71FB93746",
+          "bytes": 938387
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_01\\chr_worker_right.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_01\\chr_worker_right.png",
+          "sha256": "9305299F93D1CFB6D1EB335C01077DCE00899FAE9A4BFB6057D1687FAB790F5E",
+          "bytes": 948207
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_01\\chr_worker_up.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_01\\chr_worker_up.png",
+          "sha256": "9D21C86094DF3CD04B3BDA1A19C0B89784069CDB68CDC0D372DD509758F7D086",
+          "bytes": 1033007
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_02\\chr_worker_02_down.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_02\\chr_worker_02_down.png",
+          "sha256": "824390E7C551F0112C7AB4A1E7657EA302975EC05A8E1CA57606E25573D3435B",
+          "bytes": 1030972
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_02\\chr_worker_02_left.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_02\\chr_worker_02_left.png",
+          "sha256": "2B70BA1BCFA97771154BC8EF529D15952F650D1F61D257E2A893B1A67743BE9E",
+          "bytes": 904027
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_02\\chr_worker_02_right.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_02\\chr_worker_02_right.png",
+          "sha256": "C1511D6702E7E3E609AD3653EBAB72F1803D92BE4A9029F8A464033A561D69C9",
+          "bytes": 928786
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_02\\chr_worker_02_up.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_02\\chr_worker_02_up.png",
+          "sha256": "E928D066C1CCC1734893B2D362B25A8D8A8AA7E59455C12726047E5A67305D31",
+          "bytes": 1002911
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_03\\chr_worker_03_down.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_03\\chr_worker_03_down.png",
+          "sha256": "E6D6B9A17C933C2B8E5C1A15963273DFD026E531897CAFDC19DCA6B1E1600C87",
+          "bytes": 1092606
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_03\\chr_worker_03_left.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_03\\chr_worker_03_left.png",
+          "sha256": "F8D380D6B877BEA0FCFB15174B77B3A2C9E82454B4D0B2F4115F90768C4E0D4A",
+          "bytes": 972294
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_03\\chr_worker_03_right.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_03\\chr_worker_03_right.png",
+          "sha256": "FF9CE61CF4A1C76844BE36169D6A844EB726003D2C808491B9E486D0D101677F",
+          "bytes": 970351
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_03\\chr_worker_03_up.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_03\\chr_worker_03_up.png",
+          "sha256": "C7222CBE3FFB82EAE6A4F95246E1489A9651B942A9734F3A32686C71272B657B",
+          "bytes": 1074988
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_04\\chr_worker_04_down.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_04\\chr_worker_04_down.png",
+          "sha256": "1AA98C88AACA95AC13E740E26C7B519613FF412AFB59898B6D588E91D42FA4DF",
+          "bytes": 1140413
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_04\\chr_worker_04_left.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_04\\chr_worker_04_left.png",
+          "sha256": "2DF88DFD7A0CA6AA74953ED771C6906B651EF0828A305077250E44D37CEC49D0",
+          "bytes": 1002043
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_04\\chr_worker_04_right.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_04\\chr_worker_04_right.png",
+          "sha256": "44D30DA166BD0F6A1BD94614DB58035DF150769188110596903D1F060A6387E3",
+          "bytes": 1036113
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集\\worker_04\\chr_worker_04_up.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\人物\\居民\\worker_04\\chr_worker_04_up.png",
+          "sha256": "293F13B28D852E278A8FCCB069952E435D23AD4A7A59FBBC3C3085A362F9C3A3",
+          "bytes": 1106929
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备",
+      "mode": "move",
+      "isDirectory": true,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\机器贴图清单.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\机器贴图清单.txt",
+          "sha256": "275B1CD74720963C7D83D0A22869C20BC8B9214E8D6502F0EC80B641DFED2283",
+          "bytes": 2983
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\生成交付记录.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\生成交付记录.json",
+          "sha256": "BECC36DB2A8EB6EA94F19B44B3D2CF4109CD38CAB76B7548CF93B6CC82202A72",
+          "bytes": 6526
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\生成提示词.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\生成提示词.json",
+          "sha256": "889E5EE086294153C2290D538F117DDDA60C599F10F63D8DD1D6275367E04592",
+          "bytes": 33298
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\素材信息.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\素材信息.json",
+          "sha256": "09E556CFE71AAAF14CCF2ED5C2DE17A9E43E9CDF4F9307A77F084165A39B1D99",
+          "bytes": 12583
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_auto_plastic_preprocessing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_auto_plastic_preprocessing_idle.png",
+          "sha256": "82E4A368B0F35EAA35D9D84CEFEF3179A9394A9AE2CC3D5F33AC5FAA840E5336",
+          "bytes": 1162314
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_auto_plastic_reprocessing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_auto_plastic_reprocessing_idle.png",
+          "sha256": "F1A6CBDB0F4FE632B216CAA8B08A0BB6A1AA09D2B6E996D496089E4F4EB1DB15",
+          "bytes": 1013597
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_auto_structural_parts_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_auto_structural_parts_idle.png",
+          "sha256": "A3F9ED4574B5EE02E136F028836785ECDEE45F0DB67F346FB79D9231F105BC46",
+          "bytes": 1374742
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_automatic_woodwork_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_automatic_woodwork_idle.png",
+          "sha256": "0529B06C7F021AA8EF99D85589A015965FD10B32011996F5A4704ACC2FD9ECF7",
+          "bytes": 1067562
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_composting_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_composting_idle.png",
+          "sha256": "F16C1A93CFA2719F343D877587722C8A298BE7586FE890EDC05A859B22070DAB",
+          "bytes": 1034226
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_disassembly_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_disassembly_idle.png",
+          "sha256": "2E1504BDD6BEAF922BA5764A7080140988E923C8C04FAA8AFBF8F71EAC5CCFE3",
+          "bytes": 1022379
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_electric_woodwork_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_electric_woodwork_idle.png",
+          "sha256": "BC5304E6D6F5A575579303F3D5EBDA2890E7859D4C246E6CD310353673F28FEA",
+          "bytes": 1326939
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_generator_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_generator_idle.png",
+          "sha256": "7FCD4DC852417E85B097E242D1330E7CCB164F0773739CDAF8C2E36E4E9EB569",
+          "bytes": 912448
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_grow_light_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_grow_light_idle.png",
+          "sha256": "930D8AFADB58C1A2A839B1FFAFBAB2D46F25DCDB7DC5258F79116004F472A80B",
+          "bytes": 344467
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_growing_bed_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_growing_bed_idle.png",
+          "sha256": "CABB5DE2064F45AF4EC3DB957F9E2E97B9C49D795DEAC4642FD11B17E73F7EC1",
+          "bytes": 1141836
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_metal_parts_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_metal_parts_idle.png",
+          "sha256": "12396294F77E4DB18674033FC52D6B3FD48333C48080842E821841AA39A02CE5",
+          "bytes": 1140500
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_metal_processing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_metal_processing_idle.png",
+          "sha256": "9B1F9C35E84AA8B123FA241C7F78FAE377CC7F5AFC6D86F7C016AA9397F269D9",
+          "bytes": 1569074
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_plastic_preprocessing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_plastic_preprocessing_idle.png",
+          "sha256": "CAA07A8296ED45A5E52BD225ABFB0C87F36780249CBAAFA6BB89A4B369F0C94E",
+          "bytes": 1162440
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_plastic_reprocessing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_plastic_reprocessing_idle.png",
+          "sha256": "D68C68F1AD707EBDF0E857CB9F9FD64BDB4D51A04B35640C147D53EF9FFD3DE2",
+          "bytes": 1009802
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_plastic_sorting_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_plastic_sorting_idle.png",
+          "sha256": "2F37BE5D807A36B0567F26DBA465D43D2D0A89969ABE9A8A9B5B027B8176A130",
+          "bytes": 897994
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_refurbishment_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_refurbishment_idle.png",
+          "sha256": "1BF8CB22C8F26032D0AA4DD65D417B089833B8C22D8A765A8A2614DB5EF5DE50",
+          "bytes": 1245806
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_substrate_mixing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_substrate_mixing_idle.png",
+          "sha256": "38443740F2EAEF877CB9FD3553004F980687020C12F6775249DAA62FAF046F23",
+          "bytes": 978821
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_washing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_washing_idle.png",
+          "sha256": "917055817E33B8585ED4E416DEF16B97A8A025D61E7411908E0D82A25A382996",
+          "bytes": 866302
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_wire_manufacturing_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_wire_manufacturing_idle.png",
+          "sha256": "7E1ABEA40EE1DE8F444685FC049713396C08A888B7FEA8902E150F9BCD10B2D2",
+          "bytes": 983647
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_woodwork_loaded.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_woodwork_loaded.png",
+          "sha256": "373B6711353E3A7A8C5394AE1332AC481D11CCCF7F89113AEE815B3E80C2AD27",
+          "bytes": 644334
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图\\bld_workbench_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\机器\\生产设备\\bld_workbench_idle.png",
+          "sha256": "204F363CAABF5D91493869E8709250312CC3A51C3978CE90525D91C72780C57F",
+          "bytes": 952206
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图.zip",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\主角四向贴图.zip",
+      "mode": "move",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\主角四向贴图.zip",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\主角四向贴图.zip",
+          "sha256": "64584F5CFB872C330F8404C91683B561AB2F6F7A92BC72F26A234F3ACC9DB0B5",
+          "bytes": 4178734
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图.zip",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\女主四向贴图.zip",
+      "mode": "move",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\女主四向贴图.zip",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\女主四向贴图.zip",
+          "sha256": "DF90E7F6F16127372382700801CCF45D90D4AEE412B2BFDCFA6E2DB31B592E02",
+          "bytes": 4278125
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集.zip",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\NPC造型合集.zip",
+      "mode": "move",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC造型合集.zip",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\NPC造型合集.zip",
+          "sha256": "64DAAB491ADC229F7BF759FB943E744087FC56FD7120DE7D2EB30F673536C73E",
+          "bytes": 16036787
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图.zip",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\全部机器贴图.zip",
+      "mode": "move",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\全部机器贴图.zip",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\压缩包\\全部机器贴图.zip",
+          "sha256": "AA4E7365F7279343D0BA86170D1AF8982416B98B3C79BC36124B4AEC90FD49AE",
+          "bytes": 19130163
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图",
+      "mode": "move",
+      "isDirectory": true,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图\\生成提示词.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图\\生成提示词.json",
+          "sha256": "55CCA438523A08A05621B09D861644EBCEFDD1E5CF4E8F7F2C8A28882D064012",
+          "bytes": 5942
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图\\使用说明.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图\\使用说明.txt",
+          "sha256": "589B7EE3786E14995F34F91410CC71B2B310A13D303E825D60D1A863BC5D8A26",
+          "bytes": 604
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图\\素材信息.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图\\素材信息.json",
+          "sha256": "EC597330D7128640D07548AA987F0D8136A7787BDD17E6F597FA86A5D4808905",
+          "bytes": 1477
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图\\chr_worker_down.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图\\chr_worker_down.png",
+          "sha256": "3183A53D4782BE2D8106D5E4D8EB1D3CC5B6D8DAD9265922E16420525F331626",
+          "bytes": 1048167
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图\\chr_worker_left.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图\\chr_worker_left.png",
+          "sha256": "F574E3E5C737C82D5A605472C9F3B02A7963CD1A609E194576413CE71FB93746",
+          "bytes": 938387
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图\\chr_worker_right.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图\\chr_worker_right.png",
+          "sha256": "9305299F93D1CFB6D1EB335C01077DCE00899FAE9A4BFB6057D1687FAB790F5E",
+          "bytes": 948207
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图\\chr_worker_up.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图\\chr_worker_up.png",
+          "sha256": "9D21C86094DF3CD04B3BDA1A19C0B89784069CDB68CDC0D372DD509758F7D086",
+          "bytes": 1033007
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图.zip",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图.zip",
+      "mode": "move",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图.zip",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首套NPC\\NPC四向贴图.zip",
+          "sha256": "397A9FEEF91BE130B42A1982CF210BC8DEB9878AE22B55F7BEBF82B26C537200",
+          "bytes": 3920740
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图",
+      "mode": "move",
+      "isDirectory": true,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图\\生成提示词.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图\\生成提示词.json",
+          "sha256": "C225500791DCE2A84B1E07CD351285A4462EDCD7A1A909E5CA62836E3CFF8CAF",
+          "bytes": 3448
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图\\使用说明.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图\\使用说明.txt",
+          "sha256": "8DF288BACEC4ED5BCB07C8CD6CBD82F8D521B2E979E1CD5CD7266A4D1880E738",
+          "bytes": 600
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图\\素材信息.json",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图\\素材信息.json",
+          "sha256": "F5BC6B2FDEBE5660452A1B8988F8B18D77F55065CC849BFB2AE58F585A8C4EC4",
+          "bytes": 398
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图\\bld_generator_idle.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图\\bld_generator_idle.png",
+          "sha256": "7FCD4DC852417E85B097E242D1330E7CCB164F0773739CDAF8C2E36E4E9EB569",
+          "bytes": 912448
+        },
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图\\bld_woodwork_loaded.png",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图\\bld_woodwork_loaded.png",
+          "sha256": "373B6711353E3A7A8C5394AE1332AC481D11CCCF7F89113AEE815B3E80C2AD27",
+          "bytes": 644334
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图.zip",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图.zip",
+      "mode": "move",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图.zip",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\历史素材\\首批机器\\第一批机器贴图.zip",
+          "sha256": "1B582EB533B1108F1A04EE1E25B8F1D24D9FF6A519FA61AEDED451F6788FA76D",
+          "bytes": 1294656
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\第一批美术贴图清单.md",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\素材说明\\第一批美术贴图清单.md",
+      "mode": "copy",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批美术贴图清单.md",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\素材说明\\第一批美术贴图清单.md",
+          "sha256": "B8EDC83E33CD4827A15997AE65317BAC0CB18D597A0775332C749D03B96C5F19",
+          "bytes": 24355
+        }
+      ]
+    },
+    {
+      "source": "C:\\Users\\snowy_light\\Desktop\\第一批美术贴图清单_简版.txt",
+      "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\素材说明\\第一批美术贴图清单_简版.txt",
+      "mode": "copy",
+      "isDirectory": false,
+      "files": [
+        {
+          "source": "C:\\Users\\snowy_light\\Desktop\\第一批美术贴图清单_简版.txt",
+          "destination": "C:\\Users\\snowy_light\\Desktop\\涌现游戏素材\\素材说明\\第一批美术贴图清单_简版.txt",
+          "sha256": "D2BADD22CEDF77B828B46E75E0783CD3B416C00602B89DF8AA74C287F8E186F3",
+          "bytes": 4819
+        }
+      ]
+    }
+  ],
+  "completed": [
+    "C:\\Users\\snowy_light\\Desktop\\主角四向贴图",
+    "C:\\Users\\snowy_light\\Desktop\\女主四向贴图",
+    "C:\\Users\\snowy_light\\Desktop\\NPC造型合集",
+    "C:\\Users\\snowy_light\\Desktop\\全部机器贴图",
+    "C:\\Users\\snowy_light\\Desktop\\主角四向贴图.zip",
+    "C:\\Users\\snowy_light\\Desktop\\女主四向贴图.zip",
+    "C:\\Users\\snowy_light\\Desktop\\NPC造型合集.zip",
+    "C:\\Users\\snowy_light\\Desktop\\全部机器贴图.zip",
+    "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图",
+    "C:\\Users\\snowy_light\\Desktop\\NPC四向贴图.zip",
+    "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图",
+    "C:\\Users\\snowy_light\\Desktop\\第一批机器贴图.zip",
+    "C:\\Users\\snowy_light\\Desktop\\第一批美术贴图清单.md",
+    "C:\\Users\\snowy_light\\Desktop\\第一批美术贴图清单_简版.txt"
+  ],
+  "verified": true
+}

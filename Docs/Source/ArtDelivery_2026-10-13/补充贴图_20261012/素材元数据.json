@@ -1,0 +1,106 @@
+{
+  "files": [
+    {
+      "file": "env_ground_plain_v1.png",
+      "name": "基础地面",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "sha256": "ff260d91273e5c024a93bcd759d300db3a11a77968c21b05903ffbe93f4bcaa9",
+      "logical_footprint": "1x1建议；需测试平铺",
+      "fully_transparent_pixels": 0,
+      "source": "generated_images/exec-10c13a4d-b443-435c-a45e-dd12f4ff8329.png"
+    },
+    {
+      "file": "atlas_logistics_v1.png",
+      "name": "传送带与接口",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "5ea602cf10ab4e58f4660d63de9dfdc35bda9a2f71c544858db87993127d9083",
+      "logical_footprint": "图集",
+      "fully_transparent_pixels": 1062780,
+      "source": "generated_images/exec-7775f901-8152-40ae-b404-5b54795ac901.png"
+    },
+    {
+      "file": "atlas_power_lines_v1.png",
+      "name": "电线连接件",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "5cf66dabad83286c20272d65ed8fd83add27a85f661333ba5c3d84293d7857a9",
+      "logical_footprint": "图集",
+      "fully_transparent_pixels": 1346906,
+      "source": "generated_images/exec-7df5becd-2355-4405-8b80-63f61892e082.png"
+    },
+    {
+      "file": "atlas_items_core_v1.png",
+      "name": "首批12种物品图标",
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGBA",
+      "sha256": "4b5b7fd4c65ca0d9e29f000471142f7b5896fe61368bde78b14832eea44a2d7d",
+      "logical_footprint": "图集",
+      "fully_transparent_pixels": 895244,
+      "source": "generated_images/exec-5456c87c-2896-4f42-b697-514b6ef3ff92.png"
+    },
+    {
+      "file": "atlas_items_extra_v1.png",
+      "name": "工具与生活物品图标",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "4c1cbf8eed4ecb18ae78093339abae5ab6c61e097a76fdfe928976ebecab0cf0",
+      "logical_footprint": "图集",
+      "fully_transparent_pixels": 1073630,
+      "source": "generated_images/exec-b7badd78-9973-4913-984c-59412f1558e5.png"
+    },
+    {
+      "file": "atlas_work_status_v1.png",
+      "name": "7种工作状态提示",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "714c79dd0d34745409216c8188bd3e1a706232298c01e518fc1d36458386e271",
+      "logical_footprint": "图集",
+      "fully_transparent_pixels": 1037964,
+      "source": "generated_images/exec-403c0924-d902-4a3e-aec0-37aa8b532c15.png"
+    },
+    {
+      "file": "bld_survey_idle_v1.png",
+      "name": "地质勘探站",
+      "width": 1295,
+      "height": 1215,
+      "mode": "RGBA",
+      "sha256": "ca12650c65884da0d641f8a439bd73a09a6795066d88a16750a106b08e15edd8",
+      "logical_footprint": "2x2",
+      "fully_transparent_pixels": 1001252,
+      "source": "generated_images/exec-5f2e339c-b87c-4f33-aff5-2a24fc44c337.png"
+    },
+    {
+      "file": "bld_mine_idle_v1.png",
+      "name": "持续采掘机",
+      "width": 1267,
+      "height": 1241,
+      "mode": "RGBA",
+      "sha256": "af679c37d8d661030c6ceeb53a77d87fee689b8deaeab55794460847450ec3c2",
+      "logical_footprint": "3x3",
+      "fully_transparent_pixels": 717221,
+      "source": "generated_images/exec-b48ab5b5-578c-41f3-90d8-fe1ad68a3f5c.png"
+    },
+    {
+      "file": "veh_return_lift_idle_v1.png",
+      "name": "返程升降舱",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "1472a4f9ea24e39ac3375dcd084fc2637e6abb053c5dfc1f94304be1071ab5fd",
+      "logical_footprint": "3x2视觉；检修平台4x4另制",
+      "fully_transparent_pixels": 751472,
+      "source": "generated_images/exec-1664cf04-b5c3-470d-ae91-ebc7ddd78158.png"
+    }
+  ],
+  "png_count": 9,
+  "atlas_sprite_count": 39,
+  "unity_tested": false
+}

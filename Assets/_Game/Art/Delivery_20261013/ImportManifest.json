@@ -1,0 +1,2788 @@
+{
+  "deliveryDate": "2026-10-13",
+  "archiveName": "喂——出来游戏素材.zip",
+  "archiveSha256": "c51bdf032e6dbafe8c04ffeaddfb951ad14c67b3cfa7d541024a4f3d3d64fc16",
+  "sourceDirectory": "Docs/Source/ArtDelivery_2026-10-13",
+  "textureCount": 71,
+  "spriteCount": 171,
+  "atlasSliceCount": 111,
+  "characterHeightUnits": 1.4,
+  "anchorStatus": "Initial foreground-based anchors; tune contact points in the actual scene.",
+  "textures": [
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/交互姿势/chr_hero_female_interactions.png",
+      "sourcePath": "人物/交互姿势/chr_hero_female_interactions.png",
+      "sha256": "530d34d610080447eeefc3c051698c3c28bbf309f7b3f7df7c519129de2d4e1a",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 330.714286,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_female_carry_up",
+          "x": 33,
+          "y": 989,
+          "width": 224,
+          "height": 472,
+          "pivotX": 0.5,
+          "pivotY": 0.012711864406779662,
+          "spriteId": "9f75230c77835d6f83cd16eca6185f56"
+        },
+        {
+          "name": "chr_hero_female_carry_down",
+          "x": 285,
+          "y": 987,
+          "width": 229,
+          "height": 474,
+          "pivotX": 0.5,
+          "pivotY": 0.012658227848101266,
+          "spriteId": "a71ee6a3a72455c8921a27660bcde59e"
+        },
+        {
+          "name": "chr_hero_female_carry_left",
+          "x": 530,
+          "y": 985,
+          "width": 221,
+          "height": 476,
+          "pivotX": 0.5746606334841629,
+          "pivotY": 0.012605042016806723,
+          "spriteId": "49912f755aa2558680c12399d70f0a13"
+        },
+        {
+          "name": "chr_hero_female_carry_right",
+          "x": 766,
+          "y": 985,
+          "width": 227,
+          "height": 476,
+          "pivotX": 0.42290748898678415,
+          "pivotY": 0.012605042016806723,
+          "spriteId": "e47daed8e43a5a45820e893d0fdd04cc"
+        },
+        {
+          "name": "chr_hero_female_pickup_up",
+          "x": 31,
+          "y": 548,
+          "width": 243,
+          "height": 336,
+          "pivotX": 0.5329218106995884,
+          "pivotY": 0.017857142857142856,
+          "spriteId": "02c57a0adad95facb65d7d17d551f027"
+        },
+        {
+          "name": "chr_hero_female_pickup_down",
+          "x": 299,
+          "y": 540,
+          "width": 210,
+          "height": 369,
+          "pivotX": 0.3738095238095238,
+          "pivotY": 0.016260162601626018,
+          "spriteId": "0b22df4e7a6a51d9816289d64367c4f2"
+        },
+        {
+          "name": "chr_hero_female_pickup_left",
+          "x": 509,
+          "y": 542,
+          "width": 249,
+          "height": 358,
+          "pivotX": 0.7068273092369478,
+          "pivotY": 0.01675977653631285,
+          "spriteId": "530d8410932352cea247ce28c4bd6a4f"
+        },
+        {
+          "name": "chr_hero_female_pickup_right",
+          "x": 774,
+          "y": 540,
+          "width": 235,
+          "height": 366,
+          "pivotX": 0.2765957446808511,
+          "pivotY": 0.01639344262295082,
+          "spriteId": "ffc0f424376c57339ff0cb23ee925df7"
+        },
+        {
+          "name": "chr_hero_female_saw_up",
+          "x": 12,
+          "y": 57,
+          "width": 255,
+          "height": 441,
+          "pivotX": 0.5215686274509804,
+          "pivotY": 0.013605442176870748,
+          "spriteId": "9b7606828c865ab5b53f95d070f81fbb"
+        },
+        {
+          "name": "chr_hero_female_saw_down",
+          "x": 279,
+          "y": 61,
+          "width": 236,
+          "height": 432,
+          "pivotX": 0.527542372881356,
+          "pivotY": 0.013888888888888888,
+          "spriteId": "5d318710e53755aa94774130fa3f04d4"
+        },
+        {
+          "name": "chr_hero_female_saw_left",
+          "x": 521,
+          "y": 54,
+          "width": 216,
+          "height": 438,
+          "pivotX": 0.7222222222222222,
+          "pivotY": 0.01141552511415525,
+          "spriteId": "a94f07551a0f5d1ca35247cad299d71a"
+        },
+        {
+          "name": "chr_hero_female_saw_right",
+          "x": 778,
+          "y": 52,
+          "width": 231,
+          "height": 441,
+          "pivotX": 0.27056277056277056,
+          "pivotY": 0.013605442176870748,
+          "spriteId": "eb012b6a379b594ca0406aaaf7ca1438"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/交互姿势/chr_hero_male_interactions.png",
+      "sourcePath": "人物/交互姿势/chr_hero_male_interactions.png",
+      "sha256": "65f8191ec20cdb1a5ea9ce6755e35750b237b05245eba96a82acc7cd336b2c15",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 335.714286,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_male_carry_up",
+          "x": 17,
+          "y": 962,
+          "width": 245,
+          "height": 482,
+          "pivotX": 0.5,
+          "pivotY": 0.01037344398340249,
+          "spriteId": "dd5ea29f0d085b1fbb7077e058a3608b"
+        },
+        {
+          "name": "chr_hero_male_carry_down",
+          "x": 273,
+          "y": 962,
+          "width": 240,
+          "height": 482,
+          "pivotX": 0.4979166666666667,
+          "pivotY": 0.01037344398340249,
+          "spriteId": "438cca0f114153efbd7ea8b3121cb7be"
+        },
+        {
+          "name": "chr_hero_male_carry_left",
+          "x": 530,
+          "y": 962,
+          "width": 201,
+          "height": 482,
+          "pivotX": 0.6442786069651741,
+          "pivotY": 0.012448132780082987,
+          "spriteId": "1821a86a85155009a88b78f42d46e527"
+        },
+        {
+          "name": "chr_hero_male_carry_right",
+          "x": 797,
+          "y": 962,
+          "width": 202,
+          "height": 482,
+          "pivotX": 0.349009900990099,
+          "pivotY": 0.012448132780082987,
+          "spriteId": "95228092b0c258ec95a504f438d7f3ba"
+        },
+        {
+          "name": "chr_hero_male_pickup_up",
+          "x": 16,
+          "y": 547,
+          "width": 253,
+          "height": 333,
+          "pivotX": 0.5,
+          "pivotY": 0.018018018018018018,
+          "spriteId": "164bb68c7c7d54bab3ef0e1b6d449dba"
+        },
+        {
+          "name": "chr_hero_male_pickup_down",
+          "x": 293,
+          "y": 537,
+          "width": 217,
+          "height": 353,
+          "pivotX": 0.4009216589861751,
+          "pivotY": 0.0169971671388102,
+          "spriteId": "93950f80bc2d5e559a0629b4c9f45214"
+        },
+        {
+          "name": "chr_hero_male_pickup_left",
+          "x": 521,
+          "y": 543,
+          "width": 241,
+          "height": 339,
+          "pivotX": 0.4336099585062241,
+          "pivotY": 0.017699115044247787,
+          "spriteId": "5f75462f91a655aa875f39b00d2b38b8"
+        },
+        {
+          "name": "chr_hero_male_pickup_right",
+          "x": 773,
+          "y": 543,
+          "width": 241,
+          "height": 339,
+          "pivotX": 0.5622406639004149,
+          "pivotY": 0.017699115044247787,
+          "spriteId": "f449b64a03f756978cbceda660dd6dc7"
+        },
+        {
+          "name": "chr_hero_male_saw_up",
+          "x": 16,
+          "y": 46,
+          "width": 253,
+          "height": 439,
+          "pivotX": 0.5,
+          "pivotY": 0.01366742596810934,
+          "spriteId": "37f75400c23e53728cfc7878c1d229dc"
+        },
+        {
+          "name": "chr_hero_male_saw_down",
+          "x": 273,
+          "y": 50,
+          "width": 245,
+          "height": 435,
+          "pivotX": 0.5142857142857142,
+          "pivotY": 0.011494252873563218,
+          "spriteId": "74262ec0bfc1566cac175200766503d9"
+        },
+        {
+          "name": "chr_hero_male_saw_left",
+          "x": 523,
+          "y": 42,
+          "width": 235,
+          "height": 444,
+          "pivotX": 0.7042553191489361,
+          "pivotY": 0.013513513513513514,
+          "spriteId": "4013a387c6105c4283def5ba5c7517a5"
+        },
+        {
+          "name": "chr_hero_male_saw_right",
+          "x": 778,
+          "y": 42,
+          "width": 232,
+          "height": 443,
+          "pivotX": 0.28879310344827586,
+          "pivotY": 0.013544018058690745,
+          "spriteId": "71e1af6de2a957f3ac043a31cfbe31c4"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/交互姿势/chr_worker_01_interactions.png",
+      "sourcePath": "人物/交互姿势/chr_worker_01_interactions.png",
+      "sha256": "25414e3df97a002972d8330345c5f30f9197f1516f6d8ff13112f5da90a169b5",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 315.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_01_carry_up",
+          "x": 30,
+          "y": 996,
+          "width": 211,
+          "height": 452,
+          "pivotX": 0.4928909952606635,
+          "pivotY": 0.011061946902654867,
+          "spriteId": "5c615c2eb5e957d09f9f776553dab0e9"
+        },
+        {
+          "name": "chr_worker_01_carry_down",
+          "x": 272,
+          "y": 996,
+          "width": 219,
+          "height": 452,
+          "pivotX": 0.4954337899543379,
+          "pivotY": 0.01327433628318584,
+          "spriteId": "d9cde4ee852d501e9d3fef3f296d02f7"
+        },
+        {
+          "name": "chr_worker_01_carry_left",
+          "x": 528,
+          "y": 995,
+          "width": 193,
+          "height": 454,
+          "pivotX": 0.689119170984456,
+          "pivotY": 0.013215859030837005,
+          "spriteId": "9feb47e38bc55473baca35faf279867f"
+        },
+        {
+          "name": "chr_worker_01_carry_right",
+          "x": 813,
+          "y": 995,
+          "width": 194,
+          "height": 454,
+          "pivotX": 0.30670103092783507,
+          "pivotY": 0.013215859030837005,
+          "spriteId": "ca8772a460bc5641a754ecb923eafc52"
+        },
+        {
+          "name": "chr_worker_01_pickup_up",
+          "x": 23,
+          "y": 598,
+          "width": 248,
+          "height": 306,
+          "pivotX": 0.4213709677419355,
+          "pivotY": 0.0196078431372549,
+          "spriteId": "387b256018e75519a00a37844c181b09"
+        },
+        {
+          "name": "chr_worker_01_pickup_down",
+          "x": 303,
+          "y": 585,
+          "width": 211,
+          "height": 333,
+          "pivotX": 0.43601895734597157,
+          "pivotY": 0.018018018018018018,
+          "spriteId": "4d28756de41451c998e97830c3149f0b"
+        },
+        {
+          "name": "chr_worker_01_pickup_left",
+          "x": 519,
+          "y": 586,
+          "width": 237,
+          "height": 334,
+          "pivotX": 0.48945147679324896,
+          "pivotY": 0.014970059880239521,
+          "spriteId": "4673125da0b15d6b9b9429476395f0ba"
+        },
+        {
+          "name": "chr_worker_01_pickup_right",
+          "x": 774,
+          "y": 586,
+          "width": 238,
+          "height": 334,
+          "pivotX": 0.5105042016806722,
+          "pivotY": 0.014970059880239521,
+          "spriteId": "92280d7c8ca9500c9185bacf367a3e7a"
+        },
+        {
+          "name": "chr_worker_01_saw_up",
+          "x": 10,
+          "y": 82,
+          "width": 245,
+          "height": 446,
+          "pivotX": 0.5081632653061224,
+          "pivotY": 0.013452914798206279,
+          "spriteId": "78c28e6a46b55fa8b331a144dd692a59"
+        },
+        {
+          "name": "chr_worker_01_saw_down",
+          "x": 265,
+          "y": 87,
+          "width": 241,
+          "height": 440,
+          "pivotX": 0.5124481327800829,
+          "pivotY": 0.013636363636363636,
+          "spriteId": "90978e7388fe5bc9b0b680fcf56dfa7d"
+        },
+        {
+          "name": "chr_worker_01_saw_left",
+          "x": 519,
+          "y": 81,
+          "width": 220,
+          "height": 447,
+          "pivotX": 0.7659090909090909,
+          "pivotY": 0.013422818791946308,
+          "spriteId": "035278708d775e2e8fcdc3c68068f635"
+        },
+        {
+          "name": "chr_worker_01_saw_right",
+          "x": 793,
+          "y": 81,
+          "width": 218,
+          "height": 447,
+          "pivotX": 0.23853211009174313,
+          "pivotY": 0.013422818791946308,
+          "spriteId": "ceeb7c06321e523bb293fe5a004cb1f1"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/交互姿势/chr_worker_02_interactions.png",
+      "sourcePath": "人物/交互姿势/chr_worker_02_interactions.png",
+      "sha256": "e56bbd8add78a3b5d6935a1b401ed676add15af0dc2e5128f589968afd9031fb",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 330.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_02_carry_up",
+          "x": 16,
+          "y": 1005,
+          "width": 214,
+          "height": 474,
+          "pivotX": 0.5070093457943925,
+          "pivotY": 0.010548523206751054,
+          "spriteId": "02b813aa08b056e5b1d0d7180d8e975e"
+        },
+        {
+          "name": "chr_worker_02_carry_down",
+          "x": 272,
+          "y": 1004,
+          "width": 222,
+          "height": 477,
+          "pivotX": 0.5022522522522522,
+          "pivotY": 0.012578616352201259,
+          "spriteId": "51df10a943765315aaa2ee2d07bc1bcd"
+        },
+        {
+          "name": "chr_worker_02_carry_left",
+          "x": 530,
+          "y": 1004,
+          "width": 210,
+          "height": 474,
+          "pivotX": 0.5238095238095238,
+          "pivotY": 0.010548523206751054,
+          "spriteId": "f244710fbf62550a8501af905a16cb2e"
+        },
+        {
+          "name": "chr_worker_02_carry_right",
+          "x": 807,
+          "y": 1004,
+          "width": 206,
+          "height": 470,
+          "pivotX": 0.46116504854368934,
+          "pivotY": 0.010638297872340425,
+          "spriteId": "5d094a52d238589896f728da6f554f1f"
+        },
+        {
+          "name": "chr_worker_02_pickup_up",
+          "x": 15,
+          "y": 590,
+          "width": 237,
+          "height": 340,
+          "pivotX": 0.5316455696202531,
+          "pivotY": 0.01764705882352941,
+          "spriteId": "a70e411443ac5784b70e0a6aa1268b7c"
+        },
+        {
+          "name": "chr_worker_02_pickup_down",
+          "x": 283,
+          "y": 579,
+          "width": 219,
+          "height": 363,
+          "pivotX": 0.3219178082191781,
+          "pivotY": 0.01652892561983471,
+          "spriteId": "c14e9cd6d5f55926bf5d95b78aa8f12d"
+        },
+        {
+          "name": "chr_worker_02_pickup_left",
+          "x": 507,
+          "y": 585,
+          "width": 244,
+          "height": 345,
+          "pivotX": 0.45491803278688525,
+          "pivotY": 0.017391304347826087,
+          "spriteId": "0eef2619e90d5e74ae24baf4736b7e9d"
+        },
+        {
+          "name": "chr_worker_02_pickup_right",
+          "x": 776,
+          "y": 590,
+          "width": 237,
+          "height": 346,
+          "pivotX": 0.5949367088607594,
+          "pivotY": 0.017341040462427744,
+          "spriteId": "22150d83850457fbb7620f6dd355f513"
+        },
+        {
+          "name": "chr_worker_02_saw_up",
+          "x": 16,
+          "y": 69,
+          "width": 240,
+          "height": 458,
+          "pivotX": 0.49583333333333335,
+          "pivotY": 0.013100436681222707,
+          "spriteId": "c5d77f5e09355ea680db06148fcfd64f"
+        },
+        {
+          "name": "chr_worker_02_saw_down",
+          "x": 272,
+          "y": 70,
+          "width": 222,
+          "height": 459,
+          "pivotX": 0.5202702702702703,
+          "pivotY": 0.010893246187363835,
+          "spriteId": "b9f481d4df645b69a869f52393d661c0"
+        },
+        {
+          "name": "chr_worker_02_saw_left",
+          "x": 514,
+          "y": 64,
+          "width": 221,
+          "height": 457,
+          "pivotX": 0.7714932126696833,
+          "pivotY": 0.010940919037199124,
+          "spriteId": "f0b12b4f6c7a50b99a6ca43f6d69ea4c"
+        },
+        {
+          "name": "chr_worker_02_saw_right",
+          "x": 792,
+          "y": 64,
+          "width": 221,
+          "height": 457,
+          "pivotX": 0.22624434389140272,
+          "pivotY": 0.010940919037199124,
+          "spriteId": "57e21406738e52d9b32715084d4f76cd"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/交互姿势/chr_worker_03_interactions.png",
+      "sourcePath": "人物/交互姿势/chr_worker_03_interactions.png",
+      "sha256": "a09e80de582c70b524055684f65c11e6568fd965235ffd3f3fd7503979e84955",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 310.714286,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_03_carry_up",
+          "x": 30,
+          "y": 1018,
+          "width": 213,
+          "height": 443,
+          "pivotX": 0.49765258215962443,
+          "pivotY": 0.013544018058690745,
+          "spriteId": "1e19478cc3ed52839e327ef5b860296c"
+        },
+        {
+          "name": "chr_worker_03_carry_down",
+          "x": 261,
+          "y": 1015,
+          "width": 237,
+          "height": 445,
+          "pivotX": 0.5126582278481012,
+          "pivotY": 0.01348314606741573,
+          "spriteId": "4e19e34597f55c019cd77ce00e111bd7"
+        },
+        {
+          "name": "chr_worker_03_carry_left",
+          "x": 518,
+          "y": 1012,
+          "width": 191,
+          "height": 449,
+          "pivotX": 0.5340314136125655,
+          "pivotY": 0.011135857461024499,
+          "spriteId": "8aa05f84669956a8bebcb809bda7f8a2"
+        },
+        {
+          "name": "chr_worker_03_carry_right",
+          "x": 807,
+          "y": 1012,
+          "width": 192,
+          "height": 449,
+          "pivotX": 0.4713541666666667,
+          "pivotY": 0.011135857461024499,
+          "spriteId": "d58932b46f1951dbb0ece740f7cdb01f"
+        },
+        {
+          "name": "chr_worker_03_pickup_up",
+          "x": 24,
+          "y": 551,
+          "width": 244,
+          "height": 326,
+          "pivotX": 0.6700819672131147,
+          "pivotY": 0.018404907975460124,
+          "spriteId": "01644eea260c5879af579b73f70c5d3e"
+        },
+        {
+          "name": "chr_worker_03_pickup_down",
+          "x": 295,
+          "y": 546,
+          "width": 204,
+          "height": 338,
+          "pivotX": 0.3112745098039216,
+          "pivotY": 0.01775147928994083,
+          "spriteId": "babcbe5110415e418b9f9f819e352971"
+        },
+        {
+          "name": "chr_worker_03_pickup_left",
+          "x": 525,
+          "y": 553,
+          "width": 226,
+          "height": 324,
+          "pivotX": 0.4646017699115044,
+          "pivotY": 0.018518518518518517,
+          "spriteId": "f09e275ae9c651628236e8f25f98c199"
+        },
+        {
+          "name": "chr_worker_03_pickup_right",
+          "x": 768,
+          "y": 553,
+          "width": 226,
+          "height": 324,
+          "pivotX": 0.5398230088495575,
+          "pivotY": 0.018518518518518517,
+          "spriteId": "0f40fa593bb9500f8de606ac14c7f43d"
+        },
+        {
+          "name": "chr_worker_03_saw_up",
+          "x": 7,
+          "y": 54,
+          "width": 253,
+          "height": 395,
+          "pivotX": 0.5513833992094862,
+          "pivotY": 0.015189873417721518,
+          "spriteId": "c68c33dd116d5079bdaff71485a3f07e"
+        },
+        {
+          "name": "chr_worker_03_saw_down",
+          "x": 263,
+          "y": 54,
+          "width": 254,
+          "height": 409,
+          "pivotX": 0.5118110236220472,
+          "pivotY": 0.014669926650366748,
+          "spriteId": "f0c1c138eb515ea7a863614b1a448ee8"
+        },
+        {
+          "name": "chr_worker_03_saw_right",
+          "x": 524,
+          "y": 53,
+          "width": 240,
+          "height": 404,
+          "pivotX": 0.37083333333333335,
+          "pivotY": 0.01485148514851485,
+          "spriteId": "7ef16b001a8b58b9b41a27ac877c3bae"
+        },
+        {
+          "name": "chr_worker_03_saw_left",
+          "x": 786,
+          "y": 53,
+          "width": 231,
+          "height": 404,
+          "pivotX": 0.6277056277056277,
+          "pivotY": 0.012376237623762377,
+          "spriteId": "3b20325598be5ecf93f3dc465d6d9b06"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/交互姿势/chr_worker_04_interactions.png",
+      "sourcePath": "人物/交互姿势/chr_worker_04_interactions.png",
+      "sha256": "486b36ddc286b3dd3aa436dee915a74436bdbafcf8ce06a30eb01704bdbd362b",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 335.714286,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_04_carry_up",
+          "x": 19,
+          "y": 992,
+          "width": 225,
+          "height": 476,
+          "pivotX": 0.49777777777777776,
+          "pivotY": 0.01050420168067227,
+          "spriteId": "7d3fb3ad762155219421e91a5e8db026"
+        },
+        {
+          "name": "chr_worker_04_carry_down",
+          "x": 277,
+          "y": 991,
+          "width": 225,
+          "height": 482,
+          "pivotX": 0.5088888888888888,
+          "pivotY": 0.012448132780082987,
+          "spriteId": "1af06450fa9a57fc9a92f8b3f0a1e33e"
+        },
+        {
+          "name": "chr_worker_04_carry_left",
+          "x": 525,
+          "y": 990,
+          "width": 209,
+          "height": 483,
+          "pivotX": 0.6770334928229665,
+          "pivotY": 0.012422360248447204,
+          "spriteId": "b03fb5d306305aa3afbca4a017987719"
+        },
+        {
+          "name": "chr_worker_04_carry_right",
+          "x": 808,
+          "y": 990,
+          "width": 204,
+          "height": 482,
+          "pivotX": 0.29901960784313725,
+          "pivotY": 0.012448132780082987,
+          "spriteId": "452eda86f4185ebe89d696a7efbeee0c"
+        },
+        {
+          "name": "chr_worker_04_pickup_up",
+          "x": 15,
+          "y": 563,
+          "width": 241,
+          "height": 331,
+          "pivotX": 0.6721991701244814,
+          "pivotY": 0.015105740181268883,
+          "spriteId": "d97e8d52ea0a51d198db70a9749556fb"
+        },
+        {
+          "name": "chr_worker_04_pickup_down",
+          "x": 300,
+          "y": 552,
+          "width": 216,
+          "height": 356,
+          "pivotX": 0.31712962962962965,
+          "pivotY": 0.014044943820224719,
+          "spriteId": "10af3b1cacf657aa8073df26cdef5b7f"
+        },
+        {
+          "name": "chr_worker_04_pickup_left",
+          "x": 519,
+          "y": 565,
+          "width": 239,
+          "height": 349,
+          "pivotX": 0.4581589958158996,
+          "pivotY": 0.014326647564469915,
+          "spriteId": "3145079fc324521d8a875afd13fa860f"
+        },
+        {
+          "name": "chr_worker_04_pickup_right",
+          "x": 779,
+          "y": 565,
+          "width": 237,
+          "height": 347,
+          "pivotX": 0.5358649789029536,
+          "pivotY": 0.01729106628242075,
+          "spriteId": "0a88e4ef507958f8846c238d263369b3"
+        },
+        {
+          "name": "chr_worker_04_saw_up",
+          "x": 10,
+          "y": 52,
+          "width": 253,
+          "height": 445,
+          "pivotX": 0.49407114624505927,
+          "pivotY": 0.01348314606741573,
+          "spriteId": "0f2b0138dfdf51eda36ca091dec1624a"
+        },
+        {
+          "name": "chr_worker_04_saw_down",
+          "x": 282,
+          "y": 53,
+          "width": 234,
+          "height": 444,
+          "pivotX": 0.5064102564102564,
+          "pivotY": 0.013513513513513514,
+          "spriteId": "6f83e35eb8dc5b209026ae5e37bbdbab"
+        },
+        {
+          "name": "chr_worker_04_saw_left",
+          "x": 525,
+          "y": 52,
+          "width": 229,
+          "height": 446,
+          "pivotX": 0.5807860262008734,
+          "pivotY": 0.013452914798206279,
+          "spriteId": "790feef103fd598697e4ca38dcb37b66"
+        },
+        {
+          "name": "chr_worker_04_saw_right",
+          "x": 787,
+          "y": 52,
+          "width": 226,
+          "height": 447,
+          "pivotX": 0.4092920353982301,
+          "pivotY": 0.013422818791946308,
+          "spriteId": "10a6b36438eb5a84b44db8b9a82fb4e6"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/女主/chr_hero_female_down.png",
+      "sourcePath": "人物/女主/chr_hero_female_down.png",
+      "sha256": "07653fb45025962afb50e20293d79db9a97bdeb9e1553e0de620c5f07ee8cfec",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 987.857143,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_female_down",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.5,
+          "pivotY": 0.052083333333333336,
+          "spriteId": "db73f21eb2b757169d180ede86715176"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/女主/chr_hero_female_left.png",
+      "sourcePath": "人物/女主/chr_hero_female_left.png",
+      "sha256": "d678c8d8daca5d1a72d7611ecdd3e76abda8bcb002b031d8652b232972b8a47c",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1006.428571,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_female_left",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.482421875,
+          "pivotY": 0.035807291666666664,
+          "spriteId": "cf03ebdd1e4a56d7affb49a8d220ceb1"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/女主/chr_hero_female_right.png",
+      "sourcePath": "人物/女主/chr_hero_female_right.png",
+      "sha256": "05014f7ed6fa570d47604e8db0cf1d8c3713480ff9b08568f97c598404f0ea1f",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1002.142857,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_female_right",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.51123046875,
+          "pivotY": 0.030598958333333332,
+          "spriteId": "4e38be86f0225c5bb7cd8f6aaa26239c"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/女主/chr_hero_female_up.png",
+      "sourcePath": "人物/女主/chr_hero_female_up.png",
+      "sha256": "972d42a88f701e8e90f67d2f74507f244095b9b0c5323ba15beb00a8722267b8",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 987.142857,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_female_up",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.50048828125,
+          "pivotY": 0.052734375,
+          "spriteId": "7ad9535e385558aabbab73560b61d004"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_01/chr_worker_down.png",
+      "sourcePath": "人物/居民/worker_01/chr_worker_down.png",
+      "sha256": "3183a53d4782be2d8106d5e4d8eb1d3cc5b6d8dad9265922e16420525f331626",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 998.571429,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_down",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.5,
+          "pivotY": 0.041666666666666664,
+          "spriteId": "6d7a94e8a1da52188e80cff58021a193"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_01/chr_worker_left.png",
+      "sourcePath": "人物/居民/worker_01/chr_worker_left.png",
+      "sha256": "f574e3e5c737c82d5a605472c9f3b02a7963cd1a609e194576413ce71fb93746",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 992.142857,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_left",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.48974609375,
+          "pivotY": 0.0390625,
+          "spriteId": "2fca769b09c554eea8702ab518ddc996"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_01/chr_worker_right.png",
+      "sourcePath": "人物/居民/worker_01/chr_worker_right.png",
+      "sha256": "9305299f93d1cfb6d1eb335c01077dce00899fae9a4bfb6057d1687fab790f5e",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 999.285714,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_right",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.546875,
+          "pivotY": 0.044270833333333336,
+          "spriteId": "9c1b71d9d3a85a0c86b1dc9573892ab6"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_01/chr_worker_up.png",
+      "sourcePath": "人物/居民/worker_01/chr_worker_up.png",
+      "sha256": "9d21c86094df3cd04b3bda1a19c0b89784069cdb68cdc0d372dd509758f7d086",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1012.857143,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_up",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.50048828125,
+          "pivotY": 0.041015625,
+          "spriteId": "380524633ef55ee4a6b7a7532f9eeade"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_02/chr_worker_02_down.png",
+      "sourcePath": "人物/居民/worker_02/chr_worker_02_down.png",
+      "sha256": "824390e7c551f0112c7ab4a1e7657ea302975ec05a8e1ca57606e25573d3435b",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1000.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_02_down",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.5,
+          "pivotY": 0.041015625,
+          "spriteId": "4aaf4381d19e5726b84c8ebaacd02815"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_02/chr_worker_02_left.png",
+      "sourcePath": "人物/居民/worker_02/chr_worker_02_left.png",
+      "sha256": "2b70ba1bcfa97771154bc8ef529d15952f650d1f61d257e2a893b1a67743be9e",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1005.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_02_left",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.51171875,
+          "pivotY": 0.036458333333333336,
+          "spriteId": "01f169a67d6f5f849ab9c5b1e26492e9"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_02/chr_worker_02_right.png",
+      "sourcePath": "人物/居民/worker_02/chr_worker_02_right.png",
+      "sha256": "c1511d6702e7e3e609ad3653ebab72f1803d92be4a9029f8a464033a561d69c9",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 992.142857,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_02_right",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.50439453125,
+          "pivotY": 0.041666666666666664,
+          "spriteId": "8d354d77f62d5b1dadac39146f5c9198"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_02/chr_worker_02_up.png",
+      "sourcePath": "人物/居民/worker_02/chr_worker_02_up.png",
+      "sha256": "e928d066c1ccc1734893b2d362b25a8d8a8aa7e59455c12726047e5a67305d31",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 987.142857,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_02_up",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.50146484375,
+          "pivotY": 0.048177083333333336,
+          "spriteId": "e5f76124e1fb5f3a9267b099994035eb"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_03/chr_worker_03_down.png",
+      "sourcePath": "人物/居民/worker_03/chr_worker_03_down.png",
+      "sha256": "e6d6b9a17c933c2b8e5c1a15963273dfd026e531897cafdc19dca6b1e1600c87",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1000.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_03_down",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.5,
+          "pivotY": 0.042317708333333336,
+          "spriteId": "41e6b0ad6d0651ea97f00ab53a5b43e0"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_03/chr_worker_03_left.png",
+      "sourcePath": "人物/居民/worker_03/chr_worker_03_left.png",
+      "sha256": "f8d380d6b877bea0fcfb15174b77b3a2c9e82454b4d0b2f4115f90768c4e0d4a",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1003.571429,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_03_left",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.494140625,
+          "pivotY": 0.040364583333333336,
+          "spriteId": "9478343e849857b88e0f51be77dc6d12"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_03/chr_worker_03_right.png",
+      "sourcePath": "人物/居民/worker_03/chr_worker_03_right.png",
+      "sha256": "ff9ce61cf4a1c76844be36169d6a844eb726003d2c808491b9e486d0d101677f",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1005.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_03_right",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.4990234375,
+          "pivotY": 0.0390625,
+          "spriteId": "642f4e864b3b58e1b7f535b59a1ef76f"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_03/chr_worker_03_up.png",
+      "sourcePath": "人物/居民/worker_03/chr_worker_03_up.png",
+      "sha256": "c7222cbe3ffb82eae6a4f95246e1489a9651b942a9734f3a32686c71272b657b",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1000.714286,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_03_up",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.5,
+          "pivotY": 0.041666666666666664,
+          "spriteId": "5f8c2f11a535564d89679439f6193775"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_04/chr_worker_04_down.png",
+      "sourcePath": "人物/居民/worker_04/chr_worker_04_down.png",
+      "sha256": "1aa98c88aaca95ac13e740e26c7b519613ff412afb59898b6d588e91d42fa4df",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 994.285714,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_04_down",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.49853515625,
+          "pivotY": 0.046875,
+          "spriteId": "e5499e0c1ae35127931c65f2a6a0b6e7"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_04/chr_worker_04_left.png",
+      "sourcePath": "人物/居民/worker_04/chr_worker_04_left.png",
+      "sha256": "2df88dfd7a0ca6aa74953ed771c6906b651ef0828a305077250e44d37cec49d0",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1025.714286,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_04_left",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.44921875,
+          "pivotY": 0.022135416666666668,
+          "spriteId": "f7314f2278d4547aa11fe7a77a9f3bdd"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_04/chr_worker_04_right.png",
+      "sourcePath": "人物/居民/worker_04/chr_worker_04_right.png",
+      "sha256": "44d30da166bd0f6a1bd94614db58035df150769188110596903d1f060a6387e3",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1015.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_04_right",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.5166015625,
+          "pivotY": 0.032552083333333336,
+          "spriteId": "77ab07b2aee45ed2b52c3ba226f28ae1"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/居民/worker_04/chr_worker_04_up.png",
+      "sourcePath": "人物/居民/worker_04/chr_worker_04_up.png",
+      "sha256": "293f13b28d852e278a8fccb069952e435d23ad4a7a59fbbc3c3085a362f9c3a3",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 988.571429,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_worker_04_up",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.49951171875,
+          "pivotY": 0.046875,
+          "spriteId": "3220a50c91cb5750aacb756a8ae2fa86"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/男主/chr_hero_down.png",
+      "sourcePath": "人物/男主/chr_hero_down.png",
+      "sha256": "302a1671a85a5a9aebd72a2e0b7797ecc6a31afd8695a3e71359c6e84c003001",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 987.857143,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_down",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.50048828125,
+          "pivotY": 0.048177083333333336,
+          "spriteId": "f7f36f809ebc5c2198a67e174648ca84"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/男主/chr_hero_left.png",
+      "sourcePath": "人物/男主/chr_hero_left.png",
+      "sha256": "e87c6d813785c17beb37869f14788861cbc47954f4203f23f80e2dc0d4c46572",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1005.714286,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_left",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.4853515625,
+          "pivotY": 0.03125,
+          "spriteId": "1c7267fb80f15d95a60828e5b6d3a82f"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/男主/chr_hero_right.png",
+      "sourcePath": "人物/男主/chr_hero_right.png",
+      "sha256": "70fe9048dd0ea6823ea86504a3858b13f7b5855702b5a9d0a5fbeb1cbf6f4696",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 999.285714,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_right",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.5439453125,
+          "pivotY": 0.035807291666666664,
+          "spriteId": "5b39dc94ddc15cc2bfe107e9c1f8b467"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/人物/男主/chr_hero_up.png",
+      "sourcePath": "人物/男主/chr_hero_up.png",
+      "sha256": "3822d06460248909cb8d5726f18077dac265f688e5f2cc20378e5e0c6d7ad451",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 983.571429,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "chr_hero_up",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.50048828125,
+          "pivotY": 0.052734375,
+          "spriteId": "83d74acf98825fb499c1612019e01952"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/bld_old_housing_south_unpowered.png",
+      "sourcePath": "场景/首区基础/bld_old_housing_south_unpowered.png",
+      "sha256": "78afe7ae5a79029f2f3c980b7c64665365172e6802bbf11cd3db6a12176ac72e",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 287.666667,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_old_housing_south_unpowered",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5007974481658692,
+          "pivotY": 0.11802232854864433,
+          "spriteId": "1f8eb707d1185c3fbba6e61eaeee938d"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/bld_old_warehouse_south_idle.png",
+      "sourcePath": "场景/首区基础/bld_old_warehouse_south_idle.png",
+      "sha256": "584ce4a919936e44fb1abc258aa533a24ba6069e065c74036b2511cf5b8abd32",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 325.0,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_old_warehouse_south_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5,
+          "pivotY": 0.11323763955342903,
+          "spriteId": "6ef4db2695f75fe48446a0f74b59bb64"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/bld_streetlamp_unpowered.png",
+      "sourcePath": "场景/首区基础/bld_streetlamp_unpowered.png",
+      "sha256": "1376c1fe4fc23c74859c7e82bc1963af33029b0602aa83750ee4e546e9bc454d",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 490.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "bld_streetlamp_unpowered",
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 1536,
+          "pivotX": 0.44580078125,
+          "pivotY": 0.078125,
+          "spriteId": "db525714e0545551a4b019c295403e54"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/env_hole_east.png",
+      "sourcePath": "场景/首区基础/env_hole_east.png",
+      "sha256": "db6108278f591e97d4a7d5dbe61ebb0975a2075bc5f69da85bd467d4b2f83910",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 396.5,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "env_hole_east",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5043859649122807,
+          "pivotY": 0.4896331738437002,
+          "spriteId": "8040eac2a5d65612826a530610cb0d80"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/env_waste_metal_high.png",
+      "sourcePath": "场景/首区基础/env_waste_metal_high.png",
+      "sha256": "66d2bf401176a1c4aba4c490bb98846265ccfc0c0a6bbaeb71ad0c4b76026f08",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 994.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "env_waste_metal_high",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5095693779904307,
+          "pivotY": 0.14035087719298245,
+          "spriteId": "b8ac9b64ab835ae981bc5495d9f65a6a"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/env_waste_metal_low.png",
+      "sourcePath": "场景/首区基础/env_waste_metal_low.png",
+      "sha256": "8659867bfa259b6957d9bd2058db717f60f4a1c7117eac6c678be80e3bb86015",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 802.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "env_waste_metal_low",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5119617224880383,
+          "pivotY": 0.2567783094098884,
+          "spriteId": "7067632dc4d65859bcafad86806483c3"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/env_waste_mixed_high.png",
+      "sourcePath": "场景/首区基础/env_waste_mixed_high.png",
+      "sha256": "0f0aa74479c78a10e4f6cfb039f1421ba852c08b508aa80351906a18ca1f05a0",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 1053.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "env_waste_mixed_high",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5123604465709729,
+          "pivotY": 0.1251993620414673,
+          "spriteId": "65301826d15958ed8250febd8c0d269f"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/env_waste_mixed_low.png",
+      "sourcePath": "场景/首区基础/env_waste_mixed_low.png",
+      "sha256": "f1b8ca528a6c4dda11d65c55ef7bf96315813ebf8f7b1209de53010524c8d87f",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 823.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "env_waste_mixed_low",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5147527910685805,
+          "pivotY": 0.24641148325358853,
+          "spriteId": "1cc039bfede45595bf857e36a9584f53"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/env_waste_wood_high.png",
+      "sourcePath": "场景/首区基础/env_waste_wood_high.png",
+      "sha256": "02bfe412189ce52a3dac2781215b208c902675ce44a12e1c7425f1ddeb1b62ed",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 840.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "env_waste_wood_high",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5,
+          "pivotY": 0.20733652312599682,
+          "spriteId": "12ffe5f6c4c9565e99acd8fdf8dec19a"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/场景/首区基础/env_waste_wood_low.png",
+      "sourcePath": "场景/首区基础/env_waste_wood_low.png",
+      "sha256": "3f178dfe5cc7a4df2382f98504b7519b7065a7b88d48e935cecdc57efd72847c",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 734.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "env_waste_wood_low",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5047846889952153,
+          "pivotY": 0.28149920255183414,
+          "spriteId": "7bd86945d06350538a5b2d1b62a06ffe"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/宣传/喂——出来_头图_v1.png",
+      "sourcePath": "宣传/喂——出来_头图_v1.png",
+      "sha256": "9a6fb92693114f80400aff3c68f1ef9b02f3b3b5971fdd0482cd8cddd829e557",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 100.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "喂——出来_头图_v1",
+          "x": 0,
+          "y": 0,
+          "width": 1672,
+          "height": 941,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "0d3e8f492a6454e3b1b88725cee79a81"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_auto_plastic_preprocessing_idle.png",
+      "sourcePath": "机器/生产设备/bld_auto_plastic_preprocessing_idle.png",
+      "sha256": "82e4a368b0f35eaa35d9d84cefef3179a9394a9ae2cc3d5f33ac5faa840e5336",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 230.666667,
+      "footprintWidth": 3,
+      "footprintHeight": 4,
+      "sprites": [
+        {
+          "name": "bld_auto_plastic_preprocessing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1086,
+          "height": 1448,
+          "pivotX": 0.5004604051565378,
+          "pivotY": 0.0787292817679558,
+          "spriteId": "dcf38a11e13e55edb384901997cfec49"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_auto_plastic_reprocessing_idle.png",
+      "sourcePath": "机器/生产设备/bld_auto_plastic_reprocessing_idle.png",
+      "sha256": "f1a6cbdb0f4fe632b216caa8b08a0bb6a1aa09d2b6e996d496089e4f4eb1db15",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 246.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 4,
+      "sprites": [
+        {
+          "name": "bld_auto_plastic_reprocessing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1086,
+          "height": 1448,
+          "pivotX": 0.49171270718232046,
+          "pivotY": 0.04765193370165746,
+          "spriteId": "25de65aaf2b55ba19f8cd8c8cc121a27"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_auto_structural_parts_idle.png",
+      "sourcePath": "机器/生产设备/bld_auto_structural_parts_idle.png",
+      "sha256": "a3f9ed4574b5ee02e136f028836785ecdee45f0db67f346fb79d9231f105bc46",
+      "width": 1086,
+      "height": 1448,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 278.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 4,
+      "sprites": [
+        {
+          "name": "bld_auto_structural_parts_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1086,
+          "height": 1448,
+          "pivotX": 0.49355432780847147,
+          "pivotY": 0.06629834254143646,
+          "spriteId": "56b2d9abe3f35239ae03f98b8fb435d8"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_automatic_woodwork_idle.png",
+      "sourcePath": "机器/生产设备/bld_automatic_woodwork_idle.png",
+      "sha256": "0529b06c7f021aa8ef99d85589a015965fd10b32011996f5a4704acc2fd9ecf7",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 344.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_automatic_woodwork_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5307017543859649,
+          "pivotY": 0.08931419457735247,
+          "spriteId": "77f5f5dba2ef531f95308fa6f8b82905"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_composting_idle.png",
+      "sourcePath": "机器/生产设备/bld_composting_idle.png",
+      "sha256": "f16c1a93cfa2719f343d877587722c8a298be7586fe890edc05a859b22070dab",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 300.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_composting_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.80103668261563,
+          "pivotY": 0.10925039872408293,
+          "spriteId": "f8fb3376df1d58c6ba8beee74fb34e6d"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_disassembly_idle.png",
+      "sourcePath": "机器/生产设备/bld_disassembly_idle.png",
+      "sha256": "2e1504bdd6beaf922ba5764a7080140988e923c8c04faa8afbf8f71eac5ccfe3",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 469.0,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_disassembly_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5003987240829346,
+          "pivotY": 0.12360446570972887,
+          "spriteId": "60046ea314d454209ba90daa4bd1ccef"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_electric_woodwork_idle.png",
+      "sourcePath": "机器/生产设备/bld_electric_woodwork_idle.png",
+      "sha256": "bc5304e6d6f5a575579303f3d5ebda2890e7859d4c246e6cd310353673f28fea",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 469.0,
+      "footprintWidth": 3,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_electric_woodwork_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1536,
+          "height": 1024,
+          "pivotX": 0.5240885416666666,
+          "pivotY": 0.0927734375,
+          "spriteId": "5b2f82f833e956db9c92ff6a15d09a33"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_generator_idle.png",
+      "sourcePath": "机器/生产设备/bld_generator_idle.png",
+      "sha256": "7fcd4dc852417e85b097e242d1330e7ccb164f0773739cdaf8c2e36e4e9eb569",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 545.5,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_generator_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5003987240829346,
+          "pivotY": 0.15390749601275916,
+          "spriteId": "60a002d3ea6c5a9d837950db712a9515"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_grow_light_idle.png",
+      "sourcePath": "机器/生产设备/bld_grow_light_idle.png",
+      "sha256": "930d8afadb58c1a2a839b1ffafbab2d46f25dcdb7dc5258f79116004f472a80b",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 638.0,
+      "footprintWidth": 1,
+      "footprintHeight": 1,
+      "sprites": [
+        {
+          "name": "bld_grow_light_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.4996012759170654,
+          "pivotY": 0.18580542264752792,
+          "spriteId": "8d550c0b81505cbf8473fbf8ce04c78f"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_growing_bed_idle.png",
+      "sourcePath": "机器/生产设备/bld_growing_bed_idle.png",
+      "sha256": "cabb5de2064f45af4ec3db957f9e2e97b9c49d795deac4642fd11b17e73f7ec1",
+      "width": 1278,
+      "height": 1230,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 320.666667,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_growing_bed_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1278,
+          "height": 1230,
+          "pivotX": 0.5,
+          "pivotY": 0.0951219512195122,
+          "spriteId": "c0ccb48a8e855145a976d9c34472b25f"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_metal_parts_idle.png",
+      "sourcePath": "机器/生产设备/bld_metal_parts_idle.png",
+      "sha256": "12396294f77e4db18674033fc52d6b3fd48333c48080842e821841aa39a02ce5",
+      "width": 1278,
+      "height": 1230,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 333.0,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_metal_parts_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1278,
+          "height": 1230,
+          "pivotX": 0.5007824726134585,
+          "pivotY": 0.05772357723577236,
+          "spriteId": "85ccff632b905b57b0a561a805a6c5f5"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_metal_processing_idle.png",
+      "sourcePath": "机器/生产设备/bld_metal_processing_idle.png",
+      "sha256": "9b1f9c35e84aa8b123fa241c7f78fae377cc7f5afc6d86f7c016aa9397f269d9",
+      "width": 1293,
+      "height": 1217,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 348.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_metal_processing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1293,
+          "height": 1217,
+          "pivotX": 0.5096674400618716,
+          "pivotY": 0.07066557107641742,
+          "spriteId": "b7d532cf63db5127b455bb43d1993297"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_plastic_preprocessing_idle.png",
+      "sourcePath": "机器/生产设备/bld_plastic_preprocessing_idle.png",
+      "sha256": "caa07a8296ed45a5e52bd225abfb0c87f36780249cbaafa6bb89a4b369f0c94e",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 358.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_plastic_preprocessing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5291068580542265,
+          "pivotY": 0.10446570972886762,
+          "spriteId": "571bc53488bc54fa90e0b57c97e1cf09"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_plastic_reprocessing_idle.png",
+      "sourcePath": "机器/生产设备/bld_plastic_reprocessing_idle.png",
+      "sha256": "d68c68f1ad707ebdf0e857cb9f9fd64bdb4d51a04b35640c147d53ef9ffd3de2",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 345.0,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_plastic_reprocessing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5131578947368421,
+          "pivotY": 0.09649122807017543,
+          "spriteId": "d0191a8fb4fb56af941c9c19130ceace"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_plastic_sorting_idle.png",
+      "sourcePath": "机器/生产设备/bld_plastic_sorting_idle.png",
+      "sha256": "2f37be5d807a36b0567f26dba465d43d2d0a89969abe9a8a9b5b027b8176a130",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 422.5,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_plastic_sorting_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5003987240829346,
+          "pivotY": 0.13875598086124402,
+          "spriteId": "03073e174fd252b5ba72a29cce21bd0e"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_refurbishment_idle.png",
+      "sourcePath": "机器/生产设备/bld_refurbishment_idle.png",
+      "sha256": "1bf8cb22c8f26032d0aa4dd65d417b089833b8c22d8a765a8a2614db5ef5de50",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 417.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_refurbishment_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1536,
+          "height": 1024,
+          "pivotX": 0.5065104166666666,
+          "pivotY": 0.1337890625,
+          "spriteId": "0fcc6214e6fd5500ad3abd185e22bbc0"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_substrate_mixing_idle.png",
+      "sourcePath": "机器/生产设备/bld_substrate_mixing_idle.png",
+      "sha256": "38443740f2eaef877cb9fd3553004f980687020c12f6775249daa62faf046f23",
+      "width": 1272,
+      "height": 1236,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 472.5,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_substrate_mixing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1272,
+          "height": 1236,
+          "pivotX": 0.43278301886792453,
+          "pivotY": 0.09870550161812297,
+          "spriteId": "d1fc5e4ab76458e6a1d0b73f6db950cd"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_washing_idle.png",
+      "sourcePath": "机器/生产设备/bld_washing_idle.png",
+      "sha256": "917055817e33b8585ed4e416def16b97a8a025d61e7411908e0d82a25a382996",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 427.0,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_washing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.49920255183413076,
+          "pivotY": 0.13078149920255183,
+          "spriteId": "58cc422b44b05ef383350e4217e07d5b"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_wire_manufacturing_idle.png",
+      "sourcePath": "机器/生产设备/bld_wire_manufacturing_idle.png",
+      "sha256": "7e1abea40ee1de8f444685fc049713396c08a888b7fea8902e150f9bcd10b2d2",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 308.333333,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_wire_manufacturing_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5003987240829346,
+          "pivotY": 0.1379585326953748,
+          "spriteId": "ca5e5dbd5eb956ef8ff6a968af20aaf5"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_woodwork_loaded.png",
+      "sourcePath": "机器/生产设备/bld_woodwork_loaded.png",
+      "sha256": "373b6711353e3a7a8c5394ae1332ac481d11cccf7f89113aee815b3e80c2ad27",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 402.0,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_woodwork_loaded",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5003987240829346,
+          "pivotY": 0.19856459330143542,
+          "spriteId": "7f4967478df75155af95de49304fd073"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/机器/生产设备/bld_workbench_idle.png",
+      "sourcePath": "机器/生产设备/bld_workbench_idle.png",
+      "sha256": "204f363caabf5d91493869e8709250312cc3a51c3978ce90525d91c72780c57f",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 437.0,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_workbench_idle",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5,
+          "pivotY": 0.11802232854864433,
+          "spriteId": "b5c80c28a5e95ba286e8e0e4c6165661"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/atlas_items_core_v1.png",
+      "sourcePath": "补充贴图_20261012/atlas_items_core_v1.png",
+      "sha256": "4b5b7fd4c65ca0d9e29f000471142f7b5896fe61368bde78b14832eea44a2d7d",
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 352.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "废木料",
+          "x": 42,
+          "y": 741,
+          "width": 313,
+          "height": 287,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "750ea0a0a04356398213a76585d06c71"
+        },
+        {
+          "name": "木板",
+          "x": 404,
+          "y": 740,
+          "width": 319,
+          "height": 264,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "b24c2fad3458519b9d81059fbf91a0f0"
+        },
+        {
+          "name": "木屑",
+          "x": 759,
+          "y": 740,
+          "width": 307,
+          "height": 223,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "28d1a1eeb7fb5ad9b4f28641104e1c87"
+        },
+        {
+          "name": "回收紧固件",
+          "x": 1124,
+          "y": 751,
+          "width": 283,
+          "height": 251,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "4bdcd93a52775734984d8dfb68c06b33"
+        },
+        {
+          "name": "钢铁零件",
+          "x": 42,
+          "y": 384,
+          "width": 320,
+          "height": 317,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "b7c5e3f1289f541786a720ba42c3a22b"
+        },
+        {
+          "name": "可用电线",
+          "x": 362,
+          "y": 379,
+          "width": 345,
+          "height": 281,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "096ec6d9924857eeb6dacacc833974fa"
+        },
+        {
+          "name": "回收热动力组件",
+          "x": 741,
+          "y": 362,
+          "width": 320,
+          "height": 343,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "6bb95b510e635ecb88bf7db78c24c539"
+        },
+        {
+          "name": "发电组件",
+          "x": 1091,
+          "y": 444,
+          "width": 321,
+          "height": 195,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "c2b9716bbecb53ccab81583f0af5fcde"
+        },
+        {
+          "name": "手锯",
+          "x": 26,
+          "y": 95,
+          "width": 336,
+          "height": 253,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "188cc409e1e35e169bdc441456d2a667"
+        },
+        {
+          "name": "未开封食物",
+          "x": 362,
+          "y": 76,
+          "width": 352,
+          "height": 266,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "80d0d0b5b810529da1760582fca7d522"
+        },
+        {
+          "name": "饮用水",
+          "x": 848,
+          "y": 48,
+          "width": 135,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "6c1ad18b85ef5795832ef6a8cf98c4ba"
+        },
+        {
+          "name": "金钱",
+          "x": 1110,
+          "y": 82,
+          "width": 287,
+          "height": 248,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "56c9d6c5d1e0594c8c32783d8a9a9f2e"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/atlas_items_extra_v1.png",
+      "sourcePath": "补充贴图_20261012/atlas_items_extra_v1.png",
+      "sha256": "4c1cbf8eed4ecb18ae78093339abae5ab6c61e097a76fdfe928976ebecab0cf0",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 357.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "铜零件",
+          "x": 69,
+          "y": 874,
+          "width": 322,
+          "height": 288,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "13315220d3aa5a6dbc45204771bead4b"
+        },
+        {
+          "name": "肥皂",
+          "x": 480,
+          "y": 877,
+          "width": 300,
+          "height": 248,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "dec0ad0d73aa55b89db4dddbbdd101ef"
+        },
+        {
+          "name": "废纺织物",
+          "x": 865,
+          "y": 877,
+          "width": 340,
+          "height": 248,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "151338f1c11e5d16add6c0b34f37f24c"
+        },
+        {
+          "name": "旧衣服",
+          "x": 52,
+          "y": 469,
+          "width": 357,
+          "height": 327,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "7fea161bb755525780913df9f493f25e"
+        },
+        {
+          "name": "锤",
+          "x": 466,
+          "y": 473,
+          "width": 338,
+          "height": 323,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "b407364e0a85578595bf9db7b918f6dc"
+        },
+        {
+          "name": "螺丝刀",
+          "x": 879,
+          "y": 465,
+          "width": 324,
+          "height": 331,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "87b8110c7b8c584b90ef6e295d87fcdf"
+        },
+        {
+          "name": "扳手",
+          "x": 67,
+          "y": 80,
+          "width": 325,
+          "height": 325,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "9e8c8c619ab6578bbadfe639f665dd75"
+        },
+        {
+          "name": "剪刀",
+          "x": 460,
+          "y": 69,
+          "width": 339,
+          "height": 335,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "db188bfe59165fa3ae1268b72d0220f6"
+        },
+        {
+          "name": "针线工具",
+          "x": 890,
+          "y": 93,
+          "width": 313,
+          "height": 275,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "ff1b0fe0b76e5661a885f3697fd27008"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/atlas_logistics_v1.png",
+      "sourcePath": "补充贴图_20261012/atlas_logistics_v1.png",
+      "sha256": "5ea602cf10ab4e58f4660d63de9dfdc35bda9a2f71c544858db87993127d9083",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 414.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "直带_向北",
+          "x": 197,
+          "y": 568,
+          "width": 192,
+          "height": 378,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "6b7d4ee0b6f9556184087df66908e053"
+        },
+        {
+          "name": "弯带_西入北出",
+          "x": 598,
+          "y": 568,
+          "width": 323,
+          "height": 378,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "f21857429b3358009e00c9d70132a70e"
+        },
+        {
+          "name": "合流_西南入北出",
+          "x": 1063,
+          "y": 568,
+          "width": 331,
+          "height": 378,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "6511de3e8ff55bc4890d2a0414ffa554"
+        },
+        {
+          "name": "交叉_两路分离",
+          "x": 78,
+          "y": 88,
+          "width": 414,
+          "height": 385,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "651946aa60645f9cac91f79cc453c1c8"
+        },
+        {
+          "name": "输入接口",
+          "x": 669,
+          "y": 88,
+          "width": 228,
+          "height": 364,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "82cbb10581d7588a995c2d22b31823b1"
+        },
+        {
+          "name": "输出接口",
+          "x": 1164,
+          "y": 88,
+          "width": 222,
+          "height": 365,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "6cc32349736e53428817049f44d548d1"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/atlas_power_lines_v1.png",
+      "sourcePath": "补充贴图_20261012/atlas_power_lines_v1.png",
+      "sha256": "5cf66dabad83286c20272d65ed8fd83add27a85f661333ba5c3d84293d7857a9",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 450.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "电线_直线",
+          "x": 50,
+          "y": 663,
+          "width": 438,
+          "height": 97,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "6b8e4d51b4095510b7fb748ec82f6bee"
+        },
+        {
+          "name": "电线_转角",
+          "x": 588,
+          "y": 616,
+          "width": 354,
+          "height": 316,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "2d746e9fc8c45bd68e1027010ca1f73c"
+        },
+        {
+          "name": "电线_端点",
+          "x": 1048,
+          "y": 630,
+          "width": 323,
+          "height": 144,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "a826e83f9b185269916da4673412125b"
+        },
+        {
+          "name": "电线_T形",
+          "x": 34,
+          "y": 154,
+          "width": 450,
+          "height": 324,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "306f71a58b9455d08cb6bdb95c8892cd"
+        },
+        {
+          "name": "电线_十字",
+          "x": 547,
+          "y": 71,
+          "width": 442,
+          "height": 420,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "96c2d7cfcb8352a9a52a14e369f2deac"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/atlas_work_status_v1.png",
+      "sourcePath": "补充贴图_20261012/atlas_work_status_v1.png",
+      "sha256": "714c79dd0d34745409216c8188bd3e1a706232298c01e518fc1d36458386e271",
+      "width": 1774,
+      "height": 887,
+      "hasAlpha": true,
+      "multiple": true,
+      "repeat": false,
+      "pixelsPerUnit": 443.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "等待原料",
+          "x": 60,
+          "y": 468,
+          "width": 355,
+          "height": 329,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "050499f332c15e3a81d6a14654d6fc2b"
+        },
+        {
+          "name": "缺工具",
+          "x": 478,
+          "y": 467,
+          "width": 332,
+          "height": 364,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "3d797f247e9b5242aae53dfa6673576e"
+        },
+        {
+          "name": "输出满",
+          "x": 924,
+          "y": 463,
+          "width": 359,
+          "height": 356,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "5924c1339ff75c568e01f7dbc6623b91"
+        },
+        {
+          "name": "无路可达",
+          "x": 1388,
+          "y": 463,
+          "width": 335,
+          "height": 333,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "9e7e3bec07a65fac91935cf789e4c6f4"
+        },
+        {
+          "name": "手动暂停",
+          "x": 109,
+          "y": 88,
+          "width": 221,
+          "height": 281,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "43b666b0f2bf5181be2887778183fe58"
+        },
+        {
+          "name": "缺燃料",
+          "x": 527,
+          "y": 54,
+          "width": 360,
+          "height": 353,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "761cbda9cd2b5b20a2a719d6b42f13d4"
+        },
+        {
+          "name": "缺电",
+          "x": 887,
+          "y": 59,
+          "width": 443,
+          "height": 348,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "9975b094f31c521cb0dac62b335856e1"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/bld_mine_idle_v1.png",
+      "sourcePath": "补充贴图_20261012/bld_mine_idle_v1.png",
+      "sha256": "af679c37d8d661030c6ceeb53a77d87fee689b8deaeab55794460847450ec3c2",
+      "width": 1267,
+      "height": 1241,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 346.0,
+      "footprintWidth": 3,
+      "footprintHeight": 3,
+      "sprites": [
+        {
+          "name": "bld_mine_idle_v1",
+          "x": 0,
+          "y": 0,
+          "width": 1267,
+          "height": 1241,
+          "pivotX": 0.500394632991318,
+          "pivotY": 0.09830781627719581,
+          "spriteId": "9d963f53d3fb55d984af55b1ecc3bd32"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/bld_survey_idle_v1.png",
+      "sourcePath": "补充贴图_20261012/bld_survey_idle_v1.png",
+      "sha256": "ca12650c65884da0d641f8a439bd73a09a6795066d88a16750a106b08e15edd8",
+      "width": 1295,
+      "height": 1215,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 447.0,
+      "footprintWidth": 2,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "bld_survey_idle_v1",
+          "x": 0,
+          "y": 0,
+          "width": 1295,
+          "height": 1215,
+          "pivotX": 0.5,
+          "pivotY": 0.07489711934156379,
+          "spriteId": "da78b8b1f9105ecebe53ffc3596c2016"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/env_ground_plain_v1.png",
+      "sourcePath": "补充贴图_20261012/env_ground_plain_v1.png",
+      "sha256": "ff260d91273e5c024a93bcd759d300db3a11a77968c21b05903ffbe93f4bcaa9",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": false,
+      "multiple": false,
+      "repeat": true,
+      "pixelsPerUnit": 1254.0,
+      "footprintWidth": 0,
+      "footprintHeight": 0,
+      "sprites": [
+        {
+          "name": "env_ground_plain_v1",
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254,
+          "pivotX": 0.5,
+          "pivotY": 0.5,
+          "spriteId": "cb0f4462b7c0534785aefefd56b36f1e"
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Delivery_20261013/补充贴图_20261012/veh_return_lift_idle_v1.png",
+      "sourcePath": "补充贴图_20261012/veh_return_lift_idle_v1.png",
+      "sha256": "1472a4f9ea24e39ac3375dcd084fc2637e6abb053c5dfc1f94304be1071ab5fd",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "multiple": false,
+      "repeat": false,
+      "pixelsPerUnit": 414.0,
+      "footprintWidth": 3,
+      "footprintHeight": 2,
+      "sprites": [
+        {
+          "name": "veh_return_lift_idle_v1",
+          "x": 0,
+          "y": 0,
+          "width": 1536,
+          "height": 1024,
+          "pivotX": 0.4085286458333333,
+          "pivotY": 0.1259765625,
+          "spriteId": "741d1f14323b5cba914d4305f49b2a5c"
+        }
+      ]
+    }
+  ]
+}

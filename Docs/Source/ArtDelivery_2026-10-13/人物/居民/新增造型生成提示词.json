@@ -1,0 +1,104 @@
+{
+  "mode": "内置image_gen工具",
+  "date": "2026-10-11",
+  "directory": "C:\\Users\\snowy_light\\Documents\\Codex\\2026-10-03\\x20\\outputs\\art\\npc_collection",
+  "original_directory": "C:\\Users\\snowy_light\\Documents\\Codex\\2026-10-03\\x20\\outputs\\art\\npc_directions",
+  "assets": [
+    {
+      "id": "02",
+      "name": "红棕上衣女居民",
+      "direction": "down",
+      "source": "generated_images/exec-7f387965-a4e3-4fd2-89d5-c06c469d268a.png",
+      "prompt": "Use case: style-transfer. Asset type: ONE ordinary human resident NPC static sprite for a 2D top-down factory management game. Input image: STYLE, GAME CAMERA, SCALE and POSE reference ONLY, not identity. Create a DIFFERENT resident with the following appearance: A young adult female resident, dark brown hair tied in a small practical low bun, muted brick-red rolled-sleeve work shirt, plain charcoal brown trousers, dark gray work gloves and boots. No hat, no apron, no jewelry. Match the reference's stocky readable proportions, slightly enlarged head, coarse clearly aligned square pixels, simple dark pixel outlines, limited flat colors and only 2-3 shading tones per material. Slightly elevated game camera showing full face and whole body. Direction DOWN / SOUTH: front view facing bottom of the screen, stand neutrally upright with arms resting at sides and empty hands. Portrait 2:3 canvas, full body centered at same overall scale as reference, both feet visible at about 95% canvas height, transparent margins. Exactly ONE person, ONE static idle pose. True transparent background with hard clean alpha edges, no floor, no ground shadow, no glow or halo, no environment, no typography, no watermark. No sprite sheet, no walking frames, no carried objects, no smooth painting or photorealism. A simple low-resolution pixel character enlarged with nearest-neighbor.",
+      "filename": "chr_worker_02_down.png"
+    },
+    {
+      "id": "02",
+      "name": "红棕上衣女居民",
+      "direction": "up",
+      "source": "generated_images/exec-064e31f8-fa73-44e4-b8e8-b9a74040fa05.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME resident's face, hairstyle, skin, clothing design, color palette, gloves, boots and overall stocky proportions. Match the chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY the direction of this same character. Direction: UP / NORTH, directly away from viewer: show back of hair, shirt and trousers; NO face, eyes, front shirt buttons or belt buckle.",
+      "filename": "chr_worker_02_up.png"
+    },
+    {
+      "id": "02",
+      "name": "红棕上衣女居民",
+      "direction": "left",
+      "source": "generated_images/exec-c0e05357-19d6-4cb9-bf7d-48c19d99c199.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME resident's face, hairstyle, skin, clothing design, color palette, gloves, boots and overall stocky proportions. Match the chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY the direction of this same character. Direction: LEFT / WEST, clearly left-facing SIDE PROFILE. Nose and face point to LEFT edge, not front and not three-quarter. Maintain standing idle.",
+      "filename": "chr_worker_02_left.png"
+    },
+    {
+      "id": "02",
+      "name": "红棕上衣女居民",
+      "direction": "right",
+      "source": "generated_images/exec-3e456033-24ea-4252-bc38-9d871e63d033.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME resident's face, hairstyle, skin, clothing design, color palette, gloves, boots and overall stocky proportions. Match the chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY the direction of this same character. Direction: RIGHT / EAST, clearly right-facing SIDE PROFILE. Nose and face point to RIGHT edge, not front and not three-quarter. Maintain standing idle.",
+      "filename": "chr_worker_02_right.png"
+    },
+    {
+      "id": "03",
+      "name": "灰蓝外套男居民",
+      "direction": "down",
+      "source": "generated_images/exec-6085f6bf-bfd8-47f1-b736-639540a177e0.png",
+      "prompt": "Use case: style-transfer. Asset type: ONE ordinary human resident NPC static sprite for a 2D top-down factory management game. Input image: STYLE, GAME CAMERA, SCALE and POSE reference ONLY, not identity. Create a DIFFERENT resident with the following appearance: A middle-aged male resident, short dark hair largely covered by a small muted ochre knitted work beanie, simple slate-blue work jacket, plain dusty brown trousers, dark gray work gloves and boots. A slightly broader face, no beard, no badges. Match the reference's stocky readable proportions, slightly enlarged head, coarse clearly aligned square pixels, simple dark pixel outlines, limited flat colors and only 2-3 shading tones per material. Slightly elevated game camera showing full face and whole body. Direction DOWN / SOUTH: front view facing bottom of the screen, stand neutrally upright with arms resting at sides and empty hands. Portrait 2:3 canvas, full body centered at same overall scale as reference, both feet visible at about 95% canvas height, transparent margins. Exactly ONE person, ONE static idle pose. True transparent background with hard clean alpha edges, no floor, no ground shadow, no glow or halo, no environment, no typography, no watermark. No sprite sheet, no walking frames, no carried objects, no smooth painting or photorealism. A simple low-resolution pixel character enlarged with nearest-neighbor.",
+      "filename": "chr_worker_03_down.png"
+    },
+    {
+      "id": "03",
+      "name": "灰蓝外套男居民",
+      "direction": "up",
+      "source": "generated_images/exec-140f3653-bb2b-4cde-ad2a-e5c6d22f6077.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME middle-aged male resident's ochre knitted beanie, face, skin, slate-blue jacket, plain brown trousers, dark gray gloves and boots, and stocky proportions. Match reference chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY direction. Direction: UP / NORTH, directly away from viewer: show back of ochre beanie, blue jacket and trousers; NO face, eyes, front jacket closure or belt buckle.",
+      "filename": "chr_worker_03_up.png"
+    },
+    {
+      "id": "03",
+      "name": "灰蓝外套男居民",
+      "direction": "left",
+      "source": "generated_images/exec-379e2bb4-6437-4f28-bf8e-0daaeaa68cab.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME middle-aged male resident's ochre knitted beanie, face, skin, slate-blue jacket, plain brown trousers, dark gray gloves and boots, and stocky proportions. Match reference chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY direction. Direction: LEFT / WEST, clearly left-facing SIDE PROFILE. Nose and face point to LEFT edge, not front and not three-quarter. Maintain standing idle.",
+      "filename": "chr_worker_03_left.png"
+    },
+    {
+      "id": "03",
+      "name": "灰蓝外套男居民",
+      "direction": "right",
+      "source": "generated_images/exec-21895478-af74-43ef-b782-70dcd3eeba63.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME middle-aged male resident's ochre knitted beanie, face, skin, slate-blue jacket, plain brown trousers, dark gray gloves and boots, and stocky proportions. Match reference chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY direction. Direction: RIGHT / EAST, clearly right-facing SIDE PROFILE. Nose and face point to RIGHT edge, not front and not three-quarter. Maintain standing idle.",
+      "filename": "chr_worker_03_right.png"
+    },
+    {
+      "id": "04",
+      "name": "浅褐上衣年长女居民",
+      "direction": "down",
+      "source": "generated_images/exec-a4c7a997-8f92-43b4-bba6-d3771acad5d4.png",
+      "prompt": "Use case: style-transfer. Asset type: ONE ordinary human resident NPC static sprite for a 2D top-down factory management game. Input image: STYLE, GAME CAMERA, SCALE and POSE reference ONLY, not identity. Create a DIFFERENT resident with the following appearance: An older adult female resident, short gray hair, simple muted sand-beige rolled-sleeve work shirt, plain blue-gray trousers, dark gray work gloves and boots. Age is suggested by gray hair and a mature face, not tiny detailed wrinkles. No hat, no jewelry. Match the reference's stocky readable proportions, slightly enlarged head, coarse clearly aligned square pixels, simple dark pixel outlines, limited flat colors and only 2-3 shading tones per material. Slightly elevated game camera showing full face and whole body. Direction DOWN / SOUTH: front view facing bottom of the screen, stand neutrally upright with arms resting at sides and empty hands. Portrait 2:3 canvas, full body centered at same overall scale as reference, both feet visible at about 95% canvas height, transparent margins. Exactly ONE person, ONE static idle pose. True transparent background with hard clean alpha edges, no floor, no ground shadow, no glow or halo, no environment, no typography, no watermark. No sprite sheet, no walking frames, no carried objects, no smooth painting or photorealism. A simple low-resolution pixel character enlarged with nearest-neighbor.",
+      "filename": "chr_worker_04_down.png"
+    },
+    {
+      "id": "04",
+      "name": "浅褐上衣年长女居民",
+      "direction": "up",
+      "source": "generated_images/exec-74030e4d-58ec-42bc-b798-e0f85caaf1db.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME older female resident's short gray hair, mature face, skin, sand-beige rolled-sleeve shirt, blue-gray trousers, dark gray gloves and work boots, and stocky proportions. Match reference chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY direction. Direction: UP / NORTH, directly away from viewer: show back of gray hair, beige shirt and blue-gray trousers; NO face, eyes, front shirt buttons or belt buckle.",
+      "filename": "chr_worker_04_up.png"
+    },
+    {
+      "id": "04",
+      "name": "浅褐上衣年长女居民",
+      "direction": "left",
+      "source": "generated_images/exec-bf3910bd-09d2-4d0f-ab13-49f3ddd2b1f4.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME older female resident's short gray hair, mature face, skin, sand-beige rolled-sleeve shirt, blue-gray trousers, dark gray gloves and work boots, and stocky proportions. Match reference chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY direction. Direction: LEFT / WEST, clearly left-facing SIDE PROFILE. Nose and face point to LEFT edge, not front and not three-quarter. Maintain standing idle.",
+      "filename": "chr_worker_04_left.png"
+    },
+    {
+      "id": "04",
+      "name": "浅褐上衣年长女居民",
+      "direction": "right",
+      "source": "generated_images/exec-4ee17d1c-64ff-467c-91fe-566af2273a25.png",
+      "prompt": "Use case: identity-preserve. Asset type: ONE static directional NPC sprite for a 2D top-down factory game. Attached image is the exact identity and style reference. Preserve this SAME older female resident's short gray hair, mature face, skin, sand-beige rolled-sleeve shirt, blue-gray trousers, dark gray gloves and work boots, and stocky proportions. Match reference chunky square pixel grid, simple dark outlines, limited flat colors and slightly elevated game camera. Neutral upright idle, arms at sides, EMPTY hands, full body centered, portrait 2:3 canvas and feet at about 95% of canvas height. Genuine transparent background, exactly ONE character, no sheet or animation frames, no lettering, no environment, no shadow or halo. Change ONLY direction. Direction: RIGHT / EAST, clearly right-facing SIDE PROFILE. Nose and face point to RIGHT edge, not front and not three-quarter. Maintain standing idle.",
+      "filename": "chr_worker_04_right.png"
+    }
+  ]
+}
