@@ -48,7 +48,7 @@ namespace CrazyRubbish.Editor
             if (UnityEngine.Object.FindObjectOfType<PrototypeGame>() == null) CreateScene(balance, appearance);
             PrototypePresentationEditor.EnsureCurrentLayout();
             var previewGame = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
-            var previewModel = new CrazyRubbish.Core.PrototypeSimulation(JsonUtility.FromJson<CrazyRubbish.Core.PrototypeSettings>(JsonUtility.ToJson(balance.values)), 4271);
+            var previewModel = new CrazyRubbish.Core.PrototypeSimulation(JsonUtility.FromJson<CrazyRubbish.Core.PrototypeSettings>(JsonUtility.ToJson(balance.values)), 4271, true);
             previewGame.GetComponent<PrototypeWorld>().RefreshView(previewModel);
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
@@ -127,6 +127,8 @@ namespace CrazyRubbish.Editor
                 File.Copy("Assets/_Game/Art/Fonts/OFL.txt", outputDirectory + "/Font-OFL.txt", true);
                 File.Copy("Docs/Development/08_首区Demo.md", outputDirectory + "/首区试玩说明.md", true);
                 File.Copy("Docs/Development/09_新手教程.md", outputDirectory + "/新手教程说明.md", true);
+                File.Copy("Docs/Development/13_稀疏开局与认识环境.md", outputDirectory + "/开局与地图操作.md", true);
+                File.Copy("Docs/Development/14_格子物品栏与拾取.md", outputDirectory + "/物品栏与拾取操作.md", true);
                 Debug.Log("Windows " + (development ? "development" : "release") + " build succeeded: " + outputDirectory);
             }
             finally { PlayerSettings.bundleVersion = originalVersion; }

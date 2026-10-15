@@ -21,15 +21,16 @@ namespace CrazyRubbish.Core
             manualStation=0;ReleaseUnusedTools();pendingInteraction=action;pickupInteraction=pickup;interactionRemaining=Settings.interactionSeconds;
             return Ok("交互中…");
         }
-        public void CancelInteraction(){if(pendingInteraction==null)return;pendingInteraction=null;lastInteraction=Fail("交互取消，物品未转移。");InteractionRevision++;}
+        public void CancelInteraction(){if(pendingInteraction==null)return;pendingInteraction=null;InventoryTransferPending=false;lastInteraction=Fail("交互取消，物品未转移。");InteractionRevision++;}
         private void TickInteraction(double seconds)
         {
             if(pendingInteraction==null)return;interactionRemaining-=seconds;if(interactionRemaining>1e-6)return;
             var action=pendingInteraction;pendingInteraction=null;lastInteraction=action();InteractionRevision++;RefreshState();
         }
-        public ActionResult PickUp(int requested=1,ItemId? selected=null)
+        public ActionResult PickUp(int requested=1,ItemId? selected=null,int? pileId=null)
         {
-            var pile=selected==null?NearestPickup():ground.Where(p=>p.Item==selected.Value&&p.Amount>p.Reserved&&Near(p.X,p.Y)).OrderBy(p=>Distance(PlayerX,PlayerY,p.X,p.Y)).ThenBy(p=>p.Id).FirstOrDefault();
+            var pile=pileId.HasValue?ground.FirstOrDefault(p=>p.Id==pileId.Value&&p.Amount>p.Reserved&&Near(p.X,p.Y)):
+                selected==null?NearestPickup():ground.Where(p=>p.Item==selected.Value&&p.Amount>p.Reserved&&Near(p.X,p.Y)).OrderBy(p=>Distance(PlayerX,PlayerY,p.X,p.Y)).ThenBy(p=>p.Id).FirstOrDefault();
             if(pile==null)return Fail("附近没有未预约的该物品。");
             return QueueInteraction(()=>{
                 if(!ground.Contains(pile)||!Near(pile.X,pile.Y))return Fail("物品已经移走。");
@@ -48,7 +49,7 @@ namespace CrazyRubbish.Core
                 int count=Math.Min(Math.Min(requested,pile.Amount-pile.Reserved),Carry.AvailableSlots(pile.Item));
                 if(count<=0)return Fail("背包容量不足或物品已被预约。");
                 Carry.TryAdd(pile.Item,count);MoveInstances("ground:"+pile.Id,"carry",pile.Item,count);RemoveGround(pile,count);discovered.Add(pile.Item);
-                return Ok("拾取完成。",count);
+                return Ok($"拾取 {ItemCatalog.Name(pile.Item)} ×{count}"+(pile.Amount>0?$"；该堆剩余 {pile.Amount}，背包空间不足时需先转存。":"；这一堆已拿空。"),count);
             },true);
         }
         public ActionResult Deposit()

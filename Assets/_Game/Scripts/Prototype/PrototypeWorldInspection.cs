@@ -14,7 +14,7 @@ namespace CrazyRubbish.Prototype
 
         private static bool Covers(SpriteRenderer renderer, Vector2 point)
         {
-            if (renderer == null) return false;
+            if (renderer == null || !renderer.enabled || !renderer.gameObject.activeInHierarchy) return false;
             Bounds bounds = renderer.bounds;
             return point.x >= bounds.min.x && point.x <= bounds.max.x && point.y >= bounds.min.y && point.y <= bounds.max.y;
         }
@@ -37,8 +37,13 @@ namespace CrazyRubbish.Prototype
             int facility = FacilityAt(point);
             if (!moveOnly)
             {
+                if(CoversObject("Hole",point)){hud.ShowHole();return;}
+                if(CoversObject("ReceivingHole",point)){hud.ShowObjectInfo("落料洞", "上层的废弃物会从这里分批掉下来。落在下方来料区的物品可以走近拾取；先来的工具、木料、食物和水能帮助你起步。", game.appearance.hole);return;}
+                int gx=Mathf.RoundToInt(point.x),gy=Mathf.RoundToInt(point.y);
+                var ground=mappedPile(gx,gy);
+                if(ground!=null){hud.ShowGroundItem(ground.Item);return;}
                 if (facility > 0) { hud.ShowFacility(facility); return; }
-                if (CoversObject("Warehouse", point)) { hud.OpenManagement(2); return; }
+                if (CoversObject("Warehouse", point)) { hud.OpenWarehouse(); return; }
                 if (CoversObject("OldHousing", point) || game.Model.Residents.Any(r => Vector2.Distance(new Vector2((float)r.X, (float)r.Y + 0.5f), point) < 0.65f))
                 { hud.OpenManagement(1); return; }
                 if (hud.SelectedFacility != 0) hud.ClosePanels();
@@ -52,8 +57,11 @@ namespace CrazyRubbish.Prototype
                 case 4: x = PrototypeSimulation.GeneratorX; y = PrototypeSimulation.GeneratorY; break;
             }
             if (CoversObject("Warehouse", point)) { x = PrototypeSimulation.WarehouseX; y = PrototypeSimulation.WarehouseY; }
+            if (CoversObject("Hole",point)){x=PrototypeSimulation.DumpX;y=PrototypeSimulation.DumpY;}
             game.GoTo(x, y);
         }
+
+        private GroundPile mappedPile(int x,int y)=>game.Model.Ground.Where(p=>p.Y==y&&x>=p.X&&x<p.X+p.Width&&p.Amount>0).OrderByDescending(p=>ItemCatalog.IsTool(p.Item)).ThenBy(p=>p.Id).FirstOrDefault();
 
         // Unscaled time keeps inspection available while paused. A new target restarts the delay.
         public void UpdateHover(Vector2? point, double now)
@@ -110,7 +118,9 @@ namespace CrazyRubbish.Prototype
             if (CoversObject("OldHousing", point))
             { key = "housing"; title = "旧住房"; body = $"已招募居民 {m.Residents.Count} 人\n左键查看人员与生活供应"; return true; }
             if (CoversObject("Hole", point))
-            { key = "hole"; title = "洞"; body = "深不见底，去向不明。"; return true; }
+            { key = "hole"; title = "投弃洞"; body = "可以丢弃背包里的物品，无法取回。\n去向不明；使用不是教程要求。\n左键查看 · 右键前往入口"; return true; }
+            if(CoversObject("ReceivingHole",point))
+            { key="receiving";title="落料洞";body="上层垃圾分批落入下方来料区。\n留意新掉下来的物品；左键认识它们。";return true; }
             if (CoversObject("CommunityLamp", point))
             { key = "lamp"; title = "社区路灯"; body = "社区的照明设施。"; return true; }
             int x = Mathf.RoundToInt(point.x), y = Mathf.RoundToInt(point.y);
@@ -122,7 +132,7 @@ namespace CrazyRubbish.Prototype
                     (g.Sum(p => p.Reserved) > 0 ? " · 已预约 " + g.Sum(p => p.Reserved) : "") +
                     ((ItemCatalog.IsTool(g.Key) || ItemCatalog.IsDevice(g.Key) || ItemCatalog.IsOpenable(g.Key)) && g.Any(p => !p.Usable) ? " · 含损坏物品" : "")));
                 if (content.Length > 3) body += $"\n另有 {content.Length - 3} 类物品";
-                body += "\n走近按 E 拾取 · Shift+E 整堆"; return true;
+                body += "\n左键看用途 · 右键前往 · E 拾取"; return true;
             }
             if (game.GetComponent<PrototypeHud>().ZonesVisible)
             {

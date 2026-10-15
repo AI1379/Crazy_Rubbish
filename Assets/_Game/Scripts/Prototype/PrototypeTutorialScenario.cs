@@ -39,7 +39,7 @@ namespace CrazyRubbish.Prototype
                 m.Advance(0.1);
             }
             if(m.Failed || !m.Tutorial.Completed || !m.DemoCompleted)
-                throw new InvalidOperationException($"教程未完成：课{m.Tutorial.step}，{PrototypeTutorial.NextAction(m,m.Tutorial.step).operation}，木板{m.Warehouse.Count(ItemId.Plank)}，现金{m.Money}，时间{m.GameSeconds}，{m.FailureReason}");
+                throw new InvalidOperationException($"教程未完成：课{m.Tutorial.step}，{PrototypeTutorial.NextAction(m,m.Tutorial.step).operation} / {PrototypeTutorial.NextAction(m,m.Tutorial.step).instruction}，木工{m.State}，仓库{m.Warehouse.Used}，现场输出{m.Output.Used}，木柄{m.Warehouse.Count(ItemId.WoodHandle)}，木板{m.Warehouse.Count(ItemId.Plank)}，现金{m.Money}，时间{m.GameSeconds}，{m.FailureReason}");
         }
     }
 }

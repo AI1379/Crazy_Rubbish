@@ -26,6 +26,10 @@ namespace CrazyRubbish.Core
         public int schema=3,itemCount,sourceVersion=5;public PrototypeSettings settings;public uint random;
         public CommunitySave community;public WorkshopSave workshop;public bool demoCompleted;public double demoCompletedAt;
         public TutorialProgress tutorial;
+        public OpeningProgress opening;
+        public bool gradualOpening;
+        public long dumpedTicks;
+        public InventoryGridLayout carryGrid,warehouseGrid;
         public double seconds,accumulated,inputTimer,nextInput,woodProgress,dismantleProgress,nextWage,fuelRemaining,equivalentHeat,heatRate,nextAutosave;
         public int speed,manualStation,pendingBuildings,nextGround,nextTool,geometry,woodToken,dismantleToken,woodTool,screwTool,wrenchTool,dismantleObject,nextDelivery,nextMetal;
         public int recipe,activeRecipe,device,pendingRecipe=-1,pendingDevice=-1,fuelWood,fuelChips,woodBatches,dismantleBatches,deliveredTrips;
@@ -52,10 +56,12 @@ namespace CrazyRubbish.Core
         public SimulationSnapshot Capture()
         {
             if(Interacting)throw new InvalidOperationException("请在当前0.5秒交互完成后存档。");
+            if(Hand!=null)throw new InvalidOperationException("请先放下手中物品，或关闭物品栏后保存。");
+            SyncInventoryGrids();
             var map=InventoryMap();
             return new SimulationSnapshot{
                 itemCount=Enum.GetValues(typeof(ItemId)).Length,settings=Settings,random=random.State,
-                tutorial=Tutorial.Copy(),
+                tutorial=Tutorial.Copy(),opening=Opening?.Copy(),gradualOpening=Opening!=null,dumpedTicks=DumpedTicks,carryGrid=CarryGrid.Copy(),warehouseGrid=WarehouseGrid.Copy(),
                 community=new CommunitySave{player=PlayerNeeds.Copy(),foodPolicy=(int)FoodPolicy,waterPolicy=(int)WaterPolicy,meals=MealsConsumed,water=WaterConsumed,turn=livingTurn,external=ExternalSupply,emergency=EmergencyWater,delivery=AutomaticLivingSupply,failed=Failed,riot=RiotActive,failure=FailureReason,community=CommunityCashCents,spent=ExternalLivingSpentCents,retail=RetailIncomeCents,riotTarget=RiotTargetCents,riotPaid=RiotPaidCents,firstPayroll=firstPayrollAt,nextPeriod=nextLivingPeriod,riotDeadline=RiotDeadline},
                 workshop=new WorkshopSave{recipe=(int)SelectedAssembly,token=assemblyToken,assembled=AssembledTools,boughtMask=toolsBoughtMask,progress=assemblyProgress,purchaseAt=toolPurchaseAt,budgetReset=toolBudgetReset,budgetSpent=toolBudgetSpent,autoPurchase=AutomaticToolPurchase},demoCompleted=DemoCompleted,demoCompletedAt=DemoCompletedAt,
                 seconds=GameSeconds,accumulated=accumulatedTime,inputTimer=inputTimer,nextInput=nextInput,woodProgress=jobProgress,dismantleProgress=dismantleProgress,nextWage=nextWage,
@@ -78,8 +84,11 @@ namespace CrazyRubbish.Core
         {
             if(s==null||(s.schema!=2&&s.schema!=3)||s.sourceVersion!=5||s.itemCount!=Enum.GetValues(typeof(ItemId)).Length)throw new ArgumentException("存档版本或物品目录不兼容。");
             var m=new PrototypeSimulation(s.settings,1);m.random.State=s.random;
+            m.Opening=s.gradualOpening?(s.opening?.Copy()??throw new ArgumentException("存档缺少来料进度。")):null;m.DumpedTicks=s.dumpedTicks;
+            m.CarryGrid=s.carryGrid?.Copy()??new InventoryGridLayout();m.WarehouseGrid=s.warehouseGrid?.Copy()??new InventoryGridLayout();
+            if(m.DumpedTicks<0 || m.Opening!=null&&(m.Opening.batch<0||m.Opening.batch>m.openingShipments.Count||double.IsNaN(m.Opening.nextAt)||double.IsInfinity(m.Opening.nextAt)||m.Opening.nextAt<0))throw new ArgumentException("来料进度无效。");
             m.Tutorial=s.tutorial?.Copy()??new TutorialProgress{active=false,started=true};
-            if(m.Tutorial.step<0 || m.Tutorial.step>TutorialProgress.LastStep)throw new ArgumentException("教程进度无效。");
+            if(m.Tutorial.step<0 || m.Tutorial.step>TutorialProgress.LastStep || m.Tutorial.orientation<0 || m.Tutorial.orientation>5)throw new ArgumentException("教程进度无效。");
             if(s.schema==3)
             {
                 var c=s.community??throw new ArgumentException("存档缺少生活状态。");var w=s.workshop??throw new ArgumentException("存档缺少工作台状态。");
@@ -111,7 +120,9 @@ namespace CrazyRubbish.Core
             m.residents.Clear();foreach(var r in s.residents)
             {
                 var person=new Resident(r.id){Job=(WorkerJob)r.job,X=r.x,Y=r.y,CashCents=r.cash,Needs=s.schema==3?r.needs.Copy():new LivingNeeds{nextMeal=s.seconds+300},Path=r.path,PathIndex=r.pathIndex,PathTargetX=r.pathX,PathTargetY=r.pathY,PathRevision=r.pathRevision};person.Cargo.Restore(r.cargo);
-                if(r.delivery!=null){var d=r.delivery;person.Delivery=new DeliveryTask{Id=d.id,Item=(ItemId)d.item,Amount=d.amount,Token=d.token,Stage=d.stage,SourceX=d.sx,SourceY=d.sy,TargetX=d.tx,TargetY=d.ty,From=d.from,To=d.to,Progress=d.progress,RetryAt=d.retryAt,Picked=d.picked,Ground=m.ground.Find(p=>p.Id==d.groundId),Source=map.ContainsKey(d.from)?map[d.from]:null,Target=map.ContainsKey(d.to)?map[d.to]:null};}
+                // Unity may deserialize a null nested record as an empty object. Real deliveries
+                // always have a positive identity; an idle resident must remain idle after loading.
+                if(r.delivery!=null&&r.delivery.id>0){var d=r.delivery;person.Delivery=new DeliveryTask{Id=d.id,Item=(ItemId)d.item,Amount=d.amount,Token=d.token,Stage=d.stage,SourceX=d.sx,SourceY=d.sy,TargetX=d.tx,TargetY=d.ty,From=d.from,To=d.to,Progress=d.progress,RetryAt=d.retryAt,Picked=d.picked,Ground=m.ground.Find(p=>p.Id==d.groundId),Source=map.ContainsKey(d.from)?map[d.from]:null,Target=map.ContainsKey(d.to)?map[d.to]:null};}
                 m.residents.Add(person);
             }
             m.bills.Clear();foreach(var b in s.bills){var bill=new WageBill(b.ids,b.original/b.ids.Length,b.due);Array.Copy(b.unpaid,bill.UnpaidCents,b.unpaid.Length);m.bills.Add(bill);}

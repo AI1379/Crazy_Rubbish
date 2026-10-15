@@ -10,6 +10,13 @@ namespace CrazyRubbish.Core
         private double RandomInputInterval()=>DesignRules.InputMeanInterval(GameSeconds)*(2.0/3+random.NextDouble()*2.0/3);
         private void GenerateInput(double interval)
         {
+            // Early arrivals remain useful and recognizable; advanced salvage joins after first power.
+            if(Opening!=null && !HasBeenPowered)
+            {
+                AddNatural(ItemId.WasteWood,2,ReceivingX,ReceivingY-2,true);
+                AddNatural(GameSeconds%120<60?ItemId.Food:ItemId.DrinkingWater,2,ReceivingX,ReceivingY-2,true);
+                SpawnedUnits+=4;return;
+            }
             double budget=DesignRules.InputRate(GameSeconds)*interval/60*(0.85+random.NextDouble()*0.3);
             double[] shares={0.35,0.25,0.20,0.15,0.05};
             for(int i=0;i<5;i++)categoryBudgets[i]+=budget*shares[i];
@@ -44,6 +51,7 @@ namespace CrazyRubbish.Core
         private void AddInitial(int x,int y,ItemId item,int count)=>AddNatural(item,count,x,y,true);
         private void AddNatural(ItemId item,int count,int cx=DropX,int cy=DropY,bool guaranteed=false)
         {
+            if(Opening!=null && cx==DropX && cy==DropY){cx=ReceivingX;cy=ReceivingY-2;}
             while(count>0)
             {
                 if(FindGroundSpace(item,cx,cy,out var pile,out int x,out int y,double.MaxValue,true))
@@ -71,14 +79,18 @@ namespace CrazyRubbish.Core
         public decimal GroundCapacityAt(int x,int y)=>CellTicks(x,y)/20m;
         private bool FindGroundSpace(ItemId item,int cx,int cy,out GroundPile target,out int x,out int y,double limit=double.MaxValue,bool heapFirst=false)
         {
-            target=null;x=y=-1;double best=double.MaxValue;int bestArea=2,width=ItemCatalog.CapacityTicks(item)>100?2:1;
+            target=null;x=y=-1;double best=double.MaxValue;int bestArea=2,bestMixed=2,width=ItemCatalog.CapacityTicks(item)>100?2:1;
+            var otherCells=new System.Collections.Generic.HashSet<(int,int)>();
+            foreach(var existing in ground)if(existing.Item!=item)
+                for(int cell=existing.X;cell<existing.X+existing.Width;cell++)otherCells.Add((cell,existing.Y));
             for(int py=0;py<Settings.mapHeight;py++)for(int px=0;px<Settings.mapWidth;px++)
             {
                 if(!Enumerable.Range(px,width).All(q=>IsOwnedGround(q,py)&&!Occupied(q,py)&&CellTicks(q,py)+ItemCatalog.CapacityTicks(item)/width<=100))continue;
                 double distance=Distance(cx,cy,px,py);if(distance>limit)continue;
                 int area=heapFirst&&px<=7&&py>=6&&py<=11?0:1;
-                if(area>bestArea||area==bestArea&&distance>=best)continue;
-                bestArea=area;best=distance;x=px;y=py;
+                int mixed=otherCells.Contains((px,py))||width==2&&otherCells.Contains((px+1,py))?1:0;
+                if(area>bestArea||area==bestArea&&(mixed>bestMixed||mixed==bestMixed&&distance>=best))continue;
+                bestArea=area;bestMixed=mixed;best=distance;x=px;y=py;
                 target=ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item)?null:ground.Find(p=>p.X==px&&p.Y==py&&p.Item==item);
             }
             return x>=0;

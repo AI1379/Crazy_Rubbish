@@ -57,7 +57,7 @@ namespace CrazyRubbish.Editor
                 AssetDatabase.SaveAssets();
             }
             var settings = JsonUtility.FromJson<PrototypeSettings>(JsonUtility.ToJson(game.balance.values));
-            var model = new PrototypeSimulation(settings, 4271);
+            var model = new PrototypeSimulation(settings, 4271, true);
             var world = game.GetComponent<PrototypeWorld>();
             var hud = game.GetComponent<PrototypeHud>();
             bool changed = !world.HasCurrentLayout || !hud.HasLayout;

@@ -9,7 +9,7 @@ namespace CrazyRubbish.Prototype
     // Reference-space dimensions are shared with the world camera so the map never sits under UI.
     public sealed partial class PrototypeHud
     {
-        private const int CurrentLayoutVersion = 8;
+        private const int CurrentLayoutVersion = 14;
         public const float ReferenceWidth = 1600, MapLeft = 0, MapWidth = 1600, MapTop = 0, MapBottom = 0;
         [SerializeField] private Text powerValue, populationValue, foodValue, waterValue, menuNotice;
         [SerializeField] private float[] onsiteSectionY = new float[4];
@@ -49,7 +49,7 @@ namespace CrazyRubbish.Prototype
             TextAt(sidebar, "Title", "工坊管理", 18, 12, 200, 32, 23, Ink);
             ButtonAt(sidebar, "CloseManagement", "×", 350, 16, 28, 30);
             string[] names = { "现场", "人员", "仓库", "教程" };
-            for (int i = 0; i < 4; i++) tabs[i] = ButtonAt(sidebar, "Tab" + i, names[i], 12 + i * 94, 56, 90, 40);
+            for (int i = 0; i < 4; i++) tabs[i] = ButtonAt(sidebar, "Tab" + i, i==2?"图鉴":names[i], 12 + i * 94, 56, 90, 40);
             for (int i = 0; i < 4; i++)
                 pages[i] = StretchPanel(sidebar, names[i] + " Page", Vector2.zero, Vector2.one,
                     new Vector2(8, 76), new Vector2(-8, -108), Color.clear);
@@ -61,6 +61,9 @@ namespace CrazyRubbish.Prototype
             BuildInventoryPage();
             BuildTutorialPage();
             BuildActionDock();
+            BuildTutorialWelcome();
+            BuildKnowledgePanel();
+            BuildInventoryWindow();
             BuildMenu();
             foreach (Transform child in root.GetComponentsInChildren<Transform>(true)) child.gameObject.layer = 5;
             SelectTab(0);
@@ -152,7 +155,7 @@ namespace CrazyRubbish.Prototype
         private void BuildInventoryPage()
         {
             inventoryContent = ScrollContent(pages[2], 260 + ItemCount * 76);
-            TextAt(inventoryContent, "Inventory Title", "物资清单", 12, 4, 200, 30, 21, Ink);
+            TextAt(inventoryContent, "Inventory Title", "物品图鉴", 12, 4, 200, 30, 21, Ink);
             inventoryFilter = ButtonAt(inventoryContent, "InventoryFilter", "全部物品", 238, 4, 116, 34);
             capacity = TextAt(inventoryContent, "Capacity", "", 12, 50, 342, 24, 14, Muted);
             capacityFill = Bar(inventoryContent, "CapacityBar", 12, 82, 342, 5, Green);

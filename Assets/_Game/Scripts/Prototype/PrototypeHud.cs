@@ -187,7 +187,7 @@ namespace CrazyRubbish.Prototype
             SetSelected(sortedRecipe, m.SelectedRecipe == WoodRecipe.SortedWood);
             for (int i = 1; i <= 3; i++) SetSelected(speedButtons[i - 1], !m.Paused && m.Speed == i);
             SetSelected(pause, m.Paused);
-            target.text = "左键查看设施 · WASD / 右键移动 · 滚轮缩放";
+            target.text = "左键拖动地图 · 短按看用途 · 右键行走 · 滚轮缩放";
             objective.text = m.CurrentDemoHint;
             var low = m.Tools.FirstOrDefault(t => ItemCatalog.IsTool(t.Item) && t.Durability > 0 && t.Durability <= 60 && !m.Tools.Any(other => other.Item == t.Item && other.Id != t.Id && other.Durability > 60));
             toolWarningLabel = low == null ? null : ItemCatalog.Name(low.Item);
@@ -207,6 +207,7 @@ namespace CrazyRubbish.Prototype
             RefreshInventory(m);
             RefreshTutorial(m);
             RefreshOverlay(m);
+            RefreshInventoryWindow(m);
         }
 
         private void RefreshDemo(PrototypeSimulation m)
@@ -232,7 +233,7 @@ namespace CrazyRubbish.Prototype
                 milestoneLabels[i].color = flags[i] ? Green : Ink;
                 milestoneMarks[i].color = flags[i] ? Green : Border;
             }
-            menuResume.GetComponentInChildren<Text>().text=!game.SessionStarted?"开始试玩":game.ResultVisible?"继续经营":"返回工坊";
+            menuResume.GetComponentInChildren<Text>().text=!game.SessionStarted?"开始试玩 · 新手引导":game.ResultVisible?"继续经营":"返回工坊";
             menuResume.interactable=!m.Failed;
         }
 
@@ -274,7 +275,7 @@ namespace CrazyRubbish.Prototype
                 var outline=binding.button.GetComponent<Outline>();
                 if(outline!=null)
                 {
-                    bool highlighted=live && m.Tutorial.started && !m.Tutorial.Completed && binding.command==action.button;
+                    bool highlighted=m.Tutorial.active && m.Tutorial.started && !m.Tutorial.Completed && binding.command==action.button;
                     outline.effectColor=highlighted?Accent:Border;outline.effectDistance=highlighted?new Vector2(2,-2):new Vector2(1,-1);
                 }
             }
@@ -304,6 +305,14 @@ namespace CrazyRubbish.Prototype
         {
             var m=game.Model;var action=PrototypeTutorial.NextAction(m,m.Tutorial.step);
             if(action.button==null)return;
+            if(action.page==2)
+            {
+                if(action.operation==TutorialOperation.Pick)FocusInventoryItem(action.item,false);
+                else if(action.operation==TutorialOperation.Withdraw)FocusInventoryItem(action.item,true);
+                else OpenInventory(true);
+                if(action.hasTarget)game.GetComponent<PrototypeWorld>().FocusPoint(action.x,action.y,6);
+                return;
+            }
             if(action.page==2){showAllItems=true;RefreshInventory(m);}
             SelectTab(action.page);
             var binding=buttonBindings.FirstOrDefault(b=>b.command==action.button);
@@ -321,7 +330,7 @@ namespace CrazyRubbish.Prototype
                 float room=Mathf.Max(1,scroll.content.rect.height-scroll.viewport.rect.height);
                 scroll.verticalNormalizedPosition=1-Mathf.Clamp01((-point.y-40)/room);
             }
-            if(action.hasTarget)game.GetComponent<PrototypeWorld>().FocusPoint(action.x,action.y);
+            if(action.hasTarget)game.GetComponent<PrototypeWorld>().FocusPoint(action.x,action.y,6);
             game.Report(new ActionResult(true,"金色边框标出对应按钮；完成后可返回教程页。"));
         }
         public void ShowTutorial() { reviewLesson=-1;SelectTab(3); }
@@ -393,7 +402,31 @@ namespace CrazyRubbish.Prototype
                 case "MenuLoad": game.LoadLatest();break;case "MenuSave": game.SaveGame();break;case "MenuNew": game.StartNewGame();ClosePanels();break;case "Quit": game.QuitGame();break;
                 case "CloseManagement": case "CloseFacility": ClosePanels(); break;
                 case "GoToFacility": GoToSelectedFacility(); break;
-                case "OpenGuide": if(m.Tutorial.IntroOpen)game.BeginTutorial();ShowTutorial();break;
+                case "CloseInventory": CloseInventory();break;
+                case "InventoryPrimary": InventoryPrimaryAction();break;
+                case "InventoryGoWarehouse": OpenWarehouse();break;
+                case "InventoryCatalogue": CloseInventory();showAllItems=true;SelectTab(2);break;
+                case "StockPrevious": stockPage=Math.Max(0,stockPage-1);break;
+                case "StockNext": stockPage++;break;
+                case "BagPrevious": bagPage=Math.Max(0,bagPage-1);break;
+                case "BagNext": bagPage++;break;
+                case "InventorySell": if(inspectedItem.HasValue&&m.Hand==null)game.Report(m.Sell(inspectedItem.Value,1));break;
+                case "InventoryDrop": if(inspectedItem.HasValue&&m.Hand==null)game.Report(m.Drop(inspectedItem.Value));break;
+                case "BeginGuide":
+                    m.Tutorial.orientation=1;ClosePanels();RefreshKnowledge(m);FocusKnowledge();
+                    break;
+                case "KnowledgeNext": AcknowledgeKnowledge();break;
+                case "KnowledgeFocus": FocusKnowledge();break;
+                case "KnowledgeAction": ExecuteKnowledgeAction();break;
+                case "HoleCycle": CycleDumpItem();break;
+                case "HoleDiscard": ConfirmDump();break;
+                case "OpenGuide": ShowTutorial();break;
+                case "GuideAction":
+                    if(m.Tutorial.Completed){game.SkipTutorial();break;}
+                    if(m.Paused){m.SetPaused(false);break;}
+                    game.ExecuteTutorialAction();break;
+                case "GuideLocate": ShowTutorialControl();break;
+                case "GuideCollapse": guideCollapsed=!guideCollapsed;break;
                 case "DismissGuide": game.SkipTutorial();ClosePanels();break;
                 case "Zones": showZones = !showZones; break;
                 case "Alerts":
@@ -425,6 +458,7 @@ namespace CrazyRubbish.Prototype
         private void SelectTab(int index)
         {
             if (index < 0 || index >= pages.Length) return;
+            CloseInventory();
             if (facilityPanel != null) facilityPanel.gameObject.SetActive(false);
             selectedFacility = 0; activeTab = index;
             management.gameObject.SetActive(true);

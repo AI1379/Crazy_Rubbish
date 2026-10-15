@@ -60,7 +60,7 @@ namespace CrazyRubbish.Core
             foreach(var output in new[]{(Output,"woodOutput",BenchX,BenchY),(DismantleOutput,"dismantleOutput",DismantleX,DismantleY),(TableOutput,"tableOutput",TableX,TableY),(GeneratorResidue,"ash",GeneratorX,GeneratorY),(BrokenTools,"broken",BenchX,BenchY)})
                 foreach(ItemId item in Enum.GetValues(typeof(ItemId)))if(output.Item1.Available(item)>0)
                 {task=Plan(actor,output.Item1,Warehouse,output.Item2,"warehouse",item,output.Item3,output.Item4,WarehouseX,WarehouseY,output.Item1.Available(item));if(task!=null)return task;}
-            if(BenchBuilt&&RunRequested&&WoodInputStock.Count(ItemId.WasteWood)<WoodInput(SelectedRecipe))
+            if(BenchBuilt&&RunRequested&&pendingRecipe==null&&WoodInputStock.Count(ItemId.WasteWood)<WoodInput(SelectedRecipe))
             {task=Supply(actor,WoodInputStock,"woodInput",ItemId.WasteWood,BenchX,BenchY,WoodInput(SelectedRecipe)*2-WoodInputStock.Count(ItemId.WasteWood));if(task!=null)return task;}
             if(DismantleBuilt&&DismantleRequested&&DismantleInput.Count(SelectedDevice)<1)
             {task=Supply(actor,DismantleInput,"dismantleInput",SelectedDevice,DismantleX,DismantleY,2-DismantleInput.Count(SelectedDevice));if(task!=null)return task;}

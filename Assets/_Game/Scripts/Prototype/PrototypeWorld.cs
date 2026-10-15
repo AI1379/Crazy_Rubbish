@@ -25,7 +25,7 @@ namespace CrazyRubbish.Prototype
         private Transform tutorialTarget;
         private readonly List<CellView> cells = new List<CellView>();
         [SerializeField] private int layoutVersion;
-        public bool HasCurrentLayout => HasLayout && layoutVersion == 4;
+        public bool HasCurrentLayout => HasLayout && layoutVersion == 5;
 
         private sealed class PileView
         { public GameObject Root; public SpriteRenderer Icon, Highlight, Badge; public TextMesh Count; }
@@ -120,8 +120,11 @@ namespace CrazyRubbish.Prototype
             Vector2 mouse = new Vector2(Input.mousePosition.x / Mathf.Max(1, Screen.width), Input.mousePosition.y / Mathf.Max(1, Screen.height));
             bool available = worldCamera.rect.Contains(mouse) && !overUi && !game.MenuOpen && !game.ResultVisible;
             float scroll = Input.mouseScrollDelta.y;
-            if (available && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
-                HandleMapClick(worldCamera.ScreenToWorldPoint(Input.mousePosition), Input.GetMouseButtonDown(1));
+            if(game.MenuOpen||game.ResultVisible) CancelMapDrag();
+            if(available && (Input.GetMouseButtonDown(0)||Input.GetMouseButtonDown(2))) BeginMapDrag(Input.mousePosition);
+            if(Input.GetMouseButton(0)||Input.GetMouseButton(2)) ContinueMapDrag(Input.mousePosition);
+            if(Input.GetMouseButtonUp(0)||Input.GetMouseButtonUp(2)) EndMapDrag(Input.mousePosition, available && Input.GetMouseButtonUp(0));
+            if(available && Input.GetMouseButtonDown(1)) HandleMapClick(worldCamera.ScreenToWorldPoint(Input.mousePosition),true);
             if (available && scroll != 0)
             {
                 Vector3 before = worldCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -130,20 +133,16 @@ namespace CrazyRubbish.Prototype
                 worldCamera.transform.position += before - after;
                 ClampCamera(model);
             }
-            if (available && Input.GetMouseButton(2))
-            {
-                float units = worldCamera.orthographicSize * 2 / Mathf.Max(1, Screen.height * worldCamera.rect.height);
-                worldCamera.transform.position -= new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0) * units * 12;
-                ClampCamera(model);
-            }
             RefreshView(model);
-            UpdateHover(available && scroll == 0 && !Input.GetMouseButton(2) ? (Vector2?)worldCamera.ScreenToWorldPoint(Input.mousePosition) : null, Time.unscaledTimeAsDouble);
+            UpdateHover(available && scroll == 0 && !DraggingMap ? (Vector2?)worldCamera.ScreenToWorldPoint(Input.mousePosition) : null, Time.unscaledTimeAsDouble);
         }
 
         public void RefreshView(PrototypeSimulation model)
         {
             if (previousModel != model)
             {
+                CancelMapDrag();
+                if(model.GameSeconds==0)FitCamera(model);
                 for (int i = pileRoot.childCount - 1; i >= 0; i--) RemoveView(pileRoot.GetChild(i).gameObject);
                 piles.Clear();
                 cells.Clear();
@@ -172,14 +171,21 @@ namespace CrazyRubbish.Prototype
             foreach (CellView cell in cells)
             {
                 cell.View.Highlight.enabled = nearest != null && nearest.X == cell.X && nearest.Y == cell.Y;
-                cell.View.Count.gameObject.SetActive(false);
-                cell.View.Badge.enabled = false;
+                bool nearby=PrototypeSimulation.Distance(model.PlayerX,model.PlayerY,cell.X,cell.Y)<=model.Settings.interactionRadius+1;
+                cell.View.Count.gameObject.SetActive(nearby);
+                cell.View.Badge.enabled = nearby;
             }
             RefreshMapOverlays();
             int playerPose = model.PlayerSawing ? 3 : model.PickingUp ? 2 : model.Carry.UsedTicks > 0 ? 1 : 0;
             worker.GetComponent<PrototypeActorView>().Refresh(new Vector2((float)model.PlayerX, (float)model.PlayerY), playerPose, model.Paused, model.GameSeconds);
             playerLabel.transform.position = worker.position + new Vector3(0, -0.75f, 0);
             bench.color = model.BenchBuilt ? Color.white : new Color32(195, 180, 155, 130);
+            int selected=game.GetComponent<PrototypeHud>()?.SelectedFacility??0;
+            bench.enabled=model.BenchBuilt||selected==1;
+            dismantle.enabled=model.DismantleBuilt||selected==2;
+            table.enabled=model.TableBuilt||selected==3;
+            generator.enabled=model.GeneratorBuilt||selected==4;
+            visualRoot.Find("CommunityLamp").gameObject.SetActive(model.HasBeenPowered);
             benchLabel.text = "木工台";
             benchLabel.color = model.BenchBuilt ? Color.white : new Color32(212, 187, 137, 255);
             generator.color = model.GeneratorBuilt ? Color.white : new Color32(195, 180, 155, 130);
@@ -188,8 +194,10 @@ namespace CrazyRubbish.Prototype
             generatorLabel.text = "发电机";
             tableLabel.text = "工作台";
             dismantleLabel.text = "拆解台";
-            foreach (TextMesh label in new[] { benchLabel, generatorLabel, tableLabel, dismantleLabel })
-                label.gameObject.SetActive(false);
+            benchLabel.gameObject.SetActive(model.BenchBuilt||selected==1);
+            generatorLabel.gameObject.SetActive(model.GeneratorBuilt||selected==4);
+            tableLabel.gameObject.SetActive(model.TableBuilt||selected==3);
+            dismantleLabel.gameObject.SetActive(model.DismantleBuilt||selected==2);
             foreach(int id in residentViews.Keys.Where(id=>!model.Residents.Any(r=>r.Id==id)).ToArray())
             {RemoveView(residentViews[id].gameObject);residentViews.Remove(id);}
             foreach (Resident resident in model.Residents)
@@ -225,6 +233,9 @@ namespace CrazyRubbish.Prototype
                 }
             }
             var action=PrototypeTutorial.NextAction(model,model.Tutorial.step);
+            var hud=game.GetComponent<PrototypeHud>();
+            if(hud.KnowledgeTarget(out Vector2 knowledgePoint))
+            {tutorialTarget.gameObject.SetActive(!game.MenuOpen&&!game.ResultVisible);tutorialTarget.position=new Vector3(knowledgePoint.x,knowledgePoint.y,0);return;}
             tutorialTarget.gameObject.SetActive(model.Tutorial.active && model.Tutorial.started && !model.Tutorial.Completed && action.hasTarget && !game.MenuOpen && !game.ResultVisible);
             if(tutorialTarget.gameObject.activeSelf)tutorialTarget.position=new Vector3(action.x,action.y,0);
         }
@@ -236,8 +247,8 @@ namespace CrazyRubbish.Prototype
             worldCamera.rect = new Rect(PrototypeHud.MapLeft / PrototypeHud.ReferenceWidth, PrototypeHud.MapBottom / canvasHeight,
                 PrototypeHud.MapWidth / PrototypeHud.ReferenceWidth,
                 Mathf.Max(1, canvasHeight - PrototypeHud.MapTop - PrototypeHud.MapBottom) / canvasHeight);
-            worldCamera.orthographicSize = Mathf.Min(10, FullMapSize(model));
-            worldCamera.transform.position = new Vector3((model.Settings.mapWidth - 1) / 2f, Mathf.Min(9.5f, (model.Settings.mapHeight - 1) / 2f), -10);
+            worldCamera.orthographicSize = Mathf.Min(model.Opening!=null&&!model.Tutorial.started?14:10, FullMapSize(model));
+            worldCamera.transform.position = new Vector3((model.Settings.mapWidth - 1) / 2f, model.Opening!=null&&!model.Tutorial.started?13.5f:Mathf.Min(9.5f, (model.Settings.mapHeight - 1) / 2f), -10);
             ClampCamera(model);
         }
 
@@ -252,10 +263,12 @@ namespace CrazyRubbish.Prototype
             Vector3 p = worldCamera.transform.position;
             float halfHeight = worldCamera.orthographicSize;
             float halfWidth = halfHeight * worldCamera.pixelWidth / Mathf.Max(1f, worldCamera.pixelHeight);
-            p.x = halfWidth * 2 >= model.Settings.mapWidth ? (model.Settings.mapWidth - 1) / 2f
-                : Mathf.Clamp(p.x, halfWidth - 0.5f, model.Settings.mapWidth - halfWidth - 0.5f);
-            p.y = halfHeight * 2 >= model.Settings.mapHeight ? (model.Settings.mapHeight - 1) / 2f
-                : Mathf.Clamp(p.y, halfHeight - 0.5f, model.Settings.mapHeight - halfHeight - 0.5f);
+            // A small framing margin keeps edge objects clear of overlays and lets a fully
+            // zoomed-out map still respond to dragging instead of feeling locked.
+            const float margin=3;
+            float centerX=(model.Settings.mapWidth-1)/2f,centerY=(model.Settings.mapHeight-1)/2f;
+            p.x = Mathf.Clamp(p.x,Mathf.Min(centerX-margin,halfWidth-0.5f-margin),Mathf.Max(centerX+margin,model.Settings.mapWidth-halfWidth-0.5f+margin));
+            p.y = Mathf.Clamp(p.y,Mathf.Min(centerY-margin,halfHeight-0.5f-margin),Mathf.Max(centerY+margin,model.Settings.mapHeight-halfHeight-0.5f+margin));
             worldCamera.transform.position = p;
         }
 
@@ -301,12 +314,19 @@ namespace CrazyRubbish.Prototype
 
         private void ConfigureLabels()
         {
-            // Preserve saved object IDs while retiring all world-space typography and name plates.
             foreach (var label in visualRoot.GetComponentsInChildren<TextMesh>(true)) label.gameObject.SetActive(false);
+            if(visualRoot.Find("ReceivingHole")==null)
+            {
+                var incoming=Sprite("ReceivingHole",game.appearance.hole,PrototypeSimulation.ReceivingX,PrototypeSimulation.ReceivingY,0.85f,-1500);
+                incoming.color=new Color32(236,197,120,255);
+                Label("ReceivingLabel","落料洞 ↓",PrototypeSimulation.ReceivingX,PrototypeSimulation.ReceivingY+1.2f,0.13f);
+            }
+            visualRoot.Find("HoleLabel").GetComponent<TextMesh>().text="投弃洞";
+            foreach(string name in new[]{"ReceivingLabel","HoleLabel","WarehouseLabel","HousingLabel"})visualRoot.Find(name).gameObject.SetActive(true);
             overlayLines = visualRoot.GetComponentsInChildren<SpriteRenderer>(true).Where(r =>
                 r.name.Contains("Boundary ") || r.name.Contains(" Pad ") || r.name == "Warehouse Interaction Front").ToArray();
             foreach (var line in overlayLines) line.enabled = false;
-            layoutVersion = 4;
+            layoutVersion = 5;
         }
 
         private static void SetSpriteSize(SpriteRenderer renderer, float width, float height)
@@ -316,6 +336,7 @@ namespace CrazyRubbish.Prototype
 
         private static void RemoveView(GameObject obj)
         {
+            obj.SetActive(false);
             if (Application.isPlaying) Destroy(obj); else DestroyImmediate(obj);
         }
 
@@ -340,6 +361,7 @@ namespace CrazyRubbish.Prototype
                     view.Icon = Sprite("Item", game.appearance.ItemSprite(pile.Item), pile.X, pile.Y, 1, SortAt(pile.Y - 0.3f));
                     view.Count = Label("Quantity", "", pile.X + 0.24f, pile.Y - 0.24f, 0.055f);
                     view.Badge = Sprite("Cell Badge", game.appearance.marker, pile.X + 0.24f, pile.Y - 0.24f, 1, 1999);
+                    SetSpriteSize(view.Badge,0.55f,0.28f);
                     view.Badge.color = new Color32(29, 45, 48, 255);
                     view.Highlight.transform.SetParent(root.transform, true);
                     view.Icon.transform.SetParent(root.transform, true);
@@ -379,7 +401,7 @@ namespace CrazyRubbish.Prototype
                 view.Icon.transform.position = new Vector3(primary.X, primary.Y - (heap ? 0.34f : 0), 0);
                 view.Icon.enabled = true;
                 view.Icon.color = Color.white;
-                view.Count.text = types > 1 ? "+" + (types - 1) : amount.ToString();
+                view.Count.text = types > 1 ? primary.Amount+"+"+(types-1)+"类" : "×"+amount;
                 cells.Add(new CellView { X = primary.X, Y = primary.Y, Types = types, View = view });
             }
         }

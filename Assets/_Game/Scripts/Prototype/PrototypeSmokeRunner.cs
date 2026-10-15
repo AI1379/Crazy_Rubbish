@@ -51,8 +51,15 @@ namespace CrazyRubbish.Prototype
                 try { CapturePreview(screenshot); }
                 catch (Exception exception) { failed = true; Debug.LogException(exception); }
             }
+            try { VerifyInventoryGrid(screenshot); VerifyTutorialCoach(screenshot); }
+            catch (Exception exception) { failed = true; Debug.LogException(exception); }
+            // The onboarding checks reset/load sessions. Let Unity dispose their old world views
+            // before counting renderers in the independent presentation checks.
+            yield return null;
+            yield return null;
             try
             {
+                game.Model.Advance(2.05);
                 if (game.GetComponent<PrototypeHud>().VisualRoot.GetComponentsInChildren<Button>(true).Length < 20 || Camera.main == null)
                     throw new InvalidOperationException("Scene HUD or camera was not initialized.");
                 VerifyHudBindings(screenshot);
@@ -110,11 +117,26 @@ namespace CrazyRubbish.Prototype
             // Let presentation render the completed production state before quitting.
             yield return null;
             yield return null;
+            if(!failed&&!string.IsNullOrEmpty(screenshot))game.GetComponent<PrototypeHud>().OpenInventory(true);
+            // GraphicRaycaster requires a rendered canvas depth. A window opened and tested in
+            // the same synchronous function still has depth -1, unlike a real subsequent click.
+            yield return null;
+            yield return null;
             if (!failed && !string.IsNullOrEmpty(screenshot))
             {
                 string completed = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(screenshot)),
                     Path.GetFileNameWithoutExtension(screenshot) + "-completed.png");
-                try { VerifyManagementLayout(screenshot); CapturePreview(completed); }
+                try
+                {
+                    var hud = game.GetComponent<PrototypeHud>();
+                    VerifyInventoryPointerBlocking();hud.CloseInventory();
+                    hud.ClosePanels(); hud.RefreshView(game.Model);
+                    if (!hud.VisualRoot.Find("Guide Prompt").gameObject.activeSelf ||
+                        !hud.VisualRoot.Find("Guide Prompt/Body/GuideAction/Label").GetComponent<Text>().text.Contains("完成"))
+                        throw new InvalidOperationException("Completed tutorial has no acknowledgement card.");
+                    CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + "-guide-complete.png"));
+                    VerifyManagementLayout(screenshot); CapturePreview(completed);
+                }
                 catch (Exception exception) { failed = true; Debug.LogException(exception); }
             }
             if(!failed&&!string.IsNullOrEmpty(screenshot))
@@ -158,6 +180,167 @@ namespace CrazyRubbish.Prototype
         private void OnLog(string message, string stack, LogType type)
         { if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) failed = true; }
 
+        private void VerifyInventoryGrid(string screenshot)
+        {
+            var hud=game.GetComponent<PrototypeHud>();var world=game.GetComponent<PrototypeWorld>();var root=hud.VisualRoot;
+            void Refresh(){hud.RefreshView(game.Model);world.RefreshView(game.Model);Canvas.ForceUpdateCanvases();}
+            void Capture(string suffix){if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+suffix+".png"));}
+            int Slot(bool warehouse,ItemId item){game.Model.SyncInventoryGrids();return game.Model.Grid(warehouse).slots.FindIndex(s=>s.amount>0&&s.item==item);}
+            game.StartNewGame();game.BeginTutorial();game.Model.Advance(9.05);Refresh();
+            var saw=game.Model.Ground.First(p=>p.Item==ItemId.WoodHandSaw);
+            PrototypeStartingScenario.MoveTo(game.Model,saw.X,saw.Y);PrototypeStartingScenario.Act(game.Model,()=>game.Model.PickUp(int.MaxValue,null,saw.Id));
+            var food=game.Model.Ground.First(p=>p.Item==ItemId.Food);
+            PrototypeStartingScenario.MoveTo(game.Model,food.X,food.Y);world.FocusPoint(food.X,food.Y,6);Refresh();
+            var oldView=world.VisualRoot.Find("Ground Items/GroundPile_"+food.Id);
+            Capture("-ground-before");
+            PrototypeStartingScenario.Act(game.Model,()=>game.Model.PickUp(int.MaxValue,null,food.Id));Refresh();
+            if(game.Model.Ground.Any(p=>p.Id==food.Id)||oldView.gameObject.activeInHierarchy)throw new InvalidOperationException("An exhausted picked pile is still visible.");
+            Capture("-ground-after");
+            int totalFood=game.Model.Carry.Count(ItemId.Food);
+            hud.OpenInventory(false);Refresh();
+            if(!hud.InventoryOpen||!root.Find("Inventory Window/Card/Upper Grid/Ground Slot 0").gameObject.activeInHierarchy)throw new InvalidOperationException("Backpack did not show nearby stacks.");
+            var card=root.Find("Inventory Window/Card").GetComponent<RectTransform>();var bounds=RectTransformUtility.CalculateRelativeRectTransformBounds(root,card);
+            if(bounds.min.y<root.rect.yMin||bounds.max.y>root.rect.yMax||bounds.min.x<root.rect.xMin||bounds.max.x>root.rect.xMax)throw new InvalidOperationException("Inventory window leaves the screen.");
+            hud.ClickInventorySlot(0,Slot(false,ItemId.Food),true);Refresh();
+            if(game.Model.Hand==null||game.Model.Hand.amount!=(totalFood+1)/2)throw new InvalidOperationException("Right-click did not take half a stack.");
+            root.Find("Inventory Window/Held Stack").GetComponent<RectTransform>().anchoredPosition=new Vector2(-140,70);Capture("-inventory-held");
+            hud.ClickInventorySlot(0,10,true);Refresh();
+            if(game.Model.CarryGrid.slots[10].amount!=1)throw new InvalidOperationException("Right-click did not place one item.");
+            game.HandleEscape();
+            if(hud.InventoryOpen||game.Model.Hand!=null||game.Model.Carry.Count(ItemId.Food)!=totalFood)throw new InvalidOperationException("Closing inventory lost or retained the held stack.");
+            PrototypeStartingScenario.MoveTo(game.Model,PrototypeSimulation.WarehouseX,PrototypeSimulation.WarehouseY);
+            hud.OpenWarehouse();Refresh();
+            hud.ClickInventorySlot(0,Slot(false,ItemId.Food),false,true);game.Model.Advance(0.55);Refresh();
+            if(!game.Model.LastInteraction.Success||game.Model.Hand!=null)throw new InvalidOperationException("Shift transfer failed.");
+            var cells=root.GetComponentsInChildren<PrototypeInventorySlot>(true);
+            int remaining=Slot(false,ItemId.Food),destination=Slot(true,ItemId.Food);
+            var from=cells.First(c=>c.container==0&&c.index==remaining);var to=cells.First(c=>c.container==1&&c.index==destination);
+            var pointer=new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current){button=UnityEngine.EventSystems.PointerEventData.InputButton.Left,pointerCurrentRaycast=new UnityEngine.EventSystems.RaycastResult{gameObject=to.gameObject}};
+            UnityEngine.EventSystems.ExecuteEvents.Execute(from.gameObject,pointer,UnityEngine.EventSystems.ExecuteEvents.beginDragHandler);
+            UnityEngine.EventSystems.ExecuteEvents.Execute(from.gameObject,pointer,UnityEngine.EventSystems.ExecuteEvents.endDragHandler);
+            game.Model.Advance(0.55);Refresh();
+            if(game.Model.Carry.Count(ItemId.Food)!=0||game.Model.Warehouse.Count(ItemId.Food)!=totalFood)throw new InvalidOperationException("Dragging between grids did not transfer the stack.");
+            hud.ClickInventorySlot(1,Slot(true,ItemId.Food),true);hud.ClickInventorySlot(0,7);game.Model.Advance(0.55);Refresh();
+            if(game.Model.Carry.Count(ItemId.Food)!=(totalFood+1)/2||game.Model.Hand!=null)throw new InvalidOperationException("Taking a split stack from warehouse failed.");
+            hud.InspectInventorySlot(0,7);Refresh();Capture("-inventory-chest");
+            hud.ClickInventorySlot(0,7);hud.ClickInventorySlot(1,20);game.HandleEscape();game.Model.Advance(0.55);
+            if(game.Model.Carry.Count(ItemId.Food)+game.Model.Warehouse.Count(ItemId.Food)!=totalFood||game.Model.Hand!=null||game.Model.Interacting)throw new InvalidOperationException("Closing during a transfer did not safely cancel it.");
+            game.StartNewGame();Refresh();
+        }
+
+        private void VerifyTutorialCoach(string screenshot)
+        {
+            var hud = game.GetComponent<PrototypeHud>();
+            var root = hud.VisualRoot;
+            Button Find(string name) => root.GetComponentsInChildren<Button>(true).First(button => button.name == name);
+            void Refresh() { hud.RefreshView(game.Model); game.GetComponent<PrototypeWorld>().RefreshView(game.Model); Canvas.ForceUpdateCanvases(); }
+            void Capture(string suffix)
+            {
+                if (!string.IsNullOrEmpty(screenshot)) CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot), Path.GetFileNameWithoutExtension(screenshot) + suffix + ".png"));
+            }
+            void CheckCard(string path)
+            {
+                var card = root.Find(path).GetComponent<RectTransform>();
+                var bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(root, card);
+                if (bounds.min.x < root.rect.xMin || bounds.max.x > root.rect.xMax || bounds.min.y < root.rect.yMin || bounds.max.y > root.rect.yMax)
+                    throw new InvalidOperationException("Tutorial card leaves the screen: " + path);
+                foreach (var label in card.GetComponentsInChildren<Text>())
+                    if (!label.resizeTextForBestFit && label.preferredHeight > label.rectTransform.rect.height + 1)
+                        throw new InvalidOperationException($"Tutorial text overflows: {label.name}, {label.preferredHeight} > {label.rectTransform.rect.height}");
+            }
+            Refresh();
+            if (!root.Find("Tutorial Welcome").gameObject.activeSelf || !game.Model.Tutorial.IntroOpen ||
+                !root.Find("Tutorial Welcome").GetComponent<Image>().raycastTarget)
+                throw new InvalidOperationException("New session does not show a blocking tutorial welcome.");
+            CheckCard("Tutorial Welcome/Card"); Capture("-welcome");
+            Find("DismissGuide").onClick.Invoke(); Refresh();
+            if (game.Model.Tutorial.active || root.Find("Tutorial Welcome").gameObject.activeSelf || root.Find("Guide Prompt").gameObject.activeSelf)
+                throw new InvalidOperationException("Free play did not dismiss onboarding.");
+            game.StartNewGame(); Refresh();
+            Find("BeginGuide").onClick.Invoke(); Refresh();
+            if(game.Model.Ground.Count!=0||!hud.KnowledgeOpen)throw new InvalidOperationException("Sparse opening or orientation is missing.");
+            var world=game.GetComponent<PrototypeWorld>();
+            foreach(string name in new[]{"WoodworkBench","Generator","Workbench","Dismantle"})
+                if(world.VisualRoot.Find(name).GetComponent<SpriteRenderer>().enabled)throw new InvalidOperationException("Unbuilt facility is visible: "+name);
+            if(world.VisualRoot.Find("ReceivingHole")==null)throw new InvalidOperationException("Receiving hole is missing.");
+            for(int place=1;place<=4;place++)
+            {
+                if(game.Model.Tutorial.orientation!=place||game.Model.GameSeconds!=0)throw new InvalidOperationException("Orientation skips places or advances time.");
+                if(hud.KnowledgeTarget(out Vector2 placeTarget)&&RectTransformUtility.RectangleContainsScreenPoint(root.Find("Knowledge Card").GetComponent<RectTransform>(),world.worldCamera.WorldToScreenPoint(placeTarget)))
+                    throw new InvalidOperationException("Orientation target is obscured: "+place);
+                CheckCard("Knowledge Card");Capture("-orientation"+place);
+                Find("KnowledgeNext").onClick.Invoke();Refresh();
+            }
+            game.Model.Advance(2.05);Refresh();
+            if(!hud.KnowledgeOpen||!root.Find("Knowledge Card/Description").GetComponent<Text>().text.Contains("手工锯木"))throw new InvalidOperationException("First saw has no explanation.");
+            CheckCard("Knowledge Card");Capture("-first-discovery");Find("KnowledgeNext").onClick.Invoke();Refresh();
+            var saw=game.Model.Ground.First(p=>p.Item==ItemId.WoodHandSaw);
+            PrototypeStartingScenario.MoveTo(game.Model,saw.X,saw.Y);
+            Refresh();while(hud.KnowledgeOpen){Find("KnowledgeNext").onClick.Invoke();Refresh();}
+            world.FocusPoint(saw.X,saw.Y,6);
+            if (game.Model.Tutorial.step != 1 || hud.ManagementOpen || root.Find("Tutorial Welcome").gameObject.activeSelf || !root.Find("Guide Prompt").gameObject.activeSelf)
+                throw new InvalidOperationException("Start guide did not reveal the first actionable lesson.");
+            var first = PrototypeTutorial.NextAction(game.Model, game.Model.Tutorial.step);
+            Vector3 marker = game.GetComponent<PrototypeWorld>().worldCamera.WorldToScreenPoint(new Vector3(first.x, first.y));
+            if (RectTransformUtility.RectangleContainsScreenPoint(root.Find("Guide Prompt").GetComponent<RectTransform>(), marker))
+                throw new InvalidOperationException("The first tutorial target is hidden behind the coach.");
+            CheckCard("Guide Prompt"); Capture("-guide");
+            game.Model.SetPaused(true); Refresh();
+            if (!Find("GuideAction").interactable || !Find("GuideAction").GetComponentInChildren<Text>().text.Contains("继续"))
+                throw new InvalidOperationException("Paused tutorial has no resume action.");
+            Find("GuideAction").onClick.Invoke();
+            if (game.Model.Paused || game.Model.Carry.UsedTicks != 0) throw new InvalidOperationException("Resume performed a gameplay action.");
+            Find("GuideAction").onClick.Invoke();
+            if (!game.Model.Interacting || game.Model.Tutorial.step != 1) throw new InvalidOperationException("Coach bypassed timed pickup.");
+            game.Model.Advance(0.55); Refresh();
+            while(hud.KnowledgeOpen){Find("KnowledgeNext").onClick.Invoke();Refresh();}
+            if (game.Model.Tutorial.step != 2 || !root.Find("Guide Prompt/Body/Checklist").GetComponent<Text>().text.Contains("0/12"))
+                throw new InvalidOperationException("Coach did not advance after actual pickup.");
+            CheckCard("Guide Prompt"); Capture("-supplies");
+            Find("GuideCollapse").onClick.Invoke(); Refresh();
+            if (root.Find("Guide Prompt/Body").gameObject.activeSelf) throw new InvalidOperationException("Coach did not collapse.");
+            Find("GuideCollapse").onClick.Invoke(); Find("OpenGuide").onClick.Invoke(); Find("TutorialNext").onClick.Invoke(); Refresh();
+            if (!root.Find("Guide Prompt/Objective").GetComponent<Text>().text.Equals(PrototypeTutorial.Titles[2]))
+                throw new InvalidOperationException("Review changed the live coach lesson.");
+            Find("GuideLocate").onClick.Invoke(); Refresh();
+            if (!hud.InventoryOpen || !Find("InventoryPrimary").gameObject.activeInHierarchy)
+                throw new InvalidOperationException("Tutorial does not reveal the grid inventory pickup control.");
+            hud.ClosePanels();
+            PrototypeStartingScenario.MoveTo(game.Model, PrototypeSimulation.WarehouseX, PrototypeSimulation.WarehouseY);
+            Refresh();while(hud.KnowledgeOpen){Find("KnowledgeNext").onClick.Invoke();Refresh();}
+            Find("GuideAction").onClick.Invoke(); Refresh();
+            if (!game.Walking || Find("GuideAction").interactable) throw new InvalidOperationException("Coach does not show travel in progress.");
+            Capture("-walking"); game.HandleEscape();
+            world.FocusPoint(16,14,6);
+            Vector3 cameraBefore=world.worldCamera.transform.position;
+            game.Model.SetPaused(true);world.BeginMapDrag(new Vector2(800,400));world.ContinueMapDrag(new Vector2(980,440));world.EndMapDrag(new Vector2(980,440),true);
+            if(world.worldCamera.transform.position==cameraBefore||game.Walking)throw new InvalidOperationException("Dragging while paused did not pan, or incorrectly moved the player.");
+            world.worldCamera.orthographicSize=16;cameraBefore=world.worldCamera.transform.position;
+            world.BeginMapDrag(new Vector2(800,400));world.ContinueMapDrag(new Vector2(860,400));world.EndMapDrag(new Vector2(860,400),true);
+            if(world.worldCamera.transform.position==cameraBefore)throw new InvalidOperationException("Overview camera feels locked while dragging.");
+            world.FocusPoint(16,14,6);
+            game.Model.SetPaused(false);Capture("-dragged");
+            hud.ShowGroundItem(ItemId.Food);Refresh();CheckCard("Knowledge Card");Capture("-item-detail");Find("KnowledgeNext").onClick.Invoke();Refresh();
+            if (!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
+            {
+                game.SaveGame(); if (!game.LastActionSucceeded) throw new InvalidOperationException(game.Notice);
+                game.SkipTutorial(); game.LoadLatest(); Refresh();
+                if (!game.LastActionSucceeded || game.Model.Tutorial.step != 2 || !root.Find("Guide Prompt").gameObject.activeSelf || root.Find("Tutorial Welcome").gameObject.activeSelf)
+                    throw new InvalidOperationException("Loading tutorial progress did not restore the current coach.");
+            }
+            PrototypeStartingScenario.Collect(game.Model,ItemId.WasteWood,1);
+            PrototypeStartingScenario.MoveTo(game.Model,PrototypeSimulation.WarehouseX,PrototypeSimulation.WarehouseY);
+            PrototypeStartingScenario.Act(game.Model,()=>game.Model.Withdraw(ItemId.WasteWood,1));
+            PrototypeStartingScenario.MoveTo(game.Model,PrototypeSimulation.DumpX,PrototypeSimulation.DumpY);
+            hud.ShowHole();Refresh();CheckCard("Knowledge Card");Capture("-hole");
+            int carriedWood=game.Model.Carry.Count(ItemId.WasteWood);
+            Find("HoleDiscard").onClick.Invoke();Refresh();
+            if(game.Model.Carry.Count(ItemId.WasteWood)!=carriedWood||game.Model.Interacting)throw new InvalidOperationException("Dumping bypassed confirmation.");
+            Find("HoleDiscard").onClick.Invoke();game.Model.Advance(0.55);
+            if(game.Model.Carry.Count(ItemId.WasteWood)!=carriedWood-1||game.Model.DumpedTicks!=ItemCatalog.CapacityTicks(ItemId.WasteWood))throw new InvalidOperationException("Hole controls did not perform the selected disposal.");
+            game.StartNewGame(); Refresh();
+        }
+
         private void VerifyHudBindings(string screenshot)
         {
             var root = game.GetComponent<PrototypeHud>().VisualRoot;
@@ -187,8 +370,7 @@ namespace CrazyRubbish.Prototype
             if(game.Model.Tutorial.active)throw new InvalidOperationException("Tutorial skip button is unbound.");
             Find("TutorialStart").onClick.Invoke();game.GetComponent<PrototypeHud>().RefreshView(game.Model);
             Find("TutorialLocate").onClick.Invoke();game.GetComponent<PrototypeHud>().RefreshView(game.Model);
-            if(!Find("Pick3").gameObject.activeInHierarchy)throw new InvalidOperationException("Tutorial does not reveal the suggested inventory control.");
-            Find("InventoryFilter").onClick.Invoke();
+            if(!hud.InventoryOpen||!Find("InventoryPrimary").gameObject.activeInHierarchy)throw new InvalidOperationException("Tutorial does not reveal the suggested inventory control.");
             Find("Tab3").onClick.Invoke();game.GetComponent<PrototypeWorld>().RefreshView(game.Model);game.GetComponent<PrototypeHud>().RefreshView(game.Model);
             if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+"-tutorial.png"));
             Find("FoodPolicy").onClick.Invoke();if(game.Model.FoodPolicy!=SupplyPolicy.Free)throw new InvalidOperationException("Supply policy button is unbound.");Find("FoodPolicy").onClick.Invoke();Find("FoodPolicy").onClick.Invoke();
@@ -296,16 +478,9 @@ namespace CrazyRubbish.Prototype
             Rect viewport = camera.rect;
             hud.ClosePanels();
             Find("OpenTab2").onClick.Invoke();
-            if (!hud.ManagementOpen) throw new InvalidOperationException("Inventory launcher did not open management.");
-            Canvas.ForceUpdateCanvases();
-            var panel = root.Find("Management").GetComponent<RectTransform>();
-            var eventData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current) { position = panel.TransformPoint(panel.rect.center) };
-            var hits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
-            UnityEngine.EventSystems.EventSystem.current.RaycastAll(eventData, hits);
-            if (!hits.Any(h => h.gameObject.transform == panel || h.gameObject.transform.IsChildOf(panel)))
-                throw new InvalidOperationException("Overlay does not intercept map input.");
+            if (!hud.InventoryOpen) throw new InvalidOperationException("Inventory launcher did not open the grid inventory.");
             Find("OpenTab2").onClick.Invoke();
-            if (hud.ManagementOpen) throw new InvalidOperationException("Clicking the same launcher did not close management.");
+            if (hud.InventoryOpen) throw new InvalidOperationException("Clicking the same launcher did not close inventory.");
             for (int facility = 1; facility <= 4; facility++)
             {
                 hud.ShowFacility(facility);
@@ -346,6 +521,20 @@ namespace CrazyRubbish.Prototype
                 throw new InvalidOperationException("Area overlay cannot be hidden.");
         }
 
+        private void VerifyInventoryPointerBlocking()
+        {
+            var root=game.GetComponent<PrototypeHud>().VisualRoot;
+            var overlay=root.Find("Inventory Window");var panel=overlay.Find("Card").GetComponent<RectTransform>();
+            var data=new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current){position=panel.TransformPoint(panel.rect.center)};
+            var hits=new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+            UnityEngine.EventSystems.EventSystem.current.RaycastAll(data,hits);
+            if(!hits.Any(h=>h.gameObject.transform==overlay||h.gameObject.transform.IsChildOf(overlay)))throw new InvalidOperationException("Rendered inventory does not intercept map input.");
+            var slot=overlay.GetComponentsInChildren<PrototypeInventorySlot>().First(s=>s.container==0&&s.index==0);
+            var rect=slot.GetComponent<RectTransform>();data.position=rect.TransformPoint(rect.rect.center);hits.Clear();
+            UnityEngine.EventSystems.EventSystem.current.RaycastAll(data,hits);
+            if(hits.Count==0||hits[0].gameObject.GetComponentInParent<PrototypeInventorySlot>()!=slot)throw new InvalidOperationException("A visible inventory slot does not receive pointer input.");
+        }
+
         private void VerifyWorldPresentation(string screenshot)
         {
             var world = game.GetComponent<PrototypeWorld>();
@@ -363,8 +552,8 @@ namespace CrazyRubbish.Prototype
             var items = world.VisualRoot.Find("Ground Items");
             if (items.GetComponentsInChildren<SpriteRenderer>().Count(r => r.name == "Item" && r.enabled) != cellCount)
                 throw new InvalidOperationException("Dense ground cells are not represented by one icon per cell.");
-            if (items.GetComponentsInChildren<TextMesh>().Any(t => t.name == "Quantity"))
-                throw new InvalidOperationException("Quantity labels clutter the overview zoom.");
+            foreach(var quantity in items.GetComponentsInChildren<TextMesh>().Where(t=>t.name=="Quantity"))
+                if(string.IsNullOrEmpty(quantity.text))throw new InvalidOperationException("Nearby pile count is empty.");
             if (world.VisualRoot.Find("PlayerLabel").gameObject.activeSelf || world.VisualRoot.Find("Tutorial Guide Target/Tutorial Target Label") != null)
                 throw new InvalidOperationException("Player or tutorial text overlaps ground items.");
             var crowded = model.Ground.GroupBy(p => (p.X, p.Y)).OrderByDescending(g => g.Count()).First();
@@ -372,8 +561,8 @@ namespace CrazyRubbish.Prototype
             world.RefreshView(model);
             Vector3 targetPoint = camera.WorldToViewportPoint(new Vector3(crowded.Key.X, crowded.Key.Y, 0));
             if (!new Rect(0, 0, 1, 1).Contains(targetPoint)) throw new InvalidOperationException("Focused inspection target is outside the map viewport.");
-            if (world.VisualRoot.GetComponentsInChildren<TextMesh>().Any())
-                throw new InvalidOperationException("World text or quantities are visible at detailed zoom.");
+            if (!world.VisualRoot.Find("ReceivingLabel").gameObject.activeSelf||!world.VisualRoot.Find("WarehouseLabel").gameObject.activeSelf)
+                throw new InvalidOperationException("Opening landmarks have no names.");
             var inspectPoint = new Vector2(crowded.Key.X, crowded.Key.Y);
             world.UpdateHover(null, 10);
             world.UpdateHover(inspectPoint, 10);

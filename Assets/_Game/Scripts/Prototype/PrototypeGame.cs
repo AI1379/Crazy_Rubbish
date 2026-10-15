@@ -52,7 +52,7 @@ namespace CrazyRubbish.Prototype
         {
             // A fresh copy prevents play sessions and tests from editing the configuration asset.
             var settings = JsonUtility.FromJson<PrototypeSettings>(sessionBalance);
-            Model = new PrototypeSimulation(settings, SmokeMode ? 4271 : Environment.TickCount);
+            Model = new PrototypeSimulation(settings, SmokeMode ? 4271 : Environment.TickCount, true);
             Notice = "先拾取手锯，再把木料和连接件送进仓库。";
             LastActionSucceeded = true;
             interactionRevision = 0;
@@ -62,6 +62,7 @@ namespace CrazyRubbish.Prototype
         }
 
         public void StartNewGame(){ResetGame();SessionStarted=true;MenuOpen=false;}
+        public void StopWalkingForInventory(){walkPath=null;}
         public void OpenMenu(){MenuOpen=true;walkPath=null;Model.LeaveManualRole();}
         public void ResumeGame(){if(SessionStarted&&!Model.Failed)MenuOpen=false;}
         public void ContinueAfterResult(){if(!Model.Failed){ResultVisible=false;resultSeen=true;Model.SetPaused(false);}}
@@ -71,13 +72,13 @@ namespace CrazyRubbish.Prototype
         public void SkipTutorial(){Model.Tutorial.Skip();Report(new ActionResult(true,"教程已收起；可随时从教程页继续或翻阅。"));}
         public void ExecuteTutorialAction()
         {
-            if(MenuOpen||ResultVisible||Model.Failed||Model.Interacting)return;
+            if(MenuOpen||ResultVisible||Model.Failed||Model.Interacting||Model.Paused||!Model.Tutorial.active||!Model.Tutorial.started||Model.Tutorial.Completed)return;
             var action=PrototypeTutorial.NextAction(Model,Model.Tutorial.step);
             if(action.operation==TutorialOperation.Trade){GetComponent<PrototypeHud>().ShowTutorialControl();return;}
             if(action.operation==TutorialOperation.Wait)return;
             if(action.hasTarget && !action.AtTarget(Model))
             {
-                GoTo(action.x,action.y);GetComponent<PrototypeWorld>().FocusPoint(action.x,action.y);return;
+                GoTo(action.x,action.y);GetComponent<PrototypeWorld>().FocusPoint(action.x,action.y,6);return;
             }
             walkPath=null;Report(PrototypeTutorialActions.Execute(Model,action));Model.Tutorial.Refresh(Model);
         }
@@ -112,13 +113,15 @@ namespace CrazyRubbish.Prototype
             if (Input.GetKeyDown(KeyCode.Escape)) HandleEscape();
             if(MenuOpen||ResultVisible)return;
             if(Model.Failed){ResultVisible=true;return;}
-            GetComponent<PrototypeHud>().HandlePanelShortcuts();
             if(Model.Tutorial.IntroOpen)return;
+            GetComponent<PrototypeHud>().HandlePanelShortcuts();
             double delta = Math.Min(Time.unscaledDeltaTime, 0.25f);
             if (Input.GetKeyDown(KeyCode.Space)) Model.SetPaused(!Model.Paused);
             if (Input.GetKeyDown(KeyCode.Alpha1)) Model.SetSpeed(1);
             if (Input.GetKeyDown(KeyCode.Alpha2)) Model.SetSpeed(2);
             if (Input.GetKeyDown(KeyCode.Alpha3)) Model.SetSpeed(3);
+            if(!GetComponent<PrototypeHud>().InventoryOpen)
+            {
             double x = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1 : 0)
                 - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1 : 0);
             double y = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) ? 1 : 0)
@@ -128,10 +131,11 @@ namespace CrazyRubbish.Prototype
             if (Input.GetKeyDown(KeyCode.E)) Interact();
             if (Input.GetKeyDown(KeyCode.Q)) Report(Model.Deposit());
             if (Input.GetKeyDown(KeyCode.F)) { if(Model.NearBench)GetComponent<PrototypeHud>().ShowFacility(1); Report(Model.ToggleWork()); }
+            }
             Model.Advance(delta);
             if(Model.Failed||Model.DemoCompleted&&!resultSeen){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
             if (interactionRevision != Model.InteractionRevision) { interactionRevision = Model.InteractionRevision; Report(Model.LastInteraction); }
-            if (Model.GameSeconds >= Model.NextAutosave && !Model.Interacting)
+            if (Model.GameSeconds >= Model.NextAutosave && !Model.Interacting && Model.Hand==null)
             {
                 Model.NextAutosave += 300;
                 autoIndex = (autoIndex + 1) % 3;WriteSave("auto-" + autoIndex + ".json");
@@ -241,7 +245,7 @@ namespace CrazyRubbish.Prototype
                 else if(Model.TableOutput.UsedTicks>0)Report(Model.TakeAssembly());
                 else Report(Model.ToggleAssembly());return;
             }
-            Report(Model.PickUp());
+            Report(Model.PickUp(int.MaxValue));
         }
         public static string ItemName(ItemId item) => ItemCatalog.Name(item);
 

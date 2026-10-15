@@ -17,6 +17,7 @@ namespace CrazyRubbish.Prototype
                 case TutorialOperation.FeedWood: return m.DeliverInput();
                 case TutorialOperation.WorkWood: return m.ToggleWork();
                 case TutorialOperation.TakeWood: return m.TakeOutput();
+                case TutorialOperation.TakeWoodInput: return m.TakeInput();
                 case TutorialOperation.BuildTable: return m.BuildTable();
                 case TutorialOperation.BuildDismantle: return m.BuildDismantle();
                 case TutorialOperation.FeedDevice: return m.DeliverInput(true);

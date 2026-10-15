@@ -68,6 +68,7 @@ namespace CrazyRubbish.Prototype
                     return;
                 }
                 var pile=model.Ground.FirstOrDefault(p=>p.Item==item&&p.Amount>p.Reserved);
+                if(pile==null && model.AwaitingOpeningItem(item)){model.Advance(5);continue;}
                 if(pile==null)throw new InvalidOperationException("缺少开局物品："+item);
                 MoveTo(model,pile.X,pile.Y);
                 int need=target-model.Warehouse.Count(item)-model.Carry.Count(item);

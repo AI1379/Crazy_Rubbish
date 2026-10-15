@@ -7,12 +7,14 @@ namespace CrazyRubbish.Core
     public sealed class TutorialProgress
     {
         public bool active = true, started;
+        public int orientation;
+        public System.Collections.Generic.List<string> seenConcepts = new System.Collections.Generic.List<string>();
         public int step;
         public const int LastStep = 13;
         public bool Completed => step == LastStep;
         public bool IntroOpen => active && !started;
-        public TutorialProgress Copy() => (TutorialProgress)MemberwiseClone();
-        public void Begin() { active = true; started = true; }
+        public TutorialProgress Copy() { var copy=(TutorialProgress)MemberwiseClone();copy.seenConcepts=new System.Collections.Generic.List<string>(seenConcepts??new System.Collections.Generic.List<string>());return copy; }
+        public void Begin() { active = true; started = true; orientation=5; }
         public void Skip() { active = false; started = true; }
         public void Refresh(PrototypeSimulation m)
         {
@@ -27,7 +29,7 @@ namespace CrazyRubbish.Core
         Wait, Pick, Deposit, Withdraw, BuildBench, FeedWood, WorkWood, TakeWood,
         BuildTable, BuildDismantle, FeedDevice, WorkDismantle, TakeDeviceOutput,
         BuildGenerator, Fuel, Recruit, HandSaw, AssignWorker, Sell, Pay,
-        SelectHandle, SelectPlank, BuyBlade, FeedAssembly, WorkAssembly, Trade
+        SelectHandle, SelectPlank, BuyBlade, FeedAssembly, WorkAssembly, Trade, TakeWoodInput
     }
 
     public sealed class TutorialAction
@@ -72,6 +74,29 @@ namespace CrazyRubbish.Core
             "你已经掌握拾取、真实搬运、生产、发电、招募、工资和工具续补。\n\n可以继续经营，留意工资、生活物资和工具耐久。随时从“教程”页翻阅任意一课；重看不会重开游戏。"
         };
 
+        public static string ProgressSummary(PrototypeSimulation m, int step)
+        {
+            string Stock(ItemId item, int target) => $"{ItemCatalog.Name(item)} {Math.Min(target, m.Warehouse.Count(item))}/{target}";
+            string Built(bool built) => built ? "已建成" : "待建设";
+            switch (step)
+            {
+                case 1: return m.HasSaw ? "已取得手锯" : "取得手锯 0/1 · 先学会拾取";
+                case 2: return "入库：" + Stock(ItemId.Food, 12) + "\n入库：" + Stock(ItemId.DrinkingWater, 24);
+                case 3: return "入库：" + Stock(ItemId.WasteWood, 16) + "\n入库：" + Stock(ItemId.RecoveredFastener, 4);
+                case 4: return "木工台：" + Built(m.BenchBuilt) + "\n建材：废木料 4 + 紧固件 2";
+                case 5: return $"木工生产 {Math.Min(m.CompletedBatches, 2)}/2 批 · 当前 {m.Progress:P0}\n入库：{Stock(ItemId.Plank, 6)}";
+                case 6: return "工作台：" + Built(m.TableBuilt) + "\n拆解地点：" + Built(m.DismantleBuilt);
+                case 7: return $"拆解 {Math.Min(m.DismantledBatches, 1)}/1 台 · 当前 {m.DismantleProgress:P0}\n取出全部产物，再送回仓库";
+                case 8: return "发电机：" + Built(m.GeneratorBuilt) + "\n" + (m.HasBeenPowered ? "已实际发电" : "建设后投入燃料，实际发电一次");
+                case 9: return $"招募 {Math.Min(m.Residents.Count, 5)}/5 人 · 手锯{(m.WoodTools.Count(ItemId.WoodHandSaw) > 0 ? "已交接" : "待交接")}\n木工岗位：{(m.Woodworker != null ? "已分配" : "待分配")}";
+                case 10: return $"已付工资 {Math.Min(m.TotalWagesPaidCents / 100m, 50):0.##}/50 钱\n欠薪 {m.UnpaidWages:0.##} · 下次发薪 {m.SecondsToWage:0} 秒";
+                case 11: return $"制作工具 {Math.Min(m.AssembledTools, 1)}/1 把 · 装配 {m.AssemblyProgress:P0}\n木柄 1 + 手锯锯片 1";
+                case 12: return $"现金 {m.Money:0.##}/200 · 欠薪 {m.UnpaidWages:0.##}\n生活缺供 {m.MissingSupplyPeople} 人";
+                case TutorialProgress.LastStep: return "拾取、生产、居民与工具补给已学会。\n首区经营目标已达成。";
+                default: return "准备好后，开始第一步实操。";
+            }
+        }
+
         public static bool Satisfied(PrototypeSimulation m, int step)
         {
             switch (step)
@@ -98,7 +123,7 @@ namespace CrazyRubbish.Core
         private static TutorialAction Pick(PrototypeSimulation m,ItemId item,int count)
         {
             var pile=m.Ground.Where(p=>p.Item==item && p.Amount>p.Reserved).OrderBy(p=>PrototypeSimulation.Distance(m.PlayerX,m.PlayerY,p.X,p.Y)).FirstOrDefault();
-            if(pile==null)return Wait("地面没有未预约的"+ItemCatalog.Name(item)+"。查看仓库或在现场/人员页采购。");
+            if(pile==null)return Wait(m.AwaitingOpeningItem(item)?"落料洞还会送来"+ItemCatalog.Name(item)+"。留意金色入口附近；可用3倍速等待。":"地面没有未预约的"+ItemCatalog.Name(item)+"。查看仓库或在现场/人员页采购。");
             return Plan(TutorialOperation.Pick,"拾取"+ItemCatalog.Name(item),"走近后拾取"+count+"份；装不下会按容量分趟。","Pick"+(int)item,2,pile.X,pile.Y,item,count);
         }
         private static TutorialAction Collect(PrototypeSimulation m,ItemId item,int target)
@@ -117,6 +142,8 @@ namespace CrazyRubbish.Core
         {
             if(m.Interacting)return Wait("正在进行0.5秒交互，请等完成；移动会取消。");
             if(m.AnyBuildPending)return Wait("施工蓝图已规划。按空格恢复后建成；可在现场页取消蓝图。");
+            if(step>=10&&m.UnpaidWageCents>0&&m.CashCents>0)
+                return Plan(TutorialOperation.Pay,"支付到期工资","先处理已经到期的工资，再继续当前课程。","Command5",1);
             switch(step)
             {
                 case 1: return Pick(m,ItemId.WoodHandSaw,1);
@@ -175,6 +202,12 @@ namespace CrazyRubbish.Core
                     if(m.UnpaidWageCents>0 && m.CashCents>0)return Plan(TutorialOperation.Pay,"支付工资","按原账单把经营现金转进居民钱包。","Command5",1);
                     return Wait($"现金 {m.Money:0.00} / 欠薪 {m.UnpaidWages:0.00}。距离下次发薪 {m.SecondsToWage:0}秒；用3倍速等生产和配送，收到木板后再出售。");
                 case 11:
+                    if(m.RecipeChangePending&&!m.JobActive&&m.WoodInputStock.Used>4)
+                    {
+                        if(m.Carry.AvailableSlots(ItemId.WasteWood)==0)return Depot();
+                        return Plan(TutorialOperation.TakeWoodInput,"取回多余木料","木柄配方的输入容量较小；先取回旧配方剩余的木料，切换才能完成。","Command24",0,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);
+                    }
+                    if(m.Carry.Available(ItemId.WasteWood)>0)return Depot();
                     if(m.TableOutput.UsedTicks>0)return Wait("工具已产出，居民会运回仓库。");
                     if(m.AssemblyActive)
                         return m.AssemblyWorking?Wait("站在工作台正面等装配完成；人工20秒。"):

@@ -64,5 +64,33 @@ namespace CrazyRubbish.Tests
             Assert.That(Copy(m).Tutorial.Completed,Is.True);
             Debug.Log($"TUTORIAL_ACCEPTANCE: {m.GameSeconds/60:0.0} minutes, {m.Money:0.00} money, {m.CompletedBatches} batches, {m.DeliveredTrips} deliveries.");
         }
+        [Test]public void SupplyChecklistCountsWarehouseStockInsteadOfUnfinishedHauling()
+        {
+            var m=Fresh();m.Tutorial.Begin();m.Tutorial.step=2;
+            m.Carry.TryAdd(ItemId.Food,4);m.Warehouse.TryAdd(ItemId.DrinkingWater,6);
+            string checklist=PrototypeTutorial.ProgressSummary(m,2);
+            Assert.That(checklist,Does.Contain("0/12"));Assert.That(checklist,Does.Contain("6/24"));
+            Assert.That(m.Tutorial.step,Is.EqualTo(2));
+            m.Warehouse.TryAdd(ItemId.Food,12);
+            Assert.That(PrototypeTutorial.ProgressSummary(m,2),Does.Contain("12/12"));
+        }
+        [Test]public void ProductionChecklistSeparatesFinishedBatchesFromStockActuallyDeposited()
+        {
+            var snapshot=Fresh().Capture();snapshot.woodBatches=2;
+            var m=PrototypeSimulation.Restore(snapshot);m.Output.TryAdd(ItemId.Plank,6);
+            Assert.That(PrototypeTutorial.ProgressSummary(m,5),Does.Contain("2/2"));
+            Assert.That(PrototypeTutorial.ProgressSummary(m,5),Does.Contain("0/6"));
+            Assert.That(PrototypeTutorial.Satisfied(m,5),Is.False);
+        }
+        [Test]public void ToolLessonClearsExcessOldInputBeforeWaitingForTheHandleRecipe()
+        {
+            var snapshot=Fresh().Capture();snapshot.bench=true;snapshot.playerX=PrototypeSimulation.BenchX;snapshot.playerY=PrototypeSimulation.BenchY;
+            var m=PrototypeSimulation.Restore(snapshot);m.WoodInputStock.TryAdd(ItemId.WasteWood,8);m.SelectRecipe(WoodRecipe.WoodHandle);
+            m.Tutorial.Begin();m.Tutorial.step=11;
+            var action=PrototypeTutorial.NextAction(m,11);Assert.That(action.operation,Is.EqualTo(TutorialOperation.TakeWoodInput));
+            PrototypeTutorialActions.Execute(m,action);m.Advance(0.55);
+            Assert.That(m.RecipeChangePending,Is.False);Assert.That(m.SelectedRecipe,Is.EqualTo(WoodRecipe.WoodHandle));
+            Assert.That(PrototypeTutorial.NextAction(m,11).operation,Is.EqualTo(TutorialOperation.Deposit));
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace CrazyRubbish.Prototype
         [SerializeField] private RectTransform management, facilityPanel, guidePrompt, toast;
         [SerializeField] private RectTransform[] facilityPages = new RectTransform[4];
         [SerializeField] private Button[] launchers = new Button[4];
-        [SerializeField] private Button alerts, guideOpen, zones;
+        [SerializeField] private Button alerts, zones;
         [SerializeField] private Text facilityTitle, facilitySummary;
         [SerializeField] private Image facilityArtwork;
         private int activeTab, selectedFacility;
@@ -28,19 +28,11 @@ namespace CrazyRubbish.Prototype
             var navigation = Surface(root, "Navigation", 16, 0, 574, 54, new Color32(26, 31, 34, 242));
             navigation.anchorMin = navigation.anchorMax = Vector2.zero;
             navigation.anchoredPosition = new Vector2(16, 70);
-            string[] captions = { "建造  B", "人员  P", "仓库  I", "教程  H" };
+            string[] captions = { "建造  B", "人员  P", "背包  I", "教程  H" };
             for (int i = 0; i < 4; i++) launchers[i] = ButtonAt(navigation, "OpenTab" + i, captions[i], 8 + 112 * i, 8, 104, 38);
             zones = ButtonAt(navigation, "Zones", "区域", 456, 8, 110, 38);
 
-            guidePrompt = Surface(root, "Guide Prompt", 16, 0, 392, 126, new Color32(26, 31, 34, 240));
-            guidePrompt.anchorMin = guidePrompt.anchorMax = Vector2.zero;
-            guidePrompt.GetComponent<Image>().raycastTarget = true;
-            guidePrompt.anchoredPosition = new Vector2(16, 214);
-            TextAt(guidePrompt, "Caption", "从废料开始", 16, 10, 360, 24, 18, Accent);
-            objective = TextAt(guidePrompt, "Objective", "", 16, 38, 360, 34, 14, Ink);
-            objective.resizeTextForBestFit = true; objective.resizeTextMinSize = 12; objective.resizeTextMaxSize = 14;
-            guideOpen = ButtonAt(guidePrompt, "OpenGuide", "开始教程", 16, 82, 174, 32, true);
-            ButtonAt(guidePrompt, "DismissGuide", "自由经营", 202, 82, 174, 32);
+            BuildTutorialCoach();
 
             alerts = ButtonAt(root, "Alerts", "", 16, 80, 410, 36);
             alerts.GetComponent<Image>().color = new Color32(73, 38, 32, 245);
@@ -107,6 +99,7 @@ namespace CrazyRubbish.Prototype
 
         public void ClosePanels()
         {
+            CloseInventory();
             if (management != null) management.gameObject.SetActive(false);
             if (facilityPanel != null) facilityPanel.gameObject.SetActive(false);
             selectedFacility = 0;
@@ -119,11 +112,16 @@ namespace CrazyRubbish.Prototype
             ClosePanels(); showZones = false; showAllItems = false; noticeUntil = 0;
             lastNoticeRevision = game.NoticeRevision;
             tutorialModel = null; reviewLesson = -1; displayedLesson = -1;
+            currentKnowledge=null;manualKnowledge=null;dumpConfirm=false;
+            if(knowledgePanel!=null)knowledgePanel.gameObject.SetActive(false);
+            guideCollapsed = false; lastGuideStep = -1; guideCelebrationUntil = 0;
             if (toast != null) toast.gameObject.SetActive(false);
         }
 
         public bool TryCloseTopPanel()
         {
+            if(InventoryOpen){CloseInventory();return true;}
+            if(KnowledgeOpen){AcknowledgeKnowledge();return true;}
             if (tradeConfirmation != null && tradeConfirmation.gameObject.activeSelf)
             { pendingTechnology = -1; tradeConfirmation.gameObject.SetActive(false); return true; }
             if (!ManagementOpen && SelectedFacility == 0) return false;
@@ -132,6 +130,7 @@ namespace CrazyRubbish.Prototype
 
         public void ToggleManagement(int page)
         {
+            if(page==2){if(InventoryOpen)CloseInventory();else OpenInventory(game.Model.NearWarehouse);return;}
             if (ManagementOpen && activeTab == page) ClosePanels();
             else SelectTab(page);
         }
@@ -168,9 +167,8 @@ namespace CrazyRubbish.Prototype
         private void RefreshOverlay(PrototypeSimulation m)
         {
             bool blocked = game.MenuOpen || game.ResultVisible;
-            guidePrompt.gameObject.SetActive(!blocked && m.Tutorial.active && !m.Tutorial.Completed && !(ManagementOpen && activeTab == 3));
-            guideOpen.GetComponentInChildren<Text>().text = m.Tutorial.IntroOpen ? "开始教程" : "打开教程";
-            if (m.Tutorial.IntroOpen) objective.text = "时间暂停中。跟着引导开始，或自由经营。";
+            RefreshAvailableMechanics(m);
+            RefreshTutorialCoach(m);
             bool warning = m.RiotActive || m.UnpaidWageCents > 0 || m.MissingSupplyPeople > 0 || toolWarningLabel != null;
             alerts.gameObject.SetActive(!blocked && warning);
             alerts.GetComponentInChildren<Text>().text = m.RiotActive ? $"!  欠薪暴动 · 剩余 {m.RiotSeconds:0} 秒  >" :
