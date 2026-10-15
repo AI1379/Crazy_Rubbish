@@ -42,27 +42,7 @@ namespace CrazyRubbish.Core
             }
         }
         // buy / base external-sale / minimum, in money units; absent prices do not imply free goods.
-        public static (decimal buy,decimal sale,decimal minimum) Price(ItemId item)
-        {
-            switch(item)
-            {
-                case ItemId.Plank:return (4,3,1);case ItemId.WoodHandle:return (3,2,0.7m);
-                case ItemId.WasteWood:return (0.8m,0.3m,0.1m);case ItemId.WoodChips:return(0.4m,0.15m,0.05m);case ItemId.SortedWood:return(1,0.4m,0.15m);
-                case ItemId.SteelPart:return(5,4,1.2m);case ItemId.CopperPart:return(7,5,1.5m);case ItemId.AluminumPart:return(6,4,1.2m);
-                case ItemId.Motor:return(12,5.4m,2.4m);case ItemId.MachineBlade:return(8,3.6m,1.6m);case ItemId.HeatingElement:return(10,4.5m,2);
-                case ItemId.Container:return(4,1.8m,0.8m);case ItemId.HandleMould:return(8,3.6m,1.6m);case ItemId.BoxMould:return(6,2.7m,1.2m);
-                case ItemId.FeedingModule:return(16,7.2m,3.2m);case ItemId.GrowingLight:return(8,3.6m,1.6m);case ItemId.LightingModule:return(6,2.7m,1.2m);
-                case ItemId.FurnaceModule:return(28,12.6m,5.6m);case ItemId.FurnaceLining:case ItemId.Fixture:return(8,3.6m,1.6m);
-                case ItemId.ThermalModule:return(18,8.1m,3.6m);case ItemId.GeneratorModule:return(24,10.8m,4.8m);
-                case ItemId.RecoveredWire:return(2,0.9m,0.4m);case ItemId.RecoveredFastener:return(1,0.45m,0.2m);
-                case ItemId.HammerHead:return(5,2.25m,1);case ItemId.SawBlade:return(6,2.7m,1.2m);case ItemId.ScrewdriverRod:return(4,1.8m,0.8m);case ItemId.BroomHead:return(3,1.35m,0.6m);
-                case ItemId.SteelMaterial:case ItemId.AluminumMaterial:return(1,0.6m,0.2m);case ItemId.CopperMaterial:return(1.5m,0.8m,0.25m);case ItemId.ToolSteelWaste:return(2,1,0.3m);
-                case ItemId.WoodHandSaw:return(16,10,3.2m);case ItemId.Hammer:return(12,7,2.4m);case ItemId.Screwdriver:return(10,6,2);
-                case ItemId.Wrench:return(12,0,0);case ItemId.Scissors:return(8,0,0);case ItemId.SewingKit:return(6,0,0);
-                case ItemId.Food:return(1.5m,1,0.3m);case ItemId.DrinkingWater:return(0.5m,0.25m,0.1m);case ItemId.Soap:return(4,2,0.6m);
-                default:return(0,0,0);
-            }
-        }
+        public static (decimal buy,decimal sale,decimal minimum) Price(ItemId item) => DesignBaseline.Price(item);
     }
     public sealed class ToolInstance
     {

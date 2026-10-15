@@ -147,7 +147,7 @@ namespace CrazyRubbish.Tests
         {
             var m=Fresh();m.SellTechnology(Technology.Wood);var s=m.Capture();s.schema=2;s.community=null;s.workshop=null;s.seconds=3000;
             var copy=PrototypeSimulation.Restore(s);Assert.That(copy.CashCents,Is.EqualTo(6000));Assert.That(copy.PlayerNeeds.nextMeal,Is.EqualTo(3300));Assert.That(copy.Failed,Is.False);
-            Assert.That(copy.Capture().schema,Is.EqualTo(3));
+            Assert.That(copy.Capture().schema,Is.EqualTo(4));
         }
         [Test]public void DefaultNewGameReachesEveryDemoGoalThroughNormalActions()
         {

@@ -36,6 +36,7 @@ namespace CrazyRubbish.Tests
         {
             var m=Ready(false);Collect(m,ItemId.SteelPart,6);Collect(m,ItemId.ThermalModule,1);Collect(m,ItemId.GeneratorModule,1);Collect(m,ItemId.RecoveredWire,2);
             Assert.That(m.BuildGenerator().Success,Is.True);
+            Collect(m,ItemId.RecoveredWire,1);Assert.That(m.ConnectCommunityPower().Success,Is.True);
             Move(m,PrototypeSimulation.WarehouseX,PrototypeSimulation.WarehouseY);Act(m,()=>m.Withdraw(ItemId.WasteWood,2));
             Move(m,PrototypeSimulation.GeneratorX,PrototypeSimulation.GeneratorY);Act(m,()=>m.AddFuel(ItemId.WasteWood,2));return m;
         }

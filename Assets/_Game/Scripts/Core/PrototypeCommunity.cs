@@ -116,8 +116,14 @@ namespace CrazyRubbish.Core
             for(int i=0;i<residents.Count;i++)
             {var r=residents[(i+livingTurn)%residents.Count];TickNeeds(r,r.Needs,seconds);}
             if(rentDue&&GameSeconds>=firstPayrollAt)
-                foreach(var r in residents)
-                    if(r.CashCents>=500){r.CashCents-=100;CommunityCashCents+=100;}
+                for(int i=0;i<residents.Count&&i<HousingCapacity-1;i++)
+                {
+                    var r=residents[i];if(r.CashCents<500)continue;
+                    r.CashCents-=100;
+                    // The protagonist occupies one old-community bed; remaining residents
+                    // fill those beds first, then player-built housing in roster order.
+                    if(i<Settings.housingCapacity-1)CommunityCashCents+=100;else cashCents+=100;
+                }
             if(Starved(PlayerNeeds)){EndGame(PlayerNeeds.waterSince>=0&&GameSeconds-PlayerNeeds.waterSince>=1200?"主角长期缺水，经营失败。":"主角长期缺食，经营失败。");return;}
             foreach(var r in residents.Where(r=>Starved(r.Needs)).ToArray())
             {

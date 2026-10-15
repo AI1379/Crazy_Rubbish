@@ -12,7 +12,7 @@ namespace CrazyRubbish.Core
         public bool PickingUp=>Interacting&&pickupInteraction;
         public int InteractionRevision {get;private set;}
         public ActionResult LastInteraction=>lastInteraction;
-        private bool AtFront(int x,int y)=>(int)Math.Floor(PlayerY+0.5)==y&&((int)Math.Floor(PlayerX+0.5)==x||(int)Math.Floor(PlayerX+0.5)==x+1);
+        private bool AtFront(int x,int y)=>(int)Math.Floor(PlayerY+0.5)==y&&(int)Math.Floor(PlayerX+0.5)==x;
         public void LeaveManualRole(){manualStation=0;CancelInteraction();RefreshState();}
         private ActionResult QueueInteraction(Func<ActionResult> action,bool pickup=false)
         {
@@ -78,8 +78,8 @@ namespace CrazyRubbish.Core
         public ActionResult HandOffTool(ItemId item)
         {
             int station=item==ItemId.WoodHandSaw?1:2;
-            if(!ItemCatalog.IsTool(item)||station==1&&!NearBench||station==2&&!Near(DismantleX,DismantleY))return Fail("靠近对应地点正面后交接工具。");
-            var slot=station==1?WoodTools:DismantleTools;string key=station==1?"benchTools":"dismantleTools";
+            if(!ItemCatalog.IsTool(item)||station==1&&!NearBench||station==2&&!Near(DismantleFrontX,DismantleFrontY))return Fail("靠近对应地点正面后交接工具。");
+            var slot=station==1?WoodTools:DismantleTools;string key=station==1?StockKey("benchTools"):StockKey("dismantleTools");
             return QueueInteraction(()=>{
                 if(slot.Count(item)>=2)return Fail("该工具已有两把。");
                 int count=MoveStock(Carry,slot,"carry",key,item,1);return count>0?Ok("工具留在地点槽，居民可使用。",count):Fail("背包没有该工具。");
@@ -87,28 +87,28 @@ namespace CrazyRubbish.Core
         }
         public ActionResult DeliverInput(bool dismantle=false,int requested=int.MaxValue)
         {
-            if(dismantle?!Near(DismantleX,DismantleY):!NearBench)return Fail("靠近地点正面后投料。");
+            if(dismantle?!Near(DismantleFrontX,DismantleFrontY):!NearBench)return Fail("靠近地点正面后投料。");
             var input=dismantle?DismantleInput:WoodInputStock;var item=dismantle?SelectedDevice:ItemId.WasteWood;
             return QueueInteraction(()=>{
-                int count=MoveStock(Carry,input,"carry",dismantle?"dismantleInput":"woodInput",item,requested);
+                int count=MoveStock(Carry,input,"carry",dismantle?StockKey("dismantleInput"):StockKey("woodInput"),item,requested);
                 return count>0?Ok("已实际投入地点缓冲。",count):Fail("背包缺料或输入缓冲已满。");
             });
         }
         public ActionResult TakeOutput(bool dismantle=false)
         {
-            if(dismantle?!Near(DismantleX,DismantleY):!NearBench)return Fail("靠近地点正面后取出。");
+            if(dismantle?!Near(DismantleFrontX,DismantleFrontY):!NearBench)return Fail("靠近地点正面后取出。");
             var output=dismantle?DismantleOutput:Output;
             return QueueInteraction(()=>{
-                int count=0;foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(output,Carry,dismantle?"dismantleOutput":"woodOutput","carry",item,output.Available(item));
+                int count=0;foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(output,Carry,dismantle?StockKey("dismantleOutput"):StockKey("woodOutput"),"carry",item,output.Available(item));
                 return count>0?Ok("成品进入背包，需搬运入库出售。",count):Fail("没有成品或背包已满。");
             });
         }
         public ActionResult TakeInput(bool dismantle=false)
         {
-            if(dismantle?!Near(DismantleX,DismantleY):!NearBench)return Fail("靠近地点正面后取料。");
+            if(dismantle?!Near(DismantleFrontX,DismantleFrontY):!NearBench)return Fail("靠近地点正面后取料。");
             var input=dismantle?DismantleInput:WoodInputStock;
             return QueueInteraction(()=>{
-                int count=0;foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(input,Carry,dismantle?"dismantleInput":"woodInput","carry",item,input.Available(item));
+                int count=0;foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(input,Carry,dismantle?StockKey("dismantleInput"):StockKey("woodInput"),"carry",item,input.Available(item));
                 return count>0?Ok("未在制的输入进入背包。",count):Fail("输入已预约或没有空间。");
             });
         }
@@ -147,8 +147,8 @@ namespace CrazyRubbish.Core
         }
         private ToolInstance ToolFor(int station,ItemId item)
         {
-            string slot=station==1?"benchTools":"dismantleTools";
-            bool personal=manualStation==station&&(station==1?AtFront(BenchX,BenchY):AtFront(DismantleX,DismantleY));
+            string slot=station==1?StockKey("benchTools"):StockKey("dismantleTools");
+            bool personal=manualStation==station&&(station==1?AtFront(BenchFrontX,BenchFrontY):AtFront(DismantleFrontX,DismantleFrontY));
             int used=station==1?woodToolId:item==ItemId.Wrench?wrenchToolId:screwToolId;
             var candidates=tools.Where(t=>t.Item==item&&t.Durability>0&&t.ReservedBy==0&&(t.Location==slot||personal&&t.Location=="carry")&&(t.UsingAt==0||t.UsingAt==station));
             return used>0?candidates.FirstOrDefault(t=>t.Id==used):candidates.OrderByDescending(t=>t.Durability).ThenBy(t=>t.Location==slot?0:1).ThenBy(t=>t.Id).FirstOrDefault();
@@ -158,7 +158,8 @@ namespace CrazyRubbish.Core
             var tool=tools.FirstOrDefault(t=>t.Id==id);if(tool==null)return;
             tool.Durability=Math.Max(0,tool.Durability-amount);tool.UsingAt=0;
             if(tool.Durability>0)return;
-            var inventory=tool.Location=="carry"?Carry:tool.Location=="warehouse"?Warehouse:tool.Location=="benchTools"?WoodTools:DismantleTools;
+            var map=InventoryMap();var inventory=map.TryGetValue(tool.Location,out var stock)?stock:null;
+            if(inventory==null)throw new InvalidOperationException("工具位置没有对应库存。");
             inventory.TryRemove(tool.Item,1);tool.Item=ItemId.BrokenWoodTool;tool.Location="broken";BrokenTools.TryAdd(ItemId.BrokenWoodTool,1);
         }
         private bool CanWear(int id,int amount)
@@ -173,7 +174,9 @@ namespace CrazyRubbish.Core
         }
         private void ReleaseUnusedTools()
         {
-            foreach(var tool in tools)if(tool.UsingAt==1&&!jobActive||tool.UsingAt==2&&!dismantleActive)tool.UsingAt=0;
+            var active=new System.Collections.Generic.HashSet<int>(facilities.Where(f=>f.Built&&f.jobActive).Select(f=>f.woodToolId));
+            foreach(var f in facilities.Where(f=>f.Built&&f.dismantleActive)){active.Add(f.screwToolId);active.Add(f.wrenchToolId);}
+            foreach(var tool in tools)if(tool.UsingAt!=0&&!active.Contains(tool.Id))tool.UsingAt=0;
         }
         private decimal SaleDurabilityFactor(ItemId item,int index)
         {

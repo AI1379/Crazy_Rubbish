@@ -14,7 +14,7 @@ namespace CrazyRubbish.Core
         private int IncomingTicks(UnitInventory target)=>residents.Where(r=>r.Delivery?.Target==target).Sum(r=>r.Delivery.Amount*ItemCatalog.CapacityTicks(r.Delivery.Item));
         private DeliveryTask Plan(Resident actor,UnitInventory source,UnitInventory target,string from,string to,ItemId item,int sx,int sy,int tx,int ty,int wanted)
         {
-            int room=target==null?10-FuelCount-residents.Where(r=>r.Delivery?.To=="fuel").Sum(r=>r.Delivery.Amount):(target.FreeTicks-IncomingTicks(target))/ItemCatalog.CapacityTicks(item);
+            int room=target==null?10-FuelCount-residents.Where(r=>r.Delivery?.To==to).Sum(r=>r.Delivery.Amount):(target.FreeTicks-IncomingTicks(target))/ItemCatalog.CapacityTicks(item);
             int count=Math.Min(Math.Min(wanted,8*20/ItemCatalog.CapacityTicks(item)),room);
             if(source!=null)count=Math.Min(count,source.Available(item));
             if(count<=0||FindPath(actor.X,actor.Y,sx,sy)==null||FindPath(sx,sy,tx,ty)==null)return null;
@@ -37,7 +37,7 @@ namespace CrazyRubbish.Core
             {task=Plan(actor,null,target,"ground:"+pile.Id,key,item,pile.X,pile.Y,x,y,wanted);if(task!=null)return task;}
             return null;
         }
-        private DeliveryTask NextTask(Resident actor)
+        private DeliveryTask NextTaskAtSelection(Resident actor)
         {
             DeliveryTask task=null;
             if(AutomaticLivingSupply)
@@ -46,40 +46,51 @@ namespace CrazyRubbish.Core
                     int wanted=(item==ItemId.DrinkingWater?2:1)*(residents.Count+1)-Warehouse.Count(item);
                     if(wanted>0){task=Supply(actor,Warehouse,"warehouse",item,WarehouseX,WarehouseY,wanted);if(task!=null)return task;}
                 }
-            if(BenchBuilt&&RunRequested&&Woodworker!=null&&(WoodTools.Count(ItemId.WoodHandSaw)==0||WoodTools.Count(ItemId.WoodHandSaw)<2&&tools.Any(t=>t.Item==ItemId.WoodHandSaw&&t.Location=="benchTools"&&t.Durability<=60)))
-            {task=Supply(actor,WoodTools,"benchTools",ItemId.WoodHandSaw,BenchX,BenchY,1);if(task!=null)return task;}
+            if(BenchBuilt&&RunRequested&&Woodworker!=null&&(WoodTools.Count(ItemId.WoodHandSaw)==0||WoodTools.Count(ItemId.WoodHandSaw)<2&&tools.Any(t=>t.Item==ItemId.WoodHandSaw&&t.Location==StockKey("benchTools")&&t.Durability<=60)))
+            {task=Supply(actor,WoodTools,StockKey("benchTools"),ItemId.WoodHandSaw,BenchFrontX,BenchFrontY,1);if(task!=null)return task;}
             if(DismantleBuilt&&DismantleRequested)
                 foreach(var item in new[]{ItemId.Screwdriver,ItemId.Wrench})
                     if((item!=ItemId.Wrench||ItemCatalog.NeedsWrench(SelectedDevice))&&DismantleTools.Count(item)==0)
-                    {task=Supply(actor,DismantleTools,"dismantleTools",item,DismantleX,DismantleY,1);if(task!=null)return task;}
+                    {task=Supply(actor,DismantleTools,StockKey("dismantleTools"),item,DismantleFrontX,DismantleFrontY,1);if(task!=null)return task;}
             if(GeneratorBuilt&&FuelSeconds<60)
             {
                 foreach(var fuel in new[]{ItemId.WoodChips,ItemId.WasteWood})
-                {task=Supply(actor,null,"fuel",fuel,GeneratorX,GeneratorY,Math.Min(8,10-FuelCount));if(task!=null)return task;}
+                {task=Supply(actor,null,StockKey("fuel"),fuel,GeneratorFrontX,GeneratorFrontY,Math.Min(8,10-FuelCount));if(task!=null)return task;}
             }
-            foreach(var output in new[]{(Output,"woodOutput",BenchX,BenchY),(DismantleOutput,"dismantleOutput",DismantleX,DismantleY),(TableOutput,"tableOutput",TableX,TableY),(GeneratorResidue,"ash",GeneratorX,GeneratorY),(BrokenTools,"broken",BenchX,BenchY)})
+            foreach(var output in new[]{(Output,StockKey("woodOutput"),BenchFrontX,BenchFrontY),(DismantleOutput,StockKey("dismantleOutput"),DismantleFrontX,DismantleFrontY),(TableOutput,StockKey("tableOutput"),TableFrontX,TableFrontY),(GeneratorResidue,StockKey("ash"),GeneratorFrontX,GeneratorFrontY),(BrokenTools,"broken",BenchFrontX,BenchFrontY)})
                 foreach(ItemId item in Enum.GetValues(typeof(ItemId)))if(output.Item1.Available(item)>0)
                 {task=Plan(actor,output.Item1,Warehouse,output.Item2,"warehouse",item,output.Item3,output.Item4,WarehouseX,WarehouseY,output.Item1.Available(item));if(task!=null)return task;}
             if(BenchBuilt&&RunRequested&&pendingRecipe==null&&WoodInputStock.Count(ItemId.WasteWood)<WoodInput(SelectedRecipe))
-            {task=Supply(actor,WoodInputStock,"woodInput",ItemId.WasteWood,BenchX,BenchY,WoodInput(SelectedRecipe)*2-WoodInputStock.Count(ItemId.WasteWood));if(task!=null)return task;}
+            {task=Supply(actor,WoodInputStock,StockKey("woodInput"),ItemId.WasteWood,BenchFrontX,BenchFrontY,WoodInput(SelectedRecipe)*2-WoodInputStock.Count(ItemId.WasteWood));if(task!=null)return task;}
             if(DismantleBuilt&&DismantleRequested&&DismantleInput.Count(SelectedDevice)<1)
-            {task=Supply(actor,DismantleInput,"dismantleInput",SelectedDevice,DismantleX,DismantleY,2-DismantleInput.Count(SelectedDevice));if(task!=null)return task;}
+            {task=Supply(actor,DismantleInput,StockKey("dismantleInput"),SelectedDevice,DismantleFrontX,DismantleFrontY,2-DismantleInput.Count(SelectedDevice));if(task!=null)return task;}
             // Remaining ground-to-warehouse stock is deliberately an explicit command until supply policies arrive.
+            return null;
+        }
+        private DeliveryTask NextTask(Resident actor)
+        {
+            DeliveryTask task=NextTaskAtSelection(actor);if(task!=null)return task;
+            foreach(var f in facilities.Where(f=>f.Built&&f.Kind<=8).OrderBy(f=>f.Id))
+            {task=AtFacility(f,()=>NextTaskAtSelection(actor));if(task!=null)return task;}
             return null;
         }
         private void TickResidents(double seconds)
         {
             foreach(var actor in residents)
             {
+                int[] previous=(int[])selectedFacilities.Clone();
+                var assigned=GetFacility(actor.FacilityId==0?1:actor.FacilityId);if(assigned!=null)SelectRuntimeFacility(assigned);
+                try {
                 if(RiotActive){actor.Activity="欠薪暴动：人工岗位停工";continue;}
                 if(actor.Delivery==null)
                 {
                     bool producing=actor.Job==WorkerJob.Woodwork&&RunRequested&&(jobActive||pendingRecipe==null&&WoodInputStock.Available(ItemId.WasteWood)>=WoodInput(SelectedRecipe))&&Output.FreeTicks>=BatchTicks(SelectedRecipe)&&(SelectedRecipe==WoodRecipe.SortedWood||ToolFor(1,ItemId.WoodHandSaw)!=null);
-                    if(producing){actor.Activity="木工操作";WalkResident(actor,BenchX,BenchY,seconds);continue;}
+                    if(producing){actor.Activity="木工操作";WalkResident(actor,BenchFrontX,BenchFrontY,seconds);continue;}
                     actor.Delivery=NextTask(actor);
-                    if(actor.Delivery==null){actor.Activity=actor.Job==WorkerJob.Woodwork?"等待原料/工具":"空闲";WalkResident(actor,actor.Job==WorkerJob.Woodwork?BenchX:14+actor.Id,actor.Job==WorkerJob.Woodwork?BenchY:5,seconds);continue;}
+                    if(actor.Delivery==null){actor.Activity=actor.Job==WorkerJob.Woodwork?"等待原料/工具":"空闲";WalkResident(actor,actor.Job==WorkerJob.Woodwork?BenchFrontX:14+actor.Id,actor.Job==WorkerJob.Woodwork?BenchFrontY:5,seconds);continue;}
                 }
                 var delivery=actor.Delivery;
+                if(delivery.To.StartsWith("fuel")){int id=delivery.To.Contains(":")?int.Parse(delivery.To.Split(':')[1]):8;var target=GetFacility(id);if(target!=null)SelectRuntimeFacility(target);}
                 if(delivery.RetryAt>GameSeconds)continue;
                 int x=delivery.Picked?delivery.TargetX:delivery.SourceX,y=delivery.Picked?delivery.TargetY:delivery.SourceY;
                 actor.Activity=delivery.Picked?"送货："+ItemCatalog.Name(delivery.Item):"取货："+ItemCatalog.Name(delivery.Item);
@@ -102,7 +113,7 @@ namespace CrazyRubbish.Core
                 }
                 else
                 {
-                    if(delivery.To=="fuel")
+                    if(delivery.To==StockKey("fuel"))
                     {if(FuelCount+delivery.Amount>10){actor.Activity="燃料缓冲满，等待";continue;}actor.Cargo.TryRemove(delivery.Item,delivery.Amount);if(delivery.Item==ItemId.WasteWood)fuelWood+=delivery.Amount;else fuelChips+=delivery.Amount;Ignite();}
                     else
                     {
@@ -111,6 +122,7 @@ namespace CrazyRubbish.Core
                     }
                     DeliveredTrips++;ClearDelivery(actor);
                 }
+                } finally {selectedFacilities=previous;}
             }
         }
         private void ClearDelivery(Resident actor)

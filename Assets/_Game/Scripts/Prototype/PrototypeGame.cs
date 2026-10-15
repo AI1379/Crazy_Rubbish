@@ -63,7 +63,7 @@ namespace CrazyRubbish.Prototype
 
         public void StartNewGame(){ResetGame();SessionStarted=true;MenuOpen=false;}
         public void StopWalkingForInventory(){walkPath=null;}
-        public void OpenMenu(){MenuOpen=true;walkPath=null;Model.LeaveManualRole();}
+        public void OpenMenu(){GetComponent<PrototypeWorld>().CancelConstruction();MenuOpen=true;walkPath=null;Model.LeaveManualRole();}
         public void ResumeGame(){if(SessionStarted&&!Model.Failed)MenuOpen=false;}
         public void ContinueAfterResult(){if(!Model.Failed){ResultVisible=false;resultSeen=true;Model.SetPaused(false);}}
         public void ShowResult(){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
@@ -110,7 +110,7 @@ namespace CrazyRubbish.Prototype
         private void Update()
         {
             if (SmokeMode) return;
-            if (Input.GetKeyDown(KeyCode.Escape)) HandleEscape();
+            if (Input.GetKeyDown(KeyCode.Escape)) { if(GetComponent<PrototypeWorld>().CancelConstruction())return; HandleEscape(); }
             if(MenuOpen||ResultVisible)return;
             if(Model.Failed){ResultVisible=true;return;}
             if(Model.Tutorial.IntroOpen)return;
@@ -120,7 +120,7 @@ namespace CrazyRubbish.Prototype
             if (Input.GetKeyDown(KeyCode.Alpha1)) Model.SetSpeed(1);
             if (Input.GetKeyDown(KeyCode.Alpha2)) Model.SetSpeed(2);
             if (Input.GetKeyDown(KeyCode.Alpha3)) Model.SetSpeed(3);
-            if(!GetComponent<PrototypeHud>().InventoryOpen)
+            if(!GetComponent<PrototypeHud>().InventoryOpen&&!GetComponent<PrototypeWorld>().ConstructionActive)
             {
             double x = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1 : 0)
                 - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1 : 0);
@@ -130,7 +130,7 @@ namespace CrazyRubbish.Prototype
             if(walkPath!=null)TickWalk(delta);else Model.MovePlayer(x, y, delta);
             if (Input.GetKeyDown(KeyCode.E)) Interact();
             if (Input.GetKeyDown(KeyCode.Q)) Report(Model.Deposit());
-            if (Input.GetKeyDown(KeyCode.F)) { if(Model.NearBench)GetComponent<PrototypeHud>().ShowFacility(1); Report(Model.ToggleWork()); }
+            if (Input.GetKeyDown(KeyCode.F)) { Model.SelectNearestFacility();if(Model.NearBench)GetComponent<PrototypeHud>().ShowFacility(1); Report(Model.ToggleWork()); }
             }
             Model.Advance(delta);
             if(Model.Failed||Model.DemoCompleted&&!resultSeen){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
@@ -217,6 +217,7 @@ namespace CrazyRubbish.Prototype
 
         public void Interact()
         {
+            Model.SelectNearestFacility();
             bool bulk = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
             if (bulk) { Report(Model.PickUp(int.MaxValue)); return; }
             if (Model.NearWarehouse && Model.Carry.Used > Model.Carry.Count(ItemId.WoodHandSaw)) { Report(Model.Deposit()); return; }
@@ -230,7 +231,7 @@ namespace CrazyRubbish.Prototype
             }
             if (Model.NearGenerator && Model.GeneratorBuilt)
             { GetComponent<PrototypeHud>().ShowFacility(4); Report(Model.AddFuel(Model.Carry.Available(ItemId.WoodChips)>0?ItemId.WoodChips:ItemId.WasteWood,int.MaxValue)); return; }
-            if (Model.DismantleBuilt && PrototypeSimulation.Distance(Model.PlayerX, Model.PlayerY, PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY) <= Model.Settings.interactionRadius)
+            if (Model.DismantleBuilt && PrototypeSimulation.Distance(Model.PlayerX, Model.PlayerY, Model.DismantleFrontX, Model.DismantleFrontY) <= Model.Settings.interactionRadius)
             {
                 GetComponent<PrototypeHud>().ShowFacility(2);
                 if (Model.Carry.Available(Model.SelectedDevice)>0) Report(Model.DeliverInput(true));
@@ -238,7 +239,7 @@ namespace CrazyRubbish.Prototype
                 else Report(Model.ToggleDismantle());
                 return;
             }
-            if(Model.TableBuilt&&PrototypeSimulation.Distance(Model.PlayerX,Model.PlayerY,PrototypeSimulation.TableX,PrototypeSimulation.TableY)<=Model.Settings.interactionRadius)
+            if(Model.TableBuilt&&PrototypeSimulation.Distance(Model.PlayerX,Model.PlayerY,Model.TableFrontX,Model.TableFrontY)<=Model.Settings.interactionRadius)
             {
                 GetComponent<PrototypeHud>().ShowFacility(3);
                 if(Model.Carry.Available(ItemId.WoodHandle)>0||Model.Carry.Available(Model.AssemblyEnd)>0)Report(Model.FeedAssembly());

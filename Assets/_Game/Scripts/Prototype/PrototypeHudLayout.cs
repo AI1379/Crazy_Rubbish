@@ -9,7 +9,7 @@ namespace CrazyRubbish.Prototype
     // Reference-space dimensions are shared with the world camera so the map never sits under UI.
     public sealed partial class PrototypeHud
     {
-        private const int CurrentLayoutVersion = 14;
+        private const int CurrentLayoutVersion = 15;
         public const float ReferenceWidth = 1600, MapLeft = 0, MapWidth = 1600, MapTop = 0, MapBottom = 0;
         [SerializeField] private Text powerValue, populationValue, foodValue, waterValue, menuNotice;
         [SerializeField] private float[] onsiteSectionY = new float[4];
@@ -22,6 +22,8 @@ namespace CrazyRubbish.Prototype
 
         private void BuildInterface()
         {
+            if(root!=null&&layoutVersion==14)
+            {UpgradeConstructionLayout();layoutVersion=CurrentLayoutVersion;RefreshItemArtwork();return;}
             if (HasLayout) { RefreshItemArtwork(); return; }
             if (root != null)
             {
@@ -99,13 +101,14 @@ namespace CrazyRubbish.Prototype
             scroll.viewport.offsetMax = new Vector2(-12, -46);
             string[] sections = { "建设", "搬运", "装配", "交易" };
             for (int i = 0; i < sections.Length; i++) ButtonAt(pages[0], "OnsiteJump" + i, sections[i], 8 + i * 90, 2, 84, 32);
-            onsiteSectionY[0] = 0; onsiteSectionY[1] = 370;
+            onsiteSectionY[0] = 0; onsiteSectionY[1] = 800;
             SectionHeading(content, "建设与设施", "01", 4);
             FacilityCard(content, "木工台", "木料加工与配方", game.appearance.woodwork, 1, 44);
             FacilityCard(content, "拆解地点", "回收旧设备中的零件", game.appearance.dismantle, 2, 120);
             FacilityCard(content, "工作台", "装配工具与替补部件", game.appearance.workbench, 3, 196);
             FacilityCard(content, "发电机", "补充燃料，获得居民认可", game.appearance.generator, 4, 272);
-            float y = CommandGroup(content, "投料与搬运", 370, new[] { 10, 11, 12, 13, 14, 15, 6, 7, 24, 25 });
+            float startY=BuildConstructionControls(content,360);onsiteSectionY[1]=startY;
+            float y = CommandGroup(content, "投料与搬运", startY, new[] { 10, 11, 12, 13, 14, 15, 6, 7, 24, 25 });
             y = CommandGroup(content, "拆解与批次", y, new[] { 8, 9, 16, 17, 18 });
             onsiteSectionY[2] = y;
             y = CommandGroup(content, "工具装配", y, new[] { 29, 30, 31, 32, 33, 34, 35, 36 });

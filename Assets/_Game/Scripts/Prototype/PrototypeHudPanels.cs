@@ -32,7 +32,7 @@ namespace CrazyRubbish.Prototype
             for (int i = 0; i < 4; i++) launchers[i] = ButtonAt(navigation, "OpenTab" + i, captions[i], 8 + 112 * i, 8, 104, 38);
             zones = ButtonAt(navigation, "Zones", "区域", 456, 8, 110, 38);
 
-            BuildTutorialCoach();
+            BuildTutorialCoach();BuildConstructionNotice();
 
             alerts = ButtonAt(root, "Alerts", "", 16, 80, 410, 36);
             alerts.GetComponent<Image>().color = new Color32(73, 38, 32, 245);
@@ -55,7 +55,7 @@ namespace CrazyRubbish.Prototype
 
         private void BuildFacilityPanel()
         {
-            facilityPanel = Surface(root, "Facility Panel", 0, 86, 396, 604, Panel);
+            facilityPanel = Surface(root, "Facility Panel", 0, 86, 396, 660, Panel);
             facilityPanel.anchorMin = facilityPanel.anchorMax = Vector2.one;
             facilityPanel.anchoredPosition = new Vector2(-412, -86);
             facilityPanel.GetComponent<Image>().raycastTarget = true;
@@ -88,6 +88,9 @@ namespace CrazyRubbish.Prototype
             ButtonAt(facilityPages[3], "Command2", "组装发电机", 20, 0, 356, 38);
             FacilityCommands(facilityPages[3], 54, new[] { 6, 7, 25, 23 });
             TextAt(facilityPages[3], "Help", "投入木料或木料碎屑作为燃料。\n发电取得认可后，可以招募居民。", 20, 164, 356, 64, 15, Muted);
+            ButtonAt(facilityPanel,"MoveOwned","搬迁 / 旋转",20,610,112,36);
+            ButtonAt(facilityPanel,"RemoveOwned","拆除返料",142,610,112,36);
+            ButtonAt(facilityPanel,"SellOwned","出售",264,610,112,36);
             facilityPanel.gameObject.SetActive(false);
         }
 
@@ -147,13 +150,14 @@ namespace CrazyRubbish.Prototype
 
         public void ShowFacility(int facility)
         {
-            if (facility < 1 || facility > 4 || facilityPanel == null) return;
+            if (facility < 1 || facility > 6 || facilityPanel == null) return;
             ClosePanels(); selectedFacility = facility;
             facilityPanel.gameObject.SetActive(true);
             for (int i = 0; i < facilityPages.Length; i++) facilityPages[i].gameObject.SetActive(i == facility - 1);
-            string[] names = { "木工台", "拆解地点", "工作台", "发电机" };
+            string[] names = { "木工台", "拆解地点", "工作台", "发电机", "新住房", "路灯" };
             facilityTitle.text = names[facility - 1];
-            Sprite[] artwork = { game.appearance.woodwork, game.appearance.dismantle, game.appearance.workbench, game.appearance.generator };
+            facilityTitle.resizeTextForBestFit=true;facilityTitle.resizeTextMinSize=16;facilityTitle.resizeTextMaxSize=24;
+            Sprite[] artwork = { game.appearance.woodwork, game.appearance.dismantle, game.appearance.workbench, game.appearance.generator, game.appearance.housing, game.appearance.streetlamp };
             facilityArtwork.sprite = artwork[facility - 1];
             if (game.Model != null) RefreshOverlay(game.Model);
         }
@@ -180,6 +184,8 @@ namespace CrazyRubbish.Prototype
             target.gameObject.SetActive(!blocked && !ManagementOpen && SelectedFacility == 0);
             switch (SelectedFacility)
             {
+                case 5:facilitySummary.text=$"床位4 · 供电 {m.SelectedFacility(16).PowerRatio:P0}\n住房总容量 {m.HousingCapacity}";break;
+                case 6:facilitySummary.text=$"照明供电 {m.SelectedFacility(32).PowerRatio:P0}\n覆盖中心距6格内的住房";break;
                 case 1:
                     facilitySummary.text = m.BenchBuilt ? "木料加工\n选择配方，运入原料后开始作业。" : "待建设\n需要废木料 4 + 紧固件 2"; break;
                 case 2:
@@ -187,7 +193,7 @@ namespace CrazyRubbish.Prototype
                 case 3:
                     facilitySummary.text = m.TableBuilt ? $"装配：{ItemCatalog.Name(m.AssemblyProduct)} · {m.AssemblyProgress:P0}\n木柄 1 + {ItemCatalog.Name(m.AssemblyEnd)} 1" : "待建设\n需要木板 4 + 钢铁零件 2"; break;
                 case 4:
-                    facilitySummary.text = m.GeneratorBuilt ? $"可用电力 {m.AvailablePower:0.#} · 燃料 {m.FuelCount}\n{(m.FuelCount > 0 ? "燃料已就绪" : "缺少燃料，请前往补充")}" : "待建设 · 钢铁零件 6 + 电线 2\n热动力组件 1 + 发电组件 1"; break;
+                    facilitySummary.text = m.GeneratorBuilt ? $"燃料余量 {m.FuelSeconds:0} 秒 · 同网请求 {m.SelectedFacility(8).PowerRequested:0.###}\n{(m.FuelSeconds > 0 ? m.SelectedFacility(8).PowerRequested>0?"已连接负载，按运行时间耗燃料":"空载待机，不耗燃料":"缺少燃料，请前往补充")}" : "待建设 · 钢铁零件 6 + 电线 2\n热动力组件 1 + 发电组件 1"; break;
             }
         }
 
@@ -197,10 +203,11 @@ namespace CrazyRubbish.Prototype
             { game.Report(new ActionResult(false, "先选择开始教程或自由经营，再前往作业点。")); return; }
             switch (SelectedFacility)
             {
-                case 1: game.GoTo(PrototypeSimulation.BenchX, PrototypeSimulation.BenchY); break;
-                case 2: game.GoTo(PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY); break;
-                case 3: game.GoTo(PrototypeSimulation.TableX, PrototypeSimulation.TableY); break;
-                case 4: game.GoTo(PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY); break;
+                case 5:case 6:var side=PrototypeSimulation.ServiceCell(game.Model.SelectedFacility(FacilityKind(SelectedFacility)));game.GoTo(side.x,side.y);break;
+                case 1: game.GoTo(game.Model.BenchFrontX, game.Model.BenchFrontY); break;
+                case 2: game.GoTo(game.Model.DismantleFrontX, game.Model.DismantleFrontY); break;
+                case 3: game.GoTo(game.Model.TableFrontX, game.Model.TableFrontY); break;
+                case 4: game.GoTo(game.Model.GeneratorFrontX, game.Model.GeneratorFrontY); break;
             }
         }
     }

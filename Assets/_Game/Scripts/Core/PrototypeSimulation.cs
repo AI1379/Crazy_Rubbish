@@ -18,30 +18,31 @@ namespace CrazyRubbish.Core
         private readonly SerializableRandom random;
         private readonly double[] salesPressure=new double[Enum.GetValues(typeof(ItemId)).Length];
         private readonly Dictionary<int,List<(UnitInventory inventory,int token)>> blueprints=new Dictionary<int,List<(UnitInventory,int)>>();
-        private double accumulatedTime,inputTimer,nextInput,jobProgress,dismantleProgress,nextWage;
+        private double accumulatedTime,inputTimer,nextInput,nextWage;
         private decimal saleRemainderCents;
-        private bool jobActive,dismantleActive;
-        private WoodRecipe activeRecipe;
-        private int pendingBuildings,nextGroundId=1,nextToolId=1,geometryRevision,woodToken,dismantleToken,woodToolId,screwToolId,wrenchToolId;
-        private int dismantleObjectId;
-        private bool dismantleUsable=true;
+
+
+        private int nextGroundId=1,nextToolId=1,geometryRevision;
+
+
         private long cashCents;
-        private int fuelWood,fuelChips,manualStation;
-        private double fuelRemaining,equivalentHeat,activeFuelHeatRate;
+        private int manualStationValue,manualFacilityId;
+        private int manualStation { get=>manualStationValue; set { manualStationValue=value; manualFacilityId=value==0?0:Station(value==3?4:value).Id; } }
+
         private readonly Dictionary<(int,int),(int revision,float value)> pressureCache=new Dictionary<(int,int),(int,float)>();
         private readonly Dictionary<(int,int),int> pressureCapacity=new Dictionary<(int,int),int>();
         private int pressureRevision=-1;
         public PrototypeSettings Settings {get;}
         public UnitInventory Carry {get;}
         public UnitInventory Warehouse {get;}
-        public UnitInventory WoodInputStock {get;}=new UnitInventory(8);
-        public UnitInventory DismantleInput {get;}=new UnitInventory(12);
-        public UnitInventory WoodTools {get;}=new UnitInventory(2);
-        public UnitInventory DismantleTools {get;}=new UnitInventory(4);
+
+
+
+
         public UnitInventory BrokenTools {get;}=new UnitInventory(8);
-        public UnitInventory Output {get;}
-        public UnitInventory DismantleOutput {get;}=new UnitInventory(11);
-        public UnitInventory GeneratorResidue {get;}=new UnitInventory(10);
+
+
+
         public IReadOnlyList<GroundPile> Ground=>ground;
         public IReadOnlyList<Resident> Residents=>residents;
         public IReadOnlyList<WageBill> WageBills=>bills;
@@ -51,22 +52,22 @@ namespace CrazyRubbish.Core
         public double GameSeconds {get;private set;}
         public bool Paused {get;private set;}
         public int Speed {get;private set;}=1;
-        public bool BenchBuilt {get;private set;}
-        public bool TableBuilt {get;private set;}
-        public bool DismantleBuilt {get;private set;}
-        public bool GeneratorBuilt {get;private set;}
-        public bool BuildPending=>(pendingBuildings&1)!=0;
-        public bool AnyBuildPending=>pendingBuildings!=0;
+        public bool BenchBuilt {get=>Station(1).Built;private set=>Station(1).Built=value;}
+        public bool TableBuilt {get=>Station(4).Built;private set=>Station(4).Built=value;}
+        public bool DismantleBuilt {get=>Station(2).Built;private set=>Station(2).Built=value;}
+        public bool GeneratorBuilt {get=>Station(8).Built;private set=>Station(8).Built=value;}
+        public bool BuildPending=>Station(1).Blueprint;
+        public bool AnyBuildPending=>facilities.Any(f=>f.Blueprint)||wirePlans.Count>0;
         public bool HasBeenPowered {get;private set;}
-        public bool RunRequested {get;private set;}
-        public bool DismantleRequested {get;private set;}
-        public WoodRecipe SelectedRecipe {get;private set;}
-        public ItemId SelectedDevice {get;private set;}=ItemId.OldCutter;
-        private WoodRecipe? pendingRecipe;
-        private ItemId? pendingDevice;
+
+
+
+
+
+
         public bool RecipeChangePending=>pendingRecipe!=null;
-        public WorkState State {get;private set;}
-        public WorkState DismantleState {get;private set;}
+
+
         public long CashCents=>cashCents;
         public decimal Money=>cashCents/100m;
         public long TotalSold {get;private set;}
@@ -74,31 +75,32 @@ namespace CrazyRubbish.Core
         public int CompletedBatches {get;private set;}
         public int DismantledBatches {get;private set;}
         public int DeliveredTrips {get;private set;}
+        public int TotalRecruited {get;private set;}
         public int GroundRevision {get;private set;}
         public long IncomingUnits=>0;
         public long SpawnedUnits {get;private set;}
         public bool JobActive=>jobActive;
-        public bool PlayerSawing=>manualStation==1&&State==WorkState.Working&&SelectedRecipe!=WoodRecipe.SortedWood;
+        public bool PlayerSawing=>manualStationValue==1&&GetFacility(manualFacilityId)?.State==WorkState.Working&&GetFacility(manualFacilityId)?.SelectedRecipe!=WoodRecipe.SortedWood;
         public int ReservedWood=>jobActive?WoodInput(activeRecipe):0;
         public float Progress=>jobActive?(float)Math.Min(1,jobProgress/Duration(activeRecipe)):0;
         public float DismantleProgress=>(float)(dismantleProgress/35);
         public bool NearWarehouse=>Near(WarehouseX,WarehouseY);
-        public bool NearBench=>Near(BenchX,BenchY);
-        public bool NearGenerator=>Near(GeneratorX,GeneratorY);
+        public bool NearBench=>Near(BenchFrontX,BenchFrontY);
+        public bool NearGenerator=>Near(GeneratorFrontX,GeneratorFrontY);
         public bool HasSaw=>tools.Any(t=>t.Item==ItemId.WoodHandSaw&&t.Durability>0&&!t.Location.StartsWith("ground:"));
         public int FuelCount=>fuelWood+fuelChips;
         public double FuelSeconds=>fuelRemaining+fuelWood*Settings.woodFuelSeconds+fuelChips*Settings.chipsFuelSeconds;
-        public float AvailablePower=>GeneratorBuilt&&fuelRemaining>0?Settings.generatorOutput:0;
+        public float AvailablePower=>(float)powerNetworks.Sum(n=>n.Output);
         public double SecondsToWage=>residents.Count==0?0:Math.Max(0,nextWage-GameSeconds);
         public long UnpaidWageCents=>bills.Sum(b=>b.RemainingCents);
         public decimal UnpaidWages=>UnpaidWageCents/100m;
         public double EquivalentUnpaidPeriods=>bills.Sum(b=>(double)b.RemainingCents/b.OriginalCents);
-        public Resident Woodworker=>residents.Find(r=>r.Job==WorkerJob.Woodwork);
-        public bool WorkerAtBench=>Woodworker!=null&&Woodworker.Delivery==null&&Distance(Woodworker.X,Woodworker.Y,BenchX,BenchY)<=0.1;
+        public Resident Woodworker=>residents.Find(r=>r.Job==WorkerJob.Woodwork&&(r.FacilityId==0?Station(1).Id==1:r.FacilityId==Station(1).Id));
+        public bool WorkerAtBench=>Woodworker!=null&&Woodworker.Delivery==null&&Distance(Woodworker.X,Woodworker.Y,BenchFrontX,BenchFrontY)<=0.1;
         public PrototypeSimulation(PrototypeSettings settings,int seed=4271,bool gradualOpening=false)
         {
             Settings=settings??throw new ArgumentNullException(nameof(settings));settings.Validate();random=new SerializableRandom(seed);
-            Carry=new UnitInventory(settings.carryCapacity);Warehouse=new UnitInventory(settings.warehouseCapacity);Output=new UnitInventory(settings.outputCapacity);
+            Carry=new UnitInventory(settings.carryCapacity);Warehouse=new UnitInventory(settings.warehouseCapacity);InitializeFacilities();
             nextInput=RandomInputInterval();
             PrepareOpening();
             if(gradualOpening){Opening=new OpeningProgress();return;}
@@ -146,57 +148,6 @@ namespace CrazyRubbish.Core
         }
         public GroundPile NearestPickup()=>ground.Where(p=>p.Amount>p.Reserved&&Distance(PlayerX,PlayerY,p.X,p.Y)<=Settings.interactionRadius)
             .OrderBy(p=>Distance(PlayerX,PlayerY,p.X,p.Y)).ThenByDescending(p=>ItemCatalog.IsTool(p.Item)).ThenBy(p=>p.Id).FirstOrDefault();
-        public ActionResult BuildBench()=>Build(1,BenchBuilt,new ItemAmount(ItemId.WasteWood,4),new ItemAmount(ItemId.RecoveredFastener,2));
-        public ActionResult BuildDismantle()=>Build(2,DismantleBuilt,new ItemAmount(ItemId.WasteWood,4),new ItemAmount(ItemId.RecoveredFastener,2));
-        public ActionResult BuildTable()=>Build(4,TableBuilt,new ItemAmount(ItemId.Plank,4),new ItemAmount(ItemId.SteelPart,2));
-        public ActionResult BuildGenerator()=>Build(8,GeneratorBuilt,new ItemAmount(ItemId.SteelPart,6),new ItemAmount(ItemId.ThermalModule,1),new ItemAmount(ItemId.GeneratorModule,1),new ItemAmount(ItemId.RecoveredWire,2));
-        private ActionResult Build(int flag,bool built,params ItemAmount[] costs)
-        {
-            if(RiotActive||Failed)return Fail("暴动或失败期间无法安排建设。");
-            if(built||(pendingBuildings&flag)!=0)return Fail("已经建成或规划。");
-            if(manualStation!=0&&!residents.Any(r=>r.Job==WorkerJob.Idle&&r.Delivery==null))return Fail("缺空闲建设人员，请先退出岗位。");
-            if(flag==4 && (!discovered.Contains(ItemId.Plank)||!discovered.Contains(ItemId.SteelPart)))return Fail("首次取得木板和钢铁零件后解锁工作台。");
-            if(flag==8&&!discovered.Contains(ItemId.SteelPart))return Fail("先取得钢铁零件以解锁发电机。");
-            string obstruction=ConstructionObstruction(flag);
-            if(obstruction!=null)return Fail(obstruction);
-            var tokens=new List<(UnitInventory,int)>();
-            foreach(var cost in costs)
-            {
-                int fromCarry=Math.Min(cost.Amount,Carry.Available(cost.Item)),fromWarehouse=cost.Amount-fromCarry;
-                if(Warehouse.Available(cost.Item)<fromWarehouse){foreach(var token in tokens)token.Item1.Release(token.Item2);return Fail("背包及仓库材料不足。");}
-                if(fromCarry>0)tokens.Add((Carry,Carry.Reserve(new ItemAmount(cost.Item,fromCarry))));
-                if(fromWarehouse>0)tokens.Add((Warehouse,Warehouse.Reserve(new ItemAmount(cost.Item,fromWarehouse))));
-            }
-            blueprints[flag]=tokens;pendingBuildings|=flag;
-            if(!Paused)CompleteBuildings();
-            RefreshState();return Ok(Paused?"已预约材料，恢复后建成；取消可全释放。":"建设完成。");
-        }
-        public ActionResult CancelBlueprints()
-        {
-            foreach(var list in blueprints.Values)foreach(var token in list)token.inventory.Release(token.token);
-            blueprints.Clear();pendingBuildings=0;return Ok("蓝图已取消，预约全部释放。");
-        }
-        private void CompleteBuildings()
-        {
-            if(pendingBuildings==0)return;
-            foreach(int flag in blueprints.Keys.ToArray())
-            {
-                // Recheck when resuming: people or dropped items can occupy an existing blueprint.
-                if(ConstructionObstruction(flag)!=null)continue;
-                foreach(var token in blueprints[flag])token.inventory.Commit(token.token);
-                if(flag==1)BenchBuilt=true;if(flag==2)DismantleBuilt=true;if(flag==4)TableBuilt=true;if(flag==8)GeneratorBuilt=true;
-                blueprints.Remove(flag);pendingBuildings&=~flag;geometryRevision++;GroundRevision++;
-            }
-        }
-        private string ConstructionObstruction(int flag)
-        {
-            int x=flag==1?BenchX:flag==2?DismantleX:flag==4?TableX:GeneratorX,y=flag==1?BenchY:flag==2?DismantleY:flag==4?TableY:GeneratorY;
-            if(InBuilding(CellCoordinate(PlayerX),CellCoordinate(PlayerY),x,y+1)||
-                residents.Any(r=>InBuilding(CellCoordinate(r.X),CellCoordinate(r.Y),x,y+1)))
-                return "建设位置有人，请先离开设施占地。";
-            for(int px=x;px<x+2;px++)for(int py=y+1;py<y+3;py++)if(CellTicks(px,py)>0)return "建设位置有地面物品，先清理。";
-            return null;
-        }
         public ActionResult SelectRecipe(WoodRecipe recipe)
         {
             if(!Enum.IsDefined(typeof(WoodRecipe),recipe))throw new ArgumentOutOfRangeException(nameof(recipe));
@@ -223,14 +174,14 @@ namespace CrazyRubbish.Core
         {
             if(RiotActive||Failed)return Fail("人工岗位因暴动或失败停工。");
             if(!BenchBuilt)return Fail("先建木工地点。");
-            if(NearBench){manualStation=manualStation==1?0:1;RunRequested=true;ReleaseUnusedTools();RefreshState();return Ok(manualStation==1?"主角进入木工岗位。":"主角退出，投入及进度保留。");}
+            if(NearBench){manualStation=ManualAt(1)?0:1;RunRequested=true;ReleaseUnusedTools();RefreshState();return Ok(ManualAt(1)?"主角进入木工岗位。":"主角退出，投入及进度保留。");}
             RunRequested=!RunRequested;RefreshState();return Ok(RunRequested?"木工请求已开启。":"木工请求已停。");
         }
         public ActionResult ToggleDismantle()
         {
             if(RiotActive||Failed)return Fail("人工岗位因暴动或失败停工。");
             if(!DismantleBuilt)return Fail("先建拆解地点。");
-            DismantleRequested=!DismantleRequested;manualStation=DismantleRequested&&Near(DismantleX,DismantleY)?2:0;ReleaseUnusedTools();RefreshState();return Ok("拆解请求已调整。");
+            DismantleRequested=!DismantleRequested;manualStation=DismantleRequested&&Near(DismantleFrontX,DismantleFrontY)?2:0;ReleaseUnusedTools();RefreshState();return Ok("拆解请求已调整。");
         }
         public ActionResult CancelBatch(bool dismantle=false)
         {
@@ -248,18 +199,22 @@ namespace CrazyRubbish.Core
         }
         private void Ignite()
         {
-            if(fuelRemaining>0||!GeneratorBuilt)return;
+            if(fuelRemaining>0||!GeneratorBuilt||Station(8).PowerRequested<=0)return;
             if(GeneratorResidue.FreeTicks<20&&equivalentHeat>=20-0.000001)return;
             if(fuelWood>0){fuelWood--;fuelRemaining=Settings.woodFuelSeconds;activeFuelHeatRate=1.0/Settings.woodFuelSeconds;}
             else if(fuelChips>0){fuelChips--;fuelRemaining=Settings.chipsFuelSeconds;activeFuelHeatRate=0.5/Settings.chipsFuelSeconds;}else return;
-            HasBeenPowered=true;
+
         }
         public ActionResult Recruit()
         {
             if(!HasBeenPowered)return Fail("先实际发电取得认可。");
-            if(residents.Count>=Settings.firstResidents)return Fail("旧住房满，请在后续住房阶段扩员。");
-            if(residents.Count==0){nextWage=GameSeconds+Settings.wageSeconds;if(firstPayrollAt==double.MaxValue){firstPayrollAt=nextWage;nextLivingPeriod=nextWage;}}
-            int id=Math.Max(residents.Select(r=>r.Id).DefaultIfEmpty(0).Max(),bills.SelectMany(b=>b.ResidentIds).DefaultIfEmpty(0).Max())+1;
+            if(residents.Count>=HousingCapacity-1)return Fail("住房已满，请建设新住房扩员。");
+            long fee=TotalRecruited<Settings.firstResidents?0:3000;
+            if(cashCents<fee)return Fail("首批免费名额已用完；后续招募每人30钱，另需空余床位。");
+            if(TotalRecruited==0){nextWage=GameSeconds+Settings.wageSeconds;if(firstPayrollAt==double.MaxValue){firstPayrollAt=nextWage;nextLivingPeriod=nextWage;}}
+            else if(residents.Count==0)while(nextWage<=GameSeconds)nextWage+=Settings.wageSeconds;
+            cashCents-=fee;CommunityCashCents+=fee;
+            int id=++TotalRecruited;
             residents.Add(new Resident(id){Needs=new LivingNeeds{nextMeal=GameSeconds+300}});return Ok("居民加入：迁入存款5，周期工资10；饮食每300秒消耗。");
         }
         public ActionResult AssignWoodworker()
@@ -267,7 +222,7 @@ namespace CrazyRubbish.Core
             var worker=Woodworker;if(worker!=null){worker.Job=WorkerJob.Idle;RefreshState();return Ok("取消木工指定，已携货仍会送达。");}
             worker=residents.FirstOrDefault(r=>r.Job==WorkerJob.Idle);
             if(worker==null)return Fail("没有可分配居民。");
-            worker.Job=WorkerJob.Woodwork;RefreshState();return Ok("居民完成当前搬运后到木工正面；请交接手锯。");
+            worker.Job=WorkerJob.Woodwork;worker.FacilityId=Station(1).Id;RefreshState();return Ok("居民完成当前搬运后到木工正面；请交接手锯。");
         }
         public ActionResult PayWages()
         {
@@ -315,7 +270,7 @@ namespace CrazyRubbish.Core
         }
 
 
-        public int NearbyPressureTiles=>ground.Where(p=>p.Item!=ItemId.PowerAsh&&Distance(p.X,p.Y,BenchX,BenchY)<=4).Select(p=>(p.X,p.Y)).Distinct().Count();
+        public int NearbyPressureTiles=>ground.Where(p=>p.Item!=ItemId.PowerAsh&&Distance(p.X,p.Y,BenchFrontX,BenchFrontY)<=4).Select(p=>(p.X,p.Y)).Distinct().Count();
         public float PressureAt(double cx,double cy)
         {
             var key=((int)Math.Round(cx),(int)Math.Round(cy));
@@ -340,7 +295,7 @@ namespace CrazyRubbish.Core
             double overload=exposed==0?1:Math.Max(0.4,1/(1+excess/(exposed*5)));
             float result=(float)Math.Max(0.25,area*overload);pressureCache[key]=(GroundRevision,result);return result;
         }
-        public float HumanEfficiency=>(float)DesignRules.HumanEfficiency(1,0,70,WorkerAtBench?EquivalentUnpaidPeriods:0,(WorkerAtBench?Woodworker.Needs:PlayerNeeds).FoodMultiplier(GameSeconds),(WorkerAtBench?Woodworker.Needs:PlayerNeeds).WaterMultiplier(GameSeconds),PressureAt(BenchX,BenchY),1);
+        public float HumanEfficiency=>(float)DesignRules.HumanEfficiency(1,0,70,WorkerAtBench?EquivalentUnpaidPeriods:0,(WorkerAtBench?Woodworker.Needs:PlayerNeeds).FoodMultiplier(GameSeconds),(WorkerAtBench?Woodworker.Needs:PlayerNeeds).WaterMultiplier(GameSeconds),PressureAt(BenchFrontX,BenchFrontY),1);
         public double Duration(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?40:recipe==WoodRecipe.WoodHandle?30:10;
         public int ProductAmount(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?3:recipe==WoodRecipe.WoodHandle?2:4;
         public ItemId Product(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?ItemId.Plank:recipe==WoodRecipe.WoodHandle?ItemId.WoodHandle:ItemId.SortedWood;
@@ -355,33 +310,33 @@ namespace CrazyRubbish.Core
             {
                 accumulatedTime-=Step;GameSeconds+=Step;CompleteBuildings();TickInteraction(Step);TickOpening();
                 for(int i=0;i<salesPressure.Length;i++)salesPressure[i]*=Math.Exp(-Math.Log(2)*Step/600);
-                if(fuelRemaining>0&&(equivalentHeat<20-0.000001||GeneratorResidue.FreeTicks>=20))
-                {double burned=Math.Min(Step,fuelRemaining);fuelRemaining=Math.Max(0,fuelRemaining-burned);if(fuelRemaining<1e-8)fuelRemaining=0;equivalentHeat+=burned*activeFuelHeatRate;}
-                if(equivalentHeat>=20-0.000001&&GeneratorResidue.TryAdd(ItemId.PowerAsh,1))equivalentHeat=Math.Max(0,equivalentHeat-20);Ignite();
+                TickPower(Step);
                 if(residents.Count>0&&GameSeconds+1e-6>=nextWage){bills.Add(new WageBill(residents.Select(r=>r.Id).ToArray(),(long)(Settings.wagePerResident*100),nextWage));nextWage+=Settings.wageSeconds;CheckWageRiot();}
                 TickCommunity(Step);
                 if(Failed){accumulatedTime=0;break;}
-                TickWorkshop(Step);TickToolPurchase();
+                foreach(var f in facilities.Where(f=>f.Built&&f.Kind==4).ToArray())AtFacility(f,()=>TickWorkshop(Step));
+                TickToolPurchase();
                 TickResidents(Step);
                 if(Settings.automaticInput){inputTimer+=Step;while(inputTimer>=nextInput){inputTimer-=nextInput;GenerateInput(nextInput);nextInput=RandomInputInterval();}}
+                foreach(var station in facilities.Where(f=>f.Built&&f.Kind<=2).ToArray())AtFacility(station,()=>{
                 RefreshState();
-                if(State==WorkState.Working)
+                if(station.Kind==1&&State==WorkState.Working)
                 {
                     if(!jobActive){woodToken=WoodInputStock.Reserve(new ItemAmount(ItemId.WasteWood,WoodInput(SelectedRecipe)));jobActive=true;activeRecipe=SelectedRecipe;jobProgress=0;woodToolId=SelectedRecipe==WoodRecipe.SortedWood?0:ToolFor(1,ItemId.WoodHandSaw)?.Id??0;var tool=tools.FirstOrDefault(t=>t.Id==woodToolId);if(tool!=null)tool.UsingAt=1;}
                     jobProgress=Math.Min(Duration(activeRecipe),jobProgress+Step*HumanEfficiency);
                 }
-                if(jobActive&&jobProgress+1e-6>=Duration(activeRecipe)&&Output.FreeTicks>=BatchTicks(activeRecipe)&&CanWear(woodToolId,WoodInput(activeRecipe)))
+                if(station.Kind==1&&jobActive&&jobProgress+1e-6>=Duration(activeRecipe)&&Output.FreeTicks>=BatchTicks(activeRecipe)&&CanWear(woodToolId,WoodInput(activeRecipe)))
                 {
                     WoodInputStock.Commit(woodToken);Output.TryAddBatch(WoodProducts(activeRecipe));DiscoverProducts(WoodProducts(activeRecipe));
                     WearTool(woodToolId,WoodInput(activeRecipe));jobActive=false;jobProgress=0;CompletedBatches++;woodToolId=0;
                 }
-                if(DismantleState==WorkState.Working)
+                if(station.Kind==2&&DismantleState==WorkState.Working)
                 {
-                    if(!dismantleActive){dismantleToken=DismantleInput.Reserve(new ItemAmount(SelectedDevice,1));dismantleActive=true;dismantleProgress=0;screwToolId=ToolFor(2,ItemId.Screwdriver)?.Id??0;wrenchToolId=ItemCatalog.NeedsWrench(SelectedDevice)?ToolFor(2,ItemId.Wrench)?.Id??0:0;var device=tools.FirstOrDefault(t=>t.Item==SelectedDevice&&t.Location=="dismantleInput");dismantleObjectId=device?.Id??0;dismantleUsable=device?.Usable??true;}
-                    dismantleProgress=Math.Min(35,dismantleProgress+Step*PressureAt(DismantleX,DismantleY)*LivingEfficiency(null));
+                    if(!dismantleActive){dismantleToken=DismantleInput.Reserve(new ItemAmount(SelectedDevice,1));dismantleActive=true;dismantleProgress=0;screwToolId=ToolFor(2,ItemId.Screwdriver)?.Id??0;wrenchToolId=ItemCatalog.NeedsWrench(SelectedDevice)?ToolFor(2,ItemId.Wrench)?.Id??0:0;var device=tools.FirstOrDefault(t=>t.Item==SelectedDevice&&t.Location==StockKey("dismantleInput"));dismantleObjectId=device?.Id??0;dismantleUsable=device?.Usable??true;}
+                    dismantleProgress=Math.Min(35,dismantleProgress+Step*PressureAt(DismantleFrontX,DismantleFrontY)*LivingEfficiency(null));
                 }
                 var products=ItemCatalog.DeviceYield(SelectedDevice,dismantleUsable);
-                if(dismantleActive&&dismantleProgress>=35-1e-6&&DismantleOutput.FreeTicks>=products.Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item))&&CanWearDismantleTools())
+                if(station.Kind==2&&dismantleActive&&dismantleProgress>=35-1e-6&&DismantleOutput.FreeTicks>=products.Sum(p=>p.Amount*ItemCatalog.CapacityTicks(p.Item))&&CanWearDismantleTools())
                 {
                     DismantleInput.Commit(dismantleToken);DismantleOutput.TryAddBatch(products);DiscoverProducts(products);
                     WearTool(screwToolId,1);WearTool(wrenchToolId,1);dismantleActive=false;dismantleProgress=0;DismantledBatches++;screwToolId=wrenchToolId=0;
@@ -389,14 +344,15 @@ namespace CrazyRubbish.Core
                 }
                 ReleaseUnusedTools();RefreshState();
                 ApplyRecipeChanges();
-                CheckDemoComplete();
+                });
+                RefreshState();CheckDemoComplete();
             }
             Tutorial.Refresh(this);
         }
         private void DiscoverProducts(ItemAmount[] products){foreach(var product in products)discovered.Add(product.Item);}
         private void RefreshState()
         {
-            bool mainWood=manualStation==1&&AtFront(BenchX,BenchY),mainDismantle=manualStation==2&&AtFront(DismantleX,DismantleY);
+            bool mainWood=ManualAt(1)&&AtFront(BenchFrontX,BenchFrontY),mainDismantle=ManualAt(2)&&AtFront(DismantleFrontX,DismantleFrontY);
             if(!BenchBuilt)State=WorkState.NotBuilt;else if(Paused)State=WorkState.Paused;else if(RiotActive||!RunRequested)State=WorkState.Idle;
             else if(pendingRecipe!=null&&!jobActive)State=WorkState.OutputBlocked;
             else if(jobActive&&jobProgress>=Duration(activeRecipe)-1e-6||!jobActive&&Output.FreeTicks<BatchTicks(SelectedRecipe))State=WorkState.OutputBlocked;

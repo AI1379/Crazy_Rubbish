@@ -9,10 +9,7 @@ namespace CrazyRubbish.Core
         {
             if (x < 0 || y < 0 || x >= Settings.mapWidth || y >= Settings.mapHeight) return false;
             if (InBuilding(x,y,11,2,3,3) || InBuilding(x,y,16,2,3,3) || InBuilding(x,y,2,20) || (x == 20 && y == 5)) return false;
-            return !(BenchBuilt && InBuilding(x,y,BenchX,BenchY+1) ||
-                TableBuilt && InBuilding(x,y,TableX,TableY+1) ||
-                DismantleBuilt && InBuilding(x,y,DismantleX,DismantleY+1) ||
-                GeneratorBuilt && InBuilding(x,y,GeneratorX,GeneratorY+1));
+            return !BlocksMovement(x,y);
         }
         public int[] FindPath(double fromX, double fromY, int tx, int ty)
         {

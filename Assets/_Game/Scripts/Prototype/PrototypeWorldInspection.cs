@@ -21,10 +21,8 @@ namespace CrazyRubbish.Prototype
 
         public int FacilityAt(Vector2 point)
         {
-            if (Covers(bench, point)) return 1;
-            if (Covers(dismantle, point)) return 2;
-            if (Covers(table, point)) return 3;
-            if (Covers(generator, point)) return 4;
+            var f=game.Model?.FacilityAtCell(Mathf.RoundToInt(point.x),Mathf.RoundToInt(point.y));
+            if(f!=null)return f.Kind==1?1:f.Kind==2?2:f.Kind==4?3:f.Kind==8?4:f.Kind==16?5:6;
             return 0;
         }
 
@@ -32,7 +30,7 @@ namespace CrazyRubbish.Prototype
 
         public void HandleMapClick(Vector2 point, bool moveOnly)
         {
-            if (game.MenuOpen || game.ResultVisible) return;
+            if (game.MenuOpen || game.ResultVisible || ConstructionActive) return;
             var hud = game.GetComponent<PrototypeHud>();
             int facility = FacilityAt(point);
             if (!moveOnly)
@@ -42,19 +40,21 @@ namespace CrazyRubbish.Prototype
                 int gx=Mathf.RoundToInt(point.x),gy=Mathf.RoundToInt(point.y);
                 var ground=mappedPile(gx,gy);
                 if(ground!=null){hud.ShowGroundItem(ground.Item);return;}
-                if (facility > 0) { hud.ShowFacility(facility); return; }
+                if (facility > 0) { hud.ShowOwnedFacility(game.Model.FacilityAtCell(gx,gy)); return; }
                 if (CoversObject("Warehouse", point)) { hud.OpenWarehouse(); return; }
                 if (CoversObject("OldHousing", point) || game.Model.Residents.Any(r => Vector2.Distance(new Vector2((float)r.X, (float)r.Y + 0.5f), point) < 0.65f))
                 { hud.OpenManagement(1); return; }
                 if (hud.SelectedFacility != 0) hud.ClosePanels();
             }
             int x = Mathf.RoundToInt(point.x), y = Mathf.RoundToInt(point.y);
-            switch (facility)
+            var selected=game.Model.FacilityAtCell(x,y);
+            if(selected!=null){game.Model.SelectFacility(selected.Id);var side=PrototypeSimulation.ServiceCell(selected);x=side.x;y=side.y;}
+            switch (selected==null?facility:0)
             {
-                case 1: x = PrototypeSimulation.BenchX; y = PrototypeSimulation.BenchY; break;
-                case 2: x = PrototypeSimulation.DismantleX; y = PrototypeSimulation.DismantleY; break;
-                case 3: x = PrototypeSimulation.TableX; y = PrototypeSimulation.TableY; break;
-                case 4: x = PrototypeSimulation.GeneratorX; y = PrototypeSimulation.GeneratorY; break;
+                case 1: x = game.Model.BenchFrontX; y = game.Model.BenchFrontY; break;
+                case 2: x = game.Model.DismantleFrontX; y = game.Model.DismantleFrontY; break;
+                case 3: x = game.Model.TableFrontX; y = game.Model.TableFrontY; break;
+                case 4: x = game.Model.GeneratorFrontX; y = game.Model.GeneratorFrontY; break;
             }
             if (CoversObject("Warehouse", point)) { x = PrototypeSimulation.WarehouseX; y = PrototypeSimulation.WarehouseY; }
             if (CoversObject("Hole",point)){x=PrototypeSimulation.DumpX;y=PrototypeSimulation.DumpY;}
@@ -103,26 +103,23 @@ namespace CrazyRubbish.Prototype
             int facility = FacilityAt(point);
             if (facility > 0)
             {
-                key = "facility-" + facility;
-                switch (facility)
-                {
-                    case 1: title = "木工台"; body = m.BenchBuilt ? $"{PrototypeGame.StateName(m.State)}\n木料 {m.WoodInputStock.Count(ItemId.WasteWood)} · 进度 {m.Progress:P0}" : "待建设 · 木料 4 + 紧固件 2"; break;
-                    case 2: title = "拆解地点"; body = m.DismantleBuilt ? PrototypeGame.StateName(m.DismantleState) + "\n" + ItemCatalog.Name(m.SelectedDevice) : "待建设 · 木料 4 + 紧固件 2"; break;
-                    case 3: title = "工作台"; body = m.TableBuilt ? $"{ItemCatalog.Name(m.AssemblyProduct)} · {m.AssemblyProgress:P0}" : "待建设 · 木板 4 + 钢铁零件 2"; break;
-                    default: title = "发电机"; body = m.GeneratorBuilt ? $"电力 {m.AvailablePower:0.#} · 燃料 {m.FuelCount}" : "待组装 · 左键查看所需材料"; break;
-                }
+                var f=m.FacilityAtCell(Mathf.RoundToInt(point.x),Mathf.RoundToInt(point.y));
+                key = "facility-" + f.Id;title=PrototypeSimulation.FacilityName(f.Kind)+" #"+f.Id;
+                body=f.Blueprint?"施工蓝图 · 材料已预约":f.Kind==1?$"{PrototypeGame.StateName(f.State)}\n木料 {f.WoodInputStock.Count(ItemId.WasteWood)} · 进度 {f.jobProgress/m.Duration(f.SelectedRecipe):P0}":
+                    f.Kind==2?PrototypeGame.StateName(f.DismantleState)+"\n"+ItemCatalog.Name(f.SelectedDevice):f.Kind==4?$"工具装配 · {f.assemblyProgress:0.#}秒":
+                    f.Kind==8?$"输出4 · 燃料 {f.fuelWood+f.fuelChips}\n同网请求 {f.PowerRequested:0.###} · 供电 {f.PowerRatio:P0}":$"供电 {f.PowerRatio:P0}";
                 body += "\n左键查看 · 右键前往"; return true;
             }
             if (CoversObject("Warehouse", point))
             { key = "warehouse"; title = "仓库"; body = $"容量 {m.Warehouse.Used:0.#} / {m.Warehouse.Capacity}\n左键查看物资 · 到场按 Q 入库"; return true; }
             if (CoversObject("OldHousing", point))
-            { key = "housing"; title = "旧住房"; body = $"已招募居民 {m.Residents.Count} 人\n左键查看人员与生活供应"; return true; }
+            { key = "housing"; title = "旧住房"; body = $"已招募居民 {m.Residents.Count} 人 · 总床位 {m.HousingCapacity}\n供电 {m.HousingPowerRatio:P0} · 左键查看人员"; return true; }
             if (CoversObject("Hole", point))
             { key = "hole"; title = "投弃洞"; body = "可以丢弃背包里的物品，无法取回。\n去向不明；使用不是教程要求。\n左键查看 · 右键前往入口"; return true; }
             if(CoversObject("ReceivingHole",point))
             { key="receiving";title="落料洞";body="上层垃圾分批落入下方来料区。\n留意新掉下来的物品；左键认识它们。";return true; }
             if (CoversObject("CommunityLamp", point))
-            { key = "lamp"; title = "社区路灯"; body = "社区的照明设施。"; return true; }
+            { key = "lamp"; title = "社区路灯"; body = $"供电 {m.CommunityLampPowerRatio:P0}\n负载0.1 · 有效供电至少50%"; return true; }
             int x = Mathf.RoundToInt(point.x), y = Mathf.RoundToInt(point.y);
             var content = m.Ground.Where(p => y == p.Y && x >= p.X && x < p.X + p.Width).GroupBy(p => p.Item).OrderBy(g => g.Key).ToArray();
             if (content.Length > 0)
@@ -151,6 +148,7 @@ namespace CrazyRubbish.Prototype
             int selected = hud != null ? hud.SelectedFacility : 0;
             foreach (var line in overlayLines)
             {
+                if(line.name.Contains(" Pad")){line.enabled=false;continue;}
                 bool station = selected == 1 && line.name.StartsWith("Woodwork Pad") || selected == 2 && line.name.StartsWith("Dismantle Pad") ||
                     selected == 3 && line.name.StartsWith("Workbench Pad") || selected == 4 && line.name.StartsWith("Generator Pad");
                 line.enabled = zones || station && !game.MenuOpen && !game.ResultVisible;

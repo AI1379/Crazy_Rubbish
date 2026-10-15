@@ -3,7 +3,8 @@ param(
     [string]$Action = 'Import',
     [string]$UnityPath,
     [ValidatePattern('^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$')]
-    [string]$ReleaseVersion
+    [string]$ReleaseVersion,
+    [string]$TestFilter
 )
 
 $ErrorActionPreference = 'Stop'
@@ -48,6 +49,7 @@ switch ($Action) {
         New-Item -ItemType Directory -Path $resultDirectory -Force | Out-Null
         $resultFile = Join-Path $resultDirectory 'editmode.xml'
         $editorArguments += @('-nographics', '-runTests', '-testPlatform', 'EditMode', '-testResults', ('"' + $resultFile + '"'))
+        if ($TestFilter) { $editorArguments += @('-testFilter', ('"' + $TestFilter + '"')) }
     }
     'Build' {
         $editorArguments += @('-nographics', '-quit', '-buildTarget', 'StandaloneWindows64', '-executeMethod', 'CrazyRubbish.Editor.PrototypeProjectSetup.BuildWindows')

@@ -143,6 +143,7 @@ namespace CrazyRubbish.Prototype
         public void RefreshView(PrototypeSimulation m)
         {
             if (!HasLayout) return;
+            RefreshConstructionHud(m);
             if (inspection != null && (game.MenuOpen || game.ResultVisible)) inspection.gameObject.SetActive(false);
             clock.text = $"{(int)m.GameSeconds / 60:00}:{(int)m.GameSeconds % 60:00}";
             clock.color = m.Paused ? Accent : Ink;
@@ -150,7 +151,7 @@ namespace CrazyRubbish.Prototype
             capacity.text = $"仓库 {m.Warehouse.Used:0.##}/{m.Warehouse.Capacity}    背包 {m.Carry.Used:0.##}/{m.Carry.Capacity}";
             capacityFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01((float)m.Warehouse.Used / m.Warehouse.Capacity), 1);
             powerValue.text = m.AvailablePower.ToString("0.#");
-            populationValue.text = $"{m.Residents.Count} / 5";
+            populationValue.text = $"{m.Residents.Count} / {m.HousingCapacity-1}";
             foodValue.text = m.Warehouse.Count(ItemId.Food).ToString();
             waterValue.text = m.Warehouse.Count(ItemId.DrinkingWater).ToString();
             foodValue.color = m.Warehouse.Count(ItemId.Food) == 0 ? Accent : Ink;
@@ -170,6 +171,7 @@ namespace CrazyRubbish.Prototype
             build.GetComponentInChildren<Text>().color = build.interactable ? Ink : Muted;
             foreach (ButtonBinding binding in buttonBindings)
             {
+                if(binding.command=="Command3")binding.button.GetComponentInChildren<Text>().text=m.TotalRecruited<m.Settings.firstResidents?$"招募1人 · 免费{m.Settings.firstResidents-m.TotalRecruited}":"招募1人 · 30钱";
                 bool built;
                 switch (binding.command)
                 {
@@ -354,13 +356,14 @@ namespace CrazyRubbish.Prototype
         {
             var m = game.Model;
             if((game.MenuOpen||game.ResultVisible)&&command!="Resume"&&command!="MenuLoad"&&command!="MenuSave"&&command!="MenuNew"&&command!="Quit")return;
+            if(ExecuteConstructionCommand(command))return;
             if (command.StartsWith("FacilityCommand")) { Execute("Command" + command.Substring(15)); return; }
             if (command.StartsWith("OpenFacility") && int.TryParse(command.Substring(12), out int facility)) { ShowFacility(facility); return; }
             if (command.StartsWith("OpenTab") && int.TryParse(command.Substring(7), out int openTab)) { ToggleManagement(openTab); return; }
             if (command.StartsWith("Command") && int.TryParse(command.Substring(7), out int index))
             {
                 Action[] commands = {
-                    () => game.Report(m.BuildDismantle()), () => game.Report(m.BuildTable()), () => game.Report(m.BuildGenerator()),
+                    () => GetComponent<PrototypeWorld>().BeginPlacement(2), () => GetComponent<PrototypeWorld>().BeginPlacement(4), () => GetComponent<PrototypeWorld>().BeginPlacement(8),
                     () => game.Report(m.Recruit()), () => game.Report(m.AssignWoodworker()), () => game.Report(m.PayWages()),
                     () => game.Report(m.AddFuel(ItemId.WasteWood, int.MaxValue)), () => game.Report(m.AddFuel(ItemId.WoodChips, int.MaxValue)),
                     () => game.Report(m.ToggleDismantle()), CycleDevice, () => game.Report(m.DeliverInput()), () => game.Report(m.TakeOutput()),
@@ -449,7 +452,7 @@ namespace CrazyRubbish.Prototype
                 case "CancelTrade":pendingTechnology=-1;tradeConfirmation.gameObject.SetActive(false);break;
                 case "Pause": m.SetPaused(!m.Paused); break; case "Save": game.SaveGame(); break; case "Load": game.LoadLatest(); break;
                 case "Restart": game.OpenMenu(); break; case "Interact": game.Interact(); break; case "Deposit": game.Report(m.Deposit()); break;
-                case "Build": game.Report(m.BuildBench()); break; case "Plank": game.Report(m.SelectRecipe(WoodRecipe.Plank)); break;
+                case "Build": GetComponent<PrototypeWorld>().BeginPlacement(1); break; case "Plank": game.Report(m.SelectRecipe(WoodRecipe.Plank)); break;
                 case "Handle": game.Report(m.SelectRecipe(WoodRecipe.WoodHandle)); break; case "Sorted": game.Report(m.SelectRecipe(WoodRecipe.SortedWood)); break;
                 case "Work": game.Report(m.ToggleWork()); break; case "InventoryFilter": showAllItems = !showAllItems; RefreshInventory(m); break;
             }

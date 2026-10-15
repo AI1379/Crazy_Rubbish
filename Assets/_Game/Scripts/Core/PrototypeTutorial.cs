@@ -29,7 +29,7 @@ namespace CrazyRubbish.Core
         Wait, Pick, Deposit, Withdraw, BuildBench, FeedWood, WorkWood, TakeWood,
         BuildTable, BuildDismantle, FeedDevice, WorkDismantle, TakeDeviceOutput,
         BuildGenerator, Fuel, Recruit, HandSaw, AssignWorker, Sell, Pay,
-        SelectHandle, SelectPlank, BuyBlade, FeedAssembly, WorkAssembly, Trade, TakeWoodInput
+        SelectHandle, SelectPlank, BuyBlade, FeedAssembly, WorkAssembly, Trade, TakeWoodInput, ConnectPower
     }
 
     public sealed class TutorialAction
@@ -153,48 +153,53 @@ namespace CrazyRubbish.Core
                 case 3:
                     if(m.Warehouse.Available(ItemId.WasteWood)<16)return Collect(m,ItemId.WasteWood,16);
                     return Collect(m,ItemId.RecoveredFastener,4);
-                case 4: return Plan(TutorialOperation.BuildBench,"搭建木工台","木料4+紧固件2；底栏按钮也可建设。","Build",0,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);
+                case 4: return Plan(TutorialOperation.BuildBench,"搭建木工台","木料4+紧固件2；底栏按钮也可建设。","Build",0,m.BenchFrontX,m.BenchFrontY);
                 case 5:
                     if(m.Carry.Available(ItemId.Plank)>0 || m.Carry.Available(ItemId.WoodChips)>0)return Depot();
-                    if(m.Output.UsedTicks>0)return Plan(TutorialOperation.TakeWood,"取木工产物","把成品取进背包，下一步入库。","Command11",0,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);
+                    if(m.Output.UsedTicks>0)return Plan(TutorialOperation.TakeWood,"取木工产物","把成品取进背包，下一步入库。","Command11",0,m.BenchFrontX,m.BenchFrontY);
                     if(m.SelectedRecipe!=WoodRecipe.Plank && !m.RecipeChangePending)return Plan(TutorialOperation.SelectPlank,"切到木板配方","这一步要生产木板。","Plank");
                     if(m.State==WorkState.NeedsTool){var personalSaw=Carry(m,ItemId.WoodHandSaw,1);if(personalSaw!=null)return personalSaw;}
                     if(m.JobActive || m.WoodInputStock.Available(ItemId.WasteWood)>=4)
                         return m.State==WorkState.Working?Wait("站在木工正面等一批完成。可按3加速；基础40秒，现场效率会影响耗时。"):
-                            Plan(TutorialOperation.WorkWood,"木工作业 F","进入木工岗位后不要走开；进度保留。","Work",0,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);
+                            Plan(TutorialOperation.WorkWood,"木工作业 F","进入木工岗位后不要走开；进度保留。","Work",0,m.BenchFrontX,m.BenchFrontY);
                     var wood=Carry(m,ItemId.WasteWood,4);if(wood!=null)return wood;
-                    return Plan(TutorialOperation.FeedWood,"投木料","原料进入地点缓冲，仓库里的木料不能隔空加工。","Command10",0,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);
+                    return Plan(TutorialOperation.FeedWood,"投木料","原料进入地点缓冲，仓库里的木料不能隔空加工。","Command10",0,m.BenchFrontX,m.BenchFrontY);
                 case 6:
                     if(!m.TableBuilt && m.Warehouse.Available(ItemId.SteelPart)<8)return Collect(m,ItemId.SteelPart,8);
-                    if(!m.TableBuilt)return Plan(TutorialOperation.BuildTable,"建工作台","预留木板4+钢铁零件2。","Command1",0,PrototypeSimulation.TableX,PrototypeSimulation.TableY);
+                    if(!m.TableBuilt)return Plan(TutorialOperation.BuildTable,"建工作台","预留木板4+钢铁零件2。","Command1",0,m.TableFrontX,m.TableFrontY);
                     if(m.Warehouse.Available(ItemId.WasteWood)<4)return Collect(m,ItemId.WasteWood,4);
                     if(m.Warehouse.Available(ItemId.RecoveredFastener)<2)return Collect(m,ItemId.RecoveredFastener,2);
-                    return Plan(TutorialOperation.BuildDismantle,"建拆解地点","木料4+紧固件2。","Command0",0,PrototypeSimulation.DismantleX,PrototypeSimulation.DismantleY);
+                    return Plan(TutorialOperation.BuildDismantle,"建拆解地点","木料4+紧固件2。","Command0",0,m.DismantleFrontX,m.DismantleFrontY);
                 case 7:
                     if(m.Carry.Available(ItemId.Motor)>0 || m.Carry.Available(ItemId.MachineBlade)>0 || m.DismantledBatches>0 && m.Carry.UsedTicks>m.Carry.Count(ItemId.WoodHandSaw)*20)return Depot();
-                    if(m.DismantleOutput.UsedTicks>0)return Plan(TutorialOperation.TakeDeviceOutput,"取拆解产物","取出后搬运到仓库。","Command15",0,PrototypeSimulation.DismantleX,PrototypeSimulation.DismantleY);
+                    if(m.DismantleOutput.UsedTicks>0)return Plan(TutorialOperation.TakeDeviceOutput,"取拆解产物","取出后搬运到仓库。","Command15",0,m.DismantleFrontX,m.DismantleFrontY);
                     if(m.DismantleProgress>0 || m.DismantleInput.Count(ItemId.OldCutter)>0)
                         return m.DismantleState==WorkState.Working?Wait("在拆解岗位等待35秒；不要走开。"):
-                            Plan(TutorialOperation.WorkDismantle,"开拆解作业","带螺丝刀在正面操作。","Command8",0,PrototypeSimulation.DismantleX,PrototypeSimulation.DismantleY);
+                            Plan(TutorialOperation.WorkDismantle,"开拆解作业","带螺丝刀在正面操作。","Command8",0,m.DismantleFrontX,m.DismantleFrontY);
                     var screw=Carry(m,ItemId.Screwdriver,1);if(screw!=null)return screw;
                     var device=Carry(m,ItemId.OldCutter,1);if(device!=null)return device;
-                    return Plan(TutorialOperation.FeedDevice,"投入旧切割装置","旧设备进入现场缓冲后才能拆解。","Command14",0,PrototypeSimulation.DismantleX,PrototypeSimulation.DismantleY);
+                    return Plan(TutorialOperation.FeedDevice,"投入旧切割装置","旧设备进入现场缓冲后才能拆解。","Command14",0,m.DismantleFrontX,m.DismantleFrontY);
                 case 8:
                     if(!m.GeneratorBuilt)
                     {
                         foreach(var cost in new[]{new ItemAmount(ItemId.SteelPart,6),new ItemAmount(ItemId.ThermalModule,1),new ItemAmount(ItemId.GeneratorModule,1),new ItemAmount(ItemId.RecoveredWire,2)})
                             if(m.Warehouse.Available(cost.Item)<cost.Amount)return Collect(m,cost.Item,cost.Amount);
-                        return Plan(TutorialOperation.BuildGenerator,"组装发电机","完整材料齐备才建设。","Command2",0,PrototypeSimulation.GeneratorX,PrototypeSimulation.GeneratorY);
+                        return Plan(TutorialOperation.BuildGenerator,"组装发电机","完整材料齐备才建设。","Command2",0,m.GeneratorFrontX,m.GeneratorFrontY);
+                    }
+                    if(m.Wires.Count==0)
+                    {
+                        if(m.Warehouse.Available(ItemId.RecoveredWire)+m.Carry.Available(ItemId.RecoveredWire)<1)return Collect(m,ItemId.RecoveredWire,1);
+                        return Plan(TutorialOperation.ConnectPower,"接线到社区","每件电线铺4格；先连接住房与路灯，发电机空载不耗燃料。","ConnectCommunity",0);
                     }
                     ItemId fuel=m.Warehouse.Available(ItemId.WoodChips)>0 || m.Carry.Available(ItemId.WoodChips)>0?ItemId.WoodChips:ItemId.WasteWood;
                     var fuelAction=Carry(m,fuel,1);if(fuelAction!=null)return fuelAction;
-                    return Plan(TutorialOperation.Fuel,"投入燃料","要发电机实际运行，居民才愿意加入。",fuel==ItemId.WasteWood?"Command6":"Command7",0,PrototypeSimulation.GeneratorX,PrototypeSimulation.GeneratorY,fuel,int.MaxValue);
+                    return Plan(TutorialOperation.Fuel,"投入燃料","要发电机实际运行，居民才愿意加入。",fuel==ItemId.WasteWood?"Command6":"Command7",0,m.GeneratorFrontX,m.GeneratorFrontY,fuel,int.MaxValue);
                 case 9:
                     if(m.Residents.Count<5)return Plan(TutorialOperation.Recruit,"招募1人","还需招募"+(5-m.Residents.Count)+"人。迁入存款属于居民，工资到期要付。","Command3",1);
                     if(m.WoodTools.Count(ItemId.WoodHandSaw)==0)
                     {
                         var saw=Carry(m,ItemId.WoodHandSaw,1);if(saw!=null)return saw;
-                        return Plan(TutorialOperation.HandSaw,"交接手锯","居民不能使用远处主角背包的手锯。","Command12",0,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);
+                        return Plan(TutorialOperation.HandSaw,"交接手锯","居民不能使用远处主角背包的手锯。","Command12",0,m.BenchFrontX,m.BenchFrontY);
                     }
                     return Plan(TutorialOperation.AssignWorker,"指定居民木工","其余居民负责实际配送。","Command4",1);
                 case 10:
@@ -205,15 +210,15 @@ namespace CrazyRubbish.Core
                     if(m.RecipeChangePending&&!m.JobActive&&m.WoodInputStock.Used>4)
                     {
                         if(m.Carry.AvailableSlots(ItemId.WasteWood)==0)return Depot();
-                        return Plan(TutorialOperation.TakeWoodInput,"取回多余木料","木柄配方的输入容量较小；先取回旧配方剩余的木料，切换才能完成。","Command24",0,PrototypeSimulation.BenchX,PrototypeSimulation.BenchY);
+                        return Plan(TutorialOperation.TakeWoodInput,"取回多余木料","木柄配方的输入容量较小；先取回旧配方剩余的木料，切换才能完成。","Command24",0,m.BenchFrontX,m.BenchFrontY);
                     }
                     if(m.Carry.Available(ItemId.WasteWood)>0)return Depot();
                     if(m.TableOutput.UsedTicks>0)return Wait("工具已产出，居民会运回仓库。");
                     if(m.AssemblyActive)
                         return m.AssemblyWorking?Wait("站在工作台正面等装配完成；人工20秒。"):
-                            Plan(TutorialOperation.WorkAssembly,"继续工作台作业","退出岗位会停，进度保留；回到正面继续。","Command33",0,PrototypeSimulation.TableX,PrototypeSimulation.TableY);
+                            Plan(TutorialOperation.WorkAssembly,"继续工作台作业","退出岗位会停，进度保留；回到正面继续。","Command33",0,m.TableFrontX,m.TableFrontY);
                     if(m.TableInput.Count(ItemId.WoodHandle)>0 && m.TableInput.Count(ItemId.SawBlade)>0)
-                        return Plan(TutorialOperation.WorkAssembly,"工作台作业","在正面操作20秒，制成一把备用手锯。","Command33",0,PrototypeSimulation.TableX,PrototypeSimulation.TableY);
+                        return Plan(TutorialOperation.WorkAssembly,"工作台作业","在正面操作20秒，制成一把备用手锯。","Command33",0,m.TableFrontX,m.TableFrontY);
                     if(m.Carry.Available(ItemId.WoodHandle)==0 && m.Warehouse.Available(ItemId.WoodHandle)==0 && m.TableInput.Count(ItemId.WoodHandle)==0)
                         return m.SelectedRecipe==WoodRecipe.WoodHandle || m.RecipeChangePending?Wait("等待当前批次和输出清空，再由居民生产木柄。"):
                             Plan(TutorialOperation.SelectHandle,"木工切到木柄","当前批次会先做完，旧输出需实际运走。","Handle");
@@ -221,7 +226,7 @@ namespace CrazyRubbish.Core
                         return Plan(TutorialOperation.BuyBlade,"购买手锯锯片 · 6钱","机器锯片不能替代手锯锯片。","Command28");
                     if(m.TableInput.Count(ItemId.WoodHandle)==0){var handle=Carry(m,ItemId.WoodHandle,1);if(handle!=null)return handle;}
                     if(m.TableInput.Count(ItemId.SawBlade)==0){var end=Carry(m,ItemId.SawBlade,1);if(end!=null)return end;}
-                    return Plan(TutorialOperation.FeedAssembly,"投装配材料","带木柄1、手锯锯片1到工作台正面。","Command32",0,PrototypeSimulation.TableX,PrototypeSimulation.TableY);
+                    return Plan(TutorialOperation.FeedAssembly,"投装配材料","带木柄1、手锯锯片1到工作台正面。","Command32",0,m.TableFrontX,m.TableFrontY);
                 case 12:
                     if(m.SelectedRecipe!=WoodRecipe.Plank && !m.RecipeChangePending)return Plan(TutorialOperation.SelectPlank,"木工切回木板","继续保持生产利润，注意工资与生活。","Plank");
                     if(m.UnpaidWageCents>0 && m.CashCents>0)return Plan(TutorialOperation.Pay,"支付到期工资","先解除欠薪，再达成200钱目标。","Command5",1);

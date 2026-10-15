@@ -17,14 +17,14 @@ namespace CrazyRubbish.Prototype
         [Serializable]
         private sealed class SmokeReport
         {
-            public bool success, restart, development, saveRoundtrip, demoCompleted, tutorialCompleted;
+            public bool success, restart, development, saveRoundtrip, demoCompleted, tutorialCompleted,constructionVerified;
             public double demoMinutes;
             public int assembledTools, mealsConsumed;
             public long demoWagesPaidCents;
             public double money;
             public int batches, buttons, residents, deliveredTrips;
             public long wagesPaidCents;
-            public string version;
+            public string version,baselineVersion;
         }
 
         private IEnumerator Start()
@@ -100,6 +100,7 @@ namespace CrazyRubbish.Prototype
                     if(!game.LastActionSucceeded||!model.DemoCompleted||model.AssembledTools!=assembledTools||model.MealsConsumed!=mealsConsumed||!model.Tutorial.Completed||!model.Tutorial.active)
                         throw new InvalidOperationException("完整demo存档恢复失败。");
                 }
+                VerifyConstruction(screenshot);model=game.Model;
                 double time = model.GameSeconds;
                 model.SetPaused(true); model.Advance(10);
                 if (Math.Abs(model.GameSeconds - time) > 0.0001) throw new InvalidOperationException("Pause did not stop game time.");
@@ -166,7 +167,7 @@ namespace CrazyRubbish.Prototype
                     {
                         success = true, restart = true, development = Debug.isDebugBuild,
                         money = (double)earnedMoney, batches = batches, buttons = FindObjectsOfType<Button>().Length,
-                        wagesPaidCents = wagesPaid, residents = recruited, version = Application.version,
+                        wagesPaidCents = wagesPaid, residents = recruited, version = Application.version,baselineVersion=DesignBaseline.Version,constructionVerified=true,
                         deliveredTrips = deliveredTrips, saveRoundtrip = saveRoundtrip,demoCompleted=demoCompleted,demoMinutes=demoMinutes,assembledTools=assembledTools,mealsConsumed=mealsConsumed,demoWagesPaidCents=demoWages,tutorialCompleted=tutorialCompleted
                     }));
                 }
@@ -179,6 +180,39 @@ namespace CrazyRubbish.Prototype
 
         private void OnLog(string message, string stack, LogType type)
         { if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) failed = true; }
+
+        private void VerifyConstruction(string screenshot)
+        {
+            var hud=game.GetComponent<PrototypeHud>();var world=game.GetComponent<PrototypeWorld>();var m=game.Model;
+            Button Find(string name)=>hud.VisualRoot.GetComponentsInChildren<Button>(true).First(b=>b.name==name);
+            int original=m.SelectedFacility(1).Id;
+            foreach(var cost in DesignBaseline.BuildCost(1))
+                if(m.Warehouse.Available(cost.Item)+m.Carry.Available(cost.Item)<cost.Amount)Require(m.Buy(cost.Item,cost.Amount),"buy ordinary construction materials");
+            var site=(from y in Enumerable.Range(6,17) from x in Enumerable.Range(10,17) where m.PlacementError(1,x,y,0)==null select (x,y)).First();
+            hud.OpenManagement(0);Find("PlaceKind1").onClick.Invoke();
+            if(!world.ConstructionActive||hud.ManagementOpen)throw new InvalidOperationException("Free construction control did not open map placement.");
+            if(world.PreviewPlacementAtCell(site.x,site.y)!=null)throw new InvalidOperationException("Legal construction preview was rejected.");
+            world.FocusPoint(site.x,site.y,8);hud.RefreshView(m);Canvas.ForceUpdateCanvases();
+            if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+"-construction.png"));
+            var placed=world.ConfirmPlacementAtCell(site.x,site.y);Require(placed,"confirm map placement");
+            if(world.ConstructionActive||m.Facilities.Count(f=>f.Built&&f.Kind==1)<2)throw new InvalidOperationException("Second independent woodwork site did not build.");
+            var f=m.GetFacility(placed.Amount);hud.ShowOwnedFacility(f);Find("MoveOwned").onClick.Invoke();
+            if(!world.ConstructionActive)throw new InvalidOperationException("Move facility control is unbound.");world.CancelConstruction();
+            hud.ShowOwnedFacility(f);hud.RefreshView(m);world.RefreshView(m);Canvas.ForceUpdateCanvases();
+            if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+"-facility-instance.png"));
+            if(!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
+            {
+                game.SaveGame();if(!game.LastActionSucceeded)throw new InvalidOperationException(game.Notice);
+                game.LoadLatest();m=game.Model;f=m.GetFacility(placed.Amount);
+                if(!game.LastActionSucceeded||f==null||!f.Built||f.X!=site.x||f.Y!=site.y||m.Wires.Count==0)throw new InvalidOperationException("Real construction/electrical file save did not restore.");
+                world.RefreshView(m);
+            }
+            hud.ShowOwnedFacility(f);Find("RemoveOwned").onClick.Invoke();if(f.Built)throw new InvalidOperationException("Demolition control is unbound.");
+            Require(m.SelectFacility(original),"restore selected production site");
+            Find("LayWire").onClick.Invoke();if(!world.ConstructionActive)throw new InvalidOperationException("Wire control is unbound.");world.CancelConstruction();
+            Find("EraseWire").onClick.Invoke();if(!world.ConstructionActive)throw new InvalidOperationException("Remove-wire control is unbound.");world.CancelConstruction();
+            hud.ClosePanels();hud.RefreshView(m);world.RefreshView(m);
+        }
 
         private void VerifyInventoryGrid(string screenshot)
         {

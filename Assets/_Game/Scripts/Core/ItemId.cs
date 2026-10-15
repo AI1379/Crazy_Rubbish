@@ -49,6 +49,7 @@ namespace CrazyRubbish.Core
     {
         public int Id { get; }
         public WorkerJob Job { get; internal set; }
+        public int FacilityId { get; internal set; }
         public double X { get; internal set; }
         public double Y { get; internal set; }
         public long CashCents { get; internal set; } = 500;
@@ -59,7 +60,7 @@ namespace CrazyRubbish.Core
         public LivingNeeds Needs { get; internal set; } = new LivingNeeds();
         internal DeliveryTask Delivery;
         internal int[] Path; internal int PathIndex,PathTargetX,PathTargetY,PathRevision;
-        internal Resident(int id) { Id = id; X = 14 + id; Y = 5; }
+        internal Resident(int id) { Id = id; X = 15 + (id - 1) % 5; Y = 5; }
     }
     public sealed class WageBill
     {
@@ -84,25 +85,7 @@ namespace CrazyRubbish.Core
     public static partial class ItemCatalog
     {
         public const int CapacityScale = 20;
-        public static int CapacityTicks(ItemId item)
-        {
-            switch (item)
-            {
-                case ItemId.SteelPart: case ItemId.CopperPart: case ItemId.WoodHandle:
-                case ItemId.RecoveredFastener: case ItemId.RecoveredWire: case ItemId.Soap:
-                case ItemId.AluminumPart: case ItemId.HandleMould: case ItemId.BoxMould: case ItemId.SawBlade: case ItemId.MachineBlade:
-                case ItemId.HammerHead: case ItemId.ScrewdriverRod: case ItemId.BroomHead: return 10;
-                case ItemId.DrinkingWater: return 2;
-                case ItemId.ThermalModule: case ItemId.GeneratorModule: case ItemId.Motor:
-                case ItemId.FeedingModule: case ItemId.FurnaceModule: return 80;
-                case ItemId.Container: case ItemId.FurnaceLining: case ItemId.Fixture:
-                case ItemId.HeatingElement: case ItemId.GrowingLight: case ItemId.LightingModule: case ItemId.OldContainer: return 40;
-                case ItemId.DamagedMotor: case ItemId.OldCutter: case ItemId.OldWasher: case ItemId.OldFormer:
-                case ItemId.MouldBox: case ItemId.WireBundle: case ItemId.OldGrowingLamp: case ItemId.OldFeeder:
-                case ItemId.OldFurnace: case ItemId.OldMetalTable: case ItemId.OldControlBox: case ItemId.OldLamp: return 120;
-                default: return 20;
-            }
-        }
+        public static int CapacityTicks(ItemId item) => DesignBaseline.CapacityTicks(item);
         public static bool IsTool(ItemId item) =>
             item == ItemId.WoodHandSaw || item == ItemId.Screwdriver || item == ItemId.Wrench ||
             item == ItemId.Hammer || item == ItemId.Scissors || item == ItemId.SewingKit;

@@ -27,6 +27,7 @@ namespace CrazyRubbish.Prototype
             Collect(model,ItemId.SteelPart,8);Require(model.BuildTable());
             Collect(model,ItemId.ThermalModule,1);Collect(model,ItemId.GeneratorModule,1);Collect(model,ItemId.RecoveredWire,2);
             Require(model.BuildGenerator());
+            Collect(model,ItemId.RecoveredWire,1);Require(model.ConnectCommunityPower());
             Collect(model,ItemId.Screwdriver,1);Collect(model,ItemId.OldCutter,1);
             MoveTo(model,PrototypeSimulation.WarehouseX,PrototypeSimulation.WarehouseY);Act(model,()=>model.Withdraw(ItemId.Screwdriver,1));Act(model,()=>model.Withdraw(ItemId.OldCutter,1));
             MoveTo(model,PrototypeSimulation.DismantleX,PrototypeSimulation.DismantleY);Act(model,()=>model.DeliverInput(true));Require(model.ToggleDismantle());

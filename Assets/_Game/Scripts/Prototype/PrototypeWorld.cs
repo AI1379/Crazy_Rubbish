@@ -79,21 +79,21 @@ namespace CrazyRubbish.Prototype
                 }
             ZoneOutline("Construction Boundary", 9.5f, 5.5f, 18, 18, new Color32(130, 170, 141, 255));
             ZoneOutline("Receiving Boundary", -0.5f, 5.5f, 8, 6, new Color32(223, 164, 94, 255));
-            StationPad("Woodwork Pad", PrototypeSimulation.BenchX, PrototypeSimulation.BenchY, new Color32(171, 133, 78, 255));
-            StationPad("Dismantle Pad", PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY, new Color32(87, 138, 153, 255));
-            StationPad("Workbench Pad", PrototypeSimulation.TableX, PrototypeSimulation.TableY, new Color32(135, 160, 113, 255));
-            StationPad("Generator Pad", PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY, new Color32(192, 150, 76, 255));
+            StationPad("Woodwork Pad", model.BenchFrontX, model.BenchFrontY, new Color32(171, 133, 78, 255));
+            StationPad("Dismantle Pad", model.DismantleFrontX, model.DismantleFrontY, new Color32(87, 138, 153, 255));
+            StationPad("Workbench Pad", model.TableFrontX, model.TableFrontY, new Color32(135, 160, 113, 255));
+            StationPad("Generator Pad", model.GeneratorFrontX, model.GeneratorFrontY, new Color32(192, 150, 76, 255));
             Sprite("Warehouse", game.appearance.warehouse, PrototypeSimulation.WarehouseX, 1.65f, 0.94f, SortAt(4.5f));
             Line("Warehouse Interaction Front", PrototypeSimulation.WarehouseX, PrototypeSimulation.WarehouseY, 0.9f, 0.12f, new Color32(230, 179, 102, 190));
             bench = Sprite("WoodworkBench", game.appearance.woodwork,
-                PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 0.5f, 0.92f, SortAt(PrototypeSimulation.BenchY + 0.5f));
-            benchLabel = StationLabel("BenchLabel", "木工台", PrototypeSimulation.BenchX, PrototypeSimulation.BenchY);
-            generator = Sprite("Generator", game.appearance.generator, PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 0.5f, 0.92f, SortAt(PrototypeSimulation.GeneratorY + 0.5f));
-            generatorLabel = StationLabel("GeneratorLabel", "发电机", PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY);
-            table = Sprite("Workbench", game.appearance.workbench, PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 0.5f, 0.92f, SortAt(PrototypeSimulation.TableY + 0.5f));
-            tableLabel = StationLabel("TableLabel", "工作台", PrototypeSimulation.TableX, PrototypeSimulation.TableY);
-            dismantle = Sprite("Dismantle", game.appearance.dismantle, PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 0.5f, 0.92f, SortAt(PrototypeSimulation.DismantleY + 0.5f));
-            dismantleLabel = StationLabel("DismantleLabel", "拆解台", PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY);
+                model.BenchFrontX + 0.5f, model.BenchFrontY + 0.5f, 0.92f, SortAt(model.BenchFrontY + 0.5f));
+            benchLabel = StationLabel("BenchLabel", "木工台", model.BenchFrontX, model.BenchFrontY);
+            generator = Sprite("Generator", game.appearance.generator, model.GeneratorFrontX + 0.5f, model.GeneratorFrontY + 0.5f, 0.92f, SortAt(model.GeneratorFrontY + 0.5f));
+            generatorLabel = StationLabel("GeneratorLabel", "发电机", model.GeneratorFrontX, model.GeneratorFrontY);
+            table = Sprite("Workbench", game.appearance.workbench, model.TableFrontX + 0.5f, model.TableFrontY + 0.5f, 0.92f, SortAt(model.TableFrontY + 0.5f));
+            tableLabel = StationLabel("TableLabel", "工作台", model.TableFrontX, model.TableFrontY);
+            dismantle = Sprite("Dismantle", game.appearance.dismantle, model.DismantleFrontX + 0.5f, model.DismantleFrontY + 0.5f, 0.92f, SortAt(model.DismantleFrontY + 0.5f));
+            dismantleLabel = StationLabel("DismantleLabel", "拆解台", model.DismantleFrontX, model.DismantleFrontY);
             Sprite("OldHousing", game.appearance.housing, PrototypeSimulation.HousingX, 1.65f, 0.94f, SortAt(4.5f));
             Label("HousingLabel", "旧住房 · 6人", PrototypeSimulation.HousingX, 1.5f, 0.13f);
             Label("OwnedLandLabel", "建设区 / 18×18", 20, 23.8f, 0.18f, new Color32(166, 199, 169, 255));
@@ -121,10 +121,11 @@ namespace CrazyRubbish.Prototype
             bool available = worldCamera.rect.Contains(mouse) && !overUi && !game.MenuOpen && !game.ResultVisible;
             float scroll = Input.mouseScrollDelta.y;
             if(game.MenuOpen||game.ResultVisible) CancelMapDrag();
-            if(available && (Input.GetMouseButtonDown(0)||Input.GetMouseButtonDown(2))) BeginMapDrag(Input.mousePosition);
+            bool constructionInput=ConstructionActive;RefreshConstructionInput(available);
+            if(!constructionInput && !ConstructionActive && available && (Input.GetMouseButtonDown(0)||Input.GetMouseButtonDown(2))) BeginMapDrag(Input.mousePosition);
             if(Input.GetMouseButton(0)||Input.GetMouseButton(2)) ContinueMapDrag(Input.mousePosition);
             if(Input.GetMouseButtonUp(0)||Input.GetMouseButtonUp(2)) EndMapDrag(Input.mousePosition, available && Input.GetMouseButtonUp(0));
-            if(available && Input.GetMouseButtonDown(1)) HandleMapClick(worldCamera.ScreenToWorldPoint(Input.mousePosition),true);
+            if(!constructionInput && !ConstructionActive && available && Input.GetMouseButtonDown(1)) HandleMapClick(worldCamera.ScreenToWorldPoint(Input.mousePosition),true);
             if (available && scroll != 0)
             {
                 Vector3 before = worldCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -141,7 +142,8 @@ namespace CrazyRubbish.Prototype
         {
             if (previousModel != model)
             {
-                CancelMapDrag();
+                CancelMapDrag();CancelConstruction();shownConstructionRevision=-1;
+                if(constructionVisuals!=null)ClearConstructionChildren(constructionVisuals);facilityViews.Clear();
                 if(model.GameSeconds==0)FitCamera(model);
                 for (int i = pileRoot.childCount - 1; i >= 0; i--) RemoveView(pileRoot.GetChild(i).gameObject);
                 piles.Clear();
@@ -161,7 +163,7 @@ namespace CrazyRubbish.Prototype
                     for (int y = 0; y < model.Settings.mapHeight; y++)
                     {
                         float weight = Mathf.Clamp01(1 - (float)PrototypeSimulation.Distance(x, y,
-                            PrototypeSimulation.BenchX, PrototypeSimulation.BenchY) / model.Settings.pressureRadius);
+                            model.BenchFrontX, model.BenchFrontY) / model.Settings.pressureRadius);
                         Color baseColor = GroundColor(x, y);
                         floor[index++].color = Color.Lerp(baseColor, new Color32(188, 128, 91, 255),
                             weight * (1 - model.HumanEfficiency) * 1.05f);
@@ -185,7 +187,7 @@ namespace CrazyRubbish.Prototype
             dismantle.enabled=model.DismantleBuilt||selected==2;
             table.enabled=model.TableBuilt||selected==3;
             generator.enabled=model.GeneratorBuilt||selected==4;
-            visualRoot.Find("CommunityLamp").gameObject.SetActive(model.HasBeenPowered);
+            visualRoot.Find("CommunityLamp").gameObject.SetActive(true);
             benchLabel.text = "木工台";
             benchLabel.color = model.BenchBuilt ? Color.white : new Color32(212, 187, 137, 255);
             generator.color = model.GeneratorBuilt ? Color.white : new Color32(195, 180, 155, 130);
@@ -207,10 +209,15 @@ namespace CrazyRubbish.Prototype
                     view = Actor("Resident_" + resident.Id, 2 + (resident.Id - 1) % 4).transform;
                     residentViews.Add(resident.Id, view);
                 }
-                bool sawing = resident.Job == WorkerJob.Woodwork && model.WorkerAtBench && model.State == WorkState.Working && model.SelectedRecipe != WoodRecipe.SortedWood;
+                var site=model.GetFacility(resident.FacilityId==0?1:resident.FacilityId);
+                bool sawing = resident.Job == WorkerJob.Woodwork && resident.Activity=="木工操作" && site!=null && site.State==WorkState.Working && site.SelectedRecipe!=WoodRecipe.SortedWood;
                 int pose = sawing ? 3 : resident.PickingUp ? 2 : resident.Cargo.UsedTicks > 0 ? 1 : 0;
                 view.GetComponent<PrototypeActorView>().Refresh(new Vector2((float)resident.X, (float)resident.Y), pose, model.Paused, model.GameSeconds);
             }
+            bench.enabled=dismantle.enabled=table.enabled=generator.enabled=false;
+            benchLabel.gameObject.SetActive(false);dismantleLabel.gameObject.SetActive(false);
+            tableLabel.gameObject.SetActive(false);generatorLabel.gameObject.SetActive(false);
+            RefreshConstructionView(model);
             if(Application.isPlaying)RefreshTutorialTarget(model);
         }
 

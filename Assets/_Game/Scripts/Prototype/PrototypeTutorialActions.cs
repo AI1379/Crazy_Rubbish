@@ -26,6 +26,7 @@ namespace CrazyRubbish.Prototype
                     return m.ToggleDismantle();
                 case TutorialOperation.TakeDeviceOutput: return m.TakeOutput(true);
                 case TutorialOperation.BuildGenerator: return m.BuildGenerator();
+                case TutorialOperation.ConnectPower: return m.ConnectCommunityPower();
                 case TutorialOperation.Fuel: return m.AddFuel(action.item,action.amount);
                 case TutorialOperation.Recruit: return m.Recruit();
                 case TutorialOperation.HandSaw: return m.HandOffTool(ItemId.WoodHandSaw);
