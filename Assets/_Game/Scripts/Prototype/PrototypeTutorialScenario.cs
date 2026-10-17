@@ -7,7 +7,7 @@ namespace CrazyRubbish.Prototype
     public static class PrototypeTutorialScenario
     {
         // Follows the same suggested actions as the tutorial player, without stock or cash injection.
-        public static void Run(PrototypeSimulation m)
+        public static void Run(PrototypeSimulation m,bool useTechnologyFunding=true)
         {
             m.Tutorial.Begin();
             double end=m.GameSeconds+7200;
@@ -15,6 +15,9 @@ namespace CrazyRubbish.Prototype
             {
                 m.Tutorial.Refresh(m);
                 var action=PrototypeTutorial.NextAction(m,m.Tutorial.step);
+                // Financing is an explicit optional choice, not the default tutorial instruction.
+                if(useTechnologyFunding&&m.Tutorial.step==12&&action.operation!=TutorialOperation.Sell&&action.operation!=TutorialOperation.Pay&&action.operation!=TutorialOperation.SelectPlank)
+                    action=new TutorialAction{operation=TutorialOperation.Trade};
                 if(action.operation==TutorialOperation.Wait){m.Advance(2);continue;}
                 if(action.hasTarget && !action.AtTarget(m))PrototypeStartingScenario.MoveTo(m,action.x,action.y);
                 if(action.operation==TutorialOperation.Trade)

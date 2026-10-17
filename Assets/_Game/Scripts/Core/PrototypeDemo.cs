@@ -28,7 +28,7 @@ namespace CrazyRubbish.Core
                 if(!BenchBuilt)return "Shift+E 拾整堆；仓库页可按物品选拾取。木料4 + 紧固件2搭建木工。";
                 if(CompletedBatches<2)return "到木工正面，投木料后按 F；两批需木料8，成品需取出并入库。";
                 if(!TableBuilt||!DismantleBuilt)return "工作台需木板4 + 钢铁零件2；拆解地点需木料4 + 紧固件2。";
-                if(!HasBeenPowered)return "发电机需钢铁零件6、热动力/发电组件各1、电线2；到正面投入燃料。";
+                if(!HasBeenPowered)return GeneratorBuilt?ProductionDiagnosis(SelectedFacility(8)):"发电机需钢铁零件6、热动力/发电组件各1、电线2；建好后接线到住房或路灯，再投燃料。";
                 if(residents.Count<5)return "人员页招募5人；到木工现场交接手锯，再指定居民木工。";
                 if(WoodTools.Count(ItemId.WoodHandSaw)==0)return "把随身手锯交到木工工具槽；居民不能远程使用主角的工具。";
                 if(TotalWagesPaidCents<5000)return "维持木工及配送，出售仓库木板。首人入职600秒后，人员页手动发薪。";

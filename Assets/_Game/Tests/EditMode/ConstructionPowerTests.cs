@@ -143,7 +143,7 @@ namespace CrazyRubbish.Tests
         {
             var m=Fresh();var s=m.Capture();s.schema=3;s.sourceVersion=5;s.generator=true;s.fuelWood=2;
             var migrated=PrototypeSimulation.Restore(s);Assert.That(migrated.GeneratorBuilt,Is.True);Assert.That(migrated.FuelSeconds,Is.EqualTo(240));
-            Assert.That(migrated.Wires.Count,Is.Zero);Assert.That(migrated.Capture().schema,Is.EqualTo(4));
+            Assert.That(migrated.Wires.Count,Is.Zero);Assert.That(migrated.Capture().schema,Is.EqualTo(5));
         }
         [Test]public void TwoResidentsProduceAtSeparateSitesAndContinueBothBatchesAfterFileRoundtrip()
         {

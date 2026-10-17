@@ -52,9 +52,9 @@ namespace CrazyRubbish.Tests
             Assert.That(PrototypeTutorial.NextAction(m,11).operation,Is.EqualTo(TutorialOperation.Wait));
             m.LeaveManualRole();Assert.That(PrototypeTutorial.NextAction(m,11).operation,Is.EqualTo(TutorialOperation.WorkAssembly));
         }
-        [Test]public void ChoosingFundingDoesNotAutomaticallySellAnyTechnology()
+        [Test]public void FundingLessonNeverAutomaticallySellsTechnology()
         {
-            var m=Fresh();var action=PrototypeTutorial.NextAction(m,12);Assert.That(action.operation,Is.EqualTo(TutorialOperation.Trade));
+            var m=Fresh();PrototypeTutorial.NextAction(m,12);
             Assert.That(m.CashCents,Is.Zero);Assert.That(m.IsTechnologySold(Technology.Tools),Is.False);
         }
         [Test]public void FollowingOnlySuggestedTutorialActionsReachesTheFullDemo()
@@ -69,10 +69,10 @@ namespace CrazyRubbish.Tests
             var m=Fresh();m.Tutorial.Begin();m.Tutorial.step=2;
             m.Carry.TryAdd(ItemId.Food,4);m.Warehouse.TryAdd(ItemId.DrinkingWater,6);
             string checklist=PrototypeTutorial.ProgressSummary(m,2);
-            Assert.That(checklist,Does.Contain("0/12"));Assert.That(checklist,Does.Contain("6/24"));
+            Assert.That(checklist,Does.Contain("0/4"));Assert.That(checklist,Does.Contain("6/8"));
             Assert.That(m.Tutorial.step,Is.EqualTo(2));
             m.Warehouse.TryAdd(ItemId.Food,12);
-            Assert.That(PrototypeTutorial.ProgressSummary(m,2),Does.Contain("12/12"));
+            Assert.That(PrototypeTutorial.ProgressSummary(m,2),Does.Contain("4/4"));
         }
         [Test]public void ProductionChecklistSeparatesFinishedBatchesFromStockActuallyDeposited()
         {

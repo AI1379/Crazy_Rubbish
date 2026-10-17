@@ -9,7 +9,7 @@ namespace CrazyRubbish.Prototype
     // Reference-space dimensions are shared with the world camera so the map never sits under UI.
     public sealed partial class PrototypeHud
     {
-        private const int CurrentLayoutVersion = 15;
+        private const int CurrentLayoutVersion = 19;
         public const float ReferenceWidth = 1600, MapLeft = 0, MapWidth = 1600, MapTop = 0, MapBottom = 0;
         [SerializeField] private Text powerValue, populationValue, foodValue, waterValue, menuNotice;
         [SerializeField] private float[] onsiteSectionY = new float[4];
@@ -22,8 +22,6 @@ namespace CrazyRubbish.Prototype
 
         private void BuildInterface()
         {
-            if(root!=null&&layoutVersion==14)
-            {UpgradeConstructionLayout();layoutVersion=CurrentLayoutVersion;RefreshItemArtwork();return;}
             if (HasLayout) { RefreshItemArtwork(); return; }
             if (root != null)
             {
@@ -66,7 +64,7 @@ namespace CrazyRubbish.Prototype
             BuildTutorialWelcome();
             BuildKnowledgePanel();
             BuildInventoryWindow();
-            BuildMenu();
+            BuildMenu();BuildMachineryHud(false);BuildExperienceHud();
             foreach (Transform child in root.GetComponentsInChildren<Transform>(true)) child.gameObject.layer = 5;
             SelectTab(0);
             ClosePanels();
@@ -107,7 +105,9 @@ namespace CrazyRubbish.Prototype
             FacilityCard(content, "拆解地点", "回收旧设备中的零件", game.appearance.dismantle, 2, 120);
             FacilityCard(content, "工作台", "装配工具与替补部件", game.appearance.workbench, 3, 196);
             FacilityCard(content, "发电机", "补充燃料，获得居民认可", game.appearance.generator, 4, 272);
-            float startY=BuildConstructionControls(content,360);onsiteSectionY[1]=startY;
+            ButtonAt(content,"OpenShop","建材采购 / 查看缺料",12,360,342,36);
+            float automationEnd=AddAutomationButtons(content,408);
+            float startY=BuildConstructionControls(content,automationEnd+8);onsiteSectionY[1]=startY;
             float y = CommandGroup(content, "投料与搬运", startY, new[] { 10, 11, 12, 13, 14, 15, 6, 7, 24, 25 });
             y = CommandGroup(content, "拆解与批次", y, new[] { 8, 9, 16, 17, 18 });
             onsiteSectionY[2] = y;

@@ -59,6 +59,9 @@ namespace CrazyRubbish.Editor
             appearance.workbench = Machine("workbench_idle");
             appearance.generator = Machine("generator_idle");
             appearance.dismantle = Machine("disassembly_idle");
+            appearance.electricWoodwork=Machine("electric_woodwork_idle");appearance.automaticWoodwork=Machine("automatic_woodwork_idle");
+            appearance.conveyor=Load(Extras+"atlas_logistics_v1.png","直带_向北");appearance.conveyorCrossing=Load(Extras+"atlas_logistics_v1.png","交叉_两路分离");
+            appearance.inputPort=Load(Extras+"atlas_logistics_v1.png","输入接口");appearance.outputPort=Load(Extras+"atlas_logistics_v1.png","输出接口");
             appearance.wasteWoodLow = Scene("env_waste_wood_low");
             appearance.wasteWoodHigh = Scene("env_waste_wood_high");
             appearance.wasteMetalLow = Scene("env_waste_metal_low");

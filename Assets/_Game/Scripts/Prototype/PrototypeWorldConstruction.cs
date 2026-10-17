@@ -17,7 +17,7 @@ namespace CrazyRubbish.Prototype
         private bool drawPreview;
         private readonly Dictionary<int,SpriteRenderer> facilityViews=new Dictionary<int,SpriteRenderer>();
         private int shownConstructionRevision=-1;
-        public bool ConstructionActive=>placingKind!=0||placingWire||removingWire;
+        public bool ConstructionActive=>placingKind!=0||placingWire||removingWire||placingConveyor||erasingTransport||placingPortOwner!=0;
         public string ConstructionHint {get;private set;}
         public void BeginPlacement(int kind,int moveId=0)
         {
@@ -37,14 +37,14 @@ namespace CrazyRubbish.Prototype
         }
         public bool CancelConstruction()
         {
-            bool active=ConstructionActive;placingKind=movingId=placingRotation=0;placingWire=removingWire=false;wireStart=null;ConstructionHint=null;previewKey=null;
+            bool active=ConstructionActive;ResetTransportConstruction();placingKind=movingId=placingRotation=0;placingWire=removingWire=false;wireStart=null;ConstructionHint=null;previewKey=null;
             if(previewVisuals!=null)ClearConstructionChildren(previewVisuals);return active;
         }
         private void ClearConstructionChildren(Transform parent)
         {for(int i=parent.childCount-1;i>=0;i--)RemoveView(parent.GetChild(i).gameObject);}
         private Sprite ConstructionSprite(int kind)
         {
-            switch(kind){case 1:return game.appearance.woodwork;case 2:return game.appearance.dismantle;case 4:return game.appearance.workbench;case 8:return game.appearance.generator;case 16:return game.appearance.housing;default:return game.appearance.streetlamp;}
+            switch(kind){case 1:return game.appearance.woodwork;case 2:return game.appearance.dismantle;case 4:return game.appearance.workbench;case 8:return game.appearance.generator;case 64:return game.appearance.electricWoodwork;case 128:return game.appearance.automaticWoodwork;case 16:return game.appearance.housing;default:return game.appearance.streetlamp;}
         }
         private void PreviewCell(int x,int y,Color color,float size=0.92f)
         {
@@ -84,6 +84,7 @@ namespace CrazyRubbish.Prototype
             string actorCells=string.Join(";",game.Model.Residents.Select(r=>$"{Mathf.FloorToInt((float)r.X+0.5f)},{Mathf.FloorToInt((float)r.Y+0.5f)}"));
             string nextKey=$"{x},{y},{placingKind},{placingRotation},{wireStart},{game.Model.ConstructionRevision},{game.Model.GroundRevision},{Mathf.FloorToInt((float)game.Model.PlayerX+0.5f)},{Mathf.FloorToInt((float)game.Model.PlayerY+0.5f)}:{actorCells}";
             drawPreview=nextKey!=previewKey;if(drawPreview){ClearConstructionChildren(previewVisuals);previewKey=nextKey;}
+            if(TransportConstructionInput(x,y))return;
             if(placingKind!=0)
             {
                 if(drawPreview)PreviewPlacementAtCell(x,y);
@@ -115,7 +116,7 @@ namespace CrazyRubbish.Prototype
                 // Images use bottom anchors; rotating the whole image would put the base
                 // through the floor. The service-side marker communicates orientation.
                 view.transform.position=new Vector3(cx,cy-0.5f,0);view.sortingOrder=SortAt(f.Y-0.5f);
-                view.color=f.Blueprint?new Color(0.8f,0.85f,0.9f,0.4f):f.Kind==32?(f.PowerRatio>=0.5?new Color(1,0.92f,0.65f):new Color(0.55f,0.58f,0.62f)):Color.white;
+                view.color=f.Blueprint?new Color(0.8f,0.85f,0.9f,0.4f):PrototypeSimulation.IsWoodMachine(f.Kind)?(f.MachineTripped?new Color(1,0.42f,0.3f):f.State==WorkState.MachineRunning?new Color(1,0.94f,0.78f):f.State==WorkState.NeedsPower?new Color(0.55f,0.6f,0.65f):Color.white):f.Kind==32?(f.PowerRatio>=0.5?new Color(1,0.92f,0.65f):new Color(0.55f,0.58f,0.62f)):Color.white;
             }
             if(shownConstructionRevision!=m.ConstructionRevision||previousModel!=m)
             {
@@ -128,7 +129,7 @@ namespace CrazyRubbish.Prototype
                     {var line=Sprite("Wire span",game.appearance.tile,(w.X+p.X)/2f,(w.Y+p.Y)/2f,1,-401);line.transform.SetParent(r.transform,true);line.transform.localScale=new Vector3((w.X==p.X?0.09f:1)/line.sprite.bounds.size.x,(w.Y==p.Y?0.09f:1)/line.sprite.bounds.size.y,1);}
                 }
                 foreach(var f in m.Facilities.Where(f=>f.Built||f.Blueprint))
-                {var front=PrototypeSimulation.ServiceCell(f);var r=Sprite("Service "+f.Id,game.appearance.tile,front.x,front.y,1,-350);r.transform.SetParent(wireVisuals,true);r.transform.localScale=new Vector3(0.45f/r.sprite.bounds.size.x,0.12f/r.sprite.bounds.size.y,1);r.color=new Color(0.95f,0.72f,0.3f,0.8f);}
+                {var front=PrototypeSimulation.ServiceCell(f);var r=Sprite("Service "+f.Id,game.appearance.tile,front.x,front.y,1,-350);r.transform.SetParent(wireVisuals,true);r.transform.localScale=new Vector3(0.45f/r.sprite.bounds.size.x,0.12f/r.sprite.bounds.size.y,1);r.color=new Color(0.95f,0.72f,0.3f,0.8f);if(PrototypeSimulation.IsWoodMachine(f.Kind)){var side=PrototypeSimulation.MaintenanceCell(f);var mark=Sprite("Maintenance "+f.Id,game.appearance.tile,side.x,side.y,1,-349);mark.transform.SetParent(wireVisuals,true);mark.transform.localScale=new Vector3(0.45f/mark.sprite.bounds.size.x,0.12f/mark.sprite.bounds.size.y,1);mark.color=new Color(0.35f,0.8f,1,0.9f);}}
                 shownConstructionRevision=m.ConstructionRevision;
             }
             foreach(Transform child in wireVisuals)

@@ -2,6 +2,7 @@ param(
     [string]$PlayerDirectory = 'Builds/WindowsRelease',
     [string]$ResultsDirectory = 'TestResults/ci-smoke',
     [string]$ExpectedVersion = '',
+    [switch]$Automation,
     [ValidateRange(10, 600)][int]$TimeoutSeconds = 120
 )
 
@@ -18,6 +19,7 @@ $resultPath = Join-Path $resultRoot "smoke-$runKey.json"
 $logPath = Join-Path $resultRoot "smoke-$runKey.log"
 $arguments = @('-batchmode', '-nographics', '-prototypeSmoke', '-prototypeResults', ('"' + $resultPath + '"'),
     '-logFile', ('"' + $logPath + '"'), '-prototypeSaveDirectory', ('"' + (Join-Path $resultRoot ("saves-$runKey")) + '"'))
+if ($Automation) { $arguments += @('-prototypeTutorialSmoke', '-prototypeAutomationSmoke') }
 $process = Start-Process -FilePath $playerPath -ArgumentList $arguments -WorkingDirectory $playerRoot -WindowStyle Hidden -PassThru
 if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
     Stop-Process -Id $process.Id -Force
@@ -36,6 +38,9 @@ if (-not $report.demoCompleted -or $report.assembledTools -lt 1 -or $report.meal
     throw 'Complete demo, nutrition, tool assembly or expansion-funding acceptance failed.'
 }
 if (-not $report.tutorialCompleted) { throw 'Tutorial progress or runtime bindings did not complete.' }
+if ($Automation -and (-not $report.automationVerified -or $report.machineBatches -lt 3 -or $report.machineRepaired -le 0 -or $report.conveyorDeliveredItems -lt 20)) {
+    throw 'Electric production, maintenance, conveyor delivery or file-save continuation acceptance failed.'
+}
 if ($ExpectedVersion -and $report.version -cne $ExpectedVersion) {
     throw "Expected player version $ExpectedVersion, got $($report.version)."
 }

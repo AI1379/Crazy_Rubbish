@@ -215,9 +215,37 @@ namespace CrazyRubbish.Core
                 case 8: return new[] { new ItemAmount(ItemId.SteelPart, 6), new ItemAmount(ItemId.ThermalModule, 1), new ItemAmount(ItemId.GeneratorModule, 1), new ItemAmount(ItemId.RecoveredWire, 2) };
                 case 16: return new[] { new ItemAmount(ItemId.Plank, 12), new ItemAmount(ItemId.SteelPart, 2) };
                 case 32: return new[] { new ItemAmount(ItemId.SteelPart, 2), new ItemAmount(ItemId.LightingModule, 1), new ItemAmount(ItemId.RecoveredWire, 1) };
+                case 64: return new[] { new ItemAmount(ItemId.Plank, 6), new ItemAmount(ItemId.SteelPart, 4), new ItemAmount(ItemId.Motor, 1), new ItemAmount(ItemId.MachineBlade, 1), new ItemAmount(ItemId.RecoveredWire, 2) };
+                case 128: return new[] { new ItemAmount(ItemId.Plank, 8), new ItemAmount(ItemId.SteelPart, 8), new ItemAmount(ItemId.Motor, 1), new ItemAmount(ItemId.MachineBlade, 1), new ItemAmount(ItemId.FeedingModule, 1), new ItemAmount(ItemId.RecoveredWire, 2) };
                 default: throw new ArgumentOutOfRangeException(nameof(kind));
             }
         }
+        public static int PortLimit(int kind)
+        {
+            switch(kind)
+            {
+                case -1: return 8;
+                case 1: return 4;
+                case 2: return 4;
+                case 4: return 4;
+                case 8: return 4;
+                case 16: return 8;
+                case 32: return 2;
+                case 64: return 6;
+                case 128: return 8;
+                default: return 0;
+            }
+        }
+        public const double ElectricHumanSeconds = 10;
+        public const double WoodMachineSeconds = 15;
+        public const double ElectricWoodLoad = 1;
+        public const double AutomaticWoodLoad = 1.5;
+        public const double MachineMaximum = 100;
+        public const double MachineDecay = 0.2;
+        public const double MachineRepair = 0.4;
+        public const double MachineRestart = 20;
+        public const double BeltSpeed = 1;
+        public const double BeltLoad = 0.005;
         public const double GeneratorPower = 4;
         public const double HousingValidRatio = 0.5;
         public const double LampValidRatio = 0.5;

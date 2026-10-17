@@ -35,6 +35,9 @@ namespace CrazyRubbish.Prototype
                 case TutorialOperation.SelectHandle: return m.SelectRecipe(WoodRecipe.WoodHandle);
                 case TutorialOperation.SelectPlank: return m.SelectRecipe(WoodRecipe.Plank);
                 case TutorialOperation.BuyBlade: return m.Buy(ItemId.SawBlade);
+                case TutorialOperation.BuySupply: return m.Buy(action.item,action.amount);
+                case TutorialOperation.StartWood: return m.RunRequested?new ActionResult(true,"生产请求已开启。"):m.ToggleWork();
+                case TutorialOperation.SellResource: return m.Sell(action.item,action.amount);
                 case TutorialOperation.FeedAssembly: return m.FeedAssembly();
                 case TutorialOperation.WorkAssembly: return m.ToggleAssembly();
                 case TutorialOperation.Sell:

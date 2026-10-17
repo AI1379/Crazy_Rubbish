@@ -45,10 +45,29 @@ for enum, key in mapping.items():
     lines.append(f'                case ItemId.{enum}: return ({number(item.get("buy"))}m, {number(item.get("sell_base"))}m, {number(item.get("sell_floor"))}m);')
 lines += ['                default: throw new ArgumentOutOfRangeException(nameof(item));', '            }', '        }',
           '        public static ItemAmount[] BuildCost(int kind)', '        {', '            switch(kind)', '            {']
-for kind, key in {1: 'wood', 2: 'disassembly', 4: 'bench', 8: 'generator', 16: 'housing', 32: 'streetlamp'}.items():
+facility_mapping = {1: 'wood', 2: 'disassembly', 4: 'bench', 8: 'generator', 16: 'housing', 32: 'streetlamp', 64: 'electric_wood', 128: 'auto_wood'}
+for kind, key in facility_mapping.items():
     cost = ', '.join(f'new ItemAmount(ItemId.{reverse[item]}, {amount})' for item, amount in data['facilities'][key]['build'].items())
     lines.append(f'                case {kind}: return new[] {{ {cost} }};')
 lines += ['                default: throw new ArgumentOutOfRangeException(nameof(kind));', '            }', '        }']
+lines += ['        public static int PortLimit(int kind)', '        {', '            switch(kind)', '            {', '                case -1: return 8;']
+for kind, key in facility_mapping.items():
+    lines.append(f'                case {kind}: return {data["facilities"][key]["ports"]};')
+lines += ['                default: return 0;', '            }', '        }']
+constants = {
+    'ElectricHumanSeconds': data['recipes']['electric_boards']['human_seconds'],
+    'WoodMachineSeconds': data['recipes']['electric_boards']['machine_seconds'],
+    'ElectricWoodLoad': data['facilities']['electric_wood']['power'],
+    'AutomaticWoodLoad': data['facilities']['auto_wood']['power'],
+    'MachineMaximum': data['global']['maintenance']['maximum'],
+    'MachineDecay': data['global']['maintenance']['active_decay_per_second'],
+    'MachineRepair': data['global']['maintenance']['repair_per_second_at_efficiency1'],
+    'MachineRestart': data['global']['maintenance']['restart_at'],
+    'BeltSpeed': data['global']['storage']['belt_entities_per_second'],
+    'BeltLoad': data['global']['storage']['belt_power_per_cell'],
+}
+for name, value in constants.items():
+    lines.append(f'        public const double {name} = {number(value)};')
 for section, key, name in [('power','generator_power','GeneratorPower'), ('power','housing_valid_ratio','HousingValidRatio'), ('power','lamp_valid_ratio','LampValidRatio')]:
     lines.append(f'        public const double {name} = {number(data["global"][section][key])};')
 lines += ['    }', '}', '']

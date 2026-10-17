@@ -7,7 +7,7 @@ namespace CrazyRubbish.Core
     public sealed partial class PrototypeSimulation
     {
         private readonly List<FacilityInstance> facilities=new List<FacilityInstance>();
-        private int[] selectedFacilities={1,2,4,8,0,0};
+        private int[] selectedFacilities={1,2,4,8,0,0,0,0};
         private int nextFacilityId=9;
         private FacilityInstance placementObstacle;
         private int placementIgnoredId;
@@ -16,7 +16,7 @@ namespace CrazyRubbish.Core
         public int ConstructionRevision {get;private set;}
         private static int KindIndex(int kind)
         {
-            switch(kind){case 1:return 0;case 2:return 1;case 4:return 2;case 8:return 3;case 16:return 4;case 32:return 5;default:throw new ArgumentOutOfRangeException(nameof(kind));}
+            switch(kind){case 1:return 0;case 2:return 1;case 4:return 2;case 8:return 3;case 16:return 4;case 32:return 5;case 64:return 6;case 128:return 7;default:throw new ArgumentOutOfRangeException(nameof(kind));}
         }
         private void InitializeFacilities()
         {
@@ -57,9 +57,9 @@ namespace CrazyRubbish.Core
         public bool PlayerWorksAt(int id)=>manualFacilityId==id&&manualStationValue!=0;
         public static string FacilityName(int kind)
         {
-            switch(kind){case 1:return "手工木料地点";case 2:return "拆解地点";case 4:return "工作台";case 8:return "简陋发电机";case 16:return "新住房";case 32:return "路灯";default:return "设施";}
+            switch(kind){case 1:return "手工木料地点";case 2:return "拆解地点";case 4:return "工作台";case 8:return "简陋发电机";case 16:return "新住房";case 32:return "路灯";case 64:return "电动木工";case 128:return "自动木工";default:return "设施";}
         }
-        public static (int width,int height) Footprint(FacilityInstance f)=>f.Kind==16?(3,3):f.Kind==32?(1,1):(2,2);
+        public static (int width,int height) Footprint(FacilityInstance f)=>f.Kind==16||f.Kind==128||f.Kind==-1?(3,3):f.Kind==32?(1,1):f.Kind==64?(f.Rotation%2==0?(3,2):(2,3)):(2,2);
         public static (int x,int y) ServiceCell(FacilityInstance f)
         {
             var size=Footprint(f);
@@ -69,15 +69,16 @@ namespace CrazyRubbish.Core
         {var size=Footprint(f);return x>=f.X&&x<f.X+size.width&&y>=f.Y&&y<f.Y+size.height;}
         public FacilityInstance FacilityAtCell(int x,int y)=>facilities.LastOrDefault(f=>(f.Built||f.Blueprint)&&Contains(f,x,y));
         private bool ConstructionCell(int x,int y)=>x>=10&&x<=27&&y>=6&&y<=23;
-        private bool BlocksMovement(int x,int y)=>facilities.Any(f=>f.Id!=placementIgnoredId&&(f.Built||placementObstacle!=null&&!placementActorPaths&&f.Blueprint)&&Contains(f,x,y))||placementObstacle!=null&&Contains(placementObstacle,x,y);
+        private bool BlocksMovement(int x,int y)=>facilities.Any(f=>f.Id!=placementIgnoredId&&(f.Built||placementObstacle!=null&&!placementActorPaths&&f.Blueprint)&&Contains(f,x,y))||placementObstacle!=null&&Contains(placementObstacle,x,y)||InfrastructureBlocksMovement(x,y);
         public string PlacementError(int kind,int x,int y,int rotation,int ignoreId=0)
         {
-            if(!new[]{1,2,4,8,16,32}.Contains(kind)||rotation<0||rotation>3)return "设施或方向无效。";
+            if(!new[]{1,2,4,8,16,32,64,128}.Contains(kind)||rotation<0||rotation>3)return "设施或方向无效。";
             var candidate=new FacilityInstance{Kind=kind,X=x,Y=y,Rotation=rotation};var size=Footprint(candidate);
             for(int cx=x;cx<x+size.width;cx++)for(int cy=y;cy<y+size.height;cy++)
             {
                 if(!ConstructionCell(cx,cy)||IsReservedCell(cx,cy))return "设施必须完整位于建设区内。";
                 if(facilities.Any(f=>f.Id!=ignoreId&&(f.Built||f.Blueprint)&&Contains(f,cx,cy)))return "与设施或已有蓝图重叠。";
+                if(InfrastructureOccupied(cx,cy))return "占地内有传送带或接口，请先拆除。";
                 if(wires.Any(w=>w.X==cx&&w.Y==cy))return "占地内有电线，请先拆线。";
                 if(CellTicks(cx,cy)>0)return "占地有地面物品，请先搬走。";
                 if(CellCoordinate(PlayerX)==cx&&CellCoordinate(PlayerY)==cy||residents.Any(r=>CellCoordinate(r.X)==cx&&CellCoordinate(r.Y)==cy))return "建设位置有人，请先离开。";
@@ -91,6 +92,8 @@ namespace CrazyRubbish.Core
                 if(FindPath(WarehouseX,WarehouseY,side.x,side.y)==null)return "作业面与仓库之间没有通路。";
                 foreach(var f in facilities.Where(f=>f.Id!=ignoreId&&(f.Built||f.Blueprint)))
                 {var front=ServiceCell(f);if(FindPath(WarehouseX,WarehouseY,front.x,front.y)==null)return "放置会封住已有设施的作业面。";}
+                if(IsWoodMachine(kind)){var maintenance=MaintenanceCell(candidate);if(FindPath(WarehouseX,WarehouseY,maintenance.x,maintenance.y)==null)return "维护侧与仓库之间没有通路。";}
+                foreach(var f in facilities.Where(f=>f.Id!=ignoreId&&f.Built&&IsWoodMachine(f.Kind))){var maintenance=MaintenanceCell(f);if(FindPath(WarehouseX,WarehouseY,maintenance.x,maintenance.y)==null)return "放置会封住已有机器的维护侧。";}
                 placementActorPaths=true;
                 if(FindPath(PlayerX,PlayerY,WarehouseX,WarehouseY)==null||residents.Any(r=>FindPath(r.X,r.Y,WarehouseX,WarehouseY)==null))return "放置会困住角色，请保留通道。";
             }
@@ -106,6 +109,8 @@ namespace CrazyRubbish.Core
             else if(kind==4&&!TableUnlocked)reason="先取得木板与钢铁零件。";
             else if((kind==8||kind==16)&&!GeneratorUnlocked)reason="先取得钢铁零件。";
             else if(kind==32&&!HasDiscovered(ItemId.LightingModule))reason="先取得照明部件。";
+            else if(kind==64&&!ElectricWoodUnlocked)reason="首次取得电机和机器锯片后解锁电动木工。";
+            else if(kind==128&&!AutomaticWoodUnlocked)reason="先解锁电动木工，再取得送料组件。";
             return reason==null;
         }
         private List<(UnitInventory inventory,int token)> ReserveConstruction(ItemAmount[] costs)
@@ -125,7 +130,7 @@ namespace CrazyRubbish.Core
             if(!CanConstruct(kind,out string reason))return Fail(reason);
             reason=PlacementError(kind,x,y,rotation);if(reason!=null)return Fail(reason);
             var reservations=ReserveConstruction(DesignBaseline.BuildCost(kind));if(reservations==null)return Fail("背包与仓库建材不足，未扣材料。");
-            var f=facilities.FirstOrDefault(a=>a.Kind==kind&&!a.Built&&!a.Blueprint);
+            var f=facilities.FirstOrDefault(a=>a.Kind==kind&&!a.Built&&!a.Blueprint&&(!IsWoodMachine(kind)||!a.WasConstructed));
             if(f==null)f=AddFacility(nextFacilityId++,kind,x,y,rotation);
             f.X=x;f.Y=y;f.Rotation=rotation;f.Blueprint=true;blueprints[f.Id]=reservations;SelectRuntimeFacility(f);
             ConstructionRevision++;if(!Paused)CompleteBuildings();RefreshState();
@@ -139,13 +144,14 @@ namespace CrazyRubbish.Core
         {var f=Station(kind);return f.Built||f.Blueprint?Fail("已建成或规划；可在建造页新增同类设施。"):PlaceFacility(kind,f.X,f.Y,f.Rotation);}
         private void CompleteBuildings()
         {
-            if(!facilities.Any(f=>f.Blueprint)&&wirePlans.Count==0)return;
+            if(!facilities.Any(f=>f.Blueprint)&&wirePlans.Count==0&&infrastructurePlans.Count==0)return;
+            CompleteInfrastructure();
             CompleteWires();
             foreach(var f in facilities.Where(f=>f.Blueprint).ToArray())
             {
                 if(PlacementError(f.Kind,f.X,f.Y,f.Rotation,f.Id)!=null)continue;
                 foreach(var r in blueprints[f.Id])if(!r.inventory.Commit(r.token))throw new InvalidOperationException("施工材料预约丢失。");
-                blueprints.Remove(f.Id);f.Blueprint=false;f.Built=true;geometryRevision++;GroundRevision++;ConstructionRevision++;
+                blueprints.Remove(f.Id);f.Blueprint=false;f.Built=true;f.WasConstructed=true;geometryRevision++;GroundRevision++;ConstructionRevision++;
             }
             RecomputePower();
         }
@@ -156,7 +162,7 @@ namespace CrazyRubbish.Core
             blueprints.Remove(id);f.Blueprint=false;ConstructionRevision++;return Ok("已取消，材料预约全部释放。");
         }
         public ActionResult CancelBlueprints()
-        {foreach(var f in facilities.Where(f=>f.Blueprint).ToArray())CancelBlueprint(f.Id);foreach(var plan in wirePlans.ToArray())CancelWirePlan(plan);return Ok("全部蓝图已取消。");}
+        {foreach(var f in facilities.Where(f=>f.Blueprint).ToArray())CancelBlueprint(f.Id);foreach(var plan in wirePlans.ToArray())CancelWirePlan(plan);foreach(var plan in infrastructurePlans.ToArray())CancelInfrastructurePlan(plan);return Ok("全部蓝图已取消。");}
         public ActionResult MoveFacility(int id,int x,int y,int rotation)
         {
             var f=GetFacility(id);if(f==null||!f.Built)return Fail("只能搬迁已建成的玩家设施。");
@@ -164,6 +170,8 @@ namespace CrazyRubbish.Core
             if(f.X==x&&f.Y==y&&f.Rotation==rotation)return Ok("设施位置未改变。");
             reason=PlacementError(f.Kind,x,y,rotation,id);if(reason!=null)return Fail(reason);
             if(f.Kind<=8){var removed=AtFacility(f,()=>RemoveFacility(f.Kind,false,false));if(!removed.Success)return removed;}
+            if(IsWoodMachine(f.Kind)){var removed=EvacuateMachine(f,false,false);if(!removed.Success)return removed;}
+            DetachFacilityPorts(f.Id);
             f.X=x;f.Y=y;f.Rotation=rotation;f.Built=true;
             geometryRevision++;GroundRevision++;ConstructionRevision++;RecomputePower();RefreshState();
             return Ok("搬迁完成；内部物品已返仓，溢出留在旧址。已耗原料不重复返还。");
@@ -173,6 +181,7 @@ namespace CrazyRubbish.Core
             var f=GetFacility(id);if(f==null)return Fail("设施不存在。");
             if(f.Blueprint)return CancelBlueprint(id);
             if(f.Kind<=8)return AtFacility(f,()=>RemoveFacility(f.Kind,sell));
+            if(IsWoodMachine(f.Kind))return !f.Built?Fail("机器尚未建成。"):EvacuateMachine(f,sell,true);
             if(!f.Built)return Fail("设施尚未建成。");
             if(f.Kind==16&&residents.Count+1>HousingCapacity-4)return Fail("该住房仍被占用，先提供足够床位。");
             f.Built=false;var costs=DesignBaseline.BuildCost(f.Kind);
@@ -194,6 +203,7 @@ namespace CrazyRubbish.Core
                 if(f.Kind==2){map[StockKey("dismantleInput")]=DismantleInput;map[StockKey("dismantleOutput")]=DismantleOutput;map[StockKey("dismantleTools")]=DismantleTools;}
                 if(f.Kind==4){map[StockKey("tableInput")]=TableInput;map[StockKey("tableOutput")]=TableOutput;}
                 if(f.Kind==8)map[StockKey("ash")]=GeneratorResidue;
+                if(IsWoodMachine(f.Kind)){map[MachineInputKey(f.Id)]=f.WoodInputStock;map[MachineOutputKey(f.Id)]=f.Output;}
             });
             return map;
         }
@@ -205,14 +215,15 @@ namespace CrazyRubbish.Core
             facilities.Clear();
             foreach(var saved in s.facilities)
             {
-                if(saved.Id<=0||!new[]{1,2,4,8,16,32}.Contains(saved.Kind)||saved.Rotation<0||saved.Rotation>3)throw new ArgumentException("存档设施类型或方向无效。");
+                if(saved.Id<=0||!new[]{1,2,4,8,16,32,64,128}.Contains(saved.Kind)||saved.Rotation<0||saved.Rotation>3)throw new ArgumentException("存档设施类型或方向无效。");
                 var f=saved.Copy();f.InitializeStocks(Settings.outputCapacity);facilities.Add(f);
             }
-            if(s.selectedFacilities==null||s.selectedFacilities.Length!=6)throw new ArgumentException("存档缺少设施选择。");
-            selectedFacilities=(int[])s.selectedFacilities.Clone();
+            if(s.selectedFacilities==null||s.selectedFacilities.Length<6||s.selectedFacilities.Length>8)throw new ArgumentException("存档缺少设施选择。");
+            selectedFacilities=new int[8];Array.Copy(s.selectedFacilities,selectedFacilities,s.selectedFacilities.Length);
             foreach(int kind in new[]{1,2,4,8})if(!facilities.Any(f=>f.Id==selectedFacilities[KindIndex(kind)]&&f.Kind==kind))throw new ArgumentException("存档设施选择无效。");
             nextFacilityId=s.nextFacility;wires.Clear();
             if(s.wires!=null)foreach(var w in s.wires){if(w.X<0||w.Y<0||w.X>=Settings.mapWidth||w.Y>=Settings.mapHeight||wires.Any(a=>a.X==w.X&&a.Y==w.Y))throw new ArgumentException("存档电线无效。");wires.Add(w.Copy());}
+            RestoreAutomation(s);
             wireCredit=s.wireCredit;
             wirePlans.Clear();if(s.wirePlans!=null)wirePlans.AddRange(s.wirePlans.Select(p=>p.Copy()));nextWirePlan=s.nextWirePlan<0?s.nextWirePlan:-1;
             if(wireCredit<0||wireCredit>3)throw new ArgumentException("存档电线余料无效。");

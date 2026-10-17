@@ -7,7 +7,7 @@ using UnityEngine;
 namespace CrazyRubbish.Prototype
 {
     [DefaultExecutionOrder(-100)]
-    public sealed class PrototypeGame : MonoBehaviour
+    public sealed partial class PrototypeGame : MonoBehaviour
     {
         public PrototypeBalance balance;
         public PrototypeAppearance appearance;
@@ -69,7 +69,7 @@ namespace CrazyRubbish.Prototype
         public void ShowResult(){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
         public void QuitGame(){Application.Quit();}
         public void BeginTutorial(){Model.Tutorial.Begin();Model.Tutorial.Refresh(Model);}
-        public void SkipTutorial(){Model.Tutorial.Skip();Report(new ActionResult(true,"教程已收起；可随时从教程页继续或翻阅。"));}
+        public void SkipTutorial(){Model.Tutorial.Skip();if(Model.Tutorial.Completed)Model.Tutorial.automationDismissed=true;Report(new ActionResult(true,"教程已收起；可随时从教程页继续或翻阅。"));}
         public void ExecuteTutorialAction()
         {
             if(MenuOpen||ResultVisible||Model.Failed||Model.Interacting||Model.Paused||!Model.Tutorial.active||!Model.Tutorial.started||Model.Tutorial.Completed)return;
@@ -120,7 +120,7 @@ namespace CrazyRubbish.Prototype
             if (Input.GetKeyDown(KeyCode.Alpha1)) Model.SetSpeed(1);
             if (Input.GetKeyDown(KeyCode.Alpha2)) Model.SetSpeed(2);
             if (Input.GetKeyDown(KeyCode.Alpha3)) Model.SetSpeed(3);
-            if(!GetComponent<PrototypeHud>().InventoryOpen&&!GetComponent<PrototypeWorld>().ConstructionActive)
+            if(!GetComponent<PrototypeHud>().InventoryOpen&&!GetComponent<PrototypeHud>().ShopOpen&&!GetComponent<PrototypeWorld>().ConstructionActive)
             {
             double x = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1 : 0)
                 - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1 : 0);
@@ -144,6 +144,7 @@ namespace CrazyRubbish.Prototype
 
         public void HandleEscape()
         {
+            if(GetComponent<PrototypeHud>().TryCloseSessionOverlay())return;
             if (ResultVisible) return;
             if (MenuOpen) { if (SessionStarted) ResumeGame(); return; }
             if (GetComponent<PrototypeHud>().TryCloseTopPanel()) return;
@@ -188,14 +189,7 @@ namespace CrazyRubbish.Prototype
                 {
                     try
                     {
-                        var snapshot=JsonUtility.FromJson<SimulationSnapshot>(File.ReadAllText(path));
-                        if(snapshot.slot==null||!System.Text.RegularExpressions.Regex.IsMatch(snapshot.slot,@"^[a-f0-9]{32}$"))throw new InvalidOperationException("存档槽标识无效。");
-                        var restored=PrototypeSimulation.Restore(snapshot);
-                        if(restored.Failed){lastError="跳过失败后的存档。";continue;}
-                        Model=restored;saveSlot=snapshot.slot;autoIndex=snapshot.autoIndex;
-                        walkPath=null;SessionStarted=true;MenuOpen=false;ResultVisible=false;resultSeen=Model.DemoCompleted;
-                        interactionRevision=Model.InteractionRevision;
-                        GetComponent<PrototypeHud>().ResetForSession();
+                        RestoreSaveFile(path);
                         Report(new ActionResult(true,lastError==null?"已读取最近存档，生活、工资、预约和工具状态保留。":"最近存档不可读，已恢复较早的有效存档。"));return;
                     }
                     catch(Exception error){lastError=error.Message;}
@@ -221,6 +215,8 @@ namespace CrazyRubbish.Prototype
             bool bulk = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
             if (bulk) { Report(Model.PickUp(int.MaxValue)); return; }
             if (Model.NearWarehouse && Model.Carry.Used > Model.Carry.Count(ItemId.WoodHandSaw)) { Report(Model.Deposit()); return; }
+            var machine=Model.Facilities.Where(f=>f.Built&&PrototypeSimulation.IsWoodMachine(f.Kind)).OrderBy(f=>{var s=PrototypeSimulation.ServiceCell(f);return PrototypeSimulation.Distance(Model.PlayerX,Model.PlayerY,s.x,s.y);}).FirstOrDefault();
+            if(machine!=null){var s=PrototypeSimulation.ServiceCell(machine);if(PrototypeSimulation.Distance(Model.PlayerX,Model.PlayerY,s.x,s.y)<=Model.Settings.interactionRadius){GetComponent<PrototypeHud>().ShowOwnedFacility(machine);if(Model.Carry.Available(PrototypeSimulation.MachineFeed(machine))>0)Report(Model.FeedMachine(machine.Id));else if(machine.Output.UsedTicks>0)Report(Model.TakeMachineStock(machine.Id));else if(machine.Kind==64)Report(Model.ToggleMachinePlayerRole(machine.Id,false));else Report(Model.ToggleMachine(machine.Id));return;}}
             if (Model.NearBench && Model.BenchBuilt)
             {
                 GetComponent<PrototypeHud>().ShowFacility(1);
@@ -260,6 +256,10 @@ namespace CrazyRubbish.Prototype
                 case WorkState.NeedsOperator: return "等待操作人员到岗";
                 case WorkState.NeedsTool: return "缺少对应工具";
                 case WorkState.NeedsMaterials: return "缺少现场原料 · 请实际投料";
+                case WorkState.NeedsPower:return "缺电，机器进度保留";
+                case WorkState.NeedsMaintenance:return "耐久归零，维护到20后重启";
+                case WorkState.MachineRunning:return "机器阶段";
+                case WorkState.Preparing:return "人工准备阶段";
                 case WorkState.OutputBlocked: return "输出堵塞 · 仓库或内部容量已满";
                 default: return "正在手工锯切";
             }

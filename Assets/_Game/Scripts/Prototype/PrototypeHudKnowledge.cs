@@ -24,6 +24,7 @@ namespace CrazyRubbish.Prototype
         private ItemId dumpItem;
         private bool dumpConfirm;
         public bool KnowledgeOpen=>knowledgePanel!=null&&knowledgePanel.gameObject.activeSelf;
+        private bool KnowledgeIsPassive=>KnowledgeOpen&&manualKnowledge==null&&!game.Model.Tutorial.IntroOpen;
         public bool KnowledgeTarget(out Vector2 targetPoint)
         {
             targetPoint=currentKnowledge==null?Vector2.zero:new Vector2(currentKnowledge.x,currentKnowledge.y);
@@ -79,7 +80,7 @@ namespace CrazyRubbish.Prototype
                 case "planks":return ItemKnowledge(ItemId.Plank,id);
                 case "table":return new Knowledge{id=id,title="工作台：把部件组装成工具",sprite=game.appearance.workbench,target=true,x=PrototypeSimulation.TableX,y=PrototypeSimulation.TableY,body="你已经取得木板和钢铁零件，现在知道如何建工作台。它把木柄与工作端组装成工具，例如木柄 + 手锯锯片 = 手锯。\n\n首次取得材料只解锁方案，不会自动造好建筑。按 B 查看建材和建设位置。"};
                 case "dismantle":return new Knowledge{id=id,title="拆解地点：旧设备里有零件",sprite=game.appearance.dismantle,target=true,x=PrototypeSimulation.DismantleX,y=PrototypeSimulation.DismantleY,body="旧机器是原料，不是已经安装的生产设施。带上螺丝刀，将旧设备投入拆解地点，再到正面作业。\n\n拆出的电机、锯片和钢铁零件留在输出处，要取走后才算完成搬运。"};
-                case "power":return new Knowledge{id=id,title="发电机：建好后还要加燃料",sprite=game.appearance.generator,target=true,x=PrototypeSimulation.GeneratorX,y=PrototypeSimulation.GeneratorY,body="首次取得钢铁零件后，发电机方案可用。收集热动力组件、发电组件和电线，才能实际组装。\n\n把废木料或木屑送到正面作燃料，才会产生电力。灰渣留在设备里，需要取走。"};
+                case "power":return new Knowledge{id=id,title="发电机：接线、负载与燃料",sprite=game.appearance.generator,target=true,x=PrototypeSimulation.GeneratorX,y=PrototypeSimulation.GeneratorY,body="建好发电机后，从设备外沿铺电线，连接旧住房、路灯或机器，再到正面投入木料或碎屑。\n\n完全空载不烧燃料。要实际带负载发电才取得招募认可。设备面板会区分断线、缺燃料和电力不足。"};
                 case "people":return new Knowledge{id=id,title="居民：工作、生活和工资",sprite=game.appearance.housing,target=true,x=PrototypeSimulation.HousingX,y=PrototypeSimulation.HousingY,body="发电机已经运行，居民愿意加入了。按 P 招募、分配岗位；首批免招募费，工资不免。\n\n先招2—3人便于熟悉，也可以招满5人。居民会实际走路搬运；木工需要现场工具，不能使用你远处背包里的手锯。"};
                 case "wages":return new Knowledge{id=id,title="第一张工资：需要实际支付",sprite=game.appearance.housing,body=$"首位员工加入600秒后，每位居民应得10钱。现在待付 {m.UnpaidWages:0.##} 钱，下次到期还有 {m.SecondsToWage:0} 秒。\n\n出售已经入库的产品取得现金，再在人员页支付工资。查看账单不会自动付款，免费食物也不抵工资。"};
                 default:return new Knowledge{id=id,title="工具耐久：准备下一把手锯",sprite=game.appearance.ItemSprite(ItemId.SawBlade),body="手锯反复加工会磨损。木工做木柄，采购手锯锯片，再带两种部件到工作台装配备用手锯。\n\n机器锯片和手锯锯片是不同的部件。完成后把工具送回仓库或交给需要它的岗位。"};
@@ -143,7 +144,10 @@ namespace CrazyRubbish.Prototype
                 holeDiscard.interactable=m.Carry.Available(dumpItem)>0&&!m.Interacting&&!m.Paused&&PrototypeSimulation.Distance(m.PlayerX,m.PlayerY,PrototypeSimulation.DumpX,PrototypeSimulation.DumpY)<=m.Settings.interactionRadius;
             }
             float height=buttonsY+(currentKnowledge.hole?192:knowledgeAction.gameObject.activeSelf?100:54);
-            knowledgePanel.sizeDelta=new Vector2(430,height);knowledgePanel.anchoredPosition=new Vector2(16,130+height);
+            knowledgePanel.sizeDelta=new Vector2(430,height);
+            bool passive=!tour&&manualKnowledge==null;
+            knowledgePanel.anchorMin=knowledgePanel.anchorMax=new Vector2(passive?1:0,0);
+            knowledgePanel.anchoredPosition=new Vector2(passive?-446:16,130+height);
         }
 
         public void ShowObjectInfo(string title,string body,Sprite sprite)

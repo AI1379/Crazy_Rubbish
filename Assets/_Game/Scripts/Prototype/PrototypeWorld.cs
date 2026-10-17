@@ -142,7 +142,7 @@ namespace CrazyRubbish.Prototype
         {
             if (previousModel != model)
             {
-                CancelMapDrag();CancelConstruction();shownConstructionRevision=-1;
+                CancelMapDrag();CancelConstruction();ResetTransportView();shownConstructionRevision=-1;
                 if(constructionVisuals!=null)ClearConstructionChildren(constructionVisuals);facilityViews.Clear();
                 if(model.GameSeconds==0)FitCamera(model);
                 for (int i = pileRoot.childCount - 1; i >= 0; i--) RemoveView(pileRoot.GetChild(i).gameObject);
@@ -217,7 +217,7 @@ namespace CrazyRubbish.Prototype
             bench.enabled=dismantle.enabled=table.enabled=generator.enabled=false;
             benchLabel.gameObject.SetActive(false);dismantleLabel.gameObject.SetActive(false);
             tableLabel.gameObject.SetActive(false);generatorLabel.gameObject.SetActive(false);
-            RefreshConstructionView(model);
+            RefreshConstructionView(model);RefreshTransportView(model);
             if(Application.isPlaying)RefreshTutorialTarget(model);
         }
 

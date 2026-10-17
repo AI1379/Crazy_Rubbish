@@ -27,7 +27,7 @@ namespace CrazyRubbish.Core
 
         private long cashCents;
         private int manualStationValue,manualFacilityId;
-        private int manualStation { get=>manualStationValue; set { manualStationValue=value; manualFacilityId=value==0?0:Station(value==3?4:value).Id; } }
+        private int manualStation { get=>manualStationValue; set { manualStationValue=value; manualFacilityId=value==0||value>3?0:Station(value==3?4:value).Id; } }
 
         private readonly Dictionary<(int,int),(int revision,float value)> pressureCache=new Dictionary<(int,int),(int,float)>();
         private readonly Dictionary<(int,int),int> pressureCapacity=new Dictionary<(int,int),int>();
@@ -57,7 +57,7 @@ namespace CrazyRubbish.Core
         public bool DismantleBuilt {get=>Station(2).Built;private set=>Station(2).Built=value;}
         public bool GeneratorBuilt {get=>Station(8).Built;private set=>Station(8).Built=value;}
         public bool BuildPending=>Station(1).Blueprint;
-        public bool AnyBuildPending=>facilities.Any(f=>f.Blueprint)||wirePlans.Count>0;
+        public bool AnyBuildPending=>facilities.Any(f=>f.Blueprint)||wirePlans.Count>0||infrastructurePlans.Count>0;
         public bool HasBeenPowered {get;private set;}
 
 
@@ -120,7 +120,7 @@ namespace CrazyRubbish.Core
         public static bool IsOwnedGround(int x,int y)=>(x>=10&&x<=27&&y>=6&&y<=23)||(x>=0&&x<=7&&y>=6&&y<=11);
         private static bool InBuilding(int x,int y,int bx,int by,int width=2,int height=2)=>x>=bx&&x<bx+width&&y>=by&&y<by+height;
         public static bool IsReservedCell(int x,int y)=>InBuilding(x,y,11,2,3,3)||InBuilding(x,y,16,2,3,3)||InBuilding(x,y,2,20)||(x==20&&y==5);
-        private bool Occupied(int x,int y)=>IsReservedCell(x,y)||!IsWalkable(x,y);
+        private bool Occupied(int x,int y)=>IsReservedCell(x,y)||!IsWalkable(x,y)||InfrastructureOccupied(x,y);
         public void SetPaused(bool value){Paused=value;RefreshState();}
         public void SetSpeed(int speed){if(speed<1||speed>3)throw new ArgumentOutOfRangeException(nameof(speed));Speed=speed;}
         public void MovePlayer(double hx,double hy,double seconds)
@@ -310,13 +310,13 @@ namespace CrazyRubbish.Core
             {
                 accumulatedTime-=Step;GameSeconds+=Step;CompleteBuildings();TickInteraction(Step);TickOpening();
                 for(int i=0;i<salesPressure.Length;i++)salesPressure[i]*=Math.Exp(-Math.Log(2)*Step/600);
-                TickPower(Step);
+                PrepareMachineBatches();TickPower(Step);
                 if(residents.Count>0&&GameSeconds+1e-6>=nextWage){bills.Add(new WageBill(residents.Select(r=>r.Id).ToArray(),(long)(Settings.wagePerResident*100),nextWage));nextWage+=Settings.wageSeconds;CheckWageRiot();}
                 TickCommunity(Step);
                 if(Failed){accumulatedTime=0;break;}
                 foreach(var f in facilities.Where(f=>f.Built&&f.Kind==4).ToArray())AtFacility(f,()=>TickWorkshop(Step));
                 TickToolPurchase();
-                TickResidents(Step);
+                StaffMachines();TickResidents(Step);TickMachinery(Step);TickConveyors(Step);
                 if(Settings.automaticInput){inputTimer+=Step;while(inputTimer>=nextInput){inputTimer-=nextInput;GenerateInput(nextInput);nextInput=RandomInputInterval();}}
                 foreach(var station in facilities.Where(f=>f.Built&&f.Kind<=2).ToArray())AtFacility(station,()=>{
                 RefreshState();

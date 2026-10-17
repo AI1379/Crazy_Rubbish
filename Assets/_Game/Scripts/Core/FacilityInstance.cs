@@ -37,6 +37,11 @@ namespace CrazyRubbish.Core
         public double fuelRemaining;
         public double equivalentHeat;
         public double activeFuelHeatRate;
+        public bool MachineActive,MachineTripped;
+        public bool WasConstructed,SuppressAutoOperator,SuppressAutoMaintenance;
+        public int MachineToken,MachinePhase,MachineBatches;
+        public double HumanProgress,MachineProgress,Durability=100,RepairedDurability;
+        [NonSerialized] public double StepPowerRatio,StepPoweredFraction;
         [NonSerialized] public UnitInventory WoodInputStock;
         [NonSerialized] public UnitInventory WoodTools;
         [NonSerialized] public UnitInventory Output;

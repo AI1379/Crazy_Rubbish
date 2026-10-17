@@ -143,6 +143,7 @@ namespace CrazyRubbish.Prototype
         public void RefreshView(PrototypeSimulation m)
         {
             if (!HasLayout) return;
+            RefreshExperienceHud(m);
             RefreshConstructionHud(m);
             if (inspection != null && (game.MenuOpen || game.ResultVisible)) inspection.gameObject.SetActive(false);
             clock.text = $"{(int)m.GameSeconds / 60:00}:{(int)m.GameSeconds % 60:00}";
@@ -271,7 +272,7 @@ namespace CrazyRubbish.Prototype
             if(live && m.Tutorial.started && !m.Tutorial.Completed && m.Paused)tutorialAction.interactable=false;
             tutorialLocate.interactable=live && m.Tutorial.started && action.button!=null;
             tutorialStart.GetComponentInChildren<Text>().text=m.Tutorial.active?"回到当前步骤":"继续教程";
-            LayoutTutorialText(lesson);
+            LayoutTutorialText(lesson,m);
             foreach(var binding in buttonBindings)
             {
                 var outline=binding.button.GetComponent<Outline>();
@@ -285,7 +286,7 @@ namespace CrazyRubbish.Prototype
                 objective.text=$"教程 {m.Tutorial.step}/{TutorialProgress.LastStep-1} · {PrototypeTutorial.Titles[m.Tutorial.step]}";
         }
 
-        private void LayoutTutorialText(int lesson)
+        private void LayoutTutorialText(int lesson,PrototypeSimulation m)
         {
             float titleHeight=Mathf.Max(30,tutorialTitle.preferredHeight);
             tutorialTitle.rectTransform.sizeDelta=new Vector2(352,titleHeight);
@@ -300,6 +301,13 @@ namespace CrazyRubbish.Prototype
             tutorialPrevious.GetComponent<RectTransform>().anchoredPosition=new Vector2(12,-(actionY+162));tutorialNext.GetComponent<RectTransform>().anchoredPosition=new Vector2(188,-(actionY+162));
             tutorialStart.GetComponent<RectTransform>().anchoredPosition=new Vector2(12,-(actionY+210));tutorialHelp.rectTransform.anchoredPosition=new Vector2(12,-(actionY+268));
             tutorialContent.sizeDelta=new Vector2(0,actionY+368);
+            var automationButton=tutorialContent.Find("BeginAutomationGuide");
+            if(automationButton!=null)
+            {
+                automationButton.gameObject.SetActive(m.Tutorial.Completed);
+                automationButton.GetComponent<RectTransform>().anchoredPosition=new Vector2(12,-(actionY+368));
+                if(m.Tutorial.Completed)tutorialContent.sizeDelta=new Vector2(0,actionY+420);
+            }
             if(displayedLesson!=lesson){displayedLesson=lesson;pages[3].GetComponent<ScrollRect>().verticalNormalizedPosition=1;}
         }
 
@@ -355,8 +363,9 @@ namespace CrazyRubbish.Prototype
         private void Execute(string command)
         {
             var m = game.Model;
-            if((game.MenuOpen||game.ResultVisible)&&command!="Resume"&&command!="MenuLoad"&&command!="MenuSave"&&command!="MenuNew"&&command!="Quit")return;
-            if(ExecuteConstructionCommand(command))return;
+            if((game.MenuOpen||game.ResultVisible)&&command!="Resume"&&command!="MenuLoad"&&command!="MenuSave"&&command!="MenuNew"&&command!="Quit"&&!IsSessionCommand(command))return;
+            if(ExecuteExperienceCommand(command))return;
+            if(ExecuteMachineryCommand(command)||ExecuteConstructionCommand(command))return;
             if (command.StartsWith("FacilityCommand")) { Execute("Command" + command.Substring(15)); return; }
             if (command.StartsWith("OpenFacility") && int.TryParse(command.Substring(12), out int facility)) { ShowFacility(facility); return; }
             if (command.StartsWith("OpenTab") && int.TryParse(command.Substring(7), out int openTab)) { ToggleManagement(openTab); return; }
@@ -402,7 +411,7 @@ namespace CrazyRubbish.Prototype
             {
                 case "Menu": game.OpenMenu();break;
                 case "Resume": if(!game.SessionStarted){game.StartNewGame();ClosePanels();}else if(game.ResultVisible)game.ContinueAfterResult();else game.ResumeGame();break;
-                case "MenuLoad": game.LoadLatest();break;case "MenuSave": game.SaveGame();break;case "MenuNew": game.StartNewGame();ClosePanels();break;case "Quit": game.QuitGame();break;
+                case "MenuLoad": OpenSaveBrowser();break;case "MenuSave": game.SaveGame();break;case "MenuNew": RequestNewSession();break;case "Quit": game.QuitGame();break;
                 case "CloseManagement": case "CloseFacility": ClosePanels(); break;
                 case "GoToFacility": GoToSelectedFacility(); break;
                 case "CloseInventory": CloseInventory();break;
@@ -413,7 +422,7 @@ namespace CrazyRubbish.Prototype
                 case "StockNext": stockPage++;break;
                 case "BagPrevious": bagPage=Math.Max(0,bagPage-1);break;
                 case "BagNext": bagPage++;break;
-                case "InventorySell": if(inspectedItem.HasValue&&m.Hand==null)game.Report(m.Sell(inspectedItem.Value,1));break;
+                case "InventorySell": if(inspectedItem.HasValue&&m.Hand==null)game.Report(m.Sell(inspectedItem.Value,inventorySaleQuantity));break;
                 case "InventoryDrop": if(inspectedItem.HasValue&&m.Hand==null)game.Report(m.Drop(inspectedItem.Value));break;
                 case "BeginGuide":
                     m.Tutorial.orientation=1;ClosePanels();RefreshKnowledge(m);FocusKnowledge();
@@ -425,15 +434,16 @@ namespace CrazyRubbish.Prototype
                 case "HoleDiscard": ConfirmDump();break;
                 case "OpenGuide": ShowTutorial();break;
                 case "GuideAction":
-                    if(m.Tutorial.Completed){game.SkipTutorial();break;}
+                    if(m.Tutorial.Completed){if(m.Tutorial.automationStarted)ExecuteAutomationGuide();else BeginAutomationGuide();break;}
                     if(m.Paused){m.SetPaused(false);break;}
                     game.ExecuteTutorialAction();break;
-                case "GuideLocate": ShowTutorialControl();break;
+                case "GuideLocate": if(m.Tutorial.Completed&&m.Tutorial.automationStarted)FocusAutomationGuide();else if(m.Tutorial.Completed)game.SkipTutorial();else if(m.Tutorial.step==12){SelectTab(0);Execute("OnsiteJump3");}else ShowTutorialControl();break;
                 case "GuideCollapse": guideCollapsed=!guideCollapsed;break;
                 case "DismissGuide": game.SkipTutorial();ClosePanels();break;
                 case "Zones": showZones = !showZones; break;
                 case "Alerts":
                     if (m.RiotActive || m.UnpaidWageCents > 0 || m.MissingSupplyPeople > 0) SelectTab(1);
+                    else if(toolWarningLabel==null&&operationalIssueId!=0){var issue=m.GetFacility(operationalIssueId);ShowOwnedFacility(issue);if(issue!=null)game.GetComponent<PrototypeWorld>().FocusPoint(issue.X,issue.Y,7);}
                     else { SelectTab(0); Execute("OnsiteJump3"); }
                     break;
                 case "TutorialAction":

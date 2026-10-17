@@ -26,7 +26,10 @@ namespace CrazyRubbish.Core
                 {
                     var result=new List<int>();
                     while(at!=start) { result.Add(at); at=previous[at]; }
-                    result.Reverse(); return result.ToArray();
+                    result.Reverse();
+                    // A position inside the destination cell still has to reach its centre.
+                    if(result.Count==0&&Distance(fromX,fromY,tx,ty)>0.000001)result.Add(target);
+                    return result.ToArray();
                 }
                 int x=at%Settings.mapWidth,y=at/Settings.mapWidth;
                 for(int i=0;i<4;i++)
@@ -74,6 +77,12 @@ namespace CrazyRubbish.Core
                 person.PathTargetX=tx;person.PathTargetY=ty;person.PathRevision=geometryRevision;
             }
             if(person.Path==null) return;
+            // Also recover empty/exhausted routes restored from older saves.
+            if(person.PathIndex>=person.Path.Length&&Distance(person.X,person.Y,tx,ty)>0.000001)
+            {
+                person.Path=FindPath(person.X,person.Y,tx,ty);person.PathIndex=0;
+                if(person.Path==null)return;
+            }
             double distanceLeft=Settings.residentMoveSpeed*seconds;
             while(distanceLeft>0 && person.PathIndex<person.Path.Length)
             {

@@ -20,6 +20,8 @@ namespace CrazyRubbish.Prototype
         [SerializeField] private Text inventoryTitle,upperCaption,bagCaption,inventoryStatus,itemTitle,itemDescription,itemQuantity,handCount,inventoryHints;
         [SerializeField] private Image itemArtwork,handArtwork;
         [SerializeField] private Button inventoryPrimary,inventoryGo,inventorySell,inventoryDrop,stockPrevious,stockNext,bagPrevious,bagNext;
+        [SerializeField] private Text inventoryTradeInfo;
+        private int inventorySaleQuantity=1;
         private bool warehouseView,awaitingWarehouse;
         private int stockPage,bagPage;
         private ItemId? inspectedItem;
@@ -59,6 +61,11 @@ namespace CrazyRubbish.Prototype
             itemQuantity=TextAt(detail,"Quantity","",16,96,350,56,15,Accent);
             itemDescription=TextAt(detail,"Description","",16,164,350,192,16,Ink);itemDescription.alignment=TextAnchor.UpperLeft;
             itemDescription.resizeTextForBestFit=true;itemDescription.resizeTextMinSize=14;itemDescription.resizeTextMaxSize=16;
+            itemDescription.rectTransform.sizeDelta=new Vector2(350,100);
+            inventoryTradeInfo=TextAt(detail,"Sale Preview","",16,268,350,60,14,Accent);
+            ButtonAt(detail,"InventoryQuantity1","售1份",16,336,106,30);
+            ButtonAt(detail,"InventoryQuantity5","售5份",130,336,106,30);
+            ButtonAt(detail,"InventoryQuantityAll","售全部可用",244,336,122,30);
             inventoryPrimary=ButtonAt(detail,"InventoryPrimary","拾取整叠",16,376,350,40,true);
             inventoryGo=ButtonAt(detail,"InventoryGoWarehouse","前往仓库",16,426,350,40);
             inventorySell=ButtonAt(detail,"InventorySell","出售 1 份",16,478,168,38);
@@ -91,7 +98,7 @@ namespace CrazyRubbish.Prototype
         public void OpenInventory(bool warehouse=false)
         {
             ClosePanels();warehouseView=warehouse;awaitingWarehouse=false;stockPage=bagPage=0;inspectedItem=null;
-            inventoryNoticeRevision=game.NoticeRevision;inventoryInteractionRevision=game.Model.InteractionRevision;inventoryFeedbackUntil=0;
+            inventoryNoticeRevision=game.NoticeRevision;inventoryInteractionRevision=game.Model.InteractionRevision;inventoryFeedbackUntil=0;inventorySaleQuantity=1;
             game.StopWalkingForInventory();inventoryWindow.gameObject.SetActive(true);RefreshInventoryWindow(game.Model);
         }
         public void CloseInventory()
@@ -131,7 +138,7 @@ namespace CrazyRubbish.Prototype
             {inventoryInteractionRevision=m.InteractionRevision;inventoryFeedback=m.LastInteraction.Message;inventoryFeedbackSuccess=m.LastInteraction.Success;inventoryFeedbackUntil=Time.unscaledTime+4;}
             inventoryTitle.text=warehouseView?"旧仓库  /  背包":"背包  /  附近物品";
             bool feedback=Time.unscaledTime<inventoryFeedbackUntil;
-            inventoryStatus.text=m.InventoryTransferPending?"搬运中… 完成后更新库存；关闭窗口会取消。":m.Paused?"游戏已暂停；按空格继续存取。容器内整理仍可进行。":warehouseView&&!m.NearWarehouse?"远处只能查看库存。请前往仓库门前存取。":feedback?inventoryFeedback:m.Hand!=null?$"手中：{ItemCatalog.Name(m.Hand.item)} ×{m.Hand.amount}。点击格子放下；关闭会退回。":"物品栏打开时游戏继续。按空格暂停，I 或 Esc 关闭。";
+            inventoryStatus.text=m.InventoryTransferPending?"搬运中… 完成后更新库存；关闭窗口会取消。":m.Paused?"游戏已暂停；按空格继续存取。容器内整理仍可进行。":warehouseView&&!m.NearWarehouse?"远处可查看库存与出售；存取请前往仓库门前。":feedback?inventoryFeedback:m.Hand!=null?$"手中：{ItemCatalog.Name(m.Hand.item)} ×{m.Hand.amount}。点击格子放下；关闭会退回。":"物品栏打开时游戏继续。按空格暂停，I 或 Esc 关闭。";
             inventoryStatus.color=feedback&&!inventoryFeedbackSuccess?Danger:Muted;
             bagCaption.text=$"背包    {m.Carry.Used:0.##} / {m.Carry.Capacity} 容量";
             int bagPages=Math.Max(1,(m.CarryGrid.slots.FindLastIndex(s=>s.amount>0)+27)/27);
@@ -165,8 +172,8 @@ namespace CrazyRubbish.Prototype
             float bagY=warehouseView?520:304;
             bagCaption.rectTransform.anchoredPosition=new Vector2(28,-(bagY-40));bagGrid.anchoredPosition=new Vector2(28,-bagY);
             bagPrevious.GetComponent<RectTransform>().anchoredPosition=new Vector2(412,-(bagY-40));bagNext.GetComponent<RectTransform>().anchoredPosition=new Vector2(496,-(bagY-40));
-            inventoryPrimary.interactable=inspectedItem.HasValue&&!m.Interacting&&m.Hand==null&&!m.Paused;
-            inventoryPrimary.GetComponentInChildren<Text>().text=inspectedContainer==2?"拾取这一叠":warehouseView?(inspectedContainer==1?"快速取到背包":"快速存入仓库"):"打开仓库存取";
+            inventoryPrimary.interactable=inspectedItem.HasValue&&!m.Interacting&&m.Hand==null&&!m.Paused&&(!warehouseView||m.NearWarehouse);
+            inventoryPrimary.GetComponentInChildren<Text>().text=warehouseView&&!m.NearWarehouse?"请先前往仓库存取":inspectedContainer==2?"拾取这一叠":warehouseView?(inspectedContainer==1?"快速取到背包":"快速存入仓库"):"打开仓库存取";
             inventoryGo.GetComponentInChildren<Text>().text=m.NearWarehouse?"打开仓库与背包":"前往仓库并打开";
             inventorySell.interactable=inspectedItem.HasValue&&inspectedContainer==1&&m.Warehouse.Available(inspectedItem.Value)>0&&m.Hand==null;
             inventoryDrop.interactable=inspectedItem.HasValue&&inspectedContainer==0&&m.Carry.Available(inspectedItem.Value)>0&&m.Hand==null&&!m.Interacting&&!m.Paused;
@@ -175,9 +182,13 @@ namespace CrazyRubbish.Prototype
                 ItemId item=inspectedItem.Value;itemTitle.text=ItemCatalog.Name(item);itemArtwork.enabled=true;itemArtwork.sprite=game.appearance.ItemSprite(item);
                 itemQuantity.text=$"背包 {m.Carry.Count(item)}   仓库 {m.Warehouse.Count(item)}\n每份占 {ItemCatalog.CapacityTicks(item)/20m:0.##} 容量 · 预约 {m.Carry.Reserved(item)+m.Warehouse.Reserved(item)}";
                 itemDescription.text=PrototypeKnowledge.Purpose(item);
+                var quote=m.QuoteSale(item,inventorySaleQuantity);
+                inventoryTradeInfo.text=$"当前售价 {m.SalePrice(item):0.00}/份\n仓库出售 {quote.Amount} 份，预计收入 {quote.Income:0.00}钱\n欠薪 {m.UnpaidWages:0.00} · 下期工资 {m.NextPayrollCents/100m:0.00}";
+                inventorySell.GetComponentInChildren<Text>().text=$"出售 {quote.Amount} 份";
+                inventorySell.interactable=inventorySell.interactable&&quote.Amount>0;
             }
             else
-            {itemTitle.text="指向格子查看物品";itemArtwork.enabled=false;itemQuantity.text="同类物品每格最多64份";itemDescription.text="上方是仓库或附近地面，下方是随身背包。\n\n左键拿起整叠，右键拿起一半。拿着物品时，点击目标格放下；右键一次放一份。\n\n格子用于整理，容量仍由物品体积决定。";}
+            {itemTitle.text="指向格子查看物品";itemArtwork.enabled=false;itemQuantity.text="同类物品每格最多64份";itemDescription.text="上方是仓库或附近物品，下方是背包。左键拿整叠，右键拆半；Shift点击快速转移。容量按体积计算。";inventoryTradeInfo.text="选择物品可查看当前售价和出售预估。\n饮水保留生活保护量，预约物资不会出售。";}
             handView.gameObject.SetActive(m.Hand!=null);
             if(m.Hand!=null)
             {

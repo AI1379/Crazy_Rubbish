@@ -10,6 +10,7 @@ namespace CrazyRubbish.Prototype
         public Sprite marker;
         public Sprite[] itemIcons;
         public Sprite housing, hole, streetlamp, woodwork, generator, dismantle;
+        public Sprite electricWoodwork,automaticWoodwork,conveyor,conveyorCrossing,inputPort,outputPort;
         public Sprite wasteWoodLow, wasteWoodHigh, wasteMetalLow, wasteMetalHigh, wasteMixedLow, wasteMixedHigh;
         public CharacterSprites[] characters;
 

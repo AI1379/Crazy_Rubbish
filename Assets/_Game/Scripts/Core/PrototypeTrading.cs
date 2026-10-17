@@ -29,6 +29,7 @@ namespace CrazyRubbish.Core
             if(Failed)return Fail("失败后无法拆除或出售。");
             if(!built)return Fail("此玩家设施不存在；社区旧设施不能出售拆移。");
             var site=Station(flag);
+            DetachFacilityPorts(site.Id);
             if(flag==1&&jobActive&&jobProgress>=Duration(activeRecipe)-1e-6&&!CanWear(woodToolId,WoodInput(activeRecipe))||
                 flag==2&&dismantleActive&&dismantleProgress>=35-1e-6&&!CanWearDismantleTools())return Fail("损坏工具回收槽已满，先疏通仓库并搬出损坏工具，再拆除或搬迁。");
             if(flag==4)RemoveAssemblyBatch();

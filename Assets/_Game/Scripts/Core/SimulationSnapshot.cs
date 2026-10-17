@@ -23,10 +23,14 @@ namespace CrazyRubbish.Core
     [Serializable] public sealed class BlueprintSave { public int flag;public string inventory;public int token; }
     [Serializable] public sealed class SimulationSnapshot
     {
-        public int schema=4,itemCount,sourceVersion=11;
+        public int schema=5,itemCount,sourceVersion=11;
+        public bool autoMachineStaffing=true;public double nextMachineStaffing;
+        public System.Collections.Generic.List<ConveyorLane> conveyors;public System.Collections.Generic.List<ConveyorPort> ports;public System.Collections.Generic.List<InfrastructurePlan> infrastructurePlans;
+        public int nextConveyor=1,nextPort=1,nextInfrastructurePlan=-1000000000,beltCredit,portTurn;
         public string baselineVersion=DesignBaseline.Version;
         public string[] itemIds;
         public int totalRecruited;
+        public long conveyorDelivered;
         public List<WirePlan> wirePlans;public int nextWirePlan=-1;
         public List<FacilityInstance> facilities;public List<WireCell> wires;public int[] selectedFacilities;public int nextFacility,manualFacility,wireCredit;public PrototypeSettings settings;public uint random;
         public CommunitySave community;public WorkshopSave workshop;public bool demoCompleted;public double demoCompletedAt;
@@ -61,6 +65,8 @@ namespace CrazyRubbish.Core
             SyncInventoryGrids();
             var map=InventoryMap();
             return new SimulationSnapshot{
+                conveyorDelivered=ConveyorDeliveredItems,
+                autoMachineStaffing=AutomaticMachineStaffing,nextMachineStaffing=nextMachineStaffing,conveyors=conveyors.Select(b=>b.Copy()).ToList(),ports=ports.Select(p=>p.Copy()).ToList(),infrastructurePlans=infrastructurePlans.Select(p=>p.Copy()).ToList(),nextConveyor=nextConveyorId,nextPort=nextPortId,nextInfrastructurePlan=nextInfrastructurePlan,beltCredit=beltCredit,portTurn=portTurn,
                 facilities=facilities.Select(f=>f.Copy()).ToList(),wires=wires.Select(w=>w.Copy()).ToList(),selectedFacilities=(int[])selectedFacilities.Clone(),nextFacility=nextFacilityId,manualFacility=manualFacilityId,wireCredit=wireCredit,wirePlans=wirePlans.Select(p=>p.Copy()).ToList(),nextWirePlan=nextWirePlan,
                 itemCount=Enum.GetValues(typeof(ItemId)).Length,itemIds=Enum.GetValues(typeof(ItemId)).Cast<ItemId>().Select(DesignBaseline.StableItemId).ToArray(),totalRecruited=TotalRecruited,settings=Settings,random=random.State,
                 tutorial=Tutorial.Copy(),opening=Opening?.Copy(),gradualOpening=Opening!=null,dumpedTicks=DumpedTicks,carryGrid=CarryGrid.Copy(),warehouseGrid=WarehouseGrid.Copy(),
@@ -84,7 +90,7 @@ namespace CrazyRubbish.Core
         }
         public static PrototypeSimulation Restore(SimulationSnapshot s)
         {
-            if(s==null||(s.schema!=2&&s.schema!=3&&s.schema!=4)||(s.sourceVersion!=5&&s.sourceVersion!=11)||s.itemCount!=Enum.GetValues(typeof(ItemId)).Length)throw new ArgumentException("存档版本或物品目录不兼容。");
+            if(s==null||(s.schema!=2&&s.schema!=3&&s.schema!=4&&s.schema!=5)||(s.sourceVersion!=5&&s.sourceVersion!=11)||s.itemCount!=Enum.GetValues(typeof(ItemId)).Length)throw new ArgumentException("存档版本或物品目录不兼容。");
             if(s.schema>=4&&s.itemIds!=null&&!s.itemIds.SequenceEqual(Enum.GetValues(typeof(ItemId)).Cast<ItemId>().Select(DesignBaseline.StableItemId)))throw new ArgumentException("存档物品稳定ID目录不兼容。");
             var m=new PrototypeSimulation(s.settings,1);m.RestoreConstruction(s);m.random.State=s.random;
             m.Opening=s.gradualOpening?(s.opening?.Copy()??throw new ArgumentException("存档缺少来料进度。")):null;m.DumpedTicks=s.dumpedTicks;
@@ -131,7 +137,7 @@ namespace CrazyRubbish.Core
             m.bills.Clear();foreach(var b in s.bills){var bill=new WageBill(b.ids,b.original/b.ids.Length,b.due);Array.Copy(b.unpaid,bill.UnpaidCents,b.unpaid.Length);m.bills.Add(bill);}
             m.TotalRecruited=Math.Max(s.totalRecruited,Math.Max(m.residents.Select(r=>r.Id).DefaultIfEmpty(0).Max(),m.bills.SelectMany(b=>b.ResidentIds).DefaultIfEmpty(0).Max()));
             m.blueprints.Clear();foreach(var b in s.blueprints){if(!m.blueprints.ContainsKey(b.flag))m.blueprints[b.flag]=new List<(UnitInventory,int)>();m.blueprints[b.flag].Add((map[b.inventory],b.token));}
-            m.manualFacilityId=s.schema>=4?s.manualFacility:(m.manualStation==0?0:m.Station(m.manualStation==3?4:m.manualStation).Id);m.RestoreBlueprintFlags(s);m.RecomputePower();m.RecoverBlockedActors();m.GroundRevision++;m.RefreshState();return m;
+            m.manualFacilityId=s.schema>=4?s.manualFacility:(m.manualStation==0?0:m.Station(m.manualStation==3?4:m.manualStation).Id);m.RestoreBlueprintFlags(s);m.ValidateAutomationCargo();m.RecomputePower();m.RecoverBlockedActors();m.GroundRevision++;m.RefreshState();return m;
         }
     }
 }

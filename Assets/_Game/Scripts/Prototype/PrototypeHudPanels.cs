@@ -19,6 +19,7 @@ namespace CrazyRubbish.Prototype
         private int lastNoticeRevision;
         private float noticeUntil;
         private string toolWarningLabel;
+        private int operationalIssueId;
         public bool ManagementOpen => management != null && management.gameObject.activeSelf;
         public int SelectedFacility => facilityPanel != null && facilityPanel.gameObject.activeSelf ? selectedFacility : 0;
         public bool ZonesVisible => showZones || ManagementOpen && activeTab == 0;
@@ -64,6 +65,7 @@ namespace CrazyRubbish.Prototype
             facilityTitle = TextAt(facilityPanel, "Title", "木工台", 82, 20, 240, 32, 24, Ink);
             ButtonAt(facilityPanel, "CloseFacility", "×", 350, 18, 28, 30);
             facilitySummary = TextAt(facilityPanel, "Summary", "", 20, 80, 356, 64, 15, Muted);
+            facilitySummary.resizeTextForBestFit=true;facilitySummary.resizeTextMinSize=12;facilitySummary.resizeTextMaxSize=15;facilitySummary.verticalOverflow=VerticalWrapMode.Truncate;
             ButtonAt(facilityPanel, "GoToFacility", "前往作业点", 20, 150, 356, 38, true);
             for (int i = 0; i < 4; i++) facilityPages[i] = At(facilityPanel, i == 0 ? "Woodwork" : "Facility " + (i + 1), 0, 204, 396, 384);
 
@@ -102,10 +104,11 @@ namespace CrazyRubbish.Prototype
 
         public void ClosePanels()
         {
+            CloseExperiencePanels();
             CloseInventory();
             if (management != null) management.gameObject.SetActive(false);
             if (facilityPanel != null) facilityPanel.gameObject.SetActive(false);
-            selectedFacility = 0;
+            selectedFacility = 0;inspectedBelt=inspectedPort=0;if(transportPanel!=null)transportPanel.gameObject.SetActive(false);
             if (inspection != null) inspection.gameObject.SetActive(false);
             UpdateLaunchers();
         }
@@ -123,6 +126,8 @@ namespace CrazyRubbish.Prototype
 
         public bool TryCloseTopPanel()
         {
+            if(CloseExperiencePanels())return true;
+            if(transportPanel!=null&&transportPanel.gameObject.activeSelf){ClosePanels();return true;}
             if(InventoryOpen){CloseInventory();return true;}
             if(KnowledgeOpen){AcknowledgeKnowledge();return true;}
             if (tradeConfirmation != null && tradeConfirmation.gameObject.activeSelf)
@@ -150,14 +155,14 @@ namespace CrazyRubbish.Prototype
 
         public void ShowFacility(int facility)
         {
-            if (facility < 1 || facility > 6 || facilityPanel == null) return;
+            if (facility < 1 || facility > 8 || facilityPanel == null) return;
             ClosePanels(); selectedFacility = facility;
             facilityPanel.gameObject.SetActive(true);
-            for (int i = 0; i < facilityPages.Length; i++) facilityPages[i].gameObject.SetActive(i == facility - 1);
-            string[] names = { "木工台", "拆解地点", "工作台", "发电机", "新住房", "路灯" };
+            for (int i = 0; i < facilityPages.Length; i++) if(facilityPages[i]!=null)facilityPages[i].gameObject.SetActive(i == facility - 1);
+            string[] names = { "木工台", "拆解地点", "工作台", "发电机", "新住房", "路灯", "电动木工", "自动木工" };
             facilityTitle.text = names[facility - 1];
             facilityTitle.resizeTextForBestFit=true;facilityTitle.resizeTextMinSize=16;facilityTitle.resizeTextMaxSize=24;
-            Sprite[] artwork = { game.appearance.woodwork, game.appearance.dismantle, game.appearance.workbench, game.appearance.generator, game.appearance.housing, game.appearance.streetlamp };
+            Sprite[] artwork = { game.appearance.woodwork, game.appearance.dismantle, game.appearance.workbench, game.appearance.generator, game.appearance.housing, game.appearance.streetlamp, game.appearance.electricWoodwork,game.appearance.automaticWoodwork };
             facilityArtwork.sprite = artwork[facility - 1];
             if (game.Model != null) RefreshOverlay(game.Model);
         }
@@ -173,10 +178,13 @@ namespace CrazyRubbish.Prototype
             bool blocked = game.MenuOpen || game.ResultVisible;
             RefreshAvailableMechanics(m);
             RefreshTutorialCoach(m);
-            bool warning = m.RiotActive || m.UnpaidWageCents > 0 || m.MissingSupplyPeople > 0 || toolWarningLabel != null;
+            var issue=m.Facilities.FirstOrDefault(f=>f.Built&&f.RunRequested&&(f.Kind==1||PrototypeSimulation.IsWoodMachine(f.Kind))&&
+                (f.State==WorkState.NeedsTool||f.State==WorkState.NeedsMaterials||f.State==WorkState.NeedsPower||f.State==WorkState.NeedsMaintenance||f.State==WorkState.OutputBlocked));
+            operationalIssueId=issue?.Id??0;
+            bool warning = m.RiotActive || m.UnpaidWageCents > 0 || m.MissingSupplyPeople > 0 || toolWarningLabel != null || issue!=null;
             alerts.gameObject.SetActive(!blocked && warning);
             alerts.GetComponentInChildren<Text>().text = m.RiotActive ? $"!  欠薪暴动 · 剩余 {m.RiotSeconds:0} 秒  >" :
-                m.MissingSupplyPeople > 0 ? $"!  {m.MissingSupplyPeople} 人缺少生活供应  >" : m.UnpaidWageCents > 0 ? $"!  待付工资 {m.UnpaidWages:0.00}  >" : $"!  {toolWarningLabel}耐久低，请准备替补  >";
+                m.MissingSupplyPeople > 0 ? $"!  {m.MissingSupplyPeople} 人缺少生活供应  >" : m.UnpaidWageCents > 0 ? $"!  待付工资 {m.UnpaidWages:0.00}  >" : toolWarningLabel!=null?$"!  {toolWarningLabel}耐久低，请准备替补  >":issue==null?"":$"!  {PrototypeSimulation.FacilityName(issue.Kind)}：{PrototypeGame.StateName(issue.State)}  >";
             SetSelected(zones, showZones);
             if (lastNoticeRevision != game.NoticeRevision)
             { lastNoticeRevision = game.NoticeRevision; noticeUntil = Time.unscaledTime + 4.5f; }
@@ -187,13 +195,13 @@ namespace CrazyRubbish.Prototype
                 case 5:facilitySummary.text=$"床位4 · 供电 {m.SelectedFacility(16).PowerRatio:P0}\n住房总容量 {m.HousingCapacity}";break;
                 case 6:facilitySummary.text=$"照明供电 {m.SelectedFacility(32).PowerRatio:P0}\n覆盖中心距6格内的住房";break;
                 case 1:
-                    facilitySummary.text = m.BenchBuilt ? "木料加工\n选择配方，运入原料后开始作业。" : "待建设\n需要废木料 4 + 紧固件 2"; break;
+                    facilitySummary.text = m.ProductionDiagnosis(m.SelectedFacility(1)); break;
                 case 2:
                     facilitySummary.text = m.DismantleBuilt ? $"{PrototypeGame.StateName(m.DismantleState)}\n当前拆解：{ItemCatalog.Name(m.SelectedDevice)}" : "待建设\n需要废木料 4 + 紧固件 2"; break;
                 case 3:
                     facilitySummary.text = m.TableBuilt ? $"装配：{ItemCatalog.Name(m.AssemblyProduct)} · {m.AssemblyProgress:P0}\n木柄 1 + {ItemCatalog.Name(m.AssemblyEnd)} 1" : "待建设\n需要木板 4 + 钢铁零件 2"; break;
                 case 4:
-                    facilitySummary.text = m.GeneratorBuilt ? $"燃料余量 {m.FuelSeconds:0} 秒 · 同网请求 {m.SelectedFacility(8).PowerRequested:0.###}\n{(m.FuelSeconds > 0 ? m.SelectedFacility(8).PowerRequested>0?"已连接负载，按运行时间耗燃料":"空载待机，不耗燃料":"缺少燃料，请前往补充")}" : "待建设 · 钢铁零件 6 + 电线 2\n热动力组件 1 + 发电组件 1"; break;
+                    facilitySummary.text = m.GeneratorBuilt ? m.ProductionDiagnosis(m.SelectedFacility(8)) : "待建设 · 钢铁零件 6 + 电线 2\n热动力组件 1 + 发电组件 1"; break;
             }
         }
 
@@ -203,7 +211,7 @@ namespace CrazyRubbish.Prototype
             { game.Report(new ActionResult(false, "先选择开始教程或自由经营，再前往作业点。")); return; }
             switch (SelectedFacility)
             {
-                case 5:case 6:var side=PrototypeSimulation.ServiceCell(game.Model.SelectedFacility(FacilityKind(SelectedFacility)));game.GoTo(side.x,side.y);break;
+                case 5:case 6:case 7:case 8:var side=PrototypeSimulation.ServiceCell(game.Model.SelectedFacility(FacilityKind(SelectedFacility)));game.GoTo(side.x,side.y);break;
                 case 1: game.GoTo(game.Model.BenchFrontX, game.Model.BenchFrontY); break;
                 case 2: game.GoTo(game.Model.DismantleFrontX, game.Model.DismantleFrontY); break;
                 case 3: game.GoTo(game.Model.TableFrontX, game.Model.TableFrontY); break;

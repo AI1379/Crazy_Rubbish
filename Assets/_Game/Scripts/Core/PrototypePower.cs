@@ -12,6 +12,7 @@ namespace CrazyRubbish.Core
     {
         public int Id;public double Output,Requested,Ratio;
         public readonly List<int> FacilityIds=new List<int>();
+        public readonly List<int> BeltIds=new List<int>();
         public readonly List<WireCell> Wires=new List<WireCell>();
     }
     public sealed partial class PrototypeSimulation
@@ -128,12 +129,13 @@ namespace CrazyRubbish.Core
             foreach(var f in facilities){f.PowerRatio=0;f.PowerRequested=0;}
             // A device is one electrical node. Adjacent wires connect to its perimeter;
             // unrelated manual workstations never bridge two electrical circuits.
-            var electric=facilities.Where(f=>f.Built&&(f.Kind==8||f.Kind==16||f.Kind==32)).ToList();
+            var electric=facilities.Where(f=>f.Built&&(f.Kind==8||f.Kind==16||f.Kind==32||IsWoodMachine(f.Kind))).ToList();
             var oldHousing=new FacilityInstance{Id=-1,Kind=16,X=16,Y=2,Built=true};
             var oldLamp=new FacilityInstance{Id=-2,Kind=32,X=20,Y=5,Built=true};
             electric.Add(oldHousing);electric.Add(oldLamp);
             var live=wires.Where(w=>!w.Blueprint).ToList();
-            var cells=new Dictionary<(int,int),int>();int total=live.Count+electric.Count;
+            var cells=new Dictionary<(int,int),int>();int total=live.Count+electric.Count+conveyors.Count(b=>!b.Blueprint);
+            var belts=conveyors.Where(b=>!b.Blueprint).ToArray();
             var parent=Enumerable.Range(0,total).ToArray();
             Func<int,int> root=null;root=i=>parent[i]==i?i:(parent[i]=root(parent[i]));
             Action<int,int> union=(a,b)=>{a=root(a);b=root(b);if(a!=b)parent[b]=a;};
@@ -154,11 +156,17 @@ namespace CrazyRubbish.Core
                     if(perimeter&&cells.TryGetValue((x,y),out int wire))union(live.Count+i,wire);
                 }
             }
+            for(int i=0;i<belts.Length;i++)
+            {
+                var b=belts[i];int node=live.Count+electric.Count+i;
+                foreach(var at in new[]{(b.X,b.Y),(b.X+1,b.Y),(b.X-1,b.Y),(b.X,b.Y+1),(b.X,b.Y-1)})
+                    if(cells.TryGetValue(at,out int wire))union(node,wire);
+            }
             var groups=new Dictionary<int,PowerNetwork>();
             for(int i=0;i<total;i++)
             {
                 int group=root(i);if(!groups.TryGetValue(group,out var n)){n=new PowerNetwork{Id=groups.Count+1};groups[group]=n;powerNetworks.Add(n);}
-                if(i<live.Count)n.Wires.Add(live[i]);else n.FacilityIds.Add(electric[i-live.Count].Id);
+                if(i<live.Count)n.Wires.Add(live[i]);else if(i<live.Count+electric.Count)n.FacilityIds.Add(electric[i-live.Count].Id);else n.BeltIds.Add(belts[i-live.Count-electric.Count].Id);
             }
             RefreshPowerRatios();
         }
@@ -173,29 +181,56 @@ namespace CrazyRubbish.Core
                     if(id<0){n.Requested+=id==-1?0.2:0.1;continue;}
                     var f=GetFacility(id);
                     if(f.Kind==8){if((f.fuelRemaining>0||f.fuelWood+f.fuelChips>0)&&(f.equivalentHeat<20-1e-6||f.GeneratorResidue.FreeTicks>=20))n.Output+=DesignBaseline.GeneratorPower;}
-                    else n.Requested+=f.Kind==16?0.2:0.1;
+                    else n.Requested+=IsWoodMachine(f.Kind)?MachinePowerRequest(f):f.Kind==16?0.2:0.1;
                 }
+                foreach(int id in n.BeltIds){var b=GetConveyor(id);if(b.Enabled)n.Requested+=DesignBaseline.BeltLoad;}
                 n.Ratio=n.Requested<=0?0:Math.Min(1,n.Output/n.Requested);
                 foreach(int id in n.FacilityIds)
                 {
                     if(id==-1){HousingPowerRatio=n.Ratio;continue;}if(id==-2){CommunityLampPowerRatio=n.Ratio;continue;}
                     var f=GetFacility(id);f.PowerRatio=n.Ratio;f.PowerRequested=n.Requested;
                 }
+                foreach(int id in n.BeltIds)GetConveyor(id).PowerRatio=n.Ratio;
             }
+        }
+        private double GeneratorStepBudget(FacilityInstance f,double seconds)
+        {
+            double fuel=f.fuelRemaining+f.fuelWood*Settings.woodFuelSeconds+f.fuelChips*Settings.chipsFuelSeconds;
+            double heatRate=f.activeFuelHeatRate>0?f.activeFuelHeatRate:1/Settings.woodFuelSeconds;
+            double heatRoom=Math.Max(0,20-f.equivalentHeat)+(f.GeneratorResidue.FreeTicks/20)*20;
+            return Math.Min(seconds,Math.Min(fuel,heatRoom/heatRate));
         }
         private void TickPower(double seconds)
         {
             RecomputePower();
+            foreach(var f in facilities){f.StepPowerRatio=0;f.StepPoweredFraction=0;}
+            foreach(var b in conveyors)b.StepPowerRatio=0;
+            foreach(var n in powerNetworks)
+            {
+                var generators=new List<(double until,double output)>();
+                foreach(int id in n.FacilityIds)
+                {var f=GetFacility(id);if(f!=null&&f.Kind==8)generators.Add((GeneratorStepBudget(f,seconds),DesignBaseline.GeneratorPower));}
+                double ratio=0,powered=0;var times=generators.Select(g=>g.until).Concat(new[]{0.0,seconds}).Distinct().OrderBy(t=>t).ToArray();
+                for(int i=0;i+1<times.Length;i++)
+                {
+                    double output=generators.Where(g=>g.until>times[i]+1e-10).Sum(g=>g.output);
+                    double instant=n.Requested<=0?0:Math.Min(1,output/n.Requested),fraction=(times[i+1]-times[i])/seconds;
+                    ratio+=instant*fraction;if(instant>0)powered+=fraction;
+                }
+                foreach(int id in n.FacilityIds){var f=GetFacility(id);if(f!=null){f.StepPowerRatio=ratio;f.StepPoweredFraction=powered;}}
+                foreach(int id in n.BeltIds)GetConveyor(id).StepPowerRatio=ratio;
+            }
             foreach(var f in facilities.Where(f=>f.Built&&f.Kind==8&&f.PowerRequested>0).ToArray())AtFacility(f,()=>{
-                Ignite();if(fuelRemaining<=0)return;
-                HasBeenPowered=true;
-                if(equivalentHeat>=20-1e-6&&!GeneratorResidue.TryAdd(ItemId.PowerAsh,1))return;
-                if(equivalentHeat>=20-1e-6)equivalentHeat-=20;
-                double burned=Math.Min(seconds,fuelRemaining);fuelRemaining=Math.Max(0,fuelRemaining-burned);
-                if(fuelRemaining<1e-8)fuelRemaining=0;
-                equivalentHeat+=burned*activeFuelHeatRate;
+                double remaining=GeneratorStepBudget(f,seconds);
+                while(remaining>1e-9)
+                {
+                    if(equivalentHeat>=20-1e-6)
+                    {if(!GeneratorResidue.TryAdd(ItemId.PowerAsh,1))break;equivalentHeat=Math.Max(0,equivalentHeat-20);}
+                    Ignite();if(fuelRemaining<=0)break;HasBeenPowered=true;
+                    double burned=Math.Min(remaining,fuelRemaining);remaining-=burned;fuelRemaining=Math.Max(0,fuelRemaining-burned);
+                    if(fuelRemaining<1e-8)fuelRemaining=0;equivalentHeat+=burned*activeFuelHeatRate;
+                }
                 if(equivalentHeat>=20-1e-6&&GeneratorResidue.TryAdd(ItemId.PowerAsh,1))equivalentHeat=Math.Max(0,equivalentHeat-20);
-                Ignite();
             });
             RecomputePower();
         }

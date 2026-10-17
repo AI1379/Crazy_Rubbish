@@ -130,6 +130,7 @@ namespace CrazyRubbish.Editor
                 File.Copy("Docs/Development/13_稀疏开局与认识环境.md", outputDirectory + "/开局与地图操作.md", true);
                 File.Copy("Docs/Development/14_格子物品栏与拾取.md", outputDirectory + "/物品栏与拾取操作.md", true);
                 File.Copy("Docs/Development/15_自由建设与电网.md", outputDirectory + "/建设与电网操作.md", true);
+                File.Copy("Docs/Development/16_电动生产与输送维护.md", outputDirectory + "/电动生产与输送维护.md", true);
                 Debug.Log("Windows " + (development ? "development" : "release") + " build succeeded: " + outputDirectory);
             }
             finally { PlayerSettings.bundleVersion = originalVersion; }

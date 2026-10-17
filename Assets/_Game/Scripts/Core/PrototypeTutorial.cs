@@ -7,6 +7,7 @@ namespace CrazyRubbish.Core
     public sealed class TutorialProgress
     {
         public bool active = true, started;
+        public bool automationStarted, automationDismissed;
         public int orientation;
         public System.Collections.Generic.List<string> seenConcepts = new System.Collections.Generic.List<string>();
         public int step;
@@ -29,7 +30,7 @@ namespace CrazyRubbish.Core
         Wait, Pick, Deposit, Withdraw, BuildBench, FeedWood, WorkWood, TakeWood,
         BuildTable, BuildDismantle, FeedDevice, WorkDismantle, TakeDeviceOutput,
         BuildGenerator, Fuel, Recruit, HandSaw, AssignWorker, Sell, Pay,
-        SelectHandle, SelectPlank, BuyBlade, FeedAssembly, WorkAssembly, Trade, TakeWoodInput, ConnectPower
+        SelectHandle, SelectPlank, BuyBlade, FeedAssembly, WorkAssembly, Trade, TakeWoodInput, ConnectPower, BuySupply, StartWood, SellResource
     }
 
     public sealed class TutorialAction
@@ -51,26 +52,27 @@ namespace CrazyRubbish.Core
 
     public static class PrototypeTutorial
     {
+        public const int OpeningFood = 4, OpeningWater = 8, OpeningWood = 4, OpeningFasteners = 2;
         public static readonly string[] Titles = {
             "欢迎来到废料工坊", "拾取你的手锯", "先备好食物和饮水", "准备第一批建材",
             "搭建木工地点", "木料变成木板，再送进仓库", "建设工作台和拆解地点",
             "拆一台旧切割装置", "组装发电机并加燃料", "招募居民，交工具和分岗位",
-            "出售产品，支付第一期工资", "制作一把备用手锯", "准备200钱扩区资金", "新手教程完成"
+            "出售产品，支付第一期工资", "制作一把备用手锯", "积累200钱，准备升级产线", "新手教程完成"
         };
         public static readonly string[] Lessons = {
-            "跟着提示亲手操作，学会经营第一座工坊。\n\n左键查看设施；右键或WASD移动。E交互、Shift+E整堆拾取、Q入库、F木工。空格暂停，1/2/3倍速。\n\n按B/P/I/H打开建造、人员、仓库或教程，Esc先收起面板。首次准备页时间停止。",
+            "跟着提示亲手操作，学会经营第一座工坊。\n\n左键查看设施；右键或WASD移动。E交互、Shift+E整堆拾取、Q入库、F木工。空格暂停，1/2/3倍速。\n\n按B/P/I/H打开建造、人员、背包或教程，Esc先收起面板。首次准备页时间停止。",
             "手锯就在开局来料区。走近物品，按E拾取；物品多时可在仓库页指定种类。\n\n“前往”只负责走路，到达后还要点“拾取”。手锯占背包容量，入库时会保留随身手锯。",
-            "食物12份、饮水24升先送进仓库。每300秒会实际吃喝，缺货要补。\n\n背包容量8，装满要分趟搬。到仓库取用点按Q入库；不是走到仓库图像中心。居民首期免费，之后可在人员页改供应政策。",
-            "准备废木料16、紧固件4，放在仓库。木工和拆解各用木料4+紧固件2，另外木料8做两批木板。\n\nShift+E拾整堆，或按教程按钮指定物品。背包满了先入库，不能凭空跨过容量限制。",
-            "点击地图上的木工台，或从建造页查看木工台，再点“搭建木工台”，扣木料4和紧固件2。建设可从背包和仓库取建材。\n\n“前往作业点”会走到设施正面；暂停时只预约蓝图，恢复后才建成。",
+            "先把食物4份、饮水8升送进仓库，够主角起步即可。每300秒实际吃喝，招募后居民会继续搬运生活物资。\n\n背包容量8。到仓库门前按Q入库；不用先搬完全部储备。",
+            "先准备废木料4、紧固件2，放在仓库，就能搭起木工台。生产和拆解需要的后续物资，用到时再取。\n\n按教程按钮指定拾取，背包装满就先入库。先建起来，尽早做出第一批木板。",
+            "按B查看木工方案，或用任务卡搭建第一处木工。需要废木料4、紧固件2，建材可从背包和仓库取用。\n\n建造页可自由选择位置并按R旋转；“前往作业点”会走到设施正面。暂停时先预约蓝图，恢复后建成。",
             "每批木料4→木板3+碎屑1，基础40秒。先去仓库取木料，再到木工正面投料、按F进入岗位，站着等。\n\n移动会退出岗位，进度保留。取成品后按Q入库；成品不会自动变成现金。目标是两批、仓库木板6。",
             "先取得钢铁零件8：其中2件和木板4建工作台，其余6件留给发电机。拆解地点再用木料4+紧固件2。\n\n这些初始物资就在地面。不要提前把建设要用的木板全部卖掉。",
             "把螺丝刀和旧切割装置带到拆解正面。投设备，再开拆解，35秒后取电机、机器锯片和钢铁零件，送仓库。\n\n机器锯片和手锯锯片用途不同。移动会退出人工岗位，已投入的原料仍留在现场。",
-            "发电机需要钢铁零件6、热动力组件1、发电组件1、电线2。组件在地面，先拾取并入库。\n\n建好后到正面投入木料或碎屑；要实际发出电，才能得到居民认可。没有燃料会停机。",
+            "发电机需要钢铁零件6、热动力组件1、发电组件1、电线2。建好后还要用额外电线接到旧住房或路灯，再投燃料。\n\n完全空载不发电、不烧燃料。实际带负载发电后才能招募；断线、缺燃料和供电不足会分别提示。",
             "在人员页逐个招募5人。首批免招募费，工资不免：每人每600秒10钱。\n\n把随身手锯交到木工工具槽，再指定居民木工。居民会实际走路搬运，不能使用主角远处的工具。",
             "居民生产后，等搬运工把木板送进仓库，再出售。第一人加入600秒后，人员页手动发薪，5人共50钱。\n\n可用3倍速等待，仍要看生活库存和仓库空间。现金不够可部分支付；免费食物不抵工资。",
             "木工切到木柄配方，等旧批次和输出搬完。购买手锯锯片6钱，把木柄1+手锯锯片1带到工作台，投料并作业20秒。\n\n做好的手锯会由居民运回仓库，再送往缺工具的岗位。完成后建议切回木板；自动采购可在人员页开启。",
-            "目标：现金200、没有欠薪或生活缺供。继续生产、拆解回收或出售已解锁技术都可以融资。\n\n技术出售会永久压低对应商品售价，确认窗口会说明影响；这不是必须选择。不要为了凑钱出售保护饮水。",
+            "目标：现金200、没有欠薪或生活缺供。继续生产，同时把多余金属原料、纺织回收物送仓库出售，每类先保留4份；关键建材、工具和饮水要留好。\n\n技术融资是可选项，会永久压低对应售价。完成后继续自动化入门，用周转资金升级电动产线。",
             "你已经掌握拾取、真实搬运、生产、发电、招募、工资和工具续补。\n\n可以继续经营，留意工资、生活物资和工具耐久。随时从“教程”页翻阅任意一课；重看不会重开游戏。"
         };
 
@@ -81,8 +83,8 @@ namespace CrazyRubbish.Core
             switch (step)
             {
                 case 1: return m.HasSaw ? "已取得手锯" : "取得手锯 0/1 · 先学会拾取";
-                case 2: return "入库：" + Stock(ItemId.Food, 12) + "\n入库：" + Stock(ItemId.DrinkingWater, 24);
-                case 3: return "入库：" + Stock(ItemId.WasteWood, 16) + "\n入库：" + Stock(ItemId.RecoveredFastener, 4);
+                case 2: return "启动储备：" + Stock(ItemId.Food, OpeningFood) + "\n启动储备：" + Stock(ItemId.DrinkingWater, OpeningWater);
+                case 3: return "入库：" + Stock(ItemId.WasteWood, OpeningWood) + "\n入库：" + Stock(ItemId.RecoveredFastener, OpeningFasteners);
                 case 4: return "木工台：" + Built(m.BenchBuilt) + "\n建材：废木料 4 + 紧固件 2";
                 case 5: return $"木工生产 {Math.Min(m.CompletedBatches, 2)}/2 批 · 当前 {m.Progress:P0}\n入库：{Stock(ItemId.Plank, 6)}";
                 case 6: return "工作台：" + Built(m.TableBuilt) + "\n拆解地点：" + Built(m.DismantleBuilt);
@@ -102,8 +104,8 @@ namespace CrazyRubbish.Core
             switch (step)
             {
                 case 1: return m.HasSaw;
-                case 2: return m.Warehouse.Count(ItemId.Food)>=12 && m.Warehouse.Count(ItemId.DrinkingWater)>=24 || m.HasBeenPowered && m.MealsConsumed>0 && m.MissingSupplyPeople==0;
-                case 3: return m.BenchBuilt || m.Warehouse.Count(ItemId.WasteWood)>=16 && m.Warehouse.Count(ItemId.RecoveredFastener)>=4;
+                case 2: return m.Warehouse.Count(ItemId.Food)>=OpeningFood && m.Warehouse.Count(ItemId.DrinkingWater)>=OpeningWater || m.HasBeenPowered && m.MealsConsumed>0 && m.MissingSupplyPeople==0;
+                case 3: return m.BenchBuilt || m.Warehouse.Count(ItemId.WasteWood)>=OpeningWood && m.Warehouse.Count(ItemId.RecoveredFastener)>=OpeningFasteners;
                 case 4: return m.BenchBuilt;
                 case 5: return m.CompletedBatches>=2 && (m.Warehouse.Count(ItemId.Plank)>=6 || m.TableBuilt || m.TotalSold>=6);
                 case 6: return m.TableBuilt && m.DismantleBuilt;
@@ -148,11 +150,11 @@ namespace CrazyRubbish.Core
             {
                 case 1: return Pick(m,ItemId.WoodHandSaw,1);
                 case 2:
-                    if(m.Warehouse.Available(ItemId.Food)<12)return Collect(m,ItemId.Food,12);
-                    return Collect(m,ItemId.DrinkingWater,24);
+                    if(m.Warehouse.Available(ItemId.Food)<OpeningFood)return Collect(m,ItemId.Food,OpeningFood);
+                    return Collect(m,ItemId.DrinkingWater,OpeningWater);
                 case 3:
-                    if(m.Warehouse.Available(ItemId.WasteWood)<16)return Collect(m,ItemId.WasteWood,16);
-                    return Collect(m,ItemId.RecoveredFastener,4);
+                    if(m.Warehouse.Available(ItemId.WasteWood)<OpeningWood)return Collect(m,ItemId.WasteWood,OpeningWood);
+                    return Collect(m,ItemId.RecoveredFastener,OpeningFasteners);
                 case 4: return Plan(TutorialOperation.BuildBench,"搭建木工台","木料4+紧固件2；底栏按钮也可建设。","Build",0,m.BenchFrontX,m.BenchFrontY);
                 case 5:
                     if(m.Carry.Available(ItemId.Plank)>0 || m.Carry.Available(ItemId.WoodChips)>0)return Depot();
@@ -186,7 +188,7 @@ namespace CrazyRubbish.Core
                             if(m.Warehouse.Available(cost.Item)<cost.Amount)return Collect(m,cost.Item,cost.Amount);
                         return Plan(TutorialOperation.BuildGenerator,"组装发电机","完整材料齐备才建设。","Command2",0,m.GeneratorFrontX,m.GeneratorFrontY);
                     }
-                    if(m.Wires.Count==0)
+                    if(!m.ConnectedToGenerator(-1)&&!m.ConnectedToGenerator(-2))
                     {
                         if(m.Warehouse.Available(ItemId.RecoveredWire)+m.Carry.Available(ItemId.RecoveredWire)<1)return Collect(m,ItemId.RecoveredWire,1);
                         return Plan(TutorialOperation.ConnectPower,"接线到社区","每件电线铺4格；先连接住房与路灯，发电机空载不耗燃料。","ConnectCommunity",0);
@@ -205,7 +207,7 @@ namespace CrazyRubbish.Core
                 case 10:
                     if(m.Warehouse.Available(ItemId.Plank)>0 || m.Warehouse.Available(ItemId.WoodHandle)>0)return Plan(TutorialOperation.Sell,"出售木制品","先卖已送入仓库的产品，为工资筹钱。","Command19");
                     if(m.UnpaidWageCents>0 && m.CashCents>0)return Plan(TutorialOperation.Pay,"支付工资","按原账单把经营现金转进居民钱包。","Command5",1);
-                    return Wait($"现金 {m.Money:0.00} / 欠薪 {m.UnpaidWages:0.00}。距离下次发薪 {m.SecondsToWage:0}秒；用3倍速等生产和配送，收到木板后再出售。");
+                    return KeepProduction(m,$"首期工资还有 {m.SecondsToWage:0}秒。可用3倍速；等待期间可整理布局、查看电动木工。收到木板后再出售。");
                 case 11:
                     if(m.RecipeChangePending&&!m.JobActive&&m.WoodInputStock.Used>4)
                     {
@@ -231,9 +233,35 @@ namespace CrazyRubbish.Core
                     if(m.SelectedRecipe!=WoodRecipe.Plank && !m.RecipeChangePending)return Plan(TutorialOperation.SelectPlank,"木工切回木板","继续保持生产利润，注意工资与生活。","Plank");
                     if(m.UnpaidWageCents>0 && m.CashCents>0)return Plan(TutorialOperation.Pay,"支付到期工资","先解除欠薪，再达成200钱目标。","Command5",1);
                     if(m.Warehouse.Available(ItemId.Plank)>0 || m.Warehouse.Available(ItemId.WoodHandle)>0)return Plan(TutorialOperation.Sell,"出售木制品","继续生产也能融资；技术交易是另一个选择。","Command19");
-                    return Plan(TutorialOperation.Trade,"查看融资选项","现场页底部提供技术交易；每次出售需单独确认，也可以继续生产或拆解筹钱。","Command37");
+                    if(m.Carry.UsedTicks>m.Carry.Count(ItemId.WoodHandSaw)*ItemCatalog.CapacityTicks(ItemId.WoodHandSaw))return Depot();
+                    foreach(var item in new[]{ItemId.SteelMaterial,ItemId.CopperMaterial,ItemId.AluminumMaterial,ItemId.WasteTextile,ItemId.OldClothes,ItemId.MixedPlastic})
+                    {
+                        int surplus=m.Warehouse.Available(item)-4;
+                        if(surplus>0)return Plan(TutorialOperation.SellResource,"出售多余"+ItemCatalog.Name(item),$"保留4份材料，其余{surplus}份预计收入{m.QuoteSale(item,surplus).Income:0.00}钱。正常回收也能筹款，无需出售技术。","Sell"+(int)item,2,item:item,amount:surplus);
+                    }
+                    var recovery=KeepProduction(m,"先恢复生产，再继续回收筹款。");
+                    if(recovery.operation!=TutorialOperation.Wait&&(recovery.operation!=TutorialOperation.BuySupply||ItemCatalog.Price(recovery.item).buy*recovery.amount<=m.Money))return recovery;
+                    var salvage=m.Ground.Where(p=>p.Amount>p.Reserved&&new[]{ItemId.SteelMaterial,ItemId.CopperMaterial,ItemId.AluminumMaterial,ItemId.WasteTextile,ItemId.OldClothes,ItemId.MixedPlastic}.Contains(p.Item))
+                        .OrderByDescending(p=>m.SalePrice(p.Item)).ThenBy(p=>PrototypeSimulation.Distance(m.PlayerX,m.PlayerY,p.X,p.Y)).FirstOrDefault();
+                    if(salvage!=null)return Pick(m,salvage.Item,8);
+                    return KeepProduction(m,$"继续生产筹款：现金 {m.Money:0.00}/200。技术融资是可选项；先保持原料、工具和配送畅通。");
                 default: return Wait("从菜单开始，或翻阅其他课程。");
             }
+        }
+        private static TutorialAction KeepProduction(PrototypeSimulation m,string tip)
+        {
+            if(!m.RunRequested)return Plan(TutorialOperation.StartWood,"恢复木工生产","木工已停产，先恢复生产请求。","Work");
+            if(m.Woodworker==null)return Plan(TutorialOperation.AssignWorker,"安排居民木工","先安排一位居民操作，其他居民继续配送。","Command4",1);
+            if(m.WoodTools.Count(ItemId.WoodHandSaw)==0)
+            {
+                if(m.Warehouse.Available(ItemId.WoodHandSaw)>0||m.Ground.Any(p=>p.Item==ItemId.WoodHandSaw&&p.Amount>p.Reserved))
+                    return Wait("替补手锯正在等待居民送往木工。可点木工查看工具与配送状态。");
+                if(m.Carry.Available(ItemId.WoodHandSaw)>0)return Plan(TutorialOperation.HandSaw,"交接备用手锯","把备用手锯交给居民岗位。","Command12",0,m.BenchFrontX,m.BenchFrontY);
+                return Plan(TutorialOperation.BuySupply,"购买替补手锯 · 16钱","手锯已耗尽；补一把后居民会送到岗位。也可在工作台制作。","Command20",0,item:ItemId.WoodHandSaw);
+            }
+            if(m.WoodInputStock.Available(ItemId.WasteWood)<4&&m.Warehouse.Available(ItemId.WasteWood)==0&&!m.Ground.Any(p=>p.Item==ItemId.WasteWood&&p.Amount>p.Reserved))
+                return Plan(TutorialOperation.BuySupply,"采购一批木料","没有可搬运的木料；按当前采购价补4份，再由居民投料。","OpenShop",0,item:ItemId.WasteWood,amount:4);
+            return Wait(m.ProductionDiagnosis(m.SelectedFacility(1))+"\n"+tip);
         }
     }
 

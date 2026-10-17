@@ -90,6 +90,12 @@ MonoBehaviour:
   woodwork: {fileID: 21300000, guid: 767ea857a8cd40c4ca3aff474e18a89e, type: 3}
   generator: {fileID: 21300000, guid: ef5ab4392668a8b4a8801b9a610e3b25, type: 3}
   dismantle: {fileID: 21300000, guid: 15d2eeecc800ed64bbb93f0a22adae7c, type: 3}
+  electricWoodwork: {fileID: 21300000, guid: 628860d06baecc241914a2ee4dd48883, type: 3}
+  automaticWoodwork: {fileID: 21300000, guid: 3c13ffe5713ab404eb6c89007dbe9df3, type: 3}
+  conveyor: {fileID: -346669357, guid: 22c155494fb06174581248db05120e59, type: 3}
+  conveyorCrossing: {fileID: 1000022086, guid: 22c155494fb06174581248db05120e59, type: 3}
+  inputPort: {fileID: 1992154638, guid: 22c155494fb06174581248db05120e59, type: 3}
+  outputPort: {fileID: 2143647437, guid: 22c155494fb06174581248db05120e59, type: 3}
   wasteWoodLow: {fileID: 21300000, guid: eaab4a884a5a2704b8d9f1b4ad4baeb1, type: 3}
   wasteWoodHigh: {fileID: 21300000, guid: 26318c39a732bf849a1d9ce14d23dbf1, type: 3}
   wasteMetalLow: {fileID: 21300000, guid: cdb0eb2981ba9924ea4e913d52a61720, type: 3}

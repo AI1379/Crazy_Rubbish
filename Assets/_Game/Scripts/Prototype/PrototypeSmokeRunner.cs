@@ -17,7 +17,10 @@ namespace CrazyRubbish.Prototype
         [Serializable]
         private sealed class SmokeReport
         {
-            public bool success, restart, development, saveRoundtrip, demoCompleted, tutorialCompleted,constructionVerified;
+            public bool success, restart, development, saveRoundtrip, demoCompleted, tutorialCompleted,constructionVerified,automationVerified;
+            public int machineBatches;
+            public long conveyorDeliveredItems;
+            public double machineRepaired,automationMoney;
             public double demoMinutes;
             public int assembledTools, mealsConsumed;
             public long demoWagesPaidCents;
@@ -43,6 +46,7 @@ namespace CrazyRubbish.Prototype
             int batches = 0;
             bool demoCompleted=false;double demoMinutes=0;int assembledTools=0,mealsConsumed=0;long demoWages=0;
             bool tutorialCompleted=false;
+            bool automationVerified=false;int machineBatches=0;long conveyorDeliveredItems=0;double machineRepaired=0,automationMoney=0;
             if (!string.IsNullOrEmpty(screenshot))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(screenshot)));
@@ -51,7 +55,7 @@ namespace CrazyRubbish.Prototype
                 try { CapturePreview(screenshot); }
                 catch (Exception exception) { failed = true; Debug.LogException(exception); }
             }
-            try { VerifyInventoryGrid(screenshot); VerifyTutorialCoach(screenshot); }
+            try { VerifyInventoryGrid(screenshot); VerifyTutorialCoach(screenshot); VerifyExperienceHud(screenshot); }
             catch (Exception exception) { failed = true; Debug.LogException(exception); }
             // The onboarding checks reset/load sessions. Let Unity dispose their old world views
             // before counting renderers in the independent presentation checks.
@@ -109,6 +113,11 @@ namespace CrazyRubbish.Prototype
                 game.Report(new ActionResult(true, "完整首区demo验证成功：生活、工具制作、200钱、发薪与存档。"));
                 earnedMoney = model.Money;
                 batches = model.CompletedBatches;
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-prototypeAutomationSmoke")>=0)
+                {
+                    int id=VerifyAutomation(screenshot);model=game.Model;var machine=model.GetFacility(id);
+                    machineBatches=machine.MachineBatches;machineRepaired=machine.RepairedDurability;conveyorDeliveredItems=model.ConveyorDeliveredItems;automationMoney=(double)model.Money;automationVerified=true;
+                }
             }
             catch (Exception exception)
             {
@@ -168,7 +177,8 @@ namespace CrazyRubbish.Prototype
                         success = true, restart = true, development = Debug.isDebugBuild,
                         money = (double)earnedMoney, batches = batches, buttons = FindObjectsOfType<Button>().Length,
                         wagesPaidCents = wagesPaid, residents = recruited, version = Application.version,baselineVersion=DesignBaseline.Version,constructionVerified=true,
-                        deliveredTrips = deliveredTrips, saveRoundtrip = saveRoundtrip,demoCompleted=demoCompleted,demoMinutes=demoMinutes,assembledTools=assembledTools,mealsConsumed=mealsConsumed,demoWagesPaidCents=demoWages,tutorialCompleted=tutorialCompleted
+                        deliveredTrips = deliveredTrips, saveRoundtrip = saveRoundtrip,demoCompleted=demoCompleted,demoMinutes=demoMinutes,assembledTools=assembledTools,mealsConsumed=mealsConsumed,demoWagesPaidCents=demoWages,tutorialCompleted=tutorialCompleted,
+                        automationVerified=automationVerified,machineBatches=machineBatches,machineRepaired=machineRepaired,conveyorDeliveredItems=conveyorDeliveredItems,automationMoney=automationMoney
                     }));
                 }
                 Debug.Log("PROTOTYPE_SMOKE_PASS: pickup, weighted storage, woodwork, dismantle, generator, recruitment, resident production, payroll, pause and restart.");
@@ -180,6 +190,92 @@ namespace CrazyRubbish.Prototype
 
         private void OnLog(string message, string stack, LogType type)
         { if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) failed = true; }
+
+        private int VerifyAutomation(string screenshot)
+        {
+            var m=game.Model;int id=PrototypeAutomationScenario.Run(m);
+            string Signature(PrototypeSimulation model)
+            {
+                var source=model.GetFacility(id);var f=source.Copy();
+                // Unity's pretty and compact JSON paths may differ by one double ULP.
+                // Compare simulation times to a nanosecond; identities and counts stay exact.
+                f.HumanProgress=Math.Round(f.HumanProgress,9);f.MachineProgress=Math.Round(f.MachineProgress,9);f.Durability=Math.Round(f.Durability,9);f.RepairedDurability=Math.Round(f.RepairedDurability,9);f.PowerRatio=Math.Round(f.PowerRatio,9);f.PowerRequested=Math.Round(f.PowerRequested,9);
+                string Belt(ConveyorLane lane){var b=lane.Copy();b.Progress=Math.Round(b.Progress,9);b.PowerRatio=Math.Round(b.PowerRatio,9);return JsonUtility.ToJson(b);}
+                return JsonUtility.ToJson(f)+"|"+JsonUtility.ToJson(source.WoodInputStock.Capture())+"|"+JsonUtility.ToJson(source.Output.Capture())+"|"+model.ConveyorDeliveredItems+"|"+string.Join("|",model.Conveyors.Select(Belt))+"|"+string.Join("|",model.ConveyorPorts.Select(p=>JsonUtility.ToJson(p)));
+            }
+            if(!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
+            {
+                string before=Signature(m);var expected=PrototypeSimulation.Restore(JsonUtility.FromJson<SimulationSnapshot>(JsonUtility.ToJson(m.Capture())));
+                game.SaveGame();if(!game.LastActionSucceeded)throw new InvalidOperationException(game.Notice);
+                game.LoadLatest();m=game.Model;
+                string restored=Signature(m);
+                if(!game.LastActionSucceeded||restored!=before)
+                {
+                    int at=Enumerable.Range(0,Math.Min(before.Length,restored.Length)).FirstOrDefault(i=>before[i]!=restored[i]);
+                    throw new InvalidOperationException("机器、输送实物或维护进度未从真实存档还原。"+game.Notice+" #"+at+" expected:"+before.Substring(Math.Max(0,at-40),Math.Min(180,before.Length-Math.Max(0,at-40)))+" actual:"+restored.Substring(Math.Max(0,at-40),Math.Min(180,restored.Length-Math.Max(0,at-40))));
+                }
+                expected.Advance(3);m.Advance(3);
+                if(Signature(m)!=Signature(expected))throw new InvalidOperationException("电动产线读档后的连续运行与原状态不一致。");
+            }
+            var hud=game.GetComponent<PrototypeHud>();var world=game.GetComponent<PrototypeWorld>();
+            Button Find(string name)=>hud.VisualRoot.GetComponentsInChildren<Button>(true).First(b=>b.name==name);
+            foreach(string command in new[]{"LayConveyor","EraseConveyor","WarehouseOutPort","WarehouseInPort"})
+            {hud.ClosePanels();Find(command).onClick.Invoke();if(!world.ConstructionActive)throw new InvalidOperationException(command+" control is unbound.");world.CancelConstruction();}
+            var machine=m.GetFacility(id);hud.ShowOwnedFacility(machine);world.FocusPoint(machine.X+1,machine.Y+1,8);hud.RefreshView(m);world.RefreshView(m);Canvas.ForceUpdateCanvases();
+            void Capture(string suffix){if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+suffix+".png"));}
+            Capture("-electric-line");
+            Find("OwnerInPort").onClick.Invoke();if(!world.ConstructionActive)throw new InvalidOperationException("Machine input-port control is unbound.");world.CancelConstruction();
+            var port=m.ConveyorPorts.First(p=>p.OwnerId==id&&!p.Output);hud.ShowTransport(0,port.Id);hud.RefreshView(m);Canvas.ForceUpdateCanvases();Capture("-port-filter");
+            int filter=port.Filter;Find("TransportFilterAll").onClick.Invoke();if(port.Filter!=-1)throw new InvalidOperationException("Port filter control is unbound.");Require(m.ConfigurePort(port.Id,filter,true),"restore port filter");
+            var lane=m.Conveyors.FirstOrDefault(b=>b.Item>=0)??m.Conveyors[0];hud.ShowTransport(lane.Id,0);world.FocusPoint(lane.X,lane.Y,8);hud.RefreshView(m);Canvas.ForceUpdateCanvases();Capture("-conveyor");
+            Find("TransportEnable").onClick.Invoke();if(lane.Enabled)throw new InvalidOperationException("Belt stop control is unbound.");Find("TransportEnable").onClick.Invoke();
+            hud.ClosePanels();world.FocusPoint(16,10,15);hud.RefreshView(m);world.RefreshView(m);Canvas.ForceUpdateCanvases();Capture("-automation-map");
+            Find("BeginAutomationGuide").onClick.Invoke();hud.RefreshView(m);Canvas.ForceUpdateCanvases();Capture("-automation-guide");
+            if(!m.Tutorial.automationStarted||!hud.VisualRoot.Find("Guide Prompt/Caption").GetComponent<Text>().text.Contains("已完成"))throw new InvalidOperationException("Automation guide does not recognise a completed working production line.");
+            game.Report(new ActionResult(true,"电动产线验证成功：真实采购、输送、维护和存档续跑。"));return id;
+        }
+
+        private void VerifyExperienceHud(string screenshot)
+        {
+            var hud=game.GetComponent<PrototypeHud>();var root=hud.VisualRoot;
+            Button Find(string name)=>root.GetComponentsInChildren<Button>(true).First(b=>b.name==name);
+            void Refresh(){hud.RefreshView(game.Model);Canvas.ForceUpdateCanvases();}
+            void Capture(string suffix){if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(screenshot),Path.GetFileNameWithoutExtension(screenshot)+suffix+".png"));}
+            game.StartNewGame();game.SkipTutorial();Refresh();
+            Find("OpenShop").onClick.Invoke();Refresh();
+            if(!hud.ShopOpen||Find("ShopBuy"+(int)ItemId.RecoveredWire).interactable)throw new InvalidOperationException("Material shop is unavailable or permits an unaffordable purchase.");
+            Find("CloseShop").onClick.Invoke();Find("Command22").onClick.Invoke();Find("ConfirmTrade").onClick.Invoke();
+            decimal before=game.Model.Money;
+            Find("OpenShop").onClick.Invoke();Find("ShopQuantity5").onClick.Invoke();Refresh();
+            Find("ShopBuy"+(int)ItemId.RecoveredWire).onClick.Invoke();Refresh();
+            if(game.Model.Warehouse.Count(ItemId.RecoveredWire)!=5||game.Model.Money!=before-ItemCatalog.Price(ItemId.RecoveredWire).buy*5)throw new InvalidOperationException("Visible material procurement does not use real stock and cash.");
+            hud.OpenShop(64);Refresh();
+            var materials=root.Find("Material Shop/Card/Materials").GetComponent<Text>();
+            if(!materials.text.Contains("缺")||materials.preferredHeight>materials.rectTransform.rect.height+1)throw new InvalidOperationException("Construction material list is missing shortages or overflows.");
+            Find("ShopBuy"+(int)ItemId.Plank).onClick.Invoke();Refresh();Capture("-shop-materials");
+            if(game.Model.Warehouse.Count(ItemId.Plank)!=6||Find("ShopBuy"+(int)ItemId.Plank).interactable)throw new InvalidOperationException("Procurement by shortage overbought or did not stop when the recipe was supplied.");
+            Find("CloseShop").onClick.Invoke();hud.FocusInventoryItem(ItemId.RecoveredWire,true);
+            Find("InventoryQuantity5").onClick.Invoke();Refresh();Capture("-sale-preview");
+            var quote=game.Model.QuoteSale(ItemId.RecoveredWire,5);before=game.Model.Money;
+            Find("InventorySell").onClick.Invoke();Refresh();
+            if(game.Model.Money-before!=quote.Income||game.Model.Warehouse.Count(ItemId.RecoveredWire)!=0)throw new InvalidOperationException("Visible batch sale differs from its preview.");
+            hud.ClosePanels();game.OpenMenu();Refresh();
+            Find("MenuNew").onClick.Invoke();Refresh();Capture("-new-session");
+            if(!root.Find("New Session Confirmation").gameObject.activeSelf||game.Model.Money==0)throw new InvalidOperationException("Starting a new game discarded the session before confirmation.");
+            game.HandleEscape();Refresh();
+            if(root.Find("New Session Confirmation").gameObject.activeSelf||!game.MenuOpen)throw new InvalidOperationException("Escape does not close the new-game confirmation first.");
+            if(!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
+            {
+                Find("MenuSave").onClick.Invoke();if(!game.LastActionSucceeded)throw new InvalidOperationException(game.Notice);
+                decimal savedMoney=game.Model.Money;Require(game.Model.Buy(ItemId.RecoveredWire,1),"change state before selected save restore");
+                Find("MenuLoad").onClick.Invoke();Refresh();Capture("-save-list");
+                if(!root.Find("Save Browser").gameObject.activeSelf||!Find("LoadSaveRow0").interactable)throw new InvalidOperationException("Save selection is inaccessible.");
+                game.HandleEscape();Refresh();if(!game.MenuOpen||root.Find("Save Browser").gameObject.activeSelf)throw new InvalidOperationException("Escape resumes behind the save list.");
+                Find("MenuLoad").onClick.Invoke();Refresh();Find("LoadSaveRow0").onClick.Invoke();Refresh();
+                if(!game.LastActionSucceeded||game.Model.Money!=savedMoney||game.MenuOpen)throw new InvalidOperationException("Loading the selected save did not restore the session.");
+            }
+            game.StartNewGame();Refresh();
+        }
 
         private void VerifyConstruction(string screenshot)
         {
@@ -328,7 +424,7 @@ namespace CrazyRubbish.Prototype
             if (!game.Model.Interacting || game.Model.Tutorial.step != 1) throw new InvalidOperationException("Coach bypassed timed pickup.");
             game.Model.Advance(0.55); Refresh();
             while(hud.KnowledgeOpen){Find("KnowledgeNext").onClick.Invoke();Refresh();}
-            if (game.Model.Tutorial.step != 2 || !root.Find("Guide Prompt/Body/Checklist").GetComponent<Text>().text.Contains("0/12"))
+            if (game.Model.Tutorial.step != 2 || !root.Find("Guide Prompt/Body/Checklist").GetComponent<Text>().text.Contains("0/"+PrototypeTutorial.OpeningFood))
                 throw new InvalidOperationException("Coach did not advance after actual pickup.");
             CheckCard("Guide Prompt"); Capture("-supplies");
             Find("GuideCollapse").onClick.Invoke(); Refresh();

@@ -14,9 +14,9 @@ namespace CrazyRubbish.Core
         OldFeeder, OldFurnace, OldMetalTable, OldControlBox, LightingModule, OldLamp,
         SawBlade, HammerHead, ScrewdriverRod, BroomHead, SortedWood, BrokenWoodTool
     }
-    public enum WorkState { NotBuilt, Idle, Paused, NeedsOperator, NeedsTool, NeedsMaterials, Working, OutputBlocked }
+    public enum WorkState { NotBuilt, Idle, Paused, NeedsOperator, NeedsTool, NeedsMaterials, Working, OutputBlocked, NeedsPower, NeedsMaintenance, MachineRunning, Preparing }
     public enum WoodRecipe { Plank, WoodHandle, SortedWood }
-    public enum WorkerJob { Idle, Woodwork }
+    public enum WorkerJob { Idle, Woodwork, MachineOperator, Maintenance }
 
     public readonly struct ItemAmount
     {

@@ -8,7 +8,7 @@ namespace CrazyRubbish.Prototype
     {
         [SerializeField] private RectTransform constructionNotice;
         [SerializeField] private Text constructionText,powerSummary;
-        private static int FacilityKind(int page)=>page==1?1:page==2?2:page==3?4:page==4?8:page==5?16:32;
+        private static int FacilityKind(int page)=>page==1?1:page==2?2:page==3?4:page==4?8:page==5?16:page==6?32:page==7?64:128;
         private int SelectedOwnedId=>SelectedFacility==0?0:game.Model.SelectedFacility(FacilityKind(SelectedFacility)).Id;
         private void UpgradeConstructionLayout()
         {
@@ -46,6 +46,7 @@ namespace CrazyRubbish.Prototype
         }
         private void RefreshConstructionHud(PrototypeSimulation m)
         {
+            RefreshMachineryHud(m);
             var world=game.GetComponent<PrototypeWorld>();
             if(constructionNotice!=null){constructionNotice.gameObject.SetActive(world.ConstructionActive&&!game.MenuOpen&&!game.ResultVisible);constructionText.text=world.ConstructionHint;}
             if(powerSummary!=null)powerSummary.text=$"电网 {m.PowerNetworks.Count} 组 · 可用 {m.AvailablePower:0.#} / 请求 {m.RequestedPower:0.###}\n旧住房 {m.HousingPowerRatio:P0} · 社区路灯 {m.CommunityLampPowerRatio:P0}\n电线 {m.Wires.Count} 格 · 余料 {m.WireCredit}/4\n住房容量 {m.Residents.Count+1} / {m.HousingCapacity}";
@@ -78,7 +79,7 @@ namespace CrazyRubbish.Prototype
         public void ShowOwnedFacility(FacilityInstance f)
         {
             if(f==null)return;var result=game.Model.SelectFacility(f.Id);if(!result.Success){game.Report(result);return;}
-            ShowFacility(f.Kind==1?1:f.Kind==2?2:f.Kind==4?3:f.Kind==8?4:f.Kind==16?5:6);
+            ShowFacility(f.Kind==1?1:f.Kind==2?2:f.Kind==4?3:f.Kind==8?4:f.Kind==16?5:f.Kind==32?6:f.Kind==64?7:8);
             facilityTitle.text=PrototypeSimulation.FacilityName(f.Kind)+" #"+f.Id;
         }
     }

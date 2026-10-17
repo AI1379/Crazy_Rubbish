@@ -113,5 +113,30 @@ namespace CrazyRubbish.Tests
             var m=Fresh(12,4.5);
             Assert.That(m.IsWalkable(12,5),Is.True);Assert.That(m.FindPath(m.PlayerX,m.PlayerY,13,5),Is.Not.Null);
         }
+        [Test]public void PathInsideDestinationCellStillReachesItsCentre()
+        {
+            var m=Fresh(12.4,5);
+            Assert.That(m.FindPath(12.4,5,12,5),Is.EqualTo(new[]{5*m.Settings.mapWidth+12}));
+            Assert.That(m.FindPath(12,5,12,5),Is.Empty);
+        }
+        [Test]public void SavedEmptyResidentRouteRecoversWithoutTeleportingOrLosingCargo()
+        {
+            var s=Fresh().Capture();var resident=ResidentAt(12,5);resident.x=12.4;
+            resident.path=Array.Empty<int>();resident.pathX=12;resident.pathY=5;resident.pathRevision=s.geometry;
+            var stock=s.inventoryKeys.IndexOf("warehouse");
+            var inventory=new UnitInventory(s.inventories[stock].capacity);
+            inventory.TryAdd(ItemId.WasteWood,2);
+            int token=inventory.Reserve(new ItemAmount(ItemId.WasteWood,2));
+            s.inventories[stock]=inventory.Capture();
+            resident.delivery=new DeliverySave{item=(int)ItemId.WasteWood,amount=2,token=token,id=1,from="warehouse",to="warehouse",sx=12,sy=5,tx=12,ty=5};
+            s.residents.Add(resident);var m=PrototypeSimulation.Restore(s);
+            m.Advance(0.05);
+            Assert.That(m.Residents[0].X,Is.EqualTo(12.36).Within(1e-6));
+            // Two handovers can each take eight seconds under the minimum area efficiency.
+            m.Advance(20);
+            Assert.That(m.DeliveredTrips,Is.GreaterThanOrEqualTo(1));
+            Assert.That(m.Warehouse.Count(ItemId.WasteWood)+m.Residents[0].Cargo.Count(ItemId.WasteWood),Is.EqualTo(2));
+            Assert.That(m.Warehouse.Reserved(ItemId.WasteWood),Is.Zero);
+        }
     }
 }

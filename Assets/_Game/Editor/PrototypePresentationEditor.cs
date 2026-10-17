@@ -44,7 +44,7 @@ namespace CrazyRubbish.Editor
         {
             var game = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
             if (game == null || game.balance == null || game.appearance == null) return;
-            if (game.appearance.characters == null || game.appearance.characters.Length != 6)
+            if (game.appearance.characters == null || game.appearance.characters.Length != 6 || game.appearance.electricWoodwork==null || game.appearance.conveyor==null)
             {
                 DemoArtSetup.Apply(game.appearance);
                 EditorUtility.SetDirty(game.appearance);

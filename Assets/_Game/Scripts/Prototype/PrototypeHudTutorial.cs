@@ -73,8 +73,9 @@ namespace CrazyRubbish.Prototype
             bool visible = !game.MenuOpen && !game.ResultVisible && !m.Failed;
             RefreshKnowledge(m);
             tutorialWelcome.gameObject.SetActive(visible && m.Tutorial.IntroOpen && m.Tutorial.orientation==0);
-            guidePrompt.gameObject.SetActive(visible && m.Tutorial.active && m.Tutorial.started && !KnowledgeOpen && !InventoryOpen);
+            guidePrompt.gameObject.SetActive(visible && m.Tutorial.active && m.Tutorial.started && (!KnowledgeOpen||KnowledgeIsPassive) && !InventoryOpen && !ShopOpen);
             if (!guidePrompt.gameObject.activeSelf) return;
+            if(m.Tutorial.Completed&&m.Tutorial.automationStarted&&!m.Tutorial.automationDismissed){RefreshAutomationCoach(m);return;}
 
             int step = m.Tutorial.step;
             if (step != lastGuideStep)
@@ -107,7 +108,7 @@ namespace CrazyRubbish.Prototype
             var action = PrototypeTutorial.NextAction(m, step);
             bool travelling = action.hasTarget && !action.AtTarget(m) && game.Walking &&
                 game.WalkTargetX == action.x && game.WalkTargetY == action.y;
-            guideInstruction.text = completed ? "工坊已能运转，接下来由你安排生产。\n按 H 随时复习；记得照看生活物资和工资。" :
+            guideInstruction.text = completed ? "基础经营已学会，可以继续学习电动机器和输送。\n也可选择自由经营，按 H 随时重新进入。" :
                 m.Paused ? "游戏已暂停。点击下方“继续游戏”或按空格，再继续当前操作。" :
                 travelling ? "正在前往金色目标。到达后，再点击下方按钮完成操作。WASD 或 Esc 可以取消行走。" : action.instruction;
             guideInstruction.rectTransform.sizeDelta = new Vector2(398, Mathf.Max(76, guideInstruction.preferredHeight));
@@ -125,10 +126,11 @@ namespace CrazyRubbish.Prototype
                 m.UnpaidWageCents > 0 ? "工资到期：点左上角警报处理欠薪" :
                 $"背包 {m.Carry.Used:0.##} / {m.Carry.Capacity}" + (action.hasTarget ? $"    目标 ({action.x}, {action.y})" : "    空格暂停 · 3 倍速");
             guideStatus.color = m.MissingSupplyPeople > 0 || m.UnpaidWageCents > 0 ? Danger : Muted;
-            guideAction.GetComponentInChildren<Text>().text = completed ? "完成，继续经营" : m.Paused ? "继续游戏  空格" :
+            guideAction.GetComponentInChildren<Text>().text = completed ? "完成入门，学习自动化" : m.Paused ? "继续游戏  空格" :
                 travelling ? "正在前往…" : action.hasTarget && !action.AtTarget(m) ? "前往：" + action.label : action.label;
             guideAction.interactable = completed || m.Paused || !travelling && !m.Interacting && action.operation != TutorialOperation.Wait;
-            guideLocate.interactable = !completed && action.button != null;
+            guideLocate.GetComponentInChildren<Text>().text=completed?"自由经营":step==12?"可选：技术融资":"定位按钮";
+            guideLocate.interactable = completed || action.button != null||step==12;
         }
     }
 }
