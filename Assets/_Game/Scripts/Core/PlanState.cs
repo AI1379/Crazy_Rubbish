@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace CrazyRubbish.Core
@@ -13,7 +13,7 @@ namespace CrazyRubbish.Core
         public double foodDebt,waterDebt,rescueWater;public long wallet=500;public double bonus,happiness=70,foodRecoveryRate,waterRecoveryRate;public bool dead,soapDue,clothesReturned;
         public PlanStock cargo=new PlanStock{capacity=8};public PlanTrip trip;public List<PlanLoss> losses=new List<PlanLoss>();public string activity="空闲";
     }
-    [Serializable] public sealed class PlanTrip { public string source,target,item;public long ticks;public int stage,instance=-1;public double elapsed,retryAt;public bool picked; }
+    [Serializable] public sealed class PlanTrip { public string source,target,item,stackKey;public long ticks;public int stage,instance=-1;public double elapsed,retryAt;public bool picked; }
     [Serializable] public sealed class PlanSite
     {
         public int id,x,y,rotation,priority=3,maintainer,springRegion,springBody,lampBed,linkSite,direction,portSite,mergeTurn;
@@ -32,6 +32,7 @@ namespace CrazyRubbish.Core
     [Serializable] public sealed class PlanRiot {public bool active,wages,promise;public string repair="power";public double deadline;public long target,paid;public List<int> organizers=new List<int>();}
     [Serializable] public sealed class PlanState
     {
+        public List<PlanInventoryGrid> inventoryGrids = new List<PlanInventoryGrid>();
         public int schema=1,region=1,mapRevision,nextId=1,totalHired,heroSite,speed=1,revision,tutorial;public string version,ending,hero="male";
         public bool paused=true,recognized,freeFood,freeWater,externalSupply=true,emergencyWater=true,autoSupply;
         public long cash,communityCash,wagesPaid,supplySpent,retailIncome,externalSaleIncome,serviceIncome,personalSubsidyBudget,personalSubsidyUsed;public double seconds,accumulated,nextPayroll=-1,nextInput,inputIntegral,lastInput,nextAutosave=300,saleRemainder,dumped,invasionAt=-1;

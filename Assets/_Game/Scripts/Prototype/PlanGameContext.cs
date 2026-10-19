@@ -26,6 +26,7 @@ namespace CrazyRubbish.Prototype
         private void EscapeInterface()
         {
             CancelMapGesture();
+            if(InventoryOpen){CloseInventoryWindow();return;}
             if(SaveDialogOpen){CancelSaveDialog();return;}
             if(MenuOpen){if(session&&string.IsNullOrEmpty(Model.State.ending)){MenuOpen=false;RebuildPanel();}return;}
             if(SettingsOpen){CloseSettings();return;}
@@ -95,6 +96,7 @@ namespace CrazyRubbish.Prototype
                 var s=sites.FirstOrDefault(a=>a.id==siteId)??sites.Last();selectedSite=s.id;
                 BeginContext(Model.Config.Facility(s.type).name+" #"+s.id,screen);
                 AddContextReadout(s);
+                if(s.type=="warehouse")ContextAction("打开仓库物品栏",()=>RequestWarehouseInventory(s));
                 if(s.type=="lift_launch"&&s.cabinTested&&!Model.HeroAboard)ContextAction("确认登舱返程",()=>ConfirmBoardLift(s));
                 ContextAction("走到操作侧",()=>GoToSite(s));
                 ContextAction("入库 / 投入背包物品",()=>Act(()=>Model.Deposit(s)));

@@ -62,20 +62,19 @@ switch ($Action) {
     }
     { $_ -in 'Smoke','SmokePlan' } {
         $runPath = Join-Path $projectRoot 'Builds\Windows\CrazyRubbish.exe'
-        if (-not (Test-Path -LiteralPath $runPath -PathType Leaf)) { throw 'Run Build before Smoke.' }
+        if (-not (Test-Path -LiteralPath $runPath -PathType Leaf)) { throw 'Run Build before Smoke. Smoke and SmokePlan both verify the unified game.' }
         $resultDirectory = Join-Path $projectRoot 'TestResults'
         $artifactDirectory = Join-Path $projectRoot 'Artifacts'
         New-Item -ItemType Directory -Path $resultDirectory, $artifactDirectory -Force | Out-Null
-        $resultFile = Join-Path $resultDirectory $(if ($Action -eq 'SmokePlan') {'plan-smoke.json'} else {'standalone-smoke.json'})
-        $screenshotFile = Join-Path $artifactDirectory $(if ($Action -eq 'SmokePlan') {'Plan-preview.png'} else {'M2-preview.png'})
-        $smokeFlag = if ($Action -eq 'SmokePlan') {'-planSmoke'} else {'-prototypeSmoke'}
-        $resultsFlag = if ($Action -eq 'SmokePlan') {'-planResults'} else {'-prototypeResults'}
-        $screenshotFlag = if ($Action -eq 'SmokePlan') {'-planScreenshot'} else {'-prototypeScreenshot'}
+        $resultFile = Join-Path $resultDirectory 'plan-smoke.json'
+        $screenshotFile = Join-Path $artifactDirectory 'Plan-preview.png'
+        $smokeFlag = '-planSmoke'
+        $resultsFlag = '-planResults'
+        $screenshotFlag = '-planScreenshot'
         $editorArguments = @('-batchmode', '-screen-width', '1280', '-screen-height', '800', '-screen-fullscreen', '0',
             '-logFile', $quotedLog, $smokeFlag, $resultsFlag, ('"' + $resultFile + '"'),
             $screenshotFlag, ('"' + $screenshotFile + '"'))
-        if ($Action -eq 'SmokePlan') { $editorArguments += @('-planSaveRoot', ('"' + (Join-Path $resultDirectory 'PlanSmokeSaves') + '"')) }
-        else { $editorArguments += @('-prototypeSaveDirectory', ('"' + (Join-Path $resultDirectory 'PrototypeSmokeSaves') + '"'), '-prototypeTutorialSmoke', '-prototypeAutomationSmoke', '-prototypeFixesSmoke') }
+        $editorArguments += @('-planSaveRoot', ('"' + (Join-Path $resultDirectory 'PlanSmokeSaves') + '"'))
     }
 }
 $startedAt = [DateTime]::UtcNow

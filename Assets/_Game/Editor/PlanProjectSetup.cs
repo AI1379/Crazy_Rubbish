@@ -62,7 +62,7 @@ namespace CrazyRubbish.Editor
             var game=UnityEngine.Object.FindObjectsOfType<PlanGameController>(true).FirstOrDefault();
             if(game==null)game=new GameObject("Latest Plan Game").AddComponent<PlanGameController>();
             game.appearance=appearance;game.mapCamera=legacy.GetComponent<PrototypeWorld>().worldCamera;game.legacyRoot=legacy.gameObject;
-            legacy.gameObject.SetActive(false);game.gameObject.SetActive(true);game.EditPreview();TerrainMeshBaker.Save(game.gameObject);EditorUtility.SetDirty(game);EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            legacy.gameObject.tag="EditorOnly";legacy.gameObject.SetActive(false);game.gameObject.SetActive(true);game.EditPreview();TerrainMeshBaker.Save(game.gameObject);EditorUtility.SetDirty(game);EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }
         [MenuItem("Crazy Rubbish/Setup Latest Plan")]
         public static void Setup(){PrototypeProjectSetup.Setup();}

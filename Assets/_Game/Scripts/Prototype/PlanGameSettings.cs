@@ -19,7 +19,7 @@ namespace CrazyRubbish.Prototype
             settingsButton.navigation=new Navigation{mode=Navigation.Mode.None};
             settingsIcon=Rect(r,"Gear",14,3,24,24).gameObject.AddComponent<PlanGearIcon>();settingsIcon.color=Ink;settingsIcon.raycastTarget=false;
             settingsCaption=Text(r,"Caption","设置",0,28,52,13,11);settingsCaption.alignment=TextAnchor.MiddleCenter;
-            settingsMenu=Box(planCanvas,"Settings Menu",0,0,286,304);
+            settingsMenu=Box(planCanvas,"Settings Menu",0,0,286,348);
             settingsMenu.anchorMin=settingsMenu.anchorMax=new Vector2(1,0);settingsMenu.pivot=new Vector2(1,0);settingsMenu.anchoredPosition=new Vector2(-32,158);
             settingsMenu.GetComponent<Image>().raycastTarget=true;
             Text(settingsMenu,"Title","设置",16,12,200,32,21);
@@ -29,7 +29,8 @@ namespace CrazyRubbish.Prototype
             Button(settingsMenu,"主菜单",12,146,262,36,()=>{CloseSettings();MenuOpen=true;RebuildPanel();});
             Button(settingsMenu,"退出",12,188,262,36,RequestQuit);
             Button(settingsMenu,"操作说明",12,230,262,36,OpenPlayerHelp);
-            Text(settingsMenu,"Hint","空格暂停 · Esc关闭",16,276,254,22,13);
+            planSizeButton=Button(settingsMenu,"界面大小："+PlanInterfaceSizeName,12,272,262,36,CyclePlanInterfaceSize);
+            Text(settingsMenu,"Hint","空格暂停 · Esc关闭",16,318,254,22,13);
             settingsMenu.gameObject.SetActive(false);
         }
 

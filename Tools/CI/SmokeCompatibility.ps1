@@ -17,9 +17,9 @@ $runKey = [Guid]::NewGuid().ToString('N')
 $resultPath = Join-Path $resultRoot "compatibility-$runKey.json"
 $logPath = Join-Path $resultRoot "compatibility-$runKey.log"
 $arguments = @('-batchmode', '-mergeCompatibilitySmoke', '-mergeResults', ('"' + $resultPath + '"'),
-    '-prototypeSaveDirectory', ('"' + (Join-Path $resultRoot ("legacy-saves-$runKey")) + '"'),
+    '-planSaveRoot', ('"' + (Join-Path $resultRoot ("unified-saves-$runKey")) + '"'),
     '-logFile', ('"' + $logPath + '"'), '-screen-width', $Width, '-screen-height', $Height, '-screen-fullscreen', '0')
-if ($WithGraphics) { $arguments += @('-mergeScreenshot', ('"' + (Join-Path $resultRoot "legacy-$Width-$Height.png") + '"')) }
+if ($WithGraphics) { $arguments += @('-mergeScreenshot', ('"' + (Join-Path $resultRoot "unified-$Width-$Height.png") + '"')) }
 else { $arguments += '-nographics' }
 $process = Start-Process -FilePath $playerPath -ArgumentList $arguments -WorkingDirectory $playerRoot -WindowStyle Hidden -PassThru
 if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
@@ -29,7 +29,7 @@ if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
 $process.Refresh()
 if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $resultPath)) { throw "Compatibility smoke failed. See $logPath" }
 $report = Get-Content -Raw -LiteralPath $resultPath | ConvertFrom-Json
-foreach ($field in @('success', 'titleSwitch', 'independentArtwork', 'singleInputAndCanvas', 'legacyDiskSave')) {
+foreach ($field in @('success', 'singleGame', 'inventoryUi', 'splitAndDrag', 'metadataAndSwap', 'capacityAndReservations', 'releaseRules', 'saveRoundtrip', 'interfaceSizes', 'constructionShopping')) {
     if ($report.$field -ne $true) { throw "Compatibility criterion failed: $field. See $resultPath" }
 }
 Write-Output ("Compatibility smoke passed: " + ($report | ConvertTo-Json -Compress))

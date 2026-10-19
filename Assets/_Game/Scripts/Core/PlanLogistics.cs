@@ -142,20 +142,20 @@ namespace CrazyRubbish.Core
         private void TickTrip(PlanPerson p,double dt)
         {
             var t=p.trip;if(t==null)return;var target=Stock(t.target);
-            if(target==null){if(!t.picked)Stock(t.source)?.Release(t.item,t.ticks,t.instance);p.trip=null;return;}
+            if(target==null){if(!t.picked)ReleaseInventoryTrip(t);p.trip=null;return;}
             var position=StockPosition(t.picked?t.target:t.source);
-            if(!Walk(p,position.x,position.y,dt)){if(!t.picked)Stock(t.source)?.Release(t.item,t.ticks,t.instance);p.trip=null;p.activity="路径受阻，稍后重试";return;}
+            if(!Walk(p,position.x,position.y,dt)){if(!t.picked)ReleaseInventoryTrip(t);p.trip=null;p.activity="路径受阻，稍后重试";return;}
             if(Distance(p.x,p.y,position.x,position.y)>.1)return;
             t.elapsed+=dt;double wait=t.picked?Config.Rule("workers.unloading_seconds"):Config.Rule("workers.loading_seconds");if(t.elapsed+1e-8<wait)return;
             if(!t.picked)
-            {p.cargo.Put(Stock(t.source).Take(t.item,t.ticks,true,t.instance));t.picked=true;t.elapsed=0;Discover(t.item);State.revision++;}
+            {CompleteInventoryPickup(t,p.cargo);t.picked=true;t.elapsed=0;Discover(t.item);State.revision++;}
             else if(UsedTarget(t.target)+Config.Item(t.item).capacity*(Config.Item(t.item).uses_per_item>0?Math.Ceiling(t.ticks/(double)PlanStock.Scale):t.ticks/(double)PlanStock.Scale)<=target.capacity+1e-8)
             {target.Put(p.cargo.Take(t.item,t.ticks));p.trip=null;p.activity="空闲";Discover(t.item);State.revision++;}
         }
         private void AbortTripsForSite(int id)
         {
             foreach(var p in Alive.Where(p=>p.trip!=null&&(p.trip.source.EndsWith(":"+id)||p.trip.target.EndsWith(":"+id))))
-            {if(!p.trip.picked)Stock(p.trip.source)?.Release(p.trip.item,p.trip.ticks,p.trip.instance);p.trip=null;}
+            {if(!p.trip.picked)ReleaseInventoryTrip(p.trip);p.trip=null;}
         }
         private void TickWorkers(double dt,bool allowSeek)
         {

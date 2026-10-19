@@ -18,6 +18,7 @@ namespace CrazyRubbish.Prototype
         private int floorRegion;
         public void BuildPresentation()
         {
+            CloseInventoryWindow();
             ResetMapSelection();ResetAutomationViews();journeyRoot=null;journeyVisualKey=null;liftView=null;placementOutline=null;placementFront=null;mapOverview=false;if(planWorld!=null)Remove(planWorld.gameObject);if(planCanvas!=null)Remove(planCanvas.gameObject);
             groundViews.Clear();siteViews.Clear();actorViews.Clear();siteLabels.Clear();previousPositions.Clear();facings.Clear();actorMovingUntil.Clear();lastWorldRevision=-1;floorRegion=0;
             planWorld=new GameObject("Plan World").transform;planWorld.SetParent(transform,false);
@@ -29,7 +30,8 @@ namespace CrazyRubbish.Prototype
             mapCamera.orthographic=true;mapCamera.transform.position=new Vector3(14,18,-10);mapCamera.orthographicSize=20;FitViewport();BuildInterface();Canvas.ForceUpdateCanvases();RefreshPresentation(true);
         }
         private void FitViewport()
-        {float scale=Mathf.Min(Screen.width/1600f,Screen.height/1000f);float w=Screen.width/Mathf.Max(.01f,scale),h=Screen.height/Mathf.Max(.01f,scale);mapCamera.rect=new Rect(20/w,150/h,(w-(managementOpen?460:40))/w,Mathf.Max(1,h-300)/h);}
+        {float scale=planCanvas!=null?planCanvas.GetComponent<Canvas>().scaleFactor:Mathf.Min(Screen.width/1600f,Screen.height/1000f);float w=Screen.width/Mathf.Max(.01f,scale),h=Screen.height/Mathf.Max(.01f,scale);mapCamera.rect=new Rect(20/w,150/h,(w-(managementOpen?460:40))/w,Mathf.Max(1,h-300)/h);
+            if(management!=null){float height=Mathf.Clamp(h-280,360,720);management.sizeDelta=new Vector2(400,height);var viewport=management.Find("Viewport") as RectTransform;if(viewport!=null)viewport.sizeDelta=new Vector2(384,height-106);}}
         private static Transform Root(string name,Transform parent){var t=new GameObject(name).transform;t.SetParent(parent,false);return t;}
         private static void Remove(GameObject o){o.SetActive(false);if(Application.isPlaying)Destroy(o);else DestroyImmediate(o);}
         private SpriteRenderer Draw(string name,Sprite image,Transform parent,float x,float y,float size,int order)

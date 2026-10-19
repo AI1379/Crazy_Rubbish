@@ -22,7 +22,9 @@ release原始交付使用2022.3.22f1独立副本验证；本次集成已使用�
 
 `Tools/Unity.ps1`支持 Import、Setup、ValidatePlan、ValidateArt、Test、Build、SmokePlan、Smoke。可用 `-UnityPath`指定已安装Editor。源码与Player试玩包附带OFL字体授权；不包含Library、Temp或本机账户／凭据。
 
-集成分支保留原 `main` 的玩法与 `Saves` 存档，在新版初始标题选择“旧版游戏 / 存档”进入；也可用 `-legacyGame` 启动。新版使用独立的 `S6PlanSaves`，两种存档不能直接互读。返回新版可重新启动程序。坏结局不覆盖手动存档。完整合并核对见[分支合并核对](Docs/Development/31_release合并核对.md)。
+当前为一套统一游戏：以release的S6玩法及250×250地图为底座，接入main的格子背包、拆分拖拽、Shift快速存取、交易预估、建设缺料采购、界面大小与新物品用途提示。I打开格子背包；原列表留在管理页作为图鉴。冲突规则全部采用release，包括固定开局来料、E单份拾取、Q完整入库、独立仓库、食水保留、蒸汽管网和载人返程不可取消。只有一个正常游戏入口。详见[统一游戏合并](Docs/Development/32_统一游戏合并.md)。
+
+继续使用 `S6PlanSaves`，已有S6存档可继续读取并自动生成物品栏布局。历史main的模式2—6存档保留在原 `Saves` 目录，本版不转换或覆盖。历史Prototype代码仅用于回归验证。
 
 地图最新更新：[洞室扩展与复杂地形](Docs/Development/13_洞室扩展与复杂地形.md)。100×64网格，前两区2594格可用地面，保留付费扩张与旧产线，加入固定石柱、岩脊和碎石障碍。
 

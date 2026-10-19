@@ -102,7 +102,7 @@ namespace CrazyRubbish.Core
             if(p.waterSince>=0&&State.seconds-p.waterSince>=1200||p.foodSince>=0&&State.seconds-p.foodSince>=1800)
             {
                 if(p.id==0){State.ending=p.waterSince>=0&&State.seconds-p.waterSince>=1200?"主角长期缺水，生存失败":"主角长期缺食，生存失败";State.paused=true;}
-                else{if(p.trip!=null&&!p.trip.picked)Stock(p.trip.source)?.Release(p.trip.item,p.trip.ticks,p.trip.instance);foreach(var item in p.cargo.stacks)DropAt(item,(int)Math.Round(p.x),(int)Math.Round(p.y));p.cargo.stacks.Clear();State.communityCash+=p.wallet;p.wallet=0;p.dead=true;foreach(var s in State.sites.Where(s=>s.maintainer==p.id))s.maintainer=0;State.revision++;}
+                else{if(p.trip!=null&&!p.trip.picked)ReleaseInventoryTrip(p.trip);foreach(var item in p.cargo.stacks)DropAt(item,(int)Math.Round(p.x),(int)Math.Round(p.y));p.cargo.stacks.Clear();State.communityCash+=p.wallet;p.wallet=0;p.dead=true;foreach(var s in State.sites.Where(s=>s.maintainer==p.id))s.maintainer=0;State.revision++;}
             }
         }
         private bool CleaningReady(PlanPerson p)
@@ -170,7 +170,7 @@ namespace CrazyRubbish.Core
             Require(State.riot.active&&State.riot.organizers.Count>0,"没有需要兑现生活修复的暴动群体。");Require(new[]{"power","housing","clothes","clean"}.Contains(repair),"请选择固定修复承诺。");
             State.riot.promise=true;State.riot.repair=repair;
             foreach(var p in Alive.Where(p=>State.riot.organizers.Contains(p.id)))
-            {if(p.trip!=null&&!p.trip.picked)Stock(p.trip.source)?.Release(p.trip.item,p.trip.ticks,p.trip.instance);p.trip=null;p.assigned=0;p.manualAssignment=0;p.directed=false;}
+            {if(p.trip!=null&&!p.trip.picked)ReleaseInventoryTrip(p.trip);p.trip=null;p.assigned=0;p.manualAssignment=0;p.directed=false;}
         }
         private bool MayWork(PlanPerson p)=>!p.directed&&(!State.riot.active||State.riot.promise&&State.riot.organizers.Contains(p.id));
         private bool RepairType(string type)=>State.riot.promise&&(new[]{"warehouse","bench","wood"}.Contains(type)||State.riot.repair=="power"&&new[]{"generator","boiler","turbine","condenser","streetlamp","grow_lamp","power_line","steam_pipe","electromechanical","wire_maker","metal_parts"}.Contains(type)||State.riot.repair=="housing"&&type=="housing"||State.riot.repair=="clothes"&&new[]{"washing","sorting"}.Contains(type)||State.riot.repair=="clean"&&new[]{"washing","plastic_remake"}.Contains(type));
@@ -185,8 +185,8 @@ namespace CrazyRubbish.Core
                 if(State.player.trip!=null)
                 {
                     var trip=State.player.trip;var pos=StockPosition(trip.source);
-                    if(Distance(State.player.x,State.player.y,pos.x,pos.y)>Config.Rule("workers.pickup_range")){Stock(trip.source)?.Release(trip.item,trip.ticks,trip.instance);State.player.trip=null;}
-                    else{trip.elapsed+=tick;if(trip.elapsed+1e-8>=Config.Rule("workers.pickup_seconds")){State.backpack.Put(Stock(trip.source).Take(trip.item,trip.ticks,true,trip.instance));Discover(trip.item);State.player.trip=null;State.revision++;}}
+                    if(Distance(State.player.x,State.player.y,pos.x,pos.y)>Config.Rule("workers.pickup_range")){ReleaseInventoryTrip(trip);State.player.trip=null;}
+                    else{trip.elapsed+=tick;if(trip.elapsed+1e-8>=Config.Rule("workers.pickup_seconds")){CompleteInventoryPickup(trip,State.backpack);Discover(trip.item);State.player.trip=null;State.revision++;}}
                 }
                 TickEnvironment(tick);ComputePower(tick);TickProduction(tick,false);TickDisposal(tick);TickWorkers(tick,false);TickBelts(tick);
                 // Finish this tick's output/unloading before survival checks; reserve new inputs afterwards.

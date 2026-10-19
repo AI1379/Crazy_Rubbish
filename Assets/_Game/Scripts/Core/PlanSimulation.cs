@@ -237,6 +237,6 @@ namespace CrazyRubbish.Core
             State.revision++;
         }
         public void SetPaused(bool paused){State.paused=paused;}
-        public PlanState Capture(){State.rng=random.State;return State;}
+        public PlanState Capture(){Require(InventoryHand==null,"先放下手持物品再保存。");State.rng=random.State;return State;}
     }
 }

@@ -23,7 +23,7 @@ namespace CrazyRubbish.Prototype
         private void BuildInterface()
         {
             var canvas=new GameObject("Plan Interface",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));canvas.transform.SetParent(transform,false);planCanvas=canvas.transform;canvas.GetComponent<Canvas>().renderMode=RenderMode.ScreenSpaceOverlay;
-            var scaler=canvas.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1600,1000);scaler.screenMatchMode=CanvasScaler.ScreenMatchMode.Expand;canvas.GetComponent<Canvas>().scaleFactor=Mathf.Min(Screen.width/1600f,Screen.height/1000f);
+            var scaler=canvas.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1600,1000);scaler.screenMatchMode=CanvasScaler.ScreenMatchMode.Expand;ApplyPlanInterfaceSize();
             if(FindObjectOfType<EventSystem>()==null)new GameObject("EventSystem",typeof(EventSystem),typeof(StandaloneInputModule)).transform.SetParent(transform,false);
             var header=Box(planCanvas,"Header",20,16,1560,70);
             header.anchorMax=new Vector2(1,1);header.sizeDelta=new Vector2(-40,70);
@@ -42,11 +42,12 @@ namespace CrazyRubbish.Prototype
             Button(footer,"拾取 E",12,10,128,38,PickupNearest);Button(footer,"入库 / 投料 Q",150,10,160,38,()=>{var s=Model.Site(selectedSite);if(s!=null)Act(()=>Model.Deposit(s));});
             Button(footer,"主角操作 F",320,10,150,38,()=>{if(selectedSite>0)Act(()=>Model.AssignHero(selectedSite));});
             Button(footer,"取消操作",480,10,150,38,()=>{CancelPlacement();CloseContext();moveX=-1;Model.State.heroSite=0;});
+            Button(footer,"背包 I",920,10,120,38,ToggleInventoryWindow);
             BuildMinimap();Button(footer,"全图 M",640,10,110,38,ToggleOverview);Button(footer,"回主角 Home",760,10,150,38,FocusHero);
             var manage=Button(footer,"管理 Tab",0,10,140,38,ToggleManagement).GetComponent<RectTransform>();manage.anchorMin=manage.anchorMax=manage.pivot=new Vector2(1,1);manage.anchoredPosition=new Vector2(-76,-10);
             placementHint=Text(planCanvas,"Placement status","",0,0,880,64,18);placementHint.rectTransform.anchorMin=placementHint.rectTransform.anchorMax=placementHint.rectTransform.pivot=Vector2.zero;placementHint.rectTransform.anchoredPosition=new Vector2(240,158);placementHint.alignment=TextAnchor.LowerLeft;
             BuildRiskStrip();riotText=Text(planCanvas,"Riot warning","",24,184,1100,100,20);riotText.color=Accent;
-            BuildGuideHud();menu=Box(planCanvas,"Main Menu",350,170,900,610);menu.anchorMin=menu.anchorMax=menu.pivot=new Vector2(.5f,.5f);menu.anchoredPosition=Vector2.zero;BuildSettings(footer);BuildSaveInterface();RebuildPanel();
+            BuildGuideHud();menu=Box(planCanvas,"Main Menu",350,170,900,610);menu.anchorMin=menu.anchorMax=menu.pivot=new Vector2(.5f,.5f);menu.anchoredPosition=Vector2.zero;BuildSettings(footer);BuildSaveInterface();BuildInventoryWindow();RebuildPanel();
         }
         private void Line(string value,int size=16,float height=44)
         {Text(panelContent,"Description",value,5,rowY,374,height,size);rowY+=height+5;}
@@ -187,12 +188,12 @@ namespace CrazyRubbish.Prototype
             Button(menu,"新游戏 · 男主",32,356,200,46,()=>RequestNewGame("male"));Button(menu,"新游戏 · 女主",248,356,200,46,()=>RequestNewGame("female"));Button(menu,"读取存档",464,356,200,46,OpenSaveBrowser);
             if(session&&string.IsNullOrEmpty(Model.State.ending))Button(menu,"返回经营",32,426,200,46,()=>{MenuOpen=false;RebuildPanel();});Button(menu,"退出",680,426,180,46,RequestQuit);
             Button(menu,"操作说明",248,426,200,46,OpenPlayerHelp);
-            if(!session&&legacyRoot!=null)Button(menu,"旧版游戏 / 存档",464,426,200,46,OpenLegacyGame);
+
         }
         private static string CapacityLabel(double value)=>value>=1e9?"不限":value.ToString("0.##");
         private void RefreshInterface()
         {
-            if(topStatus==null)return;var st=Model.State;
+            if(topStatus==null)return;var st=Model.State;RefreshInventoryWindow();
             menu.gameObject.SetActive(MenuOpen);if(MenuOpen)CloseContext();RefreshSettings();
             topStatus.text=$"第{st.region}区    现金 {st.cash/100m:0.00}";RefreshTimeHud();RefreshGuideHud();RefreshCatalogList();
             noticeText.text=Notice;

@@ -17,7 +17,7 @@ namespace CrazyRubbish.Prototype
         private Func<bool> pendingSave;
         private bool quitApproved;
         private bool SaveDialogOpen=>saveOverlay!=null&&saveOverlay.gameObject.activeSelf;
-        private bool HasUnsavedProgress=>session&&string.IsNullOrEmpty(Model.State.ending)&&(lastSavedSnapshot==null||lastSavedSnapshot!=JsonUtility.ToJson(Model.Capture()));
+        private bool HasUnsavedProgress=>Model.InventoryHand!=null||session&&string.IsNullOrEmpty(Model.State.ending)&&(lastSavedSnapshot==null||lastSavedSnapshot!=JsonUtility.ToJson(Model.Capture()));
         private string ManualPath=>Path.Combine(SaveRoot,slot+"-manual.json");
         private void BuildSaveInterface()
         {
@@ -29,6 +29,7 @@ namespace CrazyRubbish.Prototype
         public void Save(bool automatic=false){TrySave(automatic);}
         private bool TrySave(bool automatic=false)
         {
+            if(Model.InventoryHand!=null){Notice="先放下手持物品再保存。";return false;}
             if(!session){Notice="请先开始游戏。";return false;}
             if(!string.IsNullOrEmpty(Model.State.ending)){Notice="结局不会覆盖失败前存档。";return false;}
             try
@@ -72,15 +73,16 @@ namespace CrazyRubbish.Prototype
         {
             try
             {
+                CloseInventoryWindow();
                 var restored=new PlanSimulation(LoadConfig(),1,ReadSave(path));
-                Model=restored;slot=Path.GetFileName(path).Split('-')[0];MenuOpen=false;session=true;autoAt=Model.State.seconds+300;autoSlot=0;selectedSite=0;buildType=null;movingSite=0;moveX=-1;
+                Model=restored;awaitInventoryWarehouse=0;knownAcquiredCount=Model.State.acquired.Count;slot=Path.GetFileName(path).Split('-')[0];MenuOpen=false;session=true;autoAt=Model.State.seconds+300;autoSlot=0;selectedSite=0;buildType=null;movingSite=0;moveX=-1;
                 lastSavedSnapshot=JsonUtility.ToJson(Model.Capture());BuildPresentation();Notice="已恢复新版进度。";return true;
             }
             catch(Exception e){Debug.LogWarning("Load failed: "+e.Message);Notice="读取失败：存档不可用，当前进度仍保留。";if(saveError!=null)saveError.text=Notice;return false;}
         }
         private void BeginSaveDialog(string kind,string title)
         {
-            CancelMapGesture();CloseContext();CloseSettings();saveDialogKind=kind;
+            CloseInventoryWindow();CancelMapGesture();CloseContext();CloseSettings();saveDialogKind=kind;
             for(int i=saveWindow.childCount-1;i>=0;i--)Remove(saveWindow.GetChild(i).gameObject);
             Text(saveWindow,"Title",title,28,18,760,40,26);saveError=Text(saveWindow,"Error","",28,552,824,44,16);saveError.color=Accent;
             saveOverlay.gameObject.SetActive(true);saveOverlay.SetAsLastSibling();RefreshInterface();
@@ -120,7 +122,7 @@ namespace CrazyRubbish.Prototype
         private void RequestQuit(){RequestTransition(()=>{quitApproved=true;Application.Quit();},"退出游戏");}
         private bool WantsToQuit()
         {
-            if(quitApproved||!Application.isPlaying||Array.IndexOf(Environment.GetCommandLineArgs(),"-planSmoke")>=0||!HasUnsavedProgress)return true;
+            if(quitApproved||!Application.isPlaying||PlanTestRun||!HasUnsavedProgress)return true;
             RequestQuit();return false;
         }
         private void RequestTransition(Action action,string description,Action cancel=null,Func<bool> save=null)

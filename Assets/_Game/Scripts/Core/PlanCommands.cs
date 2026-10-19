@@ -30,7 +30,7 @@ namespace CrazyRubbish.Core
                 if(p.id==0)
                 {
                     State.heroSite=0;
-                    if(p.trip!=null){Stock(p.trip.source)?.Release(p.trip.item,p.trip.ticks,p.trip.instance);p.trip=null;}
+                    if(p.trip!=null){ReleaseInventoryTrip(p.trip);p.trip=null;}
                 }
             }
             State.revision++;

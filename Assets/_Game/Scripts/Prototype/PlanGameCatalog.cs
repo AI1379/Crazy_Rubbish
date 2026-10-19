@@ -50,6 +50,7 @@ namespace CrazyRubbish.Prototype
                     if(unlocked)Row(d.name+" "+d.size[0]+"×"+d.size[1],()=>{buildType=def.id;CloseContext();HideManagement();Notice="点击地图放置 "+def.name+"；R旋转，右键取消。";});
                     else Row("未解锁："+d.name,()=>OpenFacilityRequirements(def));
                     var cost=Text(panelContent,"Build cost",Amounts(d.build),5,rowY,374,10,13);float height=Mathf.Max(34,cost.preferredHeight+6);cost.rectTransform.sizeDelta=new Vector2(374,height);rowY+=height+5;
+                    if(unlocked)Row("查看缺料 / 采购建材",()=>OpenBuildPurchase(def));
                     if(PlanSimulation.IsWaterIntake(d.id))Line("放在已开放岸边；采出的原水需要净化。",14,50);
                 }
                 if(matches.Length==0)Line("没有匹配设施。可清空搜索或切换显示未解锁设施。",16,70);
@@ -57,6 +58,18 @@ namespace CrazyRubbish.Prototype
                 parent.anchoredPosition=preservePosition?position:Vector2.zero;buildCatalogKey=BuildCatalogKey;
             }
             finally{panelContent=parent;rowY=buildResultsY+buildResults.sizeDelta.y;}
+        }
+        private void OpenBuildPurchase(PlanFacility facility)
+        {
+            var quote=Model.QuoteMissingBuildMaterials(facility.id);BeginContext("建设采购 · "+facility.name,CatalogPoint);
+            if(quote.missing.Length==0)SourceLine("当前背包与仓库的未预约建材已经齐全。");
+            else
+            {
+                SourceLine("缺少："+Amounts(quote.missing));SourceLine("合计 "+(quote.cents/100m).ToString("0.00")+" 钱 · 当前现金 "+(Model.State.cash/100m).ToString("0.00")+" 钱");
+                SourceLine("仅采购缺少的材料，放入有实际容量的仓库；不会自动建造。手动采购沿用现有价格与现金规则。");
+                if(quote.problem!=null)SourceLine(quote.problem);else ContextAction("确认采购缺料",()=>Act(()=>Model.BuyMissingBuildMaterials(facility.id)));
+            }
+            EndContext();
         }
         private void SourceLine(string value)
         {

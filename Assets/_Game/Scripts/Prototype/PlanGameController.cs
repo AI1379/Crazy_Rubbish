@@ -16,18 +16,18 @@ namespace CrazyRubbish.Prototype
         private int moveX=-1,moveY;
         public PlanConfig LoadConfig(){var c=JsonUtility.FromJson<PlanConfig>(Resources.Load<TextAsset>("Plan/RuntimeConfig").text);c.Validate();return c;}
         private string SaveRoot
-        {get{var args=Environment.GetCommandLineArgs();int n=Array.IndexOf(args,"-planSaveRoot");return Array.IndexOf(args,"-planSmoke")>=0&&n>=0&&n+1<args.Length?args[n+1]:Path.Combine(Application.persistentDataPath,"S6PlanSaves");}}
+        {get{var args=Environment.GetCommandLineArgs();int n=Array.IndexOf(args,"-planSaveRoot");return (Array.IndexOf(args,"-planSmoke")>=0||Array.IndexOf(args,"-mergeCompatibilitySmoke")>=0)&&n>=0&&n+1<args.Length?args[n+1]:Path.Combine(Application.persistentDataPath,"S6PlanSaves");}}
         private void Awake()
         {
-            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-prototypeSmoke")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-legacyGame")>=0){gameObject.SetActive(false);legacyRoot.SetActive(true);return;}
+            if(Application.isEditor&&legacyRoot!=null&&Array.IndexOf(Environment.GetCommandLineArgs(),"-prototypeSmoke")>=0){gameObject.SetActive(false);legacyRoot.SetActive(true);return;}
             if(legacyRoot!=null)legacyRoot.SetActive(false);MenuOpen=true;session=false;NewModel("male");Application.wantsToQuit+=WantsToQuit;
         }
         private void Start(){if(!gameObject.activeSelf)return;BuildPresentation();if(Array.IndexOf(Environment.GetCommandLineArgs(),"-planSmoke")>=0)StartCoroutine(Smoke());}
-        private void NewModel(string hero){lastSavedSnapshot=null;Model=new PlanSimulation(LoadConfig(),Environment.TickCount);Model.State.hero=hero;Model.State.paused=false;slot=Guid.NewGuid().ToString("N");autoAt=300;autoSlot=0;selectedSite=0;buildType=null;movingSite=0;moveX=-1;}
+        private void NewModel(string hero){Model?.ReturnInventoryHand();awaitInventoryWarehouse=0;lastSavedSnapshot=null;Model=new PlanSimulation(LoadConfig(),Environment.TickCount);Model.State.hero=hero;Model.State.paused=false;knownAcquiredCount=Model.State.acquired.Count;slot=Guid.NewGuid().ToString("N");autoAt=300;autoSlot=0;selectedSite=0;buildType=null;movingSite=0;moveX=-1;}
         public void StartGame(string hero){NewModel(hero);MenuOpen=false;session=true;BuildPresentation();}
         public void EditPreview(){Model=new PlanSimulation(LoadConfig());MenuOpen=true;session=false;BuildPresentation();}
         public void Act(Action action)
-        {try{action();Model.State.revision++;Notice="操作完成。";}catch(Exception e){Notice=e.Message;}RebuildPanel();RefreshPresentation();}
+        {try{action();Model.State.revision++;Notice="操作完成。";NotifyPlanDiscoveries();}catch(Exception e){Notice=e.Message;}RebuildPanel();RefreshPresentation();}
         private void Update()
         {
             if(Model==null)return;
@@ -35,7 +35,7 @@ namespace CrazyRubbish.Prototype
             if(Input.GetKeyDown(KeyCode.Escape)){if(EditingText&&!MenuOpen&&!SaveDialogOpen)UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);else EscapeInterface();}
             if(MenuOpen||SaveDialogOpen){CancelMapGesture();return;}
             if((Input.GetMouseButtonDown(0)||Input.GetMouseButtonDown(1))&&DismissSettingsAt(Input.mousePosition))contextDismissed=true;
-            if(!string.IsNullOrEmpty(Model.State.ending)){MenuOpen=true;RebuildPanel();return;}
+            if(!string.IsNullOrEmpty(Model.State.ending)){CloseInventoryWindow();MenuOpen=true;RebuildPanel();return;}
             bool keyboard=!EditingText;
             if(keyboard)
             {
@@ -43,30 +43,24 @@ namespace CrazyRubbish.Prototype
             if(Input.GetKeyDown(KeyCode.Alpha1))ApplyTimeControl(1);if(Input.GetKeyDown(KeyCode.Alpha2))ApplyTimeControl(2);if(Input.GetKeyDown(KeyCode.Alpha3))ApplyTimeControl(3);
             if(Input.GetKeyDown(KeyCode.M))ToggleOverview();if(Input.GetKeyDown(KeyCode.Home))FocusHero();
             if(Input.GetKeyDown(KeyCode.R))buildRotation=(buildRotation+1)%4;
-            if(Input.GetKeyDown(KeyCode.Tab))ToggleManagement();
-            if(Input.GetKeyDown(KeyCode.B))ShowManagement(1);if(Input.GetKeyDown(KeyCode.I))ShowManagement(3);
+            if(!InventoryOpen&&Input.GetKeyDown(KeyCode.Tab))ToggleManagement();
+            if(!InventoryOpen&&Input.GetKeyDown(KeyCode.B))ShowManagement(1);if(Input.GetKeyDown(KeyCode.I))ToggleInventoryWindow();
             }
             if(Input.GetMouseButtonDown(1))cancelledPlacement=CancelPlacement();
             if(Input.GetMouseButtonDown(0)&&ContextOpen&&!RectTransformUtility.RectangleContainsScreenPoint(contextMenu,Input.mousePosition,null)){CloseContext();contextDismissed=true;}
             double dt=Math.Min(Time.unscaledDeltaTime,.25);
-            if(!Model.State.paused&&!Model.HeroAboard)
+            if(!InventoryOpen&&!Model.State.paused&&!Model.HeroAboard)
             {
                 int x=keyboard?((Input.GetKey(KeyCode.D)?1:0)-(Input.GetKey(KeyCode.A)?1:0)):0,y=keyboard?((Input.GetKey(KeyCode.W)?1:0)-(Input.GetKey(KeyCode.S)?1:0)):0;
-                if(x!=0||y!=0){if(Model.State.player.directed)Model.ResumePeople(new[]{0});moveX=-1;var p=Model.State.player;Model.Walk(p,(int)Math.Round(p.x)+x,(int)Math.Round(p.y)+y,dt*Model.State.speed);}
+                if(x!=0||y!=0){awaitInventoryWarehouse=0;if(Model.State.player.directed)Model.ResumePeople(new[]{0});moveX=-1;var p=Model.State.player;Model.Walk(p,(int)Math.Round(p.x)+x,(int)Math.Round(p.y)+y,dt*Model.State.speed);}
                 else if(moveX>=0&&!Model.State.player.directed){Model.Walk(Model.State.player,moveX,moveY,dt*Model.State.speed);if(Vector2.Distance(new Vector2((float)Model.State.player.x,(float)Model.State.player.y),new Vector2(moveX,moveY))<.1)moveX=-1;}
             }
-            if(keyboard&&Input.GetKeyDown(KeyCode.E))PickupNearest();
-            if(keyboard&&!Model.HeroAboard&&Input.GetKeyDown(KeyCode.Q)){var site=Model.Site(selectedSite);if(site!=null)Act(()=>Model.Deposit(site));}
-            if(keyboard&&!Model.HeroAboard&&Input.GetKeyDown(KeyCode.F)&&selectedSite>0)Act(()=>Model.AssignHero(selectedSite));
-            HandleMap();Model.Advance(dt);
-            if(Model.State.seconds>=autoAt){Save(true);autoAt=Model.State.seconds+300;}
+            if(keyboard&&!InventoryOpen&&Input.GetKeyDown(KeyCode.E))PickupNearest();
+            if(keyboard&&!InventoryOpen&&!Model.HeroAboard&&Input.GetKeyDown(KeyCode.Q)){var site=Model.Site(selectedSite);if(site!=null)Act(()=>Model.Deposit(site));}
+            if(keyboard&&!InventoryOpen&&!Model.HeroAboard&&Input.GetKeyDown(KeyCode.F)&&selectedSite>0)Act(()=>Model.AssignHero(selectedSite));
+            if(!InventoryOpen)HandleMap();else CancelMapGesture();Model.Advance(dt);NotifyPlanDiscoveries();CheckInventoryArrival();if(InventoryOpen)MovePlanInventoryHand(Input.mousePosition);
+            if(Model.InventoryHand==null&&Model.State.seconds>=autoAt){Save(true);autoAt=Model.State.seconds+300;}
             RefreshPresentation();
-        }
-        public void OpenLegacyGame()
-        {
-            if(session||legacyRoot==null)return;
-            Application.wantsToQuit-=WantsToQuit;
-            gameObject.SetActive(false);legacyRoot.SetActive(true);
         }
         private void OnDestroy(){Application.wantsToQuit-=WantsToQuit;}
         private void OnApplicationFocus(bool focus){if(!focus)CancelMapGesture();}

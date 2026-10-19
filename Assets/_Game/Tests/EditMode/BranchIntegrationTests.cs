@@ -12,14 +12,17 @@ namespace CrazyRubbish.Tests
     {
         [TearDown] public void CloseScene() => EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-        [Test] public void SavedSceneSelectsPlanAndPreservesIndependentLegacyPresentation()
+        [Test] public void SavedSceneContainsOneGameAndInactiveHistoricalRegressionObjects()
         {
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Main.unity");
             var plan = Object.FindObjectOfType<PlanGameController>();
             var legacy = Object.FindObjectsOfType<PrototypeGame>(true).Single();
             Assert.That(plan, Is.Not.Null);
+            Assert.That(plan.transform.Find("Plan Interface/Inventory Window"), Is.Not.Null);
+            Assert.That(plan.GetComponentsInChildren<UnityEngine.UI.Button>(true).Any(b=>b.name=="旧版游戏 / 存档"), Is.False);
             Assert.That(plan.legacyRoot, Is.SameAs(legacy.gameObject));
             Assert.That(legacy.gameObject.activeSelf, Is.False);
+            Assert.That(legacy.gameObject.CompareTag("EditorOnly"), Is.True);
             Assert.That(plan.appearance, Is.Not.SameAs(legacy.appearance));
             Assert.That(AssetDatabase.GetAssetPath(legacy.appearance), Is.EqualTo("Assets/_Game/Data/M1Appearance.asset"));
             Assert.That(AssetDatabase.GetAssetPath(plan.appearance), Is.EqualTo("Assets/_Game/Data/PlanAppearance.asset"));
