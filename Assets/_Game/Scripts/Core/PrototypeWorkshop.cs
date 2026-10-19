@@ -43,7 +43,7 @@ namespace CrazyRubbish.Core
             if(!Near(TableFrontX,TableFrontY))return Fail("到工作台正面后取物。");
             return QueueInteraction(()=>{
                 var stock=input?TableInput:TableOutput;int count=0;
-                foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(stock,Carry,input?StockKey("tableInput"):StockKey("tableOutput"),"carry",item,stock.Available(item));
+                foreach(ItemId item in ItemCatalog.All)count+=MoveStock(stock,Carry,input?StockKey("tableInput"):StockKey("tableOutput"),"carry",item,stock.Available(item));
                 return count>0?Ok("工作台物品已进入背包。",count):Fail("没有可取物品或背包已满。");
             });
         }

@@ -40,7 +40,7 @@ namespace CrazyRubbish.Core
         public static (int x,int y) ConveyorNext(ConveyorLane b)=>(b.X+ConveyorDx[b.Direction],b.Y+ConveyorDy[b.Direction]);
         private bool InfrastructureOccupied(int x,int y)=>conveyors.Any(b=>b.X==x&&b.Y==y)||ports.Any(p=>p.X==x&&p.Y==y);
         private bool InfrastructureBlocksMovement(int x,int y)=>ports.Any(p=>p.Id!=portPlacementIgnore&&(!p.Blueprint||!placementActorPaths&&(portPlacementObstacle.HasValue||placementObstacle!=null))&&p.X==x&&p.Y==y)||portPlacementObstacle.HasValue&&portPlacementObstacle.Value==(x,y);
-        private bool LogisticsLand(int x,int y)=>IsOwnedGround(x,y)||x>=9&&x<=21&&y>=1&&y<=5;
+        private bool LogisticsLand(int x,int y)=>OwnedGround(x,y)||x>=9&&x<=21&&y>=1&&y<=5;
         private bool InfrastructureCellAllowed(int x,int y)=>x>=0&&y>=0&&x<Settings.mapWidth&&y<Settings.mapHeight&&LogisticsLand(x,y)&&!IsReservedCell(x,y)&&!facilities.Any(f=>(f.Built||f.Blueprint)&&Contains(f,x,y));
         private string InfrastructurePermission()
         {
@@ -72,7 +72,7 @@ namespace CrazyRubbish.Core
         }
         public List<ConveyorLane> FindConveyorRoute(int sx,int sy,int tx,int ty,int finalDirection=0)
         {
-            bool Allowed(int x,int y)=>InfrastructureCellAllowed(x,y)&&!ports.Any(p=>p.X==x&&p.Y==y)&&CellTicks(x,y)==0&&!(CellCoordinate(PlayerX)==x&&CellCoordinate(PlayerY)==y)&&!residents.Any(r=>CellCoordinate(r.X)==x&&CellCoordinate(r.Y)==y)&&!facilities.Any(f=>f.Built&&IsWoodMachine(f.Kind)&&(ServiceCell(f)==(x,y)||MaintenanceCell(f)==(x,y)));
+            bool Allowed(int x,int y)=>InfrastructureCellAllowed(x,y)&&!ports.Any(p=>p.X==x&&p.Y==y)&&CellTicks(x,y)==0&&!(CellCoordinate(PlayerX)==x&&CellCoordinate(PlayerY)==y)&&!residents.Any(r=>CellCoordinate(r.X)==x&&CellCoordinate(r.Y)==y)&&!facilities.Any(f=>f.Built&&HasMaintenanceSide(f.Kind)&&(ServiceCell(f)==(x,y)||MaintenanceCell(f)==(x,y)));
             bool CanLeave(int x,int y,int direction,int incoming)
             {
                 if(direction<0||direction>3||incoming>=0&&direction==(incoming+2)%4)return false;
@@ -128,19 +128,19 @@ namespace CrazyRubbish.Core
         public string PortPlacementError(int ownerId,int x,int y,int ignoreId=0)
         {
             var owner=PortOwner(ownerId);
-            if(owner==null||!owner.Built||!(ownerId==-1||owner.Kind<=8||IsWoodMachine(owner.Kind)))return "请选择有实际物品缓冲的已建成设施或旧仓库。";
+            if(owner==null||!owner.Built||!(ownerId==-1||owner.Kind<=8||IsWoodMachine(owner.Kind)||IsGenericKind(owner.Kind)&&PortLimit(owner.Kind)>0))return "请选择有实际物品缓冲的已建成设施或旧仓库。";
             if(PortFacing(owner,x,y)<0)return "接口必须贴在所属设施的外沿，不能在角格或机身内。";
             if(!InfrastructureCellAllowed(x,y)||conveyors.Any(b=>b.X==x&&b.Y==y)||ports.Any(p=>p.Id!=ignoreId&&p.X==x&&p.Y==y))return "接口位置被设施、传送带或其他接口占用。";
-            if(ports.Count(p=>p.Id!=ignoreId&&p.OwnerId==ownerId)>=DesignBaseline.PortLimit(ownerId==-1?-1:owner.Kind))return "该设施接口数量已达上限。";
+            if(ports.Count(p=>p.Id!=ignoreId&&p.OwnerId==ownerId)>=PortLimit(ownerId==-1?-1:owner.Kind))return "该设施接口数量已达上限。";
             if(CellTicks(x,y)>0)return "先搬走接口位置的地面物品。";
             if(CellCoordinate(PlayerX)==x&&CellCoordinate(PlayerY)==y||residents.Any(r=>CellCoordinate(r.X)==x&&CellCoordinate(r.Y)==y))return "接口位置有人。";
             var service=ownerId==-1?(WarehouseX,WarehouseY):ServiceCell(owner);
-            if(service==(x,y)||IsWoodMachine(owner.Kind)&&MaintenanceCell(owner)==(x,y))return "请保留人员作业面与维护侧。";
+            if(service==(x,y)||HasMaintenanceSide(owner.Kind)&&MaintenanceCell(owner)==(x,y))return "请保留人员作业面与维护侧。";
             portPlacementObstacle=(x,y);portPlacementIgnore=ignoreId;
             try
             {
                 foreach(var f in facilities.Where(f=>f.Built||f.Blueprint))
-                {var s=ServiceCell(f);if(FindPath(WarehouseX,WarehouseY,s.x,s.y)==null)return "接口会封住设施作业面。";if(IsWoodMachine(f.Kind)){s=MaintenanceCell(f);if(FindPath(WarehouseX,WarehouseY,s.x,s.y)==null)return "接口会封住维护侧。";}}
+                {var s=ServiceCell(f);if(FindPath(WarehouseX,WarehouseY,s.x,s.y)==null)return "接口会封住设施作业面。";if(HasMaintenanceSide(f.Kind)){s=MaintenanceCell(f);if(FindPath(WarehouseX,WarehouseY,s.x,s.y)==null)return "接口会封住维护侧。";}}
                 placementActorPaths=true;
                 if(FindPath(PlayerX,PlayerY,WarehouseX,WarehouseY)==null||residents.Any(r=>FindPath(r.X,r.Y,WarehouseX,WarehouseY)==null))return "接口会困住角色。";
             }
@@ -150,7 +150,7 @@ namespace CrazyRubbish.Core
         public ActionResult PlacePort(int ownerId,int x,int y,bool output,int filter=-1)
         {
             string error=InfrastructurePermission()??PortPlacementError(ownerId,x,y);if(error!=null)return Fail(error);
-            if(filter< -1||filter>=Enum.GetValues(typeof(ItemId)).Length)return Fail("过滤物品无效。");
+            if(filter< -1||filter>=ItemCatalog.All.Length)return Fail("过滤物品无效。");
             if(output&&ownerId==-1&&filter<0)filter=(int)ItemId.WasteWood;
             var reserved=ReserveConstruction(new[]{new ItemAmount(ItemId.SteelPart,1)});if(reserved==null)return Fail("接口需要钢铁零件1。");
             var owner=PortOwner(ownerId);var port=new ConveyorPort{Id=nextPortId++,OwnerId=ownerId,X=x,Y=y,Facing=PortFacing(owner,x,y),Output=output,Filter=filter,Blueprint=true};ports.Add(port);
@@ -159,16 +159,16 @@ namespace CrazyRubbish.Core
         }
         public ActionResult ConfigurePort(int id,int filter,bool enabled)
         {
-            var p=GetConveyorPort(id);if(p==null||filter< -1||filter>=Enum.GetValues(typeof(ItemId)).Length)return Fail("接口或过滤物品无效。");
+            var p=GetConveyorPort(id);if(p==null||filter< -1||filter>=ItemCatalog.All.Length)return Fail("接口或过滤物品无效。");
             p.Filter=filter;p.Enabled=enabled;ConstructionRevision++;return Ok(enabled?"接口过滤已更新。":"接口已停用，物品保留在原处。");
         }
         public ActionResult SetConveyorEnabled(int id,bool enabled)
         {var b=GetConveyor(id);if(b==null)return Fail("没有该传送带。");b.Enabled=enabled;ConstructionRevision++;RecomputePower();return Ok(enabled?"传送带已启用。":"传送带已停止，实物与进度保留。");}
         private void ReturnInfrastructureItem(ItemId item,int count,string from,int x,int y)
         {
-            if(!IsOwnedGround(x,y))
+            if(!OwnedGround(x,y))
             {
-                var cell=(from py in Enumerable.Range(0,Settings.mapHeight) from px in Enumerable.Range(0,Settings.mapWidth) where IsOwnedGround(px,py)&&!Occupied(px,py) orderby CellTicks(px,py),Distance(px,py,x,y),py,px select(px,py)).First();x=cell.px;y=cell.py;
+                var cell=(from py in Enumerable.Range(0,Settings.mapHeight) from px in Enumerable.Range(0,Settings.mapWidth) where OwnedGround(px,py)&&!Occupied(px,py) orderby CellTicks(px,py),Distance(px,py,x,y),py,px select(px,py)).First();x=cell.px;y=cell.py;
             }
             ReturnAtOldSite(item,count,from,x,y);
         }
@@ -223,7 +223,7 @@ namespace CrazyRubbish.Core
             if(s.conveyors!=null)conveyors.AddRange(s.conveyors.Select(b=>b.Copy()));if(s.ports!=null)ports.AddRange(s.ports.Select(p=>p.Copy()));if(s.infrastructurePlans!=null)infrastructurePlans.AddRange(s.infrastructurePlans.Select(p=>p.Copy()));
             nextConveyorId=s.nextConveyor;nextPortId=s.nextPort;nextInfrastructurePlan=s.nextInfrastructurePlan;beltCredit=s.beltCredit;portTurn=s.portTurn;
             if(nextConveyorId<1||nextPortId<1||beltCredit<0||beltCredit>1||conveyors.Select(b=>b.Id).Distinct().Count()!=conveyors.Count||ports.Select(p=>p.Id).Distinct().Count()!=ports.Count)throw new ArgumentException("输送存档编号或余料无效。");
-            foreach(var b in conveyors)if(b.Id<=0||b.Direction<0||b.Direction>3||b.X<0||b.Y<0||b.X>=Settings.mapWidth||b.Y>=Settings.mapHeight||b.Item< -1||b.Item>=Enum.GetValues(typeof(ItemId)).Length||double.IsNaN(b.Progress)||b.Progress<0||b.Progress>1.00001)throw new ArgumentException("传送带实体或进度无效。");
+            foreach(var b in conveyors)if(b.Id<=0||b.Direction<0||b.Direction>3||b.X<0||b.Y<0||b.X>=Settings.mapWidth||b.Y>=Settings.mapHeight||b.Item< -1||b.Item>=ItemCatalog.All.Length||double.IsNaN(b.Progress)||b.Progress<0||b.Progress>1.00001)throw new ArgumentException("传送带实体或进度无效。");
             foreach(var f in facilities.Where(f=>IsWoodMachine(f.Kind)))
             {
                 if(double.IsNaN(f.Durability)||f.Durability<0||f.Durability>100||f.MachinePhase<0||f.MachinePhase>2||double.IsNaN(f.HumanProgress)||double.IsNaN(f.MachineProgress)||f.HumanProgress<0||f.HumanProgress>10.00001||f.MachineProgress<0||f.MachineProgress>15.00001||f.MachineActive&&f.MachineToken<=0)throw new ArgumentException("机器耐久、预约或阶段无效。");

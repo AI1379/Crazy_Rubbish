@@ -6,7 +6,7 @@ namespace CrazyRubbish.Core
     // Capacity uses exact integer twentieths; quantities remain whole item instances/litres.
     public sealed class UnitInventory
     {
-        private static readonly int ItemCount = Enum.GetValues(typeof(ItemId)).Length;
+        private static readonly int ItemCount = ItemCatalog.All.Length;
         private readonly int[] quantities = new int[ItemCount];
         private readonly Dictionary<int, Dictionary<ItemId,int>> reservations = new Dictionary<int, Dictionary<ItemId,int>>();
         private int nextReservation = 1;
@@ -28,6 +28,7 @@ namespace CrazyRubbish.Core
             return index;
         }
         public int Count(ItemId item) => quantities[Index(item)];
+        public IEnumerable<ItemId> Stocked() { for (int i = 0; i < ItemCount; i++) if (quantities[i] > 0) yield return (ItemId)i; }
         public int Reserved(ItemId item) { Index(item); int result=0; foreach(var token in reservations.Values) if(token.TryGetValue(item,out int amount)) result+=amount; return result; }
         public int Available(ItemId item) => Count(item)-Reserved(item);
         public int Reserve(params ItemAmount[] costs)
@@ -125,7 +126,7 @@ namespace CrazyRubbish.Core
             for(int i=0;i<ItemCount;i++){if(saved.counts[i]<0)throw new ArgumentException("非法库存数量。");quantities[i]=saved.counts[i];UsedTicks+=quantities[i]*ItemCatalog.CapacityTicks((ItemId)i);}
             if(UsedTicks>Capacity*20)throw new ArgumentException("存档库存超过容量。");
             foreach(var row in saved.reservations){var token=new Dictionary<ItemId,int>();for(int i=0;i<row.items.Length;i++)token[(ItemId)row.items[i]]=row.amounts[i];reservations[row.id]=token;}
-            foreach(ItemId item in Enum.GetValues(typeof(ItemId)))if(Reserved(item)>Count(item))throw new ArgumentException("存档预约超过库存。");
+            foreach(ItemId item in ItemCatalog.All)if(Reserved(item)>Count(item))throw new ArgumentException("存档预约超过库存。");
         }
     }
 }

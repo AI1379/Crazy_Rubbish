@@ -184,7 +184,7 @@ namespace CrazyRubbish.Prototype
         }
         private void CycleDumpItem()
         {
-            var items=Enum.GetValues(typeof(ItemId)).Cast<ItemId>().Where(i=>game.Model.Carry.Available(i)>0).ToArray();
+            var items=ItemCatalog.All.Where(i=>game.Model.Carry.Available(i)>0).ToArray();
             if(items.Length>0)dumpItem=items[(Array.IndexOf(items,dumpItem)+1)%items.Length];dumpConfirm=false;
         }
         private void ConfirmDump()

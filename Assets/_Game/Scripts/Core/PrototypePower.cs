@@ -129,7 +129,7 @@ namespace CrazyRubbish.Core
             foreach(var f in facilities){f.PowerRatio=0;f.PowerRequested=0;}
             // A device is one electrical node. Adjacent wires connect to its perimeter;
             // unrelated manual workstations never bridge two electrical circuits.
-            var electric=facilities.Where(f=>f.Built&&(f.Kind==8||f.Kind==16||f.Kind==32||IsWoodMachine(f.Kind))).ToList();
+            var electric=facilities.Where(f=>f.Built&&IsElectric(f)).ToList();
             var oldHousing=new FacilityInstance{Id=-1,Kind=16,X=16,Y=2,Built=true};
             var oldLamp=new FacilityInstance{Id=-2,Kind=32,X=20,Y=5,Built=true};
             electric.Add(oldHousing);electric.Add(oldLamp);
@@ -181,7 +181,8 @@ namespace CrazyRubbish.Core
                     if(id<0){n.Requested+=id==-1?0.2:0.1;continue;}
                     var f=GetFacility(id);
                     if(f.Kind==8){if((f.fuelRemaining>0||f.fuelWood+f.fuelChips>0)&&(f.equivalentHeat<20-1e-6||f.GeneratorResidue.FreeTicks>=20))n.Output+=DesignBaseline.GeneratorPower;}
-                    else n.Requested+=IsWoodMachine(f.Kind)?MachinePowerRequest(f):f.Kind==16?0.2:0.1;
+                    else if(FacilityKey(f.Kind)=="turbine"){n.Output+=ThermalOutput(f);n.Requested+=ThermalPowerRequest(f);}
+                    else n.Requested+=FacilityPowerRequest(f);
                 }
                 foreach(int id in n.BeltIds){var b=GetConveyor(id);if(b.Enabled)n.Requested+=DesignBaseline.BeltLoad;}
                 n.Ratio=n.Requested<=0?0:Math.Min(1,n.Output/n.Requested);
@@ -209,7 +210,8 @@ namespace CrazyRubbish.Core
             {
                 var generators=new List<(double until,double output)>();
                 foreach(int id in n.FacilityIds)
-                {var f=GetFacility(id);if(f!=null&&f.Kind==8)generators.Add((GeneratorStepBudget(f,seconds),DesignBaseline.GeneratorPower));}
+                {var f=GetFacility(id);if(f!=null&&f.Kind==8)generators.Add((GeneratorStepBudget(f,seconds),DesignBaseline.GeneratorPower));
+                 if(f!=null&&FacilityKey(f.Kind)=="turbine"&&ThermalOutput(f)>0)generators.Add((Math.Min(seconds,BoilerFuelSeconds(ThermalParts(f).boiler)),ThermalNetOutput));}
                 double ratio=0,powered=0;var times=generators.Select(g=>g.until).Concat(new[]{0.0,seconds}).Distinct().OrderBy(t=>t).ToArray();
                 for(int i=0;i+1<times.Length;i++)
                 {
@@ -233,6 +235,22 @@ namespace CrazyRubbish.Core
                 if(equivalentHeat>=20-1e-6&&GeneratorResidue.TryAdd(ItemId.PowerAsh,1))equivalentHeat=Math.Max(0,equivalentHeat-20);
             });
             RecomputePower();
+        }
+        private static bool IsElectric(FacilityInstance f)
+        {
+            if(f.Kind==8||f.Kind==16||f.Kind==32||IsWoodMachine(f.Kind))return true;
+            if(!IsGenericKind(f.Kind))return false;
+            string key=FacilityKey(f.Kind);
+            return key=="grow_lamp"||key=="turbine"||Definition(f.Kind).Power>0||ProcessRecipes(f.Kind).Any(r=>r.Power>0);
+        }
+        private double FacilityPowerRequest(FacilityInstance f)
+        {
+            if(IsWoodMachine(f.Kind))return MachinePowerRequest(f);
+            if(f.Kind==16)return 0.2;if(f.Kind==32)return 0.1;
+            string key=FacilityKey(f.Kind);
+            if(key=="grow_lamp")return LampDemand(f)?Definition(f.Kind).Power:0;
+            if(key=="condenser")return 0;
+            return ProcessPowerRequest(f);
         }
         public double WirePowerRatio(int x,int y)=>powerNetworks.FirstOrDefault(n=>n.Wires.Any(w=>w.X==x&&w.Y==y))?.Ratio??0;
     }

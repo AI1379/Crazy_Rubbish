@@ -65,7 +65,7 @@ namespace CrazyRubbish.Prototype
         public void StopWalkingForInventory(){walkPath=null;}
         public void OpenMenu(){GetComponent<PrototypeWorld>().CancelConstruction();MenuOpen=true;walkPath=null;Model.LeaveManualRole();}
         public void ResumeGame(){if(SessionStarted&&!Model.Failed)MenuOpen=false;}
-        public void ContinueAfterResult(){if(!Model.Failed){ResultVisible=false;resultSeen=true;Model.SetPaused(false);}}
+        public void ContinueAfterResult(){if(!Model.Failed&&!Model.Ended){ResultVisible=false;resultSeen=true;Model.SetPaused(false);}}
         public void ShowResult(){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
         public void QuitGame(){Application.Quit();}
         public void BeginTutorial(){Model.Tutorial.Begin();Model.Tutorial.Refresh(Model);}
@@ -112,7 +112,7 @@ namespace CrazyRubbish.Prototype
             if (SmokeMode) return;
             if (Input.GetKeyDown(KeyCode.Escape)) { if(GetComponent<PrototypeWorld>().CancelConstruction())return; HandleEscape(); }
             if(MenuOpen||ResultVisible)return;
-            if(Model.Failed){ResultVisible=true;return;}
+            if(Model.Failed||Model.Ended){ResultVisible=true;return;}
             if(Model.Tutorial.IntroOpen)return;
             GetComponent<PrototypeHud>().HandlePanelShortcuts();
             double delta = Math.Min(Time.unscaledDeltaTime, 0.25f);
@@ -133,7 +133,7 @@ namespace CrazyRubbish.Prototype
             if (Input.GetKeyDown(KeyCode.F)) { Model.SelectNearestFacility();if(Model.NearBench)GetComponent<PrototypeHud>().ShowFacility(1); Report(Model.ToggleWork()); }
             }
             Model.Advance(delta);
-            if(Model.Failed||Model.DemoCompleted&&!resultSeen){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
+            if(Model.Failed||Model.Ended&&!resultSeen||Model.DemoCompleted&&!resultSeen){ResultVisible=true;Model.SetPaused(true);walkPath=null;}
             if (interactionRevision != Model.InteractionRevision) { interactionRevision = Model.InteractionRevision; Report(Model.LastInteraction); }
             if (Model.GameSeconds >= Model.NextAutosave && !Model.Interacting && Model.Hand==null)
             {

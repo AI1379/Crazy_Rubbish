@@ -12,8 +12,10 @@ namespace CrazyRubbish.Core
     {
         private int nextDelivery=1;
         private int IncomingTicks(UnitInventory target)=>residents.Where(r=>r.Delivery?.Target==target).Sum(r=>r.Delivery.Amount*ItemCatalog.CapacityTicks(r.Delivery.Item));
-        private DeliveryTask Plan(Resident actor,UnitInventory source,UnitInventory target,string from,string to,ItemId item,int sx,int sy,int tx,int ty,int wanted)
+        private DeliveryTask Plan(Resident actor,UnitInventory source,UnitInventory target,string from,string to,ItemId item,int sx,int sy,int tx,int ty,int wanted,Func<ToolInstance,bool> instanceFilter=null)
         {
+            if(ReferenceEquals(target,Warehouse)){var access=NearestWarehouseAccess(sx,sy);tx=access.x;ty=access.y;}
+            if(ReferenceEquals(source,Warehouse)){var access=NearestWarehouseAccess(tx,ty);sx=access.x;sy=access.y;}
             int room=target==null?10-FuelCount-residents.Where(r=>r.Delivery?.To==to).Sum(r=>r.Delivery.Amount):(target.FreeTicks-IncomingTicks(target))/ItemCatalog.CapacityTicks(item);
             int count=Math.Min(Math.Min(wanted,8*20/ItemCatalog.CapacityTicks(item)),room);
             if(source!=null)count=Math.Min(count,source.Available(item));
@@ -26,7 +28,7 @@ namespace CrazyRubbish.Core
             }
             else {count=Math.Min(count,source.Available(item));if(count<=0)return null;token=source.Reserve(new ItemAmount(item,count));if(token==0)return null;}
             var task=new DeliveryTask{Id=nextDelivery++,Item=item,Amount=count,Token=token,Source=source,Target=target,Ground=pile,From=from,To=to,SourceX=sx,SourceY=sy,TargetX=tx,TargetY=ty};
-            if(ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))foreach(var tool in tools.Where(t=>t.Item==item&&t.Location==from&&t.ReservedBy==0).OrderByDescending(t=>t.Durability).Take(count))tool.ReservedBy=task.Id;
+            if(ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))foreach(var tool in tools.Where(t=>t.Item==item&&t.Location==from&&t.ReservedBy==0&&(instanceFilter==null||instanceFilter(t))).OrderByDescending(t=>t.Durability).Take(count))tool.ReservedBy=task.Id;
             return task;
         }
         private DeliveryTask Supply(Resident actor,UnitInventory target,string key,ItemId item,int x,int y,int wanted)
@@ -58,15 +60,18 @@ namespace CrazyRubbish.Core
                 {task=Supply(actor,null,StockKey("fuel"),fuel,GeneratorFrontX,GeneratorFrontY,Math.Min(8,10-FuelCount));if(task!=null)return task;}
             }
             foreach(var output in new[]{(Output,StockKey("woodOutput"),BenchFrontX,BenchFrontY),(DismantleOutput,StockKey("dismantleOutput"),DismantleFrontX,DismantleFrontY),(TableOutput,StockKey("tableOutput"),TableFrontX,TableFrontY),(GeneratorResidue,StockKey("ash"),GeneratorFrontX,GeneratorFrontY),(BrokenTools,"broken",BenchFrontX,BenchFrontY)})
-                foreach(ItemId item in Enum.GetValues(typeof(ItemId)))if(output.Item1.Available(item)>0&&!PreferConveyorOutput(output.Item1,item))
+                foreach(ItemId item in output.Item1.Stocked().ToArray())if(output.Item1.Available(item)>0&&!PreferConveyorOutput(output.Item1,item))
                 {task=Plan(actor,output.Item1,Warehouse,output.Item2,"warehouse",item,output.Item3,output.Item4,WarehouseX,WarehouseY,output.Item1.Available(item));if(task!=null)return task;}
             if(BenchBuilt&&RunRequested&&pendingRecipe==null&&WoodInputStock.Count(ItemId.WasteWood)<WoodInput(SelectedRecipe)&&!PreferConveyorInput(Station(1).Id,ItemId.WasteWood))
             {task=Supply(actor,WoodInputStock,StockKey("woodInput"),ItemId.WasteWood,BenchFrontX,BenchFrontY,WoodInput(SelectedRecipe)*2-WoodInputStock.Count(ItemId.WasteWood));if(task!=null)return task;}
             if(DismantleBuilt&&DismantleRequested&&DismantleInput.Count(SelectedDevice)<1&&!PreferConveyorInput(Station(2).Id,SelectedDevice))
             {task=Supply(actor,DismantleInput,StockKey("dismantleInput"),SelectedDevice,DismantleFrontX,DismantleFrontY,2-DismantleInput.Count(SelectedDevice));if(task!=null)return task;}
             task=MachineDelivery(actor,true);if(task!=null)return task;
+            task=ProcessDelivery(actor,true);if(task!=null)return task;
+            task=ThermalDelivery(actor);if(task!=null)return task;
             task=SupplyConveyorSources(actor);if(task!=null)return task;
             task=MachineDelivery(actor,false);if(task!=null)return task;
+            task=ProcessDelivery(actor,false);if(task!=null)return task;
             // Remaining ground-to-warehouse stock is deliberately an explicit command until supply policies arrive.
             return null;
         }
@@ -85,7 +90,10 @@ namespace CrazyRubbish.Core
                 int[] previous=(int[])selectedFacilities.Clone();
                 var assigned=GetFacility(actor.FacilityId==0?1:actor.FacilityId);if(assigned!=null)SelectRuntimeFacility(assigned);
                 try {
-                if(RiotActive){actor.Activity="欠薪暴动：人工岗位停工";continue;}
+                bool promiseWork=HappinessRiot&&!WageRiot&&PromiseMade&&actor.Rioting;
+                if(RiotActive&&!promiseWork){actor.Activity=WageRiot?"欠薪暴动：人工岗位停工":"生活暴动：人工岗位停工";continue;}
+                if(promiseWork&&actor.Delivery==null){actor.Delivery=PromiseTask(actor);if(actor.Delivery==null){actor.Activity="履行承诺：等待可修复的住房供电、衣物或清洁物资";continue;}}
+                if(TickProcessWorker(actor,seconds))continue;
                 if(TickMachineWorker(actor,seconds))continue;
                 if(actor.Delivery==null)
                 {
@@ -131,6 +139,20 @@ namespace CrazyRubbish.Core
                 }
                 } finally {selectedFacilities=previous;}
             }
+        }
+        // Riot organizers under a promise only fuel generators and gather clothes, soap and cleaning supplies.
+        private DeliveryTask PromiseTask(Resident actor)
+        {
+            DeliveryTask task=null;
+            foreach(var g in facilities.Where(f=>f.Built&&f.Kind==8).ToArray())
+            {
+                task=AtFacility(g,()=>{if(FuelSeconds>=60)return null;foreach(var fuel in new[]{ItemId.WoodChips,ItemId.WasteWood}){var t=Supply(actor,null,StockKey("fuel"),fuel,GeneratorFrontX,GeneratorFrontY,Math.Min(8,10-FuelCount));if(t!=null)return t;}return null;});
+                if(task!=null)return task;
+            }
+            foreach(var item in new[]{ItemId.Clothes,ItemId.Soap,ItemId.CleanRag,ItemId.Broom})
+                foreach(var pile in ground.Where(p=>p.Item==item&&p.Amount>p.Reserved).OrderBy(p=>p.Id).ToArray())
+                {task=Plan(actor,null,Warehouse,"ground:"+pile.Id,"warehouse",item,pile.X,pile.Y,WarehouseX,WarehouseY,pile.Amount-pile.Reserved);if(task!=null)return task;}
+            return null;
         }
         private void ClearDelivery(Resident actor)
         {

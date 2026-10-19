@@ -16,7 +16,7 @@ namespace CrazyRubbish.Core
         private readonly List<ToolInstance> tools=new List<ToolInstance>();
         private readonly HashSet<ItemId> discovered=new HashSet<ItemId>();
         private readonly SerializableRandom random;
-        private readonly double[] salesPressure=new double[Enum.GetValues(typeof(ItemId)).Length];
+        private readonly double[] salesPressure=new double[ItemCatalog.All.Length];
         private readonly Dictionary<int,List<(UnitInventory inventory,int token)>> blueprints=new Dictionary<int,List<(UnitInventory,int)>>();
         private double accumulatedTime,inputTimer,nextInput,nextWage;
         private decimal saleRemainderCents;
@@ -32,7 +32,7 @@ namespace CrazyRubbish.Core
         private readonly Dictionary<(int,int),(int revision,float value)> pressureCache=new Dictionary<(int,int),(int,float)>();
         private readonly Dictionary<(int,int),int> pressureCapacity=new Dictionary<(int,int),int>();
         private int pressureRevision=-1;
-        public PrototypeSettings Settings {get;}
+        public PrototypeSettings Settings {get;private set;}
         public UnitInventory Carry {get;}
         public UnitInventory Warehouse {get;}
 
@@ -84,7 +84,7 @@ namespace CrazyRubbish.Core
         public int ReservedWood=>jobActive?WoodInput(activeRecipe):0;
         public float Progress=>jobActive?(float)Math.Min(1,jobProgress/Duration(activeRecipe)):0;
         public float DismantleProgress=>(float)(dismantleProgress/35);
-        public bool NearWarehouse=>Near(WarehouseX,WarehouseY);
+        public bool NearWarehouse=>NearAnyWarehouse;
         public bool NearBench=>Near(BenchFrontX,BenchFrontY);
         public bool NearGenerator=>Near(GeneratorFrontX,GeneratorFrontY);
         public bool HasSaw=>tools.Any(t=>t.Item==ItemId.WoodHandSaw&&t.Durability>0&&!t.Location.StartsWith("ground:"));
@@ -125,7 +125,7 @@ namespace CrazyRubbish.Core
         public void SetSpeed(int speed){if(speed<1||speed>3)throw new ArgumentOutOfRangeException(nameof(speed));Speed=speed;}
         public void MovePlayer(double hx,double hy,double seconds)
         {
-            if(Paused||Failed||seconds<=0||hx==0&&hy==0)return;
+            if(Paused||Failed||HeroAboard||seconds<=0||hx==0&&hy==0)return;
             CancelInteraction();manualStation=0;
             bool horizontalFirst=Math.Abs(hx)>=Math.Abs(hy);
             double amount=Settings.moveSpeed*seconds*Speed;
@@ -155,7 +155,7 @@ namespace CrazyRubbish.Core
         }
         public ActionResult SelectDevice(ItemId item)
         {
-            if(!ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))return Fail("选择可拆设备。");
+            if(!ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item)||(int)item>=59)return Fail("选择可拆设备；新增旧件请在拆解地点的配方列表中选择。");
             pendingDevice=item;ApplyRecipeChanges();RefreshState();return Ok(pendingDevice!=null?"拆解模板排队，完成后先搬走旧缓冲。":"拆解配方已选择。");
         }
         private void ApplyRecipeChanges()
@@ -246,7 +246,7 @@ namespace CrazyRubbish.Core
                 }
                 if (cashCents == 0) break;
             }
-            TotalWagesPaidCents += paid;if(RiotActive){RiotPaidCents+=paid;if(RiotPaidCents>=RiotTargetCents)RiotActive=false;} RefreshState();
+            TotalWagesPaidCents += paid;if(WageRiot){RiotPaidCents+=paid;if(RiotPaidCents>=RiotTargetCents)WageRiot=false;} RefreshState();
             return Ok($"实付工资{paid / 100m:0.00}，剩余欠款{UnpaidWages:0.00}。");
         }
 
@@ -286,7 +286,7 @@ namespace CrazyRubbish.Core
             int cells=0,exposed=0;double excess=0;
             for(int x=Math.Max(0,key.Item1-4);x<=Math.Min(Settings.mapWidth-1,key.Item1+4);x++)for(int y=Math.Max(0,key.Item2-4);y<=Math.Min(Settings.mapHeight-1,key.Item2+4);y++)
             {
-                if(!IsOwnedGround(x,y)||Occupied(x,y)||Distance(x,y,key.Item1,key.Item2)>4)continue;cells++;
+                if(!OwnedGround(x,y)||Occupied(x,y)||Distance(x,y,key.Item1,key.Item2)>4)continue;cells++;
                 pressureCapacity.TryGetValue((x,y),out int ticks);
                 if(ticks>0){exposed++;excess+=Math.Max(0,ticks/20.0-5);}
             }
@@ -295,7 +295,7 @@ namespace CrazyRubbish.Core
             double overload=exposed==0?1:Math.Max(0.4,1/(1+excess/(exposed*5)));
             float result=(float)Math.Max(0.25,area*overload);pressureCache[key]=(GroundRevision,result);return result;
         }
-        public float HumanEfficiency=>(float)DesignRules.HumanEfficiency(1,0,70,WorkerAtBench?EquivalentUnpaidPeriods:0,(WorkerAtBench?Woodworker.Needs:PlayerNeeds).FoodMultiplier(GameSeconds),(WorkerAtBench?Woodworker.Needs:PlayerNeeds).WaterMultiplier(GameSeconds),PressureAt(BenchFrontX,BenchFrontY),1);
+        public float HumanEfficiency=>(float)DesignRules.HumanEfficiency(1,BonusFactor,WorkerAtBench?Woodworker.Happiness:70,WorkerAtBench?EquivalentUnpaidPeriods:0,(WorkerAtBench?Woodworker.Needs:PlayerNeeds).FoodMultiplier(GameSeconds),(WorkerAtBench?Woodworker.Needs:PlayerNeeds).WaterMultiplier(GameSeconds),PressureAt(BenchFrontX,BenchFrontY),1);
         public double Duration(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?40:recipe==WoodRecipe.WoodHandle?30:10;
         public int ProductAmount(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?3:recipe==WoodRecipe.WoodHandle?2:4;
         public ItemId Product(WoodRecipe recipe)=>recipe==WoodRecipe.Plank?ItemId.Plank:recipe==WoodRecipe.WoodHandle?ItemId.WoodHandle:ItemId.SortedWood;
@@ -305,19 +305,19 @@ namespace CrazyRubbish.Core
         public void Advance(double seconds)
         {
             if(double.IsNaN(seconds)||double.IsInfinity(seconds)||seconds<0)throw new ArgumentOutOfRangeException(nameof(seconds));
-            if(Paused||Failed){RefreshState();return;}accumulatedTime+=seconds*Speed;
+            if(Paused||Failed||Ended){RefreshState();return;}accumulatedTime+=seconds*Speed;
             while(accumulatedTime+0.00000001>=Step)
             {
                 accumulatedTime-=Step;GameSeconds+=Step;CompleteBuildings();TickInteraction(Step);TickOpening();
                 for(int i=0;i<salesPressure.Length;i++)salesPressure[i]*=Math.Exp(-Math.Log(2)*Step/600);
                 PrepareMachineBatches();TickPower(Step);
                 if(residents.Count>0&&GameSeconds+1e-6>=nextWage){bills.Add(new WageBill(residents.Select(r=>r.Id).ToArray(),(long)(Settings.wagePerResident*100),nextWage));nextWage+=Settings.wageSeconds;CheckWageRiot();}
-                TickCommunity(Step);
-                if(Failed){accumulatedTime=0;break;}
+                TickCommunity(Step);TickHappiness(Step);TickEndings();
+                if(Failed||Ended){accumulatedTime=0;break;}
                 foreach(var f in facilities.Where(f=>f.Built&&f.Kind==4).ToArray())AtFacility(f,()=>TickWorkshop(Step));
-                TickToolPurchase();
-                StaffMachines();TickResidents(Step);TickMachinery(Step);TickConveyors(Step);
-                if(Settings.automaticInput){inputTimer+=Step;while(inputTimer>=nextInput){inputTimer-=nextInput;GenerateInput(nextInput);nextInput=RandomInputInterval();}}
+                TickToolPurchase();TickToolMaking();
+                StaffMachines();TickResidents(Step);TickMachinery(Step);TickProcesses(Step);TickThermal(Step);TickConveyors(Step);
+                if(Settings.automaticInput){inputTimer+=Step;while(inputTimer>=nextInput){inputTimer-=nextInput;GenerateInput(nextInput);GenerateRegionInput(nextInput);nextInput=RandomInputInterval();}}
                 foreach(var station in facilities.Where(f=>f.Built&&f.Kind<=2).ToArray())AtFacility(station,()=>{
                 RefreshState();
                 if(station.Kind==1&&State==WorkState.Working)

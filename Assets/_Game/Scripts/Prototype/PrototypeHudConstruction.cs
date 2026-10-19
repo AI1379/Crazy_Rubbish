@@ -9,7 +9,7 @@ namespace CrazyRubbish.Prototype
         [SerializeField] private RectTransform constructionNotice;
         [SerializeField] private Text constructionText,powerSummary;
         private static int FacilityKind(int page)=>page==1?1:page==2?2:page==3?4:page==4?8:page==5?16:page==6?32:page==7?64:128;
-        private int SelectedOwnedId=>SelectedFacility==0?0:game.Model.SelectedFacility(FacilityKind(SelectedFacility)).Id;
+        private int SelectedOwnedId=>SelectedFacility==0?0:SelectedFacility==GenericFacilityPage?genericFacilityId:game.Model.SelectedFacility(FacilityKind(SelectedFacility)).Id;
         private void UpgradeConstructionLayout()
         {
             var content=pages[0].GetComponent<ScrollRect>().content;
@@ -78,7 +78,8 @@ namespace CrazyRubbish.Prototype
         }
         public void ShowOwnedFacility(FacilityInstance f)
         {
-            if(f==null)return;var result=game.Model.SelectFacility(f.Id);if(!result.Success){game.Report(result);return;}
+            if(f==null)return;if(PrototypeSimulation.IsGenericKind(f.Kind)){ShowGenericFacility(f);return;}
+            var result=game.Model.SelectFacility(f.Id);if(!result.Success){game.Report(result);return;}
             ShowFacility(f.Kind==1?1:f.Kind==2?2:f.Kind==4?3:f.Kind==8?4:f.Kind==16?5:f.Kind==32?6:f.Kind==64?7:8);
             facilityTitle.text=PrototypeSimulation.FacilityName(f.Kind)+" #"+f.Id;
         }

@@ -22,7 +22,7 @@ namespace CrazyRubbish.Prototype
         public int FacilityAt(Vector2 point)
         {
             var f=game.Model?.FacilityAtCell(Mathf.RoundToInt(point.x),Mathf.RoundToInt(point.y));
-            if(f!=null)return f.Kind==1?1:f.Kind==2?2:f.Kind==4?3:f.Kind==8?4:f.Kind==16?5:f.Kind==32?6:f.Kind==64?7:8;
+            if(f!=null)return PrototypeSimulation.IsGenericKind(f.Kind)?9:f.Kind==1?1:f.Kind==2?2:f.Kind==4?3:f.Kind==8?4:f.Kind==16?5:f.Kind==32?6:f.Kind==64?7:8;
             return 0;
         }
 
@@ -106,7 +106,7 @@ namespace CrazyRubbish.Prototype
             {
                 var f=m.FacilityAtCell(Mathf.RoundToInt(point.x),Mathf.RoundToInt(point.y));
                 key = "facility-" + f.Id;title=PrototypeSimulation.FacilityName(f.Kind)+" #"+f.Id;
-                body=f.Blueprint?"施工蓝图 · 材料已预约":f.Kind==1?$"{PrototypeGame.StateName(f.State)}\n木料 {f.WoodInputStock.Count(ItemId.WasteWood)} · 进度 {f.jobProgress/m.Duration(f.SelectedRecipe):P0}":
+                body=f.Blueprint?"施工蓝图 · 材料已预约":PrototypeSimulation.IsGenericKind(f.Kind)?m.ProcessStatus(f):f.Kind==1?$"{PrototypeGame.StateName(f.State)}\n木料 {f.WoodInputStock.Count(ItemId.WasteWood)} · 进度 {f.jobProgress/m.Duration(f.SelectedRecipe):P0}":
                     f.Kind==2?PrototypeGame.StateName(f.DismantleState)+"\n"+ItemCatalog.Name(f.SelectedDevice):f.Kind==4?$"工具装配 · {f.assemblyProgress:0.#}秒":
                     PrototypeSimulation.IsWoodMachine(f.Kind)?$"{PrototypeGame.StateName(f.State)}\n耐久 {f.Durability:0.#} · 供电 {f.PowerRatio:P0}":f.Kind==8?$"输出4 · 燃料 {f.fuelWood+f.fuelChips}\n同网请求 {f.PowerRequested:0.###} · 供电 {f.PowerRatio:P0}":$"供电 {f.PowerRatio:P0}";
                 body += "\n左键查看 · 右键前往"; return true;

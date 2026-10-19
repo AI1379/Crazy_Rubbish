@@ -56,7 +56,7 @@ namespace CrazyRubbish.Core
         {
             if(!NearWarehouse)return Fail("靠近仓库取用点后转存。");
             return QueueInteraction(()=>{
-                int count=0;foreach(ItemId item in Enum.GetValues(typeof(ItemId)))if(item!=ItemId.WoodHandSaw)count+=MoveStock(Carry,Warehouse,"carry","warehouse",item,Carry.Available(item));
+                int count=0;foreach(ItemId item in ItemCatalog.All)if(item!=ItemId.WoodHandSaw)count+=MoveStock(Carry,Warehouse,"carry","warehouse",item,Carry.Available(item));
                 return count>0?Ok("转存完成，主动携带的手锯仍随身。",count):Fail("没有可转存物品或仓库已满。");
             });
         }
@@ -99,7 +99,7 @@ namespace CrazyRubbish.Core
             if(dismantle?!Near(DismantleFrontX,DismantleFrontY):!NearBench)return Fail("靠近地点正面后取出。");
             var output=dismantle?DismantleOutput:Output;
             return QueueInteraction(()=>{
-                int count=0;foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(output,Carry,dismantle?StockKey("dismantleOutput"):StockKey("woodOutput"),"carry",item,output.Available(item));
+                int count=0;foreach(ItemId item in ItemCatalog.All)count+=MoveStock(output,Carry,dismantle?StockKey("dismantleOutput"):StockKey("woodOutput"),"carry",item,output.Available(item));
                 return count>0?Ok("成品进入背包，需搬运入库出售。",count):Fail("没有成品或背包已满。");
             });
         }
@@ -108,7 +108,7 @@ namespace CrazyRubbish.Core
             if(dismantle?!Near(DismantleFrontX,DismantleFrontY):!NearBench)return Fail("靠近地点正面后取料。");
             var input=dismantle?DismantleInput:WoodInputStock;
             return QueueInteraction(()=>{
-                int count=0;foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(input,Carry,dismantle?StockKey("dismantleInput"):StockKey("woodInput"),"carry",item,input.Available(item));
+                int count=0;foreach(ItemId item in ItemCatalog.All)count+=MoveStock(input,Carry,dismantle?StockKey("dismantleInput"):StockKey("woodInput"),"carry",item,input.Available(item));
                 return count>0?Ok("未在制的输入进入背包。",count):Fail("输入已预约或没有空间。");
             });
         }
@@ -160,7 +160,8 @@ namespace CrazyRubbish.Core
             if(tool.Durability>0)return;
             var map=InventoryMap();var inventory=map.TryGetValue(tool.Location,out var stock)?stock:null;
             if(inventory==null)throw new InvalidOperationException("工具位置没有对应库存。");
-            inventory.TryRemove(tool.Item,1);tool.Item=ItemId.BrokenWoodTool;tool.Location="broken";BrokenTools.TryAdd(ItemId.BrokenWoodTool,1);
+            var broken=DesignCatalog.Item("broken_"+DesignCatalog.ItemKeys[(int)tool.Item])??ItemId.BrokenWoodTool;
+            inventory.TryRemove(tool.Item,1);tool.Item=broken;tool.Location="broken";BrokenTools.TryAdd(broken,1);
         }
         private bool CanWear(int id,int amount)
         {
@@ -175,6 +176,8 @@ namespace CrazyRubbish.Core
         private void ReleaseUnusedTools()
         {
             var active=new System.Collections.Generic.HashSet<int>(facilities.Where(f=>f.Built&&f.jobActive).Select(f=>f.woodToolId));
+            foreach(var f in facilities.Where(f=>f.ProcessActive))foreach(int id in f.ProcessTools)active.Add(id);
+            foreach(var t in tools.Where(t=>t.UsingAt<0&&GetFacility(-t.UsingAt)?.ProcessActive==true&&t.Location==ProcessInputKey(-t.UsingAt)))active.Add(t.Id);
             foreach(var f in facilities.Where(f=>f.Built&&f.dismantleActive)){active.Add(f.screwToolId);active.Add(f.wrenchToolId);}
             foreach(var tool in tools)if(tool.UsingAt!=0&&!active.Contains(tool.Id))tool.UsingAt=0;
         }
@@ -182,11 +185,11 @@ namespace CrazyRubbish.Core
         {
             if(!ItemCatalog.IsTool(item))return 1;
             var tool=tools.Where(t=>t.Item==item&&t.Location=="warehouse"&&t.ReservedBy==0).OrderBy(t=>t.Id).Skip(index).FirstOrDefault();
-            return tool==null?0:tool.Durability/300m;
+            return tool==null?0:tool.Durability/(decimal)ItemCatalog.ToolDurability(item);
         }
         public ActionResult Buy(ItemId item,int count=1)
         {
-            var price=ItemCatalog.Price(item);if(count<=0||price.buy<=0)return Fail("此物品无前期购买价。");
+            var price=ItemCatalog.Price(item);if(count<=0||price.buy<=0||!ItemCatalog.Buyable(item))return Fail("此物品没有商店购买渠道。");
             long cost=(long)decimal.Ceiling(price.buy*count*100);
             if(cost>cashCents)return Fail("经营现金不足。");
             int inWarehouse=Math.Min(count,Warehouse.AvailableSlots(item));
@@ -201,7 +204,7 @@ namespace CrazyRubbish.Core
                 var cell=candidates[0];placements.Add(cell);shadow.TryGetValue(cell,out int used);shadow[cell]=used+ItemCatalog.CapacityTicks(item);
             }
             cashCents-=cost;if(inWarehouse>0)Warehouse.TryAdd(item,inWarehouse);discovered.Add(item);
-            if(ItemCatalog.IsTool(item))for(int i=0;i<inWarehouse;i++)tools.Add(new ToolInstance{Id=nextToolId++,Item=item,Location="warehouse"});
+            if(ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item))for(int i=0;i<inWarehouse;i++)tools.Add(new ToolInstance{Id=nextToolId++,Item=item,Location="warehouse",Durability=ItemCatalog.IsTool(item)?ItemCatalog.ToolDurability(item):0,Condition=1});
             foreach(var cell in placements)Place(item,1,null,cell.x,cell.y);
             return Ok(placements.Count==0?"采购送入仓库。":"采购完成，仓库满的部分在产权地显示。",count);
         }

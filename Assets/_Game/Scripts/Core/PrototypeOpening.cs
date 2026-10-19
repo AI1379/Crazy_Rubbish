@@ -17,6 +17,7 @@ namespace CrazyRubbish.Core
         public const int ReceivingX = 7, ReceivingY = 13, DumpX = 4, DumpY = 20;
         public OpeningProgress Opening { get; private set; }
         public long DumpedTicks { get; private set; }
+        public static bool HoleAccepts(ItemId item) { string key = DesignCatalog.ItemKeys[(int)item]; return item != ItemId.DrinkingWater && item != ItemId.IndustrialWater && item != ItemId.IndustrialEffluent && !key.StartsWith("lift_") && key != "reclaimed_structure" && !key.StartsWith("mined_"); }
         public bool HasDiscovered(ItemId item) => discovered.Contains(item);
         public bool TableUnlocked => HasDiscovered(ItemId.Plank) && HasDiscovered(ItemId.SteelPart);
         public bool GeneratorUnlocked => HasDiscovered(ItemId.SteelPart);
@@ -60,12 +61,13 @@ namespace CrazyRubbish.Core
         {
             if (!Near(DumpX, DumpY)) return Fail("先到投弃洞入口，再选择要丢弃的物品。");
             if (amount <= 0 || Carry.Available(item) < amount) return Fail("背包没有足够的未预约物品。");
+            if (!HoleAccepts(item)) return Fail("饮用水、工艺水和返程关键部件不能倒入洞中。");
             if(tools.Any(t=>t.Item==item&&t.Location=="carry"&&(t.UsingAt!=0||t.ReservedBy!=0)))return Fail("这件工具仍在当前批次使用，先结束或取消批次。");
             return QueueInteraction(() => {
                 if (!Near(DumpX, DumpY) || Carry.Available(item) < amount) return Fail("物品或投弃位置已改变。");
                 Carry.TryRemove(item, amount);
                 foreach (var tool in tools.Where(t => t.Item == item && t.Location == "carry" && t.ReservedBy == 0).Take(amount).ToArray()) tools.Remove(tool);
-                DumpedTicks += (long)amount * ItemCatalog.CapacityTicks(item);
+                RecordDump((long)amount * DisposalTicks(item));
                 return Ok("物品已投入洞中，无法取回。", amount);
             });
         }

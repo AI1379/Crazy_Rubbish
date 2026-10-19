@@ -26,12 +26,13 @@ namespace CrazyRubbish.Prototype
 
         private void BuildWorldOverlay()
         {
-            var navigation = Surface(root, "Navigation", 16, 0, 574, 54, new Color32(26, 31, 34, 242));
+            var navigation = Surface(root, "Navigation", 16, 0, 690, 54, new Color32(26, 31, 34, 242));
             navigation.anchorMin = navigation.anchorMax = Vector2.zero;
             navigation.anchoredPosition = new Vector2(16, 70);
             string[] captions = { "建造  B", "人员  P", "背包  I", "教程  H" };
             for (int i = 0; i < 4; i++) launchers[i] = ButtonAt(navigation, "OpenTab" + i, captions[i], 8 + 112 * i, 8, 104, 38);
             zones = ButtonAt(navigation, "Zones", "区域", 456, 8, 110, 38);
+            ButtonAt(navigation, "OpenDevelopment", "产业  G", 572, 8, 110, 38);
 
             BuildTutorialCoach();BuildConstructionNotice();
 
@@ -108,6 +109,7 @@ namespace CrazyRubbish.Prototype
             CloseInventory();
             if (management != null) management.gameObject.SetActive(false);
             if (facilityPanel != null) facilityPanel.gameObject.SetActive(false);
+            if (developmentPanel != null) developmentPanel.gameObject.SetActive(false);armedSale=-1;
             selectedFacility = 0;inspectedBelt=inspectedPort=0;if(transportPanel!=null)transportPanel.gameObject.SetActive(false);
             if (inspection != null) inspection.gameObject.SetActive(false);
             UpdateLaunchers();
@@ -132,7 +134,7 @@ namespace CrazyRubbish.Prototype
             if(KnowledgeOpen){AcknowledgeKnowledge();return true;}
             if (tradeConfirmation != null && tradeConfirmation.gameObject.activeSelf)
             { pendingTechnology = -1; tradeConfirmation.gameObject.SetActive(false); return true; }
-            if (!ManagementOpen && SelectedFacility == 0) return false;
+            if (!ManagementOpen && SelectedFacility == 0 && !DevelopmentOpen) return false;
             ClosePanels(); return true;
         }
 
@@ -151,6 +153,7 @@ namespace CrazyRubbish.Prototype
             if (Input.GetKeyDown(KeyCode.P)) ToggleManagement(1);
             if (Input.GetKeyDown(KeyCode.I)) ToggleManagement(2);
             if (Input.GetKeyDown(KeyCode.H)) ToggleManagement(3);
+            if (Input.GetKeyDown(KeyCode.G)) ToggleDevelopment();
         }
 
         public void ShowFacility(int facility)
@@ -165,6 +168,7 @@ namespace CrazyRubbish.Prototype
             Sprite[] artwork = { game.appearance.woodwork, game.appearance.dismantle, game.appearance.workbench, game.appearance.generator, game.appearance.housing, game.appearance.streetlamp, game.appearance.electricWoodwork,game.appearance.automaticWoodwork };
             facilityArtwork.sprite = artwork[facility - 1];
             if (game.Model != null) RefreshOverlay(game.Model);
+            RefreshProcessMode();
         }
 
         private void UpdateLaunchers()
@@ -212,6 +216,7 @@ namespace CrazyRubbish.Prototype
             switch (SelectedFacility)
             {
                 case 5:case 6:case 7:case 8:var side=PrototypeSimulation.ServiceCell(game.Model.SelectedFacility(FacilityKind(SelectedFacility)));game.GoTo(side.x,side.y);break;
+                case GenericFacilityPage:var generic=game.Model.GetFacility(genericFacilityId);if(generic!=null){var front=PrototypeSimulation.ServiceCell(generic);game.GoTo(front.x,front.y);}break;
                 case 1: game.GoTo(game.Model.BenchFrontX, game.Model.BenchFrontY); break;
                 case 2: game.GoTo(game.Model.DismantleFrontX, game.Model.DismantleFrontY); break;
                 case 3: game.GoTo(game.Model.TableFrontX, game.Model.TableFrontY); break;

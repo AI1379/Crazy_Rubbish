@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace CrazyRubbish.Prototype
 {
     // Runs only with an explicit command-line flag. Uses the same actions as the player.
-    public sealed class PrototypeSmokeRunner : MonoBehaviour
+    public sealed partial class PrototypeSmokeRunner : MonoBehaviour
     {
         public PrototypeGame game;
         private bool failed;
@@ -28,6 +28,7 @@ namespace CrazyRubbish.Prototype
             public int batches, buttons, residents, deliveredTrips;
             public long wagesPaidCents;
             public string version,baselineVersion;
+            public FixesSmokeReport fixes;
         }
 
         private IEnumerator Start()
@@ -47,6 +48,7 @@ namespace CrazyRubbish.Prototype
             bool demoCompleted=false;double demoMinutes=0;int assembledTools=0,mealsConsumed=0;long demoWages=0;
             bool tutorialCompleted=false;
             bool automationVerified=false;int machineBatches=0;long conveyorDeliveredItems=0;double machineRepaired=0,automationMoney=0;
+            FixesSmokeReport fixesReport=null;
             if (!string.IsNullOrEmpty(screenshot))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(screenshot)));
@@ -118,6 +120,8 @@ namespace CrazyRubbish.Prototype
                     int id=VerifyAutomation(screenshot);model=game.Model;var machine=model.GetFacility(id);
                     machineBatches=machine.MachineBatches;machineRepaired=machine.RepairedDurability;conveyorDeliveredItems=model.ConveyorDeliveredItems;automationMoney=(double)model.Money;automationVerified=true;
                 }
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-prototypeFullGameSmoke")>=0){VerifyFullGame(screenshot);model=game.Model;}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-prototypeFixesSmoke")>=0){fixesReport=VerifyFullGameFixes(screenshot);model=game.Model;}
             }
             catch (Exception exception)
             {
@@ -178,7 +182,7 @@ namespace CrazyRubbish.Prototype
                         money = (double)earnedMoney, batches = batches, buttons = FindObjectsOfType<Button>().Length,
                         wagesPaidCents = wagesPaid, residents = recruited, version = Application.version,baselineVersion=DesignBaseline.Version,constructionVerified=true,
                         deliveredTrips = deliveredTrips, saveRoundtrip = saveRoundtrip,demoCompleted=demoCompleted,demoMinutes=demoMinutes,assembledTools=assembledTools,mealsConsumed=mealsConsumed,demoWagesPaidCents=demoWages,tutorialCompleted=tutorialCompleted,
-                        automationVerified=automationVerified,machineBatches=machineBatches,machineRepaired=machineRepaired,conveyorDeliveredItems=conveyorDeliveredItems,automationMoney=automationMoney
+                        automationVerified=automationVerified,machineBatches=machineBatches,machineRepaired=machineRepaired,conveyorDeliveredItems=conveyorDeliveredItems,automationMoney=automationMoney,fixes=fixesReport
                     }));
                 }
                 Debug.Log("PROTOTYPE_SMOKE_PASS: pickup, weighted storage, woodwork, dismantle, generator, recruitment, resident production, payroll, pause and restart.");
@@ -190,6 +194,51 @@ namespace CrazyRubbish.Prototype
 
         private void OnLog(string message, string stack, LogType type)
         { if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) failed = true; }
+
+        // Complete-catalog UI: industry panel tabs, buying region 2, a generic line opened from the map and run through its panel buttons.
+        private void VerifyFullGame(string screenshot)
+        {
+            var hud=game.GetComponent<PrototypeHud>();var root=hud.VisualRoot;var m=game.Model;
+            Button[] buttons=root.GetComponentsInChildren<Button>(true);
+            Button Find(string name)=>Array.Find(buttons,b=>b.name==name)??throw new InvalidOperationException("Missing button "+name);
+            void Shot(string suffix){if(!string.IsNullOrEmpty(screenshot))CapturePreview(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(screenshot)),Path.GetFileNameWithoutExtension(screenshot)+suffix));}
+            hud.ClosePanels();Find("OpenDevelopment").onClick.Invoke();hud.RefreshView(m);
+            if(!hud.DevelopmentOpen)throw new InvalidOperationException("Industry panel did not open.");
+            for(int i=0;i<4;i++){Find("DevTab"+i).onClick.Invoke();hud.RefreshView(m);}
+            Find("DevTab0").onClick.Invoke();hud.RefreshView(m);Shot("-industry.png");
+            foreach(var sale in DesignCatalog.TechnologySales)if(m.Money<270&&m.SaleAvailable(sale)&&!m.IsSaleSold(sale.Key))m.SellTechnology(sale.Key);
+            // Keep the existing lines running and sell their real output; nothing is injected.
+            for(double waited=0;m.Money<270&&waited<5400&&!m.Failed;waited+=30)
+            {
+                foreach(var item in new[]{ItemId.Plank,ItemId.WoodChips,ItemId.SortedWood,ItemId.WasteTextile,ItemId.OldClothes})if(m.Money<270&&m.Warehouse.Available(item)>0)m.Sell(item,m.Warehouse.Available(item));
+                if(m.Money<270)m.Advance(30);
+                if(m.UnpaidWageCents>0)m.PayWages();
+            }
+            Find("DevTab2").onClick.Invoke();hud.RefreshView(m);
+            if(m.Money<270)throw new InvalidOperationException("Not enough money to verify region purchase: "+m.Money);
+            Find("BuyRegion").onClick.Invoke();
+            if(m.OwnedRegion!=2||m.Settings.mapWidth!=52)throw new InvalidOperationException("Region purchase button failed: "+game.Notice);
+            game.GetComponent<PrototypeWorld>().RefreshView(m);hud.RefreshView(m);Shot("-regions.png");
+            if(game.GetComponent<PrototypeWorld>().VisualRoot.Find("Expansion")==null)throw new InvalidOperationException("Expanded map was not drawn.");
+            foreach(var item in new[]{ItemId.Plank,ItemId.SteelPart})if(m.Warehouse.Available(item)<6)Require(m.Buy(item,6-m.Warehouse.Available(item)),"buy build materials");
+            Require(m.Buy(ItemId.MixedPlastic,20),"buy plastic");
+            m.LeaveManualRole();
+            var placed=m.PlaceFacility(PrototypeSimulation.KindOf("sorting"),30,10);Require(placed,"place sorting");
+            var f=m.GetFacility(placed.Amount);hud.ClosePanels();hud.ShowOwnedFacility(f);hud.RefreshView(m);
+            if(hud.SelectedFacility!=9)throw new InvalidOperationException("Generic facility page did not open.");
+            Find("GenericNext").onClick.Invoke();Find("GenericRun").onClick.Invoke();hud.RefreshView(m);
+            if(f.ProcessRecipe!="sort_plastic"||!f.ProcessRun)throw new InvalidOperationException("Generic panel buttons are unbound: "+game.Notice);
+            Shot("-generic-facility.png");
+            m.SetAutomaticMachineStaffing(true);for(int i=0;i<1200&&f.ProcessBatches==0;i++)m.Advance(1);
+            if(f.ProcessBatches==0)throw new InvalidOperationException("Residents did not run the second-region sorting line: "+m.ProcessStatus(f));
+            if(!string.IsNullOrEmpty(Argument("-prototypeSaveDirectory")))
+            {
+                int batches=f.ProcessBatches;game.SaveGame();if(!game.LastActionSucceeded)throw new InvalidOperationException(game.Notice);
+                game.LoadLatest();m=game.Model;var loaded=m.GetFacility(f.Id);
+                if(!game.LastActionSucceeded||m.OwnedRegion!=2||loaded==null||loaded.ProcessBatches!=batches||loaded.ProcessRecipe!="sort_plastic")throw new InvalidOperationException("Complete-game state did not survive a real save file.");
+            }
+            hud.ClosePanels();
+        }
 
         private int VerifyAutomation(string screenshot)
         {
@@ -580,7 +629,7 @@ namespace CrazyRubbish.Prototype
             Canvas.ForceUpdateCanvases();
             inventory.verticalScrollbar.value = 0;
             Canvas.ForceUpdateCanvases();
-            var finalItem = Find("Sell" + (Enum.GetValues(typeof(ItemId)).Length - 1));
+            var finalItem = Find("Sell" + (ItemCatalog.All.Length - 1));
             Vector3 point = inventory.viewport.InverseTransformPoint(finalItem.transform.position);
             if (!finalItem.gameObject.activeInHierarchy || !inventory.viewport.rect.Contains(point))
                 throw new InvalidOperationException("The final inventory row is unreachable by scrollbar.");

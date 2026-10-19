@@ -42,9 +42,11 @@ namespace CrazyRubbish.Prototype
         }
         private void ClearConstructionChildren(Transform parent)
         {for(int i=parent.childCount-1;i>=0;i--)RemoveView(parent.GetChild(i).gameObject);}
+        public Sprite FacilitySprite(int kind)=>ConstructionSprite(kind);
         private Sprite ConstructionSprite(int kind)
         {
-            switch(kind){case 1:return game.appearance.woodwork;case 2:return game.appearance.dismantle;case 4:return game.appearance.workbench;case 8:return game.appearance.generator;case 64:return game.appearance.electricWoodwork;case 128:return game.appearance.automaticWoodwork;case 16:return game.appearance.housing;default:return game.appearance.streetlamp;}
+            switch(kind){case 1:return game.appearance.woodwork;case 2:return game.appearance.dismantle;case 4:return game.appearance.workbench;case 8:return game.appearance.generator;case 64:return game.appearance.electricWoodwork;case 128:return game.appearance.automaticWoodwork;case 16:return game.appearance.housing;case 32:return game.appearance.streetlamp;}
+            return GenericSprite(kind);
         }
         private void PreviewCell(int x,int y,Color color,float size=0.92f)
         {
@@ -62,7 +64,7 @@ namespace CrazyRubbish.Prototype
             Color c=error==null?new Color(0.35f,0.8f,0.5f,0.45f):new Color(0.95f,0.3f,0.2f,0.45f);
             for(int px=x;px<x+size.width;px++)for(int py=y;py<y+size.height;py++)PreviewCell(px,py,c);
             PreviewCell(front.x,front.y,new Color(1,0.75f,0.25f,0.7f),0.6f);
-            string costs=movingId!=0?"搬迁不重复收取建材":string.Join(" + ",DesignBaseline.BuildCost(placingKind).Select(p=>ItemCatalog.Name(p.Item)+p.Amount));
+            string costs=movingId!=0?"搬迁不重复收取建材":string.Join(" + ",PrototypeSimulation.BuildCost(placingKind).Select(p=>ItemCatalog.Name(p.Item)+p.Amount));
             ConstructionHint=$"{PrototypeSimulation.FacilityName(placingKind)} · {placingRotation*90}° · R旋转 · 右键取消\n"+(error??"位置可用 · 金色格为作业面 · 左键确认")+"\n"+costs;
             return error;
         }
@@ -116,7 +118,8 @@ namespace CrazyRubbish.Prototype
                 // Images use bottom anchors; rotating the whole image would put the base
                 // through the floor. The service-side marker communicates orientation.
                 view.transform.position=new Vector3(cx,cy-0.5f,0);view.sortingOrder=SortAt(f.Y-0.5f);
-                view.color=f.Blueprint?new Color(0.8f,0.85f,0.9f,0.4f):PrototypeSimulation.IsWoodMachine(f.Kind)?(f.MachineTripped?new Color(1,0.42f,0.3f):f.State==WorkState.MachineRunning?new Color(1,0.94f,0.78f):f.State==WorkState.NeedsPower?new Color(0.55f,0.6f,0.65f):Color.white):f.Kind==32?(f.PowerRatio>=0.5?new Color(1,0.92f,0.65f):new Color(0.55f,0.58f,0.62f)):Color.white;
+                RefreshGenericView(m,f,view);
+                view.color=PrototypeSimulation.IsGenericKind(f.Kind)?GenericTint(m,f):f.Blueprint?new Color(0.8f,0.85f,0.9f,0.4f):PrototypeSimulation.IsWoodMachine(f.Kind)?(f.MachineTripped?new Color(1,0.42f,0.3f):f.State==WorkState.MachineRunning?new Color(1,0.94f,0.78f):f.State==WorkState.NeedsPower?new Color(0.55f,0.6f,0.65f):Color.white):f.Kind==32?(f.PowerRatio>=0.5?new Color(1,0.92f,0.65f):new Color(0.55f,0.58f,0.62f)):Color.white;
             }
             if(shownConstructionRevision!=m.ConstructionRevision||previousModel!=m)
             {
@@ -129,7 +132,7 @@ namespace CrazyRubbish.Prototype
                     {var line=Sprite("Wire span",game.appearance.tile,(w.X+p.X)/2f,(w.Y+p.Y)/2f,1,-401);line.transform.SetParent(r.transform,true);line.transform.localScale=new Vector3((w.X==p.X?0.09f:1)/line.sprite.bounds.size.x,(w.Y==p.Y?0.09f:1)/line.sprite.bounds.size.y,1);}
                 }
                 foreach(var f in m.Facilities.Where(f=>f.Built||f.Blueprint))
-                {var front=PrototypeSimulation.ServiceCell(f);var r=Sprite("Service "+f.Id,game.appearance.tile,front.x,front.y,1,-350);r.transform.SetParent(wireVisuals,true);r.transform.localScale=new Vector3(0.45f/r.sprite.bounds.size.x,0.12f/r.sprite.bounds.size.y,1);r.color=new Color(0.95f,0.72f,0.3f,0.8f);if(PrototypeSimulation.IsWoodMachine(f.Kind)){var side=PrototypeSimulation.MaintenanceCell(f);var mark=Sprite("Maintenance "+f.Id,game.appearance.tile,side.x,side.y,1,-349);mark.transform.SetParent(wireVisuals,true);mark.transform.localScale=new Vector3(0.45f/mark.sprite.bounds.size.x,0.12f/mark.sprite.bounds.size.y,1);mark.color=new Color(0.35f,0.8f,1,0.9f);}}
+                {var front=PrototypeSimulation.ServiceCell(f);var r=Sprite("Service "+f.Id,game.appearance.tile,front.x,front.y,1,-350);r.transform.SetParent(wireVisuals,true);r.transform.localScale=new Vector3(0.45f/r.sprite.bounds.size.x,0.12f/r.sprite.bounds.size.y,1);r.color=new Color(0.95f,0.72f,0.3f,0.8f);if(PrototypeSimulation.HasMaintenanceSide(f.Kind)){var side=PrototypeSimulation.MaintenanceCell(f);var mark=Sprite("Maintenance "+f.Id,game.appearance.tile,side.x,side.y,1,-349);mark.transform.SetParent(wireVisuals,true);mark.transform.localScale=new Vector3(0.45f/mark.sprite.bounds.size.x,0.12f/mark.sprite.bounds.size.y,1);mark.color=new Color(0.35f,0.8f,1,0.9f);}}
                 shownConstructionRevision=m.ConstructionRevision;
             }
             foreach(Transform child in wireVisuals)

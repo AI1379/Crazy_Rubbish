@@ -2,18 +2,6 @@ using System;
 
 namespace CrazyRubbish.Core
 {
-    public enum ItemId
-    {
-        WasteWood, MixedPlastic, RecoveredFastener, WoodHandSaw, Plank, WoodHandle,
-        WoodChips, SteelPart, CopperPart, RecoveredWire, ThermalModule, GeneratorModule,
-        Screwdriver, Wrench, Hammer, Scissors, SewingKit, Food, DrinkingWater, Soap,
-        WasteTextile, OldClothes, DamagedMotor, SteelMaterial, CopperMaterial, PowerAsh,
-        Motor, MachineBlade, HeatingElement, Container, HandleMould, BoxMould, FeedingModule, GrowingLight,
-        FurnaceModule, FurnaceLining, Fixture, AluminumPart, AluminumMaterial, ToolSteelWaste,
-        OldCutter, OldWasher, OldFormer, MouldBox, OldContainer, WireBundle, OldGrowingLamp,
-        OldFeeder, OldFurnace, OldMetalTable, OldControlBox, LightingModule, OldLamp,
-        SawBlade, HammerHead, ScrewdriverRod, BroomHead, SortedWood, BrokenWoodTool
-    }
     public enum WorkState { NotBuilt, Idle, Paused, NeedsOperator, NeedsTool, NeedsMaterials, Working, OutputBlocked, NeedsPower, NeedsMaintenance, MachineRunning, Preparing }
     public enum WoodRecipe { Plank, WoodHandle, SortedWood }
     public enum WorkerJob { Idle, Woodwork, MachineOperator, Maintenance }
@@ -58,6 +46,9 @@ namespace CrazyRubbish.Core
         public string Activity { get; internal set; } = "空闲";
         public bool PickingUp => Delivery!=null&&!Delivery.Picked&&Delivery.Ground!=null&&PrototypeSimulation.Distance(X,Y,Delivery.SourceX,Delivery.SourceY)<0.001;
         public LivingNeeds Needs { get; internal set; } = new LivingNeeds();
+        public HappinessState Mood { get; internal set; } = new HappinessState();
+        public double Happiness { get; internal set; } = 70;
+        public bool Rioting => Mood.rioting;
         internal DeliveryTask Delivery;
         internal int[] Path; internal int PathIndex,PathTargetX,PathTargetY,PathRevision;
         internal Resident(int id) { Id = id; X = 15 + (id - 1) % 5; Y = 5; }
@@ -85,9 +76,16 @@ namespace CrazyRubbish.Core
     public static partial class ItemCatalog
     {
         public const int CapacityScale = 20;
-        public static int CapacityTicks(ItemId item) => DesignBaseline.CapacityTicks(item);
-        public static bool IsTool(ItemId item) =>
-            item == ItemId.WoodHandSaw || item == ItemId.Screwdriver || item == ItemId.Wrench ||
-            item == ItemId.Hammer || item == ItemId.Scissors || item == ItemId.SewingKit;
+        public static readonly ItemId[] All = (ItemId[])Enum.GetValues(typeof(ItemId));
+        public static int CapacityTicks(ItemId item) => DesignCatalog.ItemTicks[(int)item];
+        private static readonly bool[] toolFlags = Flags("工具"), brokenFlags = Flags("损坏工具"), deviceFlags = Flags("废旧设备");
+        private static bool[] Flags(string category) => Array.ConvertAll(DesignCatalog.ItemCategories, c => c == category);
+        public static bool IsTool(ItemId item) => toolFlags[(int)item];
+        public static bool IsBrokenTool(ItemId item) => brokenFlags[(int)item];
+        internal static bool IsCatalogDevice(ItemId item) => deviceFlags[(int)item];
+        public static string ToolFamily(ItemId item) => DesignCatalog.ToolFamilies[(int)item];
+        public static int ToolDurability(ItemId item) => DesignCatalog.ToolDurability[(int)item];
+        public static double ToolEfficiency(ItemId item) => DesignCatalog.ToolEfficiency[(int)item];
+        public static bool IsPackage(ItemId item) => DesignCatalog.PackPayloads[(int)item] != null;
     }
 }

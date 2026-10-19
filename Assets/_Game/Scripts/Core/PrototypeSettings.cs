@@ -22,6 +22,7 @@ namespace CrazyRubbish.Core
         public float woodFuelSeconds = 120f, chipsFuelSeconds = 60f;
         public float generatorOutput = 4f;
 
+        public PrototypeSettings Copy() => (PrototypeSettings)MemberwiseClone();
         public void Validate()
         {
             if (mapWidth < 32 || mapHeight < 28 || mapWidth > 128 || mapHeight > 128)

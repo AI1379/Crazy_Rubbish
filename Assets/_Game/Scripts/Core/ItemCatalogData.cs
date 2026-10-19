@@ -10,8 +10,8 @@ namespace CrazyRubbish.Core
             "旧切割装置","旧清洗装置","旧成形装置","模具盒","旧容器","完整线束","旧种植灯","旧送料机构","旧高温炉","旧金属台","旧电控箱","照明部件","旧普通灯",
             "手锯锯片","锤头","螺丝刀杆","扫帚头","整理木料","损坏工具"
         };
-        public static string Name(ItemId item) => Names[(int)item];
-        public static bool IsDevice(ItemId item) => item==ItemId.DamagedMotor || item>=ItemId.OldCutter && item<=ItemId.OldControlBox || item==ItemId.OldLamp;
+        public static string Name(ItemId item) => (int)item<Names.Length?Names[(int)item]:DesignCatalog.ItemNames[(int)item];
+        public static bool IsDevice(ItemId item) => item==ItemId.DamagedMotor || item>=ItemId.OldCutter && item<=ItemId.OldControlBox || item==ItemId.OldLamp || (int)item>=Names.Length && IsCatalogDevice(item);
         public static bool IsOpenable(ItemId item) => item==ItemId.MouldBox || item==ItemId.WireBundle || item==ItemId.OldContainer;
         public static bool NeedsWrench(ItemId item) => item==ItemId.OldWasher || item==ItemId.OldFurnace || item==ItemId.OldMetalTable || item==ItemId.OldControlBox;
         public static ItemAmount[] DeviceYield(ItemId item,bool usable=true)
@@ -42,7 +42,8 @@ namespace CrazyRubbish.Core
             }
         }
         // buy / base external-sale / minimum, in money units; absent prices do not imply free goods.
-        public static (decimal buy,decimal sale,decimal minimum) Price(ItemId item) => DesignBaseline.Price(item);
+        public static (decimal buy,decimal sale,decimal minimum) Price(ItemId item) => (DesignCatalog.ItemBuy[(int)item],DesignCatalog.ItemSale[(int)item],DesignCatalog.ItemFloor[(int)item]);
+        public static bool Buyable(ItemId item) => DesignCatalog.ItemBuyable[(int)item];
     }
     public sealed class ToolInstance
     {
@@ -52,5 +53,7 @@ namespace CrazyRubbish.Core
         public int ReservedBy {get;internal set;}
         public int UsingAt {get;internal set;}
         public bool Usable {get;internal set;}=true;
+        // Old motors and drives: 0 usable, 1 repairable, 2 scrap only; fixed when the instance appears.
+        public int Condition {get;internal set;}
     }
 }

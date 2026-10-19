@@ -107,7 +107,33 @@ namespace CrazyRubbish.Editor
             Bind(Machine("metal_processing_idle"), ItemId.OldFurnace);
             Bind(Machine("metal_parts_idle"), ItemId.OldMetalTable);
             Bind(Machine("refurbishment_idle"), ItemId.OldControlBox);
+            BindCatalogFallbacks(appearance, Core, Extra, Machine);
             if (appearance.itemIcons.Any(sprite => sprite == null)) throw new InvalidOperationException("An item has no delivery icon.");
+        }
+
+        // v1 items beyond the first-region slice have no dedicated art yet; reuse the closest delivered icon.
+        private static void BindCatalogFallbacks(PrototypeAppearance a, Func<string, Sprite> core, Func<string, Sprite> extra, Func<string, Sprite> machine)
+        {
+            for (int i = 0; i < a.itemIcons.Length; i++)
+            {
+                if (a.itemIcons[i] != null) continue;
+                var item = (ItemId)i; string key = DesignCatalog.ItemKeys[i], category = DesignCatalog.ItemCategories[i];
+                string family = ItemCatalog.ToolFamily(item);
+                if (category == "工具" || category == "损坏工具" || key.StartsWith("broken_"))
+                    a.itemIcons[i] = key.Contains("hammer") ? extra("锤") : key.Contains("screwdriver") ? extra("螺丝刀") : key.Contains("wrench") ? extra("扳手") :
+                        key.Contains("scissors") ? extra("剪刀") : key.Contains("sewing") ? extra("针线工具") : a.saw;
+                else if (category == "废旧设备") a.itemIcons[i] = machine("refurbishment_idle");
+                else if (category == "压缩包") a.itemIcons[i] = a.wasteMixedHigh;
+                else if (key.Contains("ore") || key.Contains("concentrate") || key.Contains("billet") || key.Contains("scrap") || key == "slag" || key == "mine_tailings") a.itemIcons[i] = a.wasteMetalLow;
+                else if (key.Contains("pp") || key.Contains("hdpe") || key.Contains("pet") || key.Contains("plastic") || key.Contains("resin") || key.Contains("glass") || key == "cullet" || key == "storage_box") a.itemIcons[i] = a.mixedPlastic;
+                else if (key.Contains("textile") || key.Contains("clothes") || key.Contains("rag") || key.Contains("fabric") || key == "patch") a.itemIcons[i] = extra(key.Contains("clothes") ? "旧衣服" : "废纺织物");
+                else if (key == "food" || key == "seed" || key == "sprouts") a.itemIcons[i] = core("未开封食物");
+                else if (key.Contains("water") || key.Contains("effluent")) a.itemIcons[i] = core("饮用水");
+                else if (key.Contains("paper") || key.Contains("carton") || key.Contains("board")) a.itemIcons[i] = a.plank;
+                else if (key.Contains("part") || key.Contains("mold") || key.Contains("die") || key.Contains("insulator") || key == "coil") a.itemIcons[i] = core("钢铁零件");
+                else if (key.Contains("module") || key.Contains("controller") || key.Contains("drive") || key.Contains("dryer") || key.Contains("melter") || key.StartsWith("lift_") || key == "reclaimed_structure") a.itemIcons[i] = core("发电组件");
+                else a.itemIcons[i] = a.wasteMixedLow;
+            }
         }
 
         [MenuItem("Crazy Rubbish/Art/Apply Delivery to Demo Scene")]

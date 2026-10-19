@@ -6,7 +6,15 @@ namespace CrazyRubbish.Core
     [Serializable] public sealed class FacilityInstance
     {
         public int Id,Kind,X,Y,Rotation; public bool Built,Blueprint; public double PowerRatio,PowerRequested;
-        public FacilityInstance Copy() => (FacilityInstance)MemberwiseClone();
+        public FacilityInstance Copy()
+        {
+            var f=(FacilityInstance)MemberwiseClone();
+            f.ProcessTools=(int[])(ProcessTools??new int[0]).Clone();
+            f.CreditItems=new List<int>(CreditItems??new List<int>());f.CreditAmounts=new List<double>(CreditAmounts??new List<double>());
+            f.OutCreditItems=new List<int>(OutCreditItems??new List<int>());f.OutCreditAmounts=new List<double>(OutCreditAmounts??new List<double>());
+            f.Addons=new List<int>(Addons??new List<int>());f.ProcessRecipe=ProcessRecipe??"";f.PendingProcess=PendingProcess??"";f.ActiveProcess=ActiveProcess??"";f.Vein=Vein??"";
+            return f;
+        }
         public double jobProgress;
         public bool jobActive;
         public WoodRecipe activeRecipe;
@@ -41,6 +49,14 @@ namespace CrazyRubbish.Core
         public bool WasConstructed,SuppressAutoOperator,SuppressAutoMaintenance;
         public int MachineToken,MachinePhase,MachineBatches;
         public double HumanProgress,MachineProgress,Durability=100,RepairedDurability;
+        // Generic v1 process state. Legacy wood/dismantle/assembly fields above stay for older saves and flows.
+        public string ProcessRecipe="",PendingProcess="",ActiveProcess="",Vein="";
+        public bool ProcessRun,ProcessActive,ProcessCompleted,Sealed,ThermalRunning;
+        public int ProcessToken,ProcessStage,ProcessBatches,Operators;
+        public double ProcessProgress,LandfillTicks,ThermalStartup,WaterLoop;
+        public int[] ProcessTools=new int[0];
+        public List<int> CreditItems=new List<int>(),OutCreditItems=new List<int>(),Addons=new List<int>();
+        public List<double> CreditAmounts=new List<double>(),OutCreditAmounts=new List<double>();
         [NonSerialized] public double StepPowerRatio,StepPoweredFraction;
         [NonSerialized] public UnitInventory WoodInputStock;
         [NonSerialized] public UnitInventory WoodTools;
@@ -51,6 +67,7 @@ namespace CrazyRubbish.Core
         [NonSerialized] public UnitInventory TableInput;
         [NonSerialized] public UnitInventory TableOutput;
         [NonSerialized] public UnitInventory GeneratorResidue;
+        [NonSerialized] public UnitInventory ProcessInput,ProcessOutput,ProcessToolSlot;
         public void InitializeStocks(int outputCapacity=8)
         {
             WoodInputStock=new UnitInventory(8);
@@ -62,6 +79,7 @@ namespace CrazyRubbish.Core
             TableInput=new UnitInventory(8);
             TableOutput=new UnitInventory(4);
             GeneratorResidue=new UnitInventory(10);
+            ProcessInput=new UnitInventory(16);ProcessOutput=new UnitInventory(16);ProcessToolSlot=new UnitInventory(4);
         }
     }
     public sealed partial class PrototypeSimulation

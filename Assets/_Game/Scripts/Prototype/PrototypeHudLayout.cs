@@ -9,7 +9,7 @@ namespace CrazyRubbish.Prototype
     // Reference-space dimensions are shared with the world camera so the map never sits under UI.
     public sealed partial class PrototypeHud
     {
-        private const int CurrentLayoutVersion = 19;
+        private const int CurrentLayoutVersion = 21;
         public const float ReferenceWidth = 1600, MapLeft = 0, MapWidth = 1600, MapTop = 0, MapBottom = 0;
         [SerializeField] private Text powerValue, populationValue, foodValue, waterValue, menuNotice;
         [SerializeField] private float[] onsiteSectionY = new float[4];
@@ -22,7 +22,7 @@ namespace CrazyRubbish.Prototype
 
         private void BuildInterface()
         {
-            if (HasLayout) { RefreshItemArtwork(); return; }
+            if (HasLayout) { RefreshItemArtwork(); EnsureProcessModeButton(); return; }
             if (root != null)
             {
                 if (Application.isPlaying) { root.gameObject.SetActive(false); Destroy(root.gameObject); }
@@ -64,7 +64,7 @@ namespace CrazyRubbish.Prototype
             BuildTutorialWelcome();
             BuildKnowledgePanel();
             BuildInventoryWindow();
-            BuildMenu();BuildMachineryHud(false);BuildExperienceHud();
+            BuildMenu();BuildMachineryHud(false);BuildExperienceHud();BuildFullGameHud();
             foreach (Transform child in root.GetComponentsInChildren<Transform>(true)) child.gameObject.layer = 5;
             SelectTab(0);
             ClosePanels();
@@ -157,6 +157,8 @@ namespace CrazyRubbish.Prototype
 
         private void BuildInventoryPage()
         {
+            // Scenes saved before the complete catalog serialized shorter arrays; size them to the live catalog.
+            inventoryRows = new RectTransform[ItemCount]; carryCounts = new Text[ItemCount]; warehouseCounts = new Text[ItemCount];
             inventoryContent = ScrollContent(pages[2], 260 + ItemCount * 76);
             TextAt(inventoryContent, "Inventory Title", "物品图鉴", 12, 4, 200, 30, 21, Ink);
             inventoryFilter = ButtonAt(inventoryContent, "InventoryFilter", "全部物品", 238, 4, 116, 34);

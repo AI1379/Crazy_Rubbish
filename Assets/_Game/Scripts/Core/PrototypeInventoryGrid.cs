@@ -20,7 +20,7 @@ namespace CrazyRubbish.Core
             if(slots==null)slots=new List<InventoryGridSlot>();
             while(slots.Count<minimum)slots.Add(new InventoryGridSlot());
             foreach(var slot in slots)if(slot.amount<0||slot.amount>StackLimit||!Enum.IsDefined(typeof(ItemId),slot.item))slot.amount=0;
-            foreach(ItemId item in Enum.GetValues(typeof(ItemId)))
+            foreach(ItemId item in ItemCatalog.All)
             {
                 int wanted=inventory.Count(item)-(hand!=null&&hand.warehouse==warehouse&&hand.item==item?hand.amount:0);
                 int difference=wanted-slots.Where(s=>s.item==item).Sum(s=>s.amount);

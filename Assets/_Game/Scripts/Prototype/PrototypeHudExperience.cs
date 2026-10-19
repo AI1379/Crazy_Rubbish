@@ -39,7 +39,7 @@ namespace CrazyRubbish.Prototype
             ButtonAt(card,"ShopQuantity5","买5份",634,226,112,36);
             ButtonAt(card,"ShopQuantity10","买10份",758,226,136,36);
             var body=At(card,"Items",16,276,888,400);shopContent=ScrollContent(body,1000);
-            var items=Enum.GetValues(typeof(ItemId)).Cast<ItemId>().Where(i=>ItemCatalog.Price(i).buy>0).ToArray();
+            var items=ItemCatalog.All.Where(i=>ItemCatalog.Price(i).buy>0).ToArray();
             shopRows=new ShopRow[items.Length];
             for(int i=0;i<items.Length;i++)
             {

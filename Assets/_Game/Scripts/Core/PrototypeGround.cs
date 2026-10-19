@@ -67,7 +67,7 @@ namespace CrazyRubbish.Core
                 else
                 {
                     int width=ItemCatalog.CapacityTicks(item)>100?2:1;
-                    var cell=ground.Where(p=>p.X+width<=Settings.mapWidth&&Enumerable.Range(p.X,width).All(x=>IsOwnedGround(x,p.Y)&&!Occupied(x,p.Y)))
+                    var cell=ground.Where(p=>p.X+width<=Settings.mapWidth&&Enumerable.Range(p.X,width).All(x=>OwnedGround(x,p.Y)&&!Occupied(x,p.Y)))
                         .OrderBy(p=>Enumerable.Range(p.X,width).Sum(x=>CellTicks(x,p.Y))).ThenBy(p=>Distance(p.X,p.Y,cx,cy)).ThenBy(p=>p.Y).ThenBy(p=>p.X).First();
                     int placed=ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item)?1:count;
                     var compatible=ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item)?null:ground.FirstOrDefault(p=>p.X==cell.X&&p.Y==cell.Y&&p.Item==item);
@@ -83,11 +83,12 @@ namespace CrazyRubbish.Core
             var otherCells=new System.Collections.Generic.HashSet<(int,int)>();
             foreach(var existing in ground)if(existing.Item!=item)
                 for(int cell=existing.X;cell<existing.X+existing.Width;cell++)otherCells.Add((cell,existing.Y));
+            var zone=GarbageZone(cx,cy);
             for(int py=0;py<Settings.mapHeight;py++)for(int px=0;px<Settings.mapWidth;px++)
             {
-                if(!Enumerable.Range(px,width).All(q=>IsOwnedGround(q,py)&&!Occupied(q,py)&&CellTicks(q,py)+ItemCatalog.CapacityTicks(item)/width<=100))continue;
+                if(!Enumerable.Range(px,width).All(q=>OwnedGround(q,py)&&!Occupied(q,py)&&CellTicks(q,py)+ItemCatalog.CapacityTicks(item)/width<=100))continue;
                 double distance=Distance(cx,cy,px,py);if(distance>limit)continue;
-                int area=heapFirst&&px<=7&&py>=6&&py<=11?0:1;
+                int area=heapFirst&&px>=zone.x0&&px<=zone.x1&&py>=zone.y0&&py<=zone.y1?0:1;
                 int mixed=otherCells.Contains((px,py))||width==2&&otherCells.Contains((px+1,py))?1:0;
                 if(area>bestArea||area==bestArea&&(mixed>bestMixed||mixed==bestMixed&&distance>=best))continue;
                 bestArea=area;bestMixed=mixed;best=distance;x=px;y=py;
@@ -100,7 +101,7 @@ namespace CrazyRubbish.Core
             int width=ItemCatalog.CapacityTicks(item)>100?2:1;
             for(int px=x;px<x+width;px++)groundCapacity[(px,y)]=CellTicks(px,y)+count*ItemCatalog.CapacityTicks(item)/width;
             if(pile==null){pile=new GroundPile(x,y,item,count){Id=nextGroundId++,Width=width};ground.Add(pile);}else pile.Amount+=count;
-            if(createTool&&(ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))){var tool=new ToolInstance{Id=nextToolId++,Item=item,Location="ground:"+pile.Id,Durability=ItemCatalog.IsTool(item)?300:0};tools.Add(tool);pile.ToolId=tool.Id;}
+            if(createTool&&(ItemCatalog.IsTool(item)||ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))){var tool=new ToolInstance{Id=nextToolId++,Item=item,Location="ground:"+pile.Id,Durability=ItemCatalog.IsTool(item)?ItemCatalog.ToolDurability(item):0};tools.Add(tool);pile.ToolId=tool.Id;}
             GroundRevision++;return pile;
         }
         private void RemoveGround(GroundPile pile,int count)

@@ -127,9 +127,9 @@ namespace CrazyRubbish.Prototype
         private int[] PortFilterOptions(ConveyorPort p)
         {
             var m=game.Model;
-            if(p.OwnerId==-1)return new[]{-1,(int)ItemId.WasteWood,(int)ItemId.SortedWood,(int)ItemId.Plank,(int)ItemId.WoodChips}.Concat(Enum.GetValues(typeof(ItemId)).Cast<ItemId>().Where(i=>m.Warehouse.Count(i)>0).Select(i=>(int)i)).Distinct().ToArray();
+            if(p.OwnerId==-1)return new[]{-1,(int)ItemId.WasteWood,(int)ItemId.SortedWood,(int)ItemId.Plank,(int)ItemId.WoodChips}.Concat(ItemCatalog.All.Where(i=>m.Warehouse.Count(i)>0).Select(i=>(int)i)).Distinct().ToArray();
             var f=m.GetFacility(p.OwnerId);if(f==null)return new[]{-1};
-            return new[]{-1,(int)ItemId.WasteWood,(int)ItemId.SortedWood,(int)ItemId.Plank,(int)ItemId.WoodChips}.Concat(Enum.GetValues(typeof(ItemId)).Cast<ItemId>().Where(i=>f.Output.Count(i)>0||f.TableOutput.Count(i)>0||f.DismantleOutput.Count(i)>0).Select(i=>(int)i)).Distinct().ToArray();
+            return new[]{-1,(int)ItemId.WasteWood,(int)ItemId.SortedWood,(int)ItemId.Plank,(int)ItemId.WoodChips}.Concat(ItemCatalog.All.Where(i=>f.Output.Count(i)>0||f.TableOutput.Count(i)>0||f.DismantleOutput.Count(i)>0||f.ProcessOutput.Count(i)>0).Select(i=>(int)i)).Distinct().ToArray();
         }
     }
 }

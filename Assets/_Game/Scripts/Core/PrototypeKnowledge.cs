@@ -25,32 +25,34 @@ namespace CrazyRubbish.Core
                 case ItemId.MachineBlade:return "与电机一起解锁电动木工，用于建造机器。它不是制作手锯所需的手锯锯片；机器内置刀具随整机维护。";
                 case ItemId.Motor:return "与机器锯片一起解锁电动木工；与钢铁零件一起解锁传送带和独立接口。电动木工先人工准备10秒，再进行15秒机器作业。";
                 case ItemId.PowerAsh:return "发电后留下的灰渣，需要从发电机取走，避免输出堵塞。它不计入附近垃圾的效率惩罚。";
-                case ItemId.MixedPlastic:return "混合或受污染的塑料，需要分选、清洗和再加工后才能变成制品。相关产线还未在本试玩开放，暂时不能直接当成木料或建材。";
-                case ItemId.Soap:return "清洁用品，规划用于居民清洁与清洗工序。本试玩的清洗产线尚未开放；它不能替代食物或饮用水。";
-                case ItemId.WasteTextile:return "废弃布料，规划用于裁剪补丁或清洗成抹布。当前试玩可收集保存，实际纺织工序尚未开放。";
-                case ItemId.OldClothes:return "需要清洗和修补的旧衣服，不能直接当成新衣供应。衣物修复是后续工序，当前试玩暂未开放。";
+                case ItemId.MixedPlastic:return "混合或受污染的塑料，需要分选、清洗和再加工后才能变成制品。先在人工分选地点分成PP、HDPE、PET和其他复合料，再经塑料预处理、再加工制成握柄、收纳盒或打包带；它不能直接当成木料或建材。";
+                case ItemId.Soap:return "清洁用品，每块含100清洁单位：社区每人每600秒用1单位，清洗地点和塑料清洗也会按配方消耗零头。它不能替代食物或饮用水。";
+                case ItemId.WasteTextile:return "废弃布料，在工作台用剪刀裁成补丁，或在清洗地点洗成干净抹布供社区清洁。";
+                case ItemId.OldClothes:return "需要清洗和修补的旧衣服，不能直接当成新衣供应。在清洗地点洗净后，于工作台用补丁和针线修成可穿衣服。";
                 case ItemId.SortedWood:return "手工整理得到的自动木工原料。自动木工每批用4份整理木料产木板3和碎屑1；它不是建造工作台所需的木板。";
                 case ItemId.BrokenWoodTool:return "耐久耗尽的旧工具，不能继续提供工作能力。给岗位补充新的可用工具，再把坏工具搬走。";
                 case ItemId.CopperPart:case ItemId.AluminumPart:return "已经成形的金属零件，用于对应设备或后续制造。材质不同，不能替代建设配方中明确要求的钢铁零件。";
-                case ItemId.SteelMaterial:case ItemId.CopperMaterial:case ItemId.AluminumMaterial:case ItemId.ToolSteelWaste:return "等待加工的金属原料，不是现成的建造零件。可储存或出售；相应熔炼、零件加工产线尚未在本试玩开放。";
-                case ItemId.HeatingElement:return "回收的加热部件，用于后续塑料再加工设备。当前可保存或交易，对应设备尚未开放。";
-                case ItemId.Container:return "可重复利用的容器，规划用于清洗和塑料预处理设备。它本身没有装好饮用水，不能作为饮水供应。";
-                case ItemId.HandleMould:case ItemId.BoxMould:return "决定塑料制品形状的模具。需要相应加工设备和原料才能使用；当前试玩的塑料再加工尚未开放。";
+                case ItemId.SteelMaterial:case ItemId.CopperMaterial:case ItemId.AluminumMaterial:case ItemId.ToolSteelWaste:return "等待加工的金属原料，不是现成的建造零件。送到金属原料处理地点熔成坯料（需夹钳和供电），再到零件制造地点加工；材质不能混用。";
+                case ItemId.HeatingElement:return "回收的加热部件，用于后续塑料再加工设备。取得后可解锁并建设塑料再加工地点。";
+                case ItemId.Container:return "可重复利用的容器，首次取得解锁清洗地点；也是工艺废水收集附件的部件。它本身没有装好饮用水，不能作为饮水供应。";
+                case ItemId.HandleMould:case ItemId.BoxMould:return "决定塑料制品形状的模具。用于塑料再加工地点制作握柄与收纳盒。";
                 case ItemId.FeedingModule:return "在电动木工解锁后，首次取得送料组件可解锁自动木工。自动机用整理木料，不需要操作工，但仍需维护、实际供电和运输。";
-                case ItemId.GrowingLight:return "种植照明组件，面向后续太阳灯和种植地。当前种植工序尚未开放，不能把这个零件直接当作食物。";
-                case ItemId.FurnaceModule:return "高温电炉的核心组件，用于后续金属原料处理。它需要其他建材和电力；当前试玩未开放这条产线。";
+                case ItemId.GrowingLight:return "种植照明组件，与种子、基质一起解锁太阳灯种植：太阳灯接电后照亮相邻种植地，芽苗清洗后成为食物。";
+                case ItemId.FurnaceModule:return "高温电炉的核心组件，用于后续金属原料处理。用于建设金属原料处理地点，熔炼需要实际供电。";
                 case ItemId.FurnaceLining:return "炉内的耐热衬材，是后续高温加工设备的建材。不能作为发电机燃料。";
-                case ItemId.Fixture:return "加工金属时固定工件的夹具，用于后续零件制造地点。当前可以回收保存，相关地点尚未开放。";
+                case ItemId.Fixture:return "加工金属时固定工件的夹具，用于建设金属零件制造与自动结构零件地点。";
                 case ItemId.LightingModule:return "首次取得后解锁自建路灯。社区路灯和自建路灯都要接入发电机电网；可在设备面板检查实际供电情况。";
                 case ItemId.HammerHead:return "锤子的工作端。在工作台选择木柄锤，投入一份木柄和一份锤头，再作业组装。";
                 case ItemId.ScrewdriverRod:return "螺丝刀的金属工作端。在工作台与木柄组合，得到拆解设备所需的螺丝刀。";
-                case ItemId.BroomHead:return "扫帚的工作端，面向后续清洁工具装配。当前工作台尚未开放扫帚配方。";
+                case ItemId.BroomHead:return "扫帚的工作端，在工作台与木柄组装成扫帚，供社区清洁使用。";
             }
             if(ItemCatalog.IsDevice(item)||ItemCatalog.IsOpenable(item))
                 return (ItemCatalog.IsOpenable(item)?"可直接打开的回收物。":"可在拆解地点拆开的旧设备，需要携带相应工具。")+
                     "可用时能回收："+string.Join("、",ItemCatalog.DeviceYield(item).Select(p=>ItemCatalog.Name(p.Item)+" ×"+p.Amount))+"。损坏物品的产出可能不同。";
-            if(ItemCatalog.IsTool(item))return "可反复使用的工具，使用会消耗耐久。保留供对应岗位使用；当前引导用到手锯和螺丝刀，其余工具面向后续工序。";
-            return "可以拾取、搬运和保存在仓库中的回收物。物品种类决定用途；部分后续加工产线尚未在本试玩开放，可先保留，不必立刻处理全部物资。";
+            if(ItemCatalog.IsTool(item))return "可反复使用的工具，使用会消耗耐久。放进对应地点的工具槽，加工时按配方磨损；耐久耗尽变为损坏工具，可在拆解地点回收。";
+            var uses=DesignCatalog.Recipes.Where(r=>r.Inputs.Any(q=>q.Item==item)).Select(r=>r.Name).Distinct().Take(4).ToArray();
+            var sources=DesignCatalog.Recipes.Where(r=>r.Outputs.Any(q=>q.Item==item)).Select(r=>r.Name).Distinct().Take(3).ToArray();
+            return "可以拾取、搬运和保存在仓库中的物品。"+(uses.Length>0?"可用于："+string.Join("、",uses)+"。":"")+(sources.Length>0?"来源："+string.Join("、",sources)+"。":"")+(PrototypeSimulation.DisposalAccepted(item)?"无用时可送去填埋或投弃。":"");
         }
     }
 }

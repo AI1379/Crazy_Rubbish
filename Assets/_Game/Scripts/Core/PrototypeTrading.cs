@@ -5,23 +5,6 @@ namespace CrazyRubbish.Core
     public enum Technology { Wood,Textile,Metal,Tools,Plastic,Growing }
     public sealed partial class PrototypeSimulation
     {
-        private readonly bool[] soldTechnologies=new bool[6];
-        public bool IsTechnologySold(Technology technology)=>soldTechnologies[(int)technology];
-        private bool MinimumPriceOnly(ItemId item)=>soldTechnologies[0]&&(item==ItemId.Plank||item==ItemId.WoodHandle||item==ItemId.SortedWood)||
-            soldTechnologies[2]&&(item==ItemId.SteelPart||item==ItemId.CopperPart||item==ItemId.AluminumPart)||
-            soldTechnologies[3]&&(item==ItemId.HammerHead||item==ItemId.SawBlade||item==ItemId.ScrewdriverRod||item==ItemId.Hammer||item==ItemId.WoodHandSaw||item==ItemId.Screwdriver)||
-            soldTechnologies[5]&&item==ItemId.Food;
-        public ActionResult SellTechnology(Technology technology)
-        {
-            if((int)technology<0||(int)technology>5||IsTechnologySold(technology))return Fail("技术不存在或已售出。");
-            bool unlocked=technology==Technology.Wood||technology==Technology.Textile&&(discovered.Contains(ItemId.WasteTextile)||discovered.Contains(ItemId.OldClothes))||
-                technology==Technology.Metal&&(discovered.Contains(ItemId.SteelMaterial)||discovered.Contains(ItemId.CopperMaterial)||discovered.Contains(ItemId.AluminumMaterial))||
-                technology==Technology.Tools&&discovered.Contains(ItemId.Plank)&&discovered.Contains(ItemId.SteelPart)||
-                technology==Technology.Plastic&&discovered.Contains(ItemId.HeatingElement)||technology==Technology.Growing&&discovered.Contains(ItemId.GrowingLight);
-            if(!unlocked)return Fail("先取得对应材料解锁科技。");
-            int[] values={60,50,100,80,80,40};cashCents+=values[(int)technology]*100;soldTechnologies[(int)technology]=true;
-            return Ok("技术使用权保留，对应商品永久最低价。收入"+values[(int)technology]+"钱。");
-        }
         public ActionResult RemoveFacility(int flag,bool sell,bool returnMaterials=true)
         {
             if(Interacting)return Fail("先完成或取消当前交互，再拆除设施。");
@@ -49,7 +32,7 @@ namespace CrazyRubbish.Core
                     else {actor.Delivery.Target=Warehouse;actor.Delivery.To="warehouse";actor.Delivery.TargetX=WarehouseX;actor.Delivery.TargetY=WarehouseY;actor.Path=null;}
                 }
             }
-            foreach(var entry in inventories)foreach(ItemId item in Enum.GetValues(typeof(ItemId)))
+            foreach(var entry in inventories)foreach(ItemId item in ItemCatalog.All)
             {int count=entry.Item1.Available(item);entry.Item1.TryRemove(item,count);ReturnAtOldSite(item,count,entry.Item2,x,y+1);}
             if(flag==8){ReturnAtOldSite(ItemId.WasteWood,fuelWood,"",x,y+1);ReturnAtOldSite(ItemId.WoodChips,fuelChips,"",x,y+1);fuelWood=fuelChips=0;fuelRemaining=0;}
             ItemAmount[] costs=DesignBaseline.BuildCost(flag);

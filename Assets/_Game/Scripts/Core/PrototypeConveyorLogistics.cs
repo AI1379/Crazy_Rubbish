@@ -15,6 +15,7 @@ namespace CrazyRubbish.Core
             var stock=PortStock(p).stock;if(stock!=null&&stock.Available(item)>0)return true;
             var f=GetFacility(p.OwnerId);if(f==null)return false;
             if(IsWoodMachine(f.Kind))return item==ItemId.Plank||item==ItemId.WoodChips;
+            if(IsGenericKind(f.Kind)){var r=DesignCatalog.Recipe(f.ProcessRecipe);return FacilityKey(f.Kind)=="boiler"?item==ItemId.PowerAsh:r!=null&&ProcessOutputs(f,r).Any(q=>q.Item==item);}
             if(f.Kind==1)return item==Product(f.SelectedRecipe)||f.SelectedRecipe!=WoodRecipe.SortedWood&&item==ItemId.WoodChips;
             if(f.Kind==2)return ItemCatalog.DeviceYield(f.SelectedDevice,f.dismantleUsable).Any(a=>a.Item==item);
             if(f.Kind==4)return item==(f.SelectedAssembly==AssemblyRecipe.Saw?ItemId.WoodHandSaw:f.SelectedAssembly==AssemblyRecipe.Hammer?ItemId.Hammer:ItemId.Screwdriver);

@@ -70,7 +70,7 @@ namespace CrazyRubbish.Core
             return QueueInteraction(()=>{
                 if(!f.Built||!Near(side.x,side.y))return Fail("位置或机器状态已改变。");
                 var stock=input?f.WoodInputStock:f.Output;int count=0;
-                foreach(ItemId item in Enum.GetValues(typeof(ItemId)))count+=MoveStock(stock,Carry,input?MachineInputKey(id):MachineOutputKey(id),"carry",item,stock.Available(item));
+                foreach(ItemId item in ItemCatalog.All)count+=MoveStock(stock,Carry,input?MachineInputKey(id):MachineOutputKey(id),"carry",item,stock.Available(item));
                 return count>0?Ok("机器物品已进入背包。",count):Fail("没有可取物品或背包已满；在制原料不能取走。");
             });
         }
@@ -94,7 +94,7 @@ namespace CrazyRubbish.Core
         private double MachineryHumanRate(FacilityInstance f,Resident person,bool maintenance=false)
         {
             var p=maintenance?MaintenanceCell(f):ServiceCell(f);var needs=person?.Needs??PlayerNeeds;
-            return DesignRules.HumanEfficiency(1,0,70,person==null?0:EquivalentUnpaidPeriods,needs.FoodMultiplier(GameSeconds),needs.WaterMultiplier(GameSeconds),PressureAt(p.x,p.y),1);
+            return DesignRules.HumanEfficiency(1,BonusFactor,person?.Happiness??70,person==null?0:EquivalentUnpaidPeriods,needs.FoodMultiplier(GameSeconds),needs.WaterMultiplier(GameSeconds),PressureAt(p.x,p.y),1);
         }
         private void StaffMachines()
         {
@@ -105,11 +105,13 @@ namespace CrazyRubbish.Core
                 if(!f.SuppressAutoMaintenance&&!residents.Any(r=>r.FacilityId==f.Id&&r.Job==WorkerJob.Maintenance)&&!(manualStationValue==6&&manualFacilityId==f.Id))AssignMachineWorker(f.Id,true,0,true);
             foreach(var f in facilities.Where(f=>f.Built&&f.Kind==64&&f.RunRequested).OrderBy(f=>f.Id))
                 if(!f.SuppressAutoOperator&&!residents.Any(r=>r.FacilityId==f.Id&&r.Job==WorkerJob.MachineOperator)&&!(manualStationValue==5&&manualFacilityId==f.Id))AssignMachineWorker(f.Id,false,0,true);
+            StaffProcesses();
         }
         private bool TickMachineWorker(Resident person,double seconds)
         {
             if(person.Job!=WorkerJob.Maintenance&&person.Job!=WorkerJob.MachineOperator)return false;
             var f=GetFacility(person.FacilityId);
+            if(f!=null&&f.Built&&!IsWoodMachine(f.Kind)&&(RunsProcesses(f.Kind)||HasMaintenanceSide(f.Kind)))return false;
             if(f==null||!f.Built||!IsWoodMachine(f.Kind)){person.Job=WorkerJob.Idle;person.FacilityId=0;return false;}
             if(person.Delivery!=null)return false;
             bool maintenance=person.Job==WorkerJob.Maintenance;
@@ -181,7 +183,7 @@ namespace CrazyRubbish.Core
             {if(f.MachineProgress>=DesignBaseline.WoodMachineSeconds-1e-6)CompleteMachineBatch(f,true);else{f.WoodInputStock.Release(f.MachineToken);f.MachineActive=false;f.MachineToken=0;}}
             RedirectMachineDeliveries(f);DetachFacilityPorts(f.Id);
             foreach(var entry in new[]{(f.WoodInputStock,MachineInputKey(f.Id)),(f.Output,MachineOutputKey(f.Id))})
-                foreach(ItemId item in Enum.GetValues(typeof(ItemId))){int count=entry.Item1.Available(item);entry.Item1.TryRemove(item,count);ReturnAtOldSite(item,count,entry.Item2,f.X,f.Y);}
+                foreach(ItemId item in ItemCatalog.All){int count=entry.Item1.Available(item);entry.Item1.TryRemove(item,count);ReturnAtOldSite(item,count,entry.Item2,f.X,f.Y);}
             foreach(var r in residents.Where(r=>r.FacilityId==f.Id)){r.Job=WorkerJob.Idle;r.FacilityId=0;}
             if(manualFacilityId==f.Id)LeaveManualRole();f.Built=false;f.RunRequested=false;f.MachinePhase=0;f.HumanProgress=f.MachineProgress=0;
             if(returnMaterials)

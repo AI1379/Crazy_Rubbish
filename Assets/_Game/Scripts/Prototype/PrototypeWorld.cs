@@ -151,23 +151,25 @@ namespace CrazyRubbish.Prototype
                 foreach (Transform view in residentViews.Values) RemoveView(view.gameObject);
                 residentViews.Clear();
                 previousModel = model;
-                lastRevision = -1;
+                lastRevision = -1;ResetExpansion();
                 worker.GetComponent<PrototypeActorView>().ResetMotion();
             }
             if (lastRevision != model.GroundRevision)
             {
                 ReconcilePiles(model);
                 lastRevision = model.GroundRevision;
-                int index = 0;
-                for (int x = 0; x < model.Settings.mapWidth; x++)
-                    for (int y = 0; y < model.Settings.mapHeight; y++)
-                    {
-                        float weight = Mathf.Clamp01(1 - (float)PrototypeSimulation.Distance(x, y,
-                            model.BenchFrontX, model.BenchFrontY) / model.Settings.pressureRadius);
-                        Color baseColor = GroundColor(x, y);
-                        floor[index++].color = Color.Lerp(baseColor, new Color32(188, 128, 91, 255),
-                            weight * (1 - model.HumanEfficiency) * 1.05f);
-                    }
+                // The authored floor covers the first-region map; expansion tiles are drawn separately.
+                int baseHeight = Mathf.Max(1, floor.Count / 32);
+                for (int index = 0; index < floor.Count; index++)
+                {
+                    int x = index / baseHeight, y = index % baseHeight;
+                    float weight = Mathf.Clamp01(1 - (float)PrototypeSimulation.Distance(x, y,
+                        model.BenchFrontX, model.BenchFrontY) / model.Settings.pressureRadius);
+                    Color baseColor = GroundColor(x, y);
+                    floor[index].color = Color.Lerp(baseColor, new Color32(188, 128, 91, 255),
+                        weight * (1 - model.HumanEfficiency) * 1.05f);
+                }
+                RefreshExpansion(model);
             }
             GroundPile nearest = model.NearestPickup();
             foreach (CellView cell in cells)

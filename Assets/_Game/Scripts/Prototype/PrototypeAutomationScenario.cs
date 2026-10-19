@@ -67,7 +67,7 @@ namespace CrazyRubbish.Prototype
         private static readonly HashSet<ItemId> Essential=new HashSet<ItemId>{ItemId.Plank,ItemId.SteelPart,ItemId.RecoveredWire,ItemId.Motor,ItemId.MachineBlade,ItemId.WasteWood,ItemId.WoodChips,ItemId.Food,ItemId.DrinkingWater,ItemId.WoodHandSaw,ItemId.SawBlade,ItemId.Screwdriver};
         private static void FreeSpace(PrototypeSimulation m,int ticks)
         {
-            foreach(ItemId item in Enum.GetValues(typeof(ItemId)))
+            foreach(ItemId item in ItemCatalog.All)
             {
                 if(m.Warehouse.FreeTicks>=ticks)return;
                 if(Essential.Contains(item)||ItemCatalog.Price(item).sale<=0||m.Warehouse.Available(item)==0)continue;

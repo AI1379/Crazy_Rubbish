@@ -16,7 +16,7 @@ namespace CrazyRubbish.Prototype
         private static readonly Color Panel = new Color32(37, 43, 46, 255), ButtonColor = new Color32(55, 63, 67, 255);
         private static readonly Color Inset = new Color32(26, 31, 34, 255), Border = new Color32(73, 82, 85, 255);
         private static readonly Color Danger = new Color32(237, 143, 123, 255);
-        private static readonly int ItemCount = Enum.GetValues(typeof(ItemId)).Length;
+        private static readonly int ItemCount = ItemCatalog.All.Length;
         [SerializeField] private Text clock, objective, capacity, money, pressure, workState, message, target, recipeInfo, community, residentsInfo, inventoryEmpty;
         [SerializeField] private Text[] carryCounts = new Text[ItemCount], warehouseCounts = new Text[ItemCount];
         [SerializeField] private RectTransform[] inventoryRows = new RectTransform[ItemCount], pages = new RectTransform[4];
@@ -145,6 +145,7 @@ namespace CrazyRubbish.Prototype
             if (!HasLayout) return;
             RefreshExperienceHud(m);
             RefreshConstructionHud(m);
+            RefreshFullGameHud(m);
             if (inspection != null && (game.MenuOpen || game.ResultVisible)) inspection.gameObject.SetActive(false);
             clock.text = $"{(int)m.GameSeconds / 60:00}:{(int)m.GameSeconds % 60:00}";
             clock.color = m.Paused ? Accent : Ink;
@@ -224,8 +225,8 @@ namespace CrazyRubbish.Prototype
             assemblyInfo.text=$"木柄1 + {ItemCatalog.Name(m.AssemblyEnd)}1 → {ItemCatalog.Name(m.AssemblyProduct)}1\n{m.AssemblySeconds:0}秒人工 / 进度 {m.AssemblyProgress:P0}\n已制作 {m.AssembledTools} 把 · 需到工作台正面";
             modal.gameObject.SetActive(game.MenuOpen||game.ResultVisible);
             if(!modal.gameObject.activeSelf)return;
-            modalTitle.text=m.Failed?"工坊暂时停下了。":game.ResultVisible?"第一座工坊，已经运转起来。":!game.SessionStarted?"从废料开始，建起一座工坊。":"工坊经营 / 阶段目标";
-            modalInfo.text=m.Failed?m.FailureReason+"\n可读取失败前存档，或新游戏重试。":game.ResultVisible?$"完成用时 {m.DemoCompletedAt/60:0.0} 分钟 · 现金 {m.Money:0.00} · 工资已付 {m.TotalWagesPaidCents/100m:0.00}\n可以继续经营或保存。这是首区阶段目标，后续扩区及返程仍在制作。":"从零现金起步，让回收、生产、运输和生活供给运转起来。\n随时保存，按自己的节奏完成八个目标。";
+            modalTitle.text=m.Ended?(m.EndingKind=="good"?"回到上层 · 零倾倒":"回到上层"):m.EndingKind=="invasion"?"下层入侵":m.Failed?"工坊暂时停下了。":game.ResultVisible?"第一座工坊，已经运转起来。":!game.SessionStarted?"从废料开始，建起一座工坊。":"工坊经营 / 阶段目标";
+            modalInfo.text=m.Ended?m.EndingText+$"\n用时 {m.GameSeconds/60:0.0} 分钟 · 倾倒量 {m.DumpedTicks/20m:0.#} · 现金 {m.Money:0.00}。结局后可开始新游戏或读取存档。":m.Failed?m.FailureReason+"\n可读取失败前存档，或新游戏重试。":game.ResultVisible?$"完成用时 {m.DemoCompletedAt/60:0.0} 分钟 · 现金 {m.Money:0.00} · 工资已付 {m.TotalWagesPaidCents/100m:0.00}\n可以继续经营或保存。这是首区阶段目标，后续扩区及返程仍在制作。":"从零现金起步，让回收、生产、运输和生活供给运转起来。\n随时保存，按自己的节奏完成八个目标。";
             menuNotice.text = game.Notice;
             menuNotice.color = game.LastActionSucceeded ? Muted : Danger;
             bool[] flags=m.DemoMilestones;
@@ -237,7 +238,7 @@ namespace CrazyRubbish.Prototype
                 milestoneMarks[i].color = flags[i] ? Green : Border;
             }
             menuResume.GetComponentInChildren<Text>().text=!game.SessionStarted?"开始试玩 · 新手引导":game.ResultVisible?"继续经营":"返回工坊";
-            menuResume.interactable=!m.Failed;
+            menuResume.interactable=!m.Failed&&!m.Ended;
         }
 
         private void RefreshTutorial(PrototypeSimulation m)
@@ -365,6 +366,7 @@ namespace CrazyRubbish.Prototype
             var m = game.Model;
             if((game.MenuOpen||game.ResultVisible)&&command!="Resume"&&command!="MenuLoad"&&command!="MenuSave"&&command!="MenuNew"&&command!="Quit"&&!IsSessionCommand(command))return;
             if(ExecuteExperienceCommand(command))return;
+            if(ExecuteFullGameCommand(command))return;
             if(ExecuteMachineryCommand(command)||ExecuteConstructionCommand(command))return;
             if (command.StartsWith("FacilityCommand")) { Execute("Command" + command.Substring(15)); return; }
             if (command.StartsWith("OpenFacility") && int.TryParse(command.Substring(12), out int facility)) { ShowFacility(facility); return; }

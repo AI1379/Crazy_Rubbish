@@ -75,6 +75,10 @@ outputs = {
     ROOT/'Assets/_Game/Scripts/Core/DesignBaseline.cs': '\n'.join(lines).encode('utf-8'),
     ROOT/'Assets/_Game/Resources/Design/Balance20261011.json': SOURCE.read_bytes(),
 }
+sys.path.insert(0, str(ROOT / 'Tools'))
+from design_catalog import build_catalog
+catalog, catalog_items = build_catalog(data, mapping, runtime_items, number)
+outputs[ROOT/'Assets/_Game/Scripts/Core/DesignCatalog.cs'] = catalog
 for path, content in outputs.items():
     if '--check' in sys.argv:
         assert path.is_file() and path.read_bytes() == content, f'Stale generated baseline: {path}'

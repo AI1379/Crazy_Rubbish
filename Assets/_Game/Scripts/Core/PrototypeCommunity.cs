@@ -33,7 +33,8 @@ namespace CrazyRubbish.Core
         public int WaterConsumed { get; private set; }
         public bool Failed { get; private set; }
         public string FailureReason { get; private set; }
-        public bool RiotActive { get; private set; }
+        public bool WageRiot { get; private set; }
+        public bool RiotActive => WageRiot || HappinessRiot;
         public long RiotTargetCents { get; private set; }
         public long RiotPaidCents { get; private set; }
         public double RiotDeadline { get; private set; }
@@ -130,18 +131,18 @@ namespace CrazyRubbish.Core
                 if(r.Delivery!=null)
                 {
                     if(!r.Delivery.Picked){if(r.Delivery.Source!=null)r.Delivery.Source.Release(r.Delivery.Token);else r.Delivery.Ground.Reserved-=r.Delivery.Amount;}
-                    foreach(ItemId item in Enum.GetValues(typeof(ItemId)))ReturnAtOldSite(item,r.Cargo.Available(item),"worker:"+r.Id,(int)Math.Round(r.X),(int)Math.Round(r.Y));
+                    foreach(ItemId item in ItemCatalog.All)ReturnAtOldSite(item,r.Cargo.Available(item),"worker:"+r.Id,(int)Math.Round(r.X),(int)Math.Round(r.Y));
                     ClearDelivery(r);
                 }
                 CommunityCashCents+=r.CashCents;residents.Remove(r);
             }
-            if(RiotActive&&RiotPaidCents>=RiotTargetCents)RiotActive=false;
-            if(RiotActive&&GameSeconds>=RiotDeadline)EndGame("欠薪暴动未在期限内平息，经营失败。");
+            if(WageRiot&&RiotPaidCents>=RiotTargetCents)WageRiot=false;
+            if(WageRiot&&GameSeconds>=RiotDeadline)EndGame("欠薪暴动未在期限内平息，经营失败。");
         }
         private void CheckWageRiot()
         {
-            if(!RiotActive&&EquivalentUnpaidPeriods>=3-1e-6)
-            {RiotActive=true;RiotTargetCents=DesignRules.RiotPayment(UnpaidWageCents);RiotPaidCents=0;RiotDeadline=GameSeconds+240;manualStation=0;}
+            if(!WageRiot&&EquivalentUnpaidPeriods>=3-1e-6)
+            {WageRiot=true;RiotTargetCents=DesignRules.RiotPayment(UnpaidWageCents);RiotPaidCents=0;RiotDeadline=GameSeconds+240;manualStation=0;}
         }
         private void EndGame(string reason){Failed=true;FailureReason=reason;Paused=true;CancelInteraction();manualStation=0;}
         private double LivingEfficiency(Resident person) => (person?.Needs??PlayerNeeds).FoodMultiplier(GameSeconds)*(person?.Needs??PlayerNeeds).WaterMultiplier(GameSeconds);

@@ -25,6 +25,7 @@ namespace CrazyRubbish.Core
             if(p.OwnerId==-1)return(Warehouse,"warehouse");
             var f=GetFacility(p.OwnerId);if(f==null)return(null,"");
             if(IsWoodMachine(f.Kind))return(p.Output?f.Output:f.WoodInputStock,p.Output?MachineOutputKey(f.Id):MachineInputKey(f.Id));
+            if(IsGenericKind(f.Kind))return(p.Output?f.ProcessOutput:f.ProcessInput,p.Output?ProcessOutputKey(f.Id):ProcessInputKey(f.Id));
             return AtFacility(f,()=>f.Kind==1?(p.Output?f.Output:f.WoodInputStock,StockKey(p.Output?"woodOutput":"woodInput")):
                 f.Kind==2?(p.Output?f.DismantleOutput:f.DismantleInput,StockKey(p.Output?"dismantleOutput":"dismantleInput")):
                 f.Kind==4?(p.Output?f.TableOutput:f.TableInput,StockKey(p.Output?"tableOutput":"tableInput")):
@@ -36,6 +37,7 @@ namespace CrazyRubbish.Core
             if(p.OwnerId==-1)return true;
             var f=GetFacility(p.OwnerId);
             if(IsWoodMachine(f.Kind))return item==MachineFeed(f);
+            if(IsGenericKind(f.Kind))return FacilityKey(f.Kind)=="boiler"?item==ItemId.WasteWood||item==ItemId.WoodChips||item==ItemId.DrinkingWater||item==ItemId.IndustrialWater:AcceptedInputs(f).Contains(item);
             if(f.Kind==1)return item==ItemId.WasteWood;
             if(f.Kind==2)return item==f.SelectedDevice;
             if(f.Kind==4)return item==ItemId.WoodHandle||item==(f.SelectedAssembly==AssemblyRecipe.Saw?ItemId.SawBlade:f.SelectedAssembly==AssemblyRecipe.Hammer?ItemId.HammerHead:ItemId.ScrewdriverRod);
@@ -124,7 +126,7 @@ namespace CrazyRubbish.Core
                 var target=LaneReceiving(p.X+ConveyorDx[p.Facing],p.Y+ConveyorDy[p.Facing],p.Facing);
                 if(target==null||target.Item>=0||target.StepPowerRatio<=0)continue;
                 var source=PortStock(p);if(source.stock==null)continue;
-                int count=Enum.GetValues(typeof(ItemId)).Length;
+                int count=ItemCatalog.All.Length;
                 for(int n=0;n<count;n++)
                 {
                     int index=p.Filter>=0?p.Filter:(p.ItemCursor+n)%count;var item=(ItemId)index;
