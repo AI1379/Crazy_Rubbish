@@ -30,6 +30,7 @@ namespace CrazyRubbish.Editor
             if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling) return;
             Scene scene = SceneManager.GetActiveScene();
             if (scene.path != MainScene) return;
+            LocalArtInstaller.EnsureInstalled(AssetDatabase.LoadAssetAtPath<PrototypeAppearance>("Assets/_Game/Data/M1Appearance.asset"));
             var world = UnityEngine.Object.FindObjectOfType<PrototypeWorld>();
             var hud = UnityEngine.Object.FindObjectOfType<PrototypeHud>();
             if (world == null || hud == null || (world.HasCurrentLayout && hud.HasLayout)) return;
@@ -69,6 +70,7 @@ namespace CrazyRubbish.Editor
         public static void Rebuild()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+            var plan=UnityEngine.Object.FindObjectOfType<PlanGameController>();if(plan!=null){Undo.RegisterFullObjectHierarchyUndo(plan.gameObject,"Refresh Latest Plan");plan.EditPreview();EditorSceneManager.MarkSceneDirty(plan.gameObject.scene);FocusWorld();return;}
             var game = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
             if (game == null) return;
             Undo.RegisterFullObjectHierarchyUndo(game.gameObject, "Refresh Scene Presentation");
@@ -83,6 +85,7 @@ namespace CrazyRubbish.Editor
         [MenuItem("Crazy Rubbish/Focus World in Scene")]
         public static void FocusWorld()
         {
+            var plan=UnityEngine.Object.FindObjectOfType<PlanGameController>();if(plan!=null){Selection.activeGameObject=plan.transform.Find("Plan World")?.gameObject;var v=SceneView.lastActiveSceneView;if(v!=null){v.in2DMode=true;v.orthographic=true;v.LookAtDirect(new Vector3(12,12,0),Quaternion.identity,19);v.Repaint();}return;}
             var world = UnityEngine.Object.FindObjectOfType<PrototypeWorld>();
             if (world == null || world.VisualRoot == null) return;
             Selection.activeGameObject = world.VisualRoot.gameObject;
@@ -100,7 +103,7 @@ namespace CrazyRubbish.Editor
             PrototypeProjectSetup.Setup();
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             EditorSceneManager.OpenScene(MainScene, OpenSceneMode.Single);
-            var game = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
+            var game = UnityEngine.Object.FindObjectsOfType<PrototypeGame>(true).First();
             var world = game.GetComponent<PrototypeWorld>();
             var hud = game.GetComponent<PrototypeHud>();
             if (!world.HasLayout || !hud.HasLayout || game.Model != null)

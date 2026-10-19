@@ -1,85 +1,73 @@
-# Crazy Rubbish · 涌现
+# 喂——出来 · Crazy Rubbish
 
-垃圾回收与产线经营 Unity 项目，现有可试玩的首区 Demo。工作名称为 **Crazy Rubbish**，正式游戏名称待定。项目根目录就是本仓库目录。
+以垃圾回收、居民生活和产线自动化为核心的2D像素经营游戏。本地新版策划 **S6 食水v1.1** 已接入默认入口，现已接通三区域、勘探开采、返程升降舱与结局。
 
-## 打开项目
+地图已改为[不规则自然洞室](Docs/Development/12_自然洞室地图.md)：用岩壁素材补齐边缘，已开放洞室的全部可用地面可利用；保留付费扩张，移除旧矩形产权限制。
 
-1. 使用 **Unity 2022.3.62f3**。
-2. Unity Hub → Add / 添加磁盘上的项目 → 选择本目录。
-3. 打开 `Assets/_Game/Scenes/Main.unity`，点击Play，在菜单选择“开始试玩”。
+## 运行
 
-2026-10-12已接入首区八项目标和阶段结算、食物/饮水供给与钱包、工作台工具装配、保护工资的替补采购、欠薪暴动和失败恢复。支持点击地图行走。推荐路线、验收数据与尚未实现内容见[首区Demo](Docs/Development/08_首区Demo.md)。
+1. 使用 **Unity 2022.3.62f3** 打开项目。
+2. 打开 `Assets/_Game/Scenes/Main.unity`，Play，选择男主或女主。
+3. Windows试玩包直接运行 `CrazyRubbish.exe`，保留同目录Data文件夹与Unity运行库。
 
-新游戏默认开启[游戏内新手教程](Docs/Development/09_新手教程.md)，右侧新增“教程”页。12步实际操作、地图金色目标和按钮定位覆盖拾取到demo结算，支持跳过、逐课复习、保存并继续。
+WASD／点空地移动，E拾取，Q投料／入库，F参加工作；R旋转，右键取消；空格暂停，1／2／3倍速，滚轮缩放，左键拖图。设施页可设配方、人员、优先级、附件、接口过滤；居民页安排工资、生活供应和保护工资的采购预算。
 
-Main现在保存实际的World地图与Interface界面对象，不进入Play也能在Scene中查看。若视角偏离，使用`Crazy Rubbish → Focus World in Scene`；选中Interface后按F可聚焦UI。界面分为现场、人员、仓库、教程四页，地图支持滚轮缩放和中键拖动。编辑方式见[界面与场景编辑](Docs/Development/07_界面与场景编辑.md)。
+真实开局要先拾取、手工产木板、完成有效供电，再招募居民。物品在现场、仓库、背包与运输之间真实转移；科技取得材料瞬时免费解锁，扩区只支付现金。无固定4小时或教程通关限制。
 
-现行策划为2026-10-09收到的合并版 (1)，S5第20章优先，取消固定整局小时数。当前工程采用32×28首区、0.8移速、现场输入输出、施工/生产预约、工具实例和实际人力配送，保留动态交易、工资并加入当前状态保存继续。操作和当前缺口见[S5调整说明](Docs/Development/06_S5调整与验证.md)，完整范围见[合并策划](Docs/Design/00_合并策划案.md)。
+[本轮差异与试玩说明](Docs/Development/11_新版策划核对与试玩.md)包含来源、数值冲突取值、实现范围与已知限制；[文档索引](Docs/README.md)与[现行策划](Docs/Design/00_合并策划案.md)为团队基线。原图74张、234切片保持不变，新增设施缺独立图的部分使用已有代表图。
 
-WASD／方向键移动，E就近交互，Shift+E附近整堆拾取，Q入库，F进入/退出木工岗位，Esc取消交互，空格暂停，1／2／3倍速，滚轮缩放。侧栏可实际投料/取出、交接工具、采购及交易，顶栏保存/读取。
+## 验证与结构
 
-## 基础依赖
+本机仅安装2022.3.22f1，测试和Windows构建在独立副本执行，正式工程版本仍为62f3。新增 `Plan*` 是默认玩法；旧 `Prototype*` 仅作历史回归，不与新系统同时运行。配置输入快照位于 `Docs/Source/S6_20261013`，运行目录为 `Assets/_Game/Resources/Plan/RuntimeConfig.json`。
 
-| 包 | 固定版本 | 用途 |
-|---|---|---|
-| 2D Sprite | 1.0.0 | 精灵导入与编辑 |
-| 2D Tilemap Editor | 1.0.0 | 网格地图与瓦片编辑 |
-| Input System | 1.14.0 | 后续键鼠／手柄输入 |
-| Unity UI (uGUI) | 1.0.0 | 后续游戏界面 |
-| TextMesh Pro | 3.0.7 | 后续文字排版 |
-| Test Framework | 1.1.33 | 后续规则测试基础设施 |
-| Visual Studio Editor | 2.0.22 | C# 工程与 IDE 集成 |
-| Unity Version Control | 2.7.1 | Unity Editor 内的 Plastic SCM／UVCS 集成 |
+`Tools/Unity.ps1`支持 Import、Setup、ValidatePlan、ValidateArt、Test、Build、SmokePlan、Smoke。可用 `-UnityPath`指定已安装Editor。源码与Player试玩包附带OFL字体授权；不包含Library、Temp或本机账户／凭据。
 
-版本依据本机 2022.3 Editor 附带包和 2D 模板选取，并固定在 `Packages/manifest.json` 和 `packages-lock.json`。保留内置渲染管线；编辑器默认 2D；Input Handling 设为 Both。M1 使用 Unity Input Manager 和 uGUI，后续可切换 Input System／TMP。中文字体为可随包分发的 OFL 字体子集，授权随构建复制。
+修改目前保留在本地，未推送GitHub。旧Demo存档保留，新的保存目录为 `S6PlanSaves`。坏结局不覆盖手动存档。
 
-2D 编辑包见 [Unity Sprite 文档](https://docs.unity3d.com/2022.3/Documentation/Manual/com.unity.2d.sprite.html) 和 [Tilemap 文档](https://docs.unity3d.com/2022.3/Documentation/Manual/com.unity.2d.tilemap.html)；输入开关依据 [Input System 安装说明](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/manual/Installation.html)。
+地图最新更新：[洞室扩展与复杂地形](Docs/Development/13_洞室扩展与复杂地形.md)。100×64网格，前两区2594格可用地面，保留付费扩张与旧产线，加入固定石柱、岩脊和碎石障碍。
 
-## 策划资料
+当前地形版本4：[大地图与地下河](Docs/Development/14_大地图与地下河.md)。250×250网格，深浅水与泥岸具有通行/建设规则，保留付费扩区和旧产线。小地图点击定位，M全图，Home回到主角。
 
-- [文档索引与整理规则](Docs/README.md)
-- [现行合并策划](Docs/Design/00_合并策划案.md)
-- [设计总览](Docs/Design/01_设计总览.md)
-- [资源与设施目录](Docs/Design/02_资源与设施目录.md)
-- [首批产线与科技](Docs/Design/03_首批产线与科技.md)
-- [待确认事项与文档差异](Docs/Design/04_待确认事项与文档差异.md)
-- [实施顺序与验收](Docs/Development/01_实施顺序与验收.md)
-- [项目结构与协作](Docs/Development/02_项目结构与协作.md)
-- [M1 原型说明](Docs/Development/03_M1原型说明.md)
-- [M2起步说明](Docs/Development/04_M2起步说明.md)
-- [CI与Windows发布](Docs/Development/05_CI与发布.md)
-- [当前S5调整与验证](Docs/Development/06_S5调整与验证.md)
-- [首区Demo与推荐试玩路线](Docs/Development/08_首区Demo.md)
+当前地图版本5：[方形地图与连续河网](Docs/Development/15_方形地图与连续河网.md)。完整250×250方形地表，实体岩脊和狭口划分付费地区；干支流、池塘与桥下河床连续。
 
-五份输入原文保存于Docs/Source，S5为当前基线，S1—S4保留历史。全部新增前期默认规则已纳入计划，已实现与尚未接入分开记录，不能把文档填完当成整局平衡验证。
 
-## 本地工具与仓库
+最新界面：[右键交互与简洁界面](Docs/Development/16_右键交互与简洁界面.md)。右侧管理默认收起；右键物品和设施查看操作，Tab管理、B建设、I库存。
 
-```powershell
-.\Tools\Unity.ps1 -Action Import
-.\Tools\Unity.ps1 -Action Setup
-.\Tools\Unity.ps1 -Action Test
-.\Tools\Unity.ps1 -Action Build
-.\Tools\Unity.ps1 -Action Release -ReleaseVersion '0.2.0'
-.\Tools\Unity.ps1 -Action Smoke
-.\Tools\Unity.ps1 -Action Open
-```
 
-脚本按 `ProjectVersion.txt` 查找对应 Editor；自定义安装位置可以加 `-UnityPath`。`Import` 在 Editor 关闭本项目时以批处理模式导入、解析依赖并检查编译，日志写入 `Logs/import.log`。参数依据 [Unity 2022.3 命令行文档](https://docs.unity3d.com/2022.3/Documentation/Manual/EditorCommandLineArguments.html)。
+最新操作：[拖动地图与框选指挥](Docs/Development/17_拖动地图与框选指挥.md)。左键拖图，右键拖框，选中人物后右键地面移动，人物菜单可恢复工作。
 
-GitHub Actions在main推送/PR时检查workflow和打包脚本；发布Release时运行Unity测试，构建Windows x64正式包，在Windows runner无图形验收后上传ZIP和SHA-256到该Release。支持手动构建快照，手动运行只产生Actions artifacts。Personal构建需UNITY_LICENSE、UNITY_EMAIL、UNITY_PASSWORD三个Secrets；本轮按用户要求先上传workflow，云端Unity构建待配置凭据后验证。完整操作见[发布说明](Docs/Development/05_CI与发布.md)。
 
-当前主要通过 **Git + Git LFS** 同步到公开的 [AI1379/Crazy_Rubbish](https://github.com/AI1379/Crazy_Rubbish)，分支为 `main`。首次克隆需要安装 Git LFS：
+最新地图与取水：[河岸取水与出生地水塘](Docs/Development/18_河岸取水与出生地水塘.md)。地图版本6，河岸可建取水设施，原出生地渗水点变为小水塘。
 
-```powershell
-git lfs install
-git clone https://github.com/AI1379/Crazy_Rubbish.git
-cd Crazy_Rubbish
-git lfs pull
-```
 
-图片、模型、音视频和字体按 `.gitattributes` 进入 LFS；代码、文档与 Unity 文本场景／配置／`.meta` 使用普通 Git。`.gitignore` 排除缓存、日志、测试结果、构建包及 `.plastic`。提交资源时同时提交 `.meta`，并在首次提交新类型的大文件前检查是否需要新增 LFS 规则。字体授权文件也随源码和构建保留。
+最新时间界面：[嵌入式时间控制条](Docs/Development/19_嵌入式时间控制条.md)。顶栏右端紧凑图标、高亮当前状态，空格暂停／继续，1／2／3选速并恢复运行。
 
-**Plastic SCM／UVCS 暂时保留**：已有工作区 `Crazy_Rubbish-Crazy_Rubbish`、云仓库 `Crazy_Rubbish/Crazy_Rubbish`、分支 `/main` 和 Unity 集成包均保留。Unity 中可通过 `Window/Unity Version Control` 打开版本控制窗口，也可使用 Plastic 桌面客户端。Git Push 与 Plastic Checkin 是独立操作，提交一个系统不会自动同步另一个。
 
-`ignore.conf` 继续排除 Plastic 的缓存、构建产物和 `.git`。源码范围为 Assets、Docs、Packages、ProjectSettings、Tools、README 与仓库配置。空资源目录用 `.gitkeep` 保持 Git 克隆后的目录与 `.meta` 一致。两个版本系统的本机元数据互相排除，不上传。
+最新存档入口：[底部设置与存档菜单](Docs/Development/20_底部设置与存档菜单.md)。下栏右端齿轮集中保存、读档和主菜单，管理入口一并移至下栏；顶栏保留状态和倍速。
+
+
+最新菜单操作：[设施菜单拖动](Docs/Development/21_设施菜单拖动.md)。左键拖动标题栏移动框内设施和右键菜单，正文仍可滚动，窗口限制在屏幕内。
+
+
+最新稳定性修复：[启动、停工、放置与存档](Docs/Development/23_启动停工放置与存档修复.md)。落实可玩性检查1A、2A、3A、5A，增加存档列表及离开前保存选择，保留原存档格式。
+
+
+最新产线提示：[实时设施信息与风险提醒](Docs/Development/24_产线状态与风险提示.md)。落实检查4A、6A，显示停机原因、食水覆盖与发薪倒计时，点击提醒可定位，保留菜单拖动与滚动。
+
+
+最新自动化：[铺带、接口与运输反馈](Docs/Development/25_自动化铺带接口与运输反馈.md)。落实检查7A，整段拖拽铺带、接口自动绑定与预览、流向和堵塞提示、实时人员任务；独立交叉按轴过货。
+
+
+最新通关主线：[三区矿料与返程](Docs/Development/26_三区矿料与返程通关.md)。沿用既定数值，接通矿点、持续采掘、唯一升降舱、试车、登舱、续档与好/普通结局。长期经济和整局人工节奏仍待专项试玩。
+
+
+最新界面调整：[右上教程与选中人物动画](Docs/Development/27_右上教程与选中人物动画.md)。当前目标常驻倍速条下方，可收起、展开完整教程并定位；移动动画在重复刷新和选择人物时保持稳定。
+
+
+最新生产查阅：[建设搜索与生产查阅](Docs/Development/28_建设搜索与生产查阅.md)。建设检索、物品来源、缺料跳转与科技条件，按现有规则只读查阅。
+
+
+最新经营修复：[长局经营验证与调度](Docs/Development/29_长局经营验证与调度修复.md)。修复种植留种运输、原水批次与补给调度、损坏工具和设施操作侧堵塞；新增零资金经营对照记录与真实经营存档续玩检查。完整经济主线仍待后续验证。
+
+
+首版上传：[0.1.0准备与验证](Docs/Development/30_首版上传准备.md)。实际版本显示、标题与设置操作说明、单条产线工具提醒，以及当前S6游戏的非调试发布验收。玩家须知与已知问题位于Docs/Release。

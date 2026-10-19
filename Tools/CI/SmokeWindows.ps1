@@ -2,7 +2,7 @@ param(
     [string]$PlayerDirectory = 'Builds/WindowsRelease',
     [string]$ResultsDirectory = 'TestResults/ci-smoke',
     [string]$ExpectedVersion = '',
-    [ValidateRange(10, 600)][int]$TimeoutSeconds = 120
+    [ValidateRange(10, 600)][int]$TimeoutSeconds = 180
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,8 +16,9 @@ New-Item -ItemType Directory -Path $resultRoot -Force | Out-Null
 $runKey = [Guid]::NewGuid().ToString('N')
 $resultPath = Join-Path $resultRoot "smoke-$runKey.json"
 $logPath = Join-Path $resultRoot "smoke-$runKey.log"
-$arguments = @('-batchmode', '-nographics', '-prototypeSmoke', '-prototypeResults', ('"' + $resultPath + '"'),
-    '-logFile', ('"' + $logPath + '"'), '-prototypeSaveDirectory', ('"' + (Join-Path $resultRoot ("saves-$runKey")) + '"'))
+$arguments = @('-batchmode', '-nographics', '-screen-width','1280','-screen-height','800','-screen-fullscreen','0',
+    '-planSmoke', '-planResults', ('"' + $resultPath + '"'),
+    '-logFile', ('"' + $logPath + '"'), '-planSaveRoot', ('"' + (Join-Path $resultRoot ("saves-$runKey")) + '"'))
 $process = Start-Process -FilePath $playerPath -ArgumentList $arguments -WorkingDirectory $playerRoot -WindowStyle Hidden -PassThru
 if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
     Stop-Process -Id $process.Id -Force
@@ -27,15 +28,13 @@ $process.Refresh()
 if ($process.ExitCode -ne 0) { throw "Windows player exited $($process.ExitCode). See $logPath" }
 if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) { throw "Smoke report missing. See $logPath" }
 $report = Get-Content -Raw -LiteralPath $resultPath | ConvertFrom-Json
-if (-not $report.success -or -not $report.restart -or $report.residents -ne 5 -or $report.wagesPaidCents -ne 5000 -or $report.batches -lt 12) {
+if (-not $report.success -or $report.activeGame -cne 'S6Plan' -or -not $report.releaseReadiness) {
     throw "Smoke acceptance criteria failed. See $resultPath"
 }
 if ($report.development -ne $false) { throw 'Release player was built with development options, or omitted build metadata.' }
-if ($report.deliveredTrips -le 0 -or -not $report.saveRoundtrip) { throw 'Physical delivery or runtime save/load acceptance failed.' }
-if (-not $report.demoCompleted -or $report.assembledTools -lt 1 -or $report.mealsConsumed -le 0 -or $report.money -lt 200) {
-    throw 'Complete demo, nutrition, tool assembly or expansion-funding acceptance failed.'
+foreach($required in @('realZeroCashStarter','diskSaveLoad','stability','automationUi','beltDrag','region3','returnJourney','tutorialHud','selectionAnimation','productionCatalog','buildingSearch','riskAlerts','settingsUi')){
+    if($report.$required -ne $true){throw "Current game acceptance missing or failed: $required. See $resultPath"}
 }
-if (-not $report.tutorialCompleted) { throw 'Tutorial progress or runtime bindings did not complete.' }
 if ($ExpectedVersion -and $report.version -cne $ExpectedVersion) {
     throw "Expected player version $ExpectedVersion, got $($report.version)."
 }

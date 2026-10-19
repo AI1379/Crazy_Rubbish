@@ -43,7 +43,7 @@ namespace CrazyRubbish.Prototype
         private bool showAllItems;
         private RectTransform inspection;
         private Text inspectionTitle, inspectionBody;
-        public bool HasLayout => root != null && clock != null && layoutVersion==5;
+        public bool HasLayout => root != null && clock != null && layoutVersion==7;
         public RectTransform VisualRoot => root;
         public void ShowInspection(string title, string body, Vector2 screenPoint)
         {
@@ -107,7 +107,7 @@ namespace CrazyRubbish.Prototype
             if (HasLayout) return;
             if(root!=null){if(Application.isPlaying)Destroy(root.gameObject);else DestroyImmediate(root.gameObject);}
             buttonBindings.Clear();
-            layoutVersion=5;pages=new RectTransform[4];tabs=new Button[4];
+            layoutVersion=7;pages=new RectTransform[4];tabs=new Button[4];
             var canvas = new GameObject("Interface", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canvas.transform.SetParent(transform, false); root = canvas.GetComponent<RectTransform>();
             canvas.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
@@ -118,8 +118,9 @@ namespace CrazyRubbish.Prototype
                 new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule)).transform.SetParent(transform, false);
             var header = StretchPanel(root, "Header", new Vector2(0, 1), Vector2.one, new Vector2(24, -94), new Vector2(-24, -20), Panel);
             Stripe(header, "Brand Accent", 0, 0, 4, 74, Accent);
-            TextAt(header, "Title", "涌现 / 废料工坊", 20, 7, 360, 36, 29, Ink);
-            TextAt(header, "Subtitle", "拾起废料，建起你的工坊。", 22, 43, 350, 22, 15, Muted);
+            CoverAt(header, 14, 6, 115, 64);
+            TextAt(header, "Title", "废料工坊", 142, 7, 238, 36, 29, Ink);
+            TextAt(header, "Subtitle", "拾起废料，建起工坊。", 144, 43, 238, 22, 15, Muted);
             clock = TextAt(header, "Clock", "00:00 · 1×", 394, 20, 150, 32, 21, Ink);
             TextAt(header, "Cash Caption", "经营现金", 568, 9, 155, 20, 14, Muted);
             money = TextAt(header, "Money", "0.00", 568, 30, 175, 32, 25, Accent);
@@ -177,7 +178,7 @@ namespace CrazyRubbish.Prototype
                 var row = At(inventoryContent, "ItemRow" + i, 8, 143 + i * 40, 356, 38); inventoryRows[i] = row;
                 var background = row.gameObject.AddComponent<Image>(); background.raycastTarget = false;
                 background.color = i % 2 == 0 ? new Color32(37, 54, 56, 255) : new Color32(32, 49, 51, 255);
-                var icon = At(row, "Icon", 5, 7, 24, 24).gameObject.AddComponent<Image>(); icon.sprite = game.appearance.ItemSprite(item); icon.raycastTarget = false;
+                var icon = At(row, "Icon", 5, 7, 24, 24).gameObject.AddComponent<Image>(); icon.sprite = game.appearance.ItemSprite(item); icon.color = game.appearance.ItemTint(item); icon.raycastTarget = false; icon.preserveAspect = true;
                 TextAt(row, "Item", PrototypeGame.ItemName(item), 35, 0, 107, 38, 14, Ink);
                 carryCounts[i] = TextAt(row, "Carry", "0", 144, 0, 30, 38, 14, Accent);
                 warehouseCounts[i] = TextAt(row, "Stock", "0", 180, 0, 48, 38, 14, Ink);
@@ -206,8 +207,9 @@ namespace CrazyRubbish.Prototype
             var card=At(modal,"Card",0,0,920,680);card.anchorMin=card.anchorMax=new Vector2(0.5f,0.5f);card.pivot=new Vector2(0.5f,0.5f);card.anchoredPosition=Vector2.zero;
             card.gameObject.AddComponent<Image>().color=Panel;
             Stripe(card,"Accent",0,0,920,4,Accent);
-            modalTitle=TextAt(card,"Title","涌现 / 首区 Demo",36,24,848,48,34,Ink);
-            modalInfo=TextAt(card,"Info","",36,82,848,82,18,Muted);modalInfo.alignment=TextAnchor.UpperLeft;
+            CoverAt(card, 674, 24, 210, 118);
+            modalTitle=TextAt(card,"Title","首区 Demo",36,24,610,48,34,Ink);
+            modalInfo=TextAt(card,"Info","",36,82,610,82,18,Muted);modalInfo.alignment=TextAnchor.UpperLeft;
             goals=TextAt(card,"Goals","",36,184,848,330,20,Ink);goals.alignment=TextAnchor.UpperLeft;
             menuResume=ButtonAt(card,"Resume","开始试玩",36,530,190,46,true);
             ButtonAt(card,"MenuLoad","继续存档",242,530,190,46);ButtonAt(card,"MenuSave","保存进度",448,530,190,46);
@@ -285,7 +287,7 @@ namespace CrazyRubbish.Prototype
             assemblyInfo.text=$"木柄1 + {ItemCatalog.Name(m.AssemblyEnd)}1 → {ItemCatalog.Name(m.AssemblyProduct)}1\n{m.AssemblySeconds:0}秒人工 / 进度 {m.AssemblyProgress:P0}\n已制作 {m.AssembledTools} 把 · 需到工作台正面";
             modal.gameObject.SetActive(game.MenuOpen||game.ResultVisible);
             if(!modal.gameObject.activeSelf)return;
-            modalTitle.text=m.Failed?"经营失败":game.ResultVisible?"首区 Demo 达成":"涌现 / 首区 Demo";
+            modalTitle.text=m.Failed?"经营失败":game.ResultVisible?"首区 Demo 达成":"首区 Demo";
             modalInfo.text=m.Failed?m.FailureReason+"\n可读取失败前存档，或新游戏重试。":game.ResultVisible?$"完成用时 {m.DemoCompletedAt/60:0.0} 分钟 · 现金 {m.Money:0.00} · 工资已付 {m.TotalWagesPaidCents/100m:0.00}\n可以继续经营或保存。这是首区阶段目标，后续扩区及返程仍在制作。":"从零现金起步，让回收、生产、运输和生活供给运转起来。\n八个目标可自由安排顺序；新局使用独立存档槽。";
             bool[] flags=m.DemoMilestones;
             goals.text=string.Join("\n",PrototypeSimulation.DemoGoalNames.Select((name,i)=>flags[i]?"<color=#97C6A1>[完成] "+name+"</color>":"[待办] "+name))+"\n\n"+game.Notice;
@@ -476,6 +478,12 @@ namespace CrazyRubbish.Prototype
             var rect = new GameObject(objectName, typeof(RectTransform)).GetComponent<RectTransform>(); rect.SetParent(parent, false);
             rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1);
             rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height); return rect;
+        }
+        private void CoverAt(Transform parent, float x, float y, float width, float height)
+        {
+            if (game.appearance.gameCover == null) return;
+            var image = At(parent, "Game Cover", x, y, width, height).gameObject.AddComponent<Image>();
+            image.sprite = game.appearance.gameCover; image.preserveAspect = true; image.raycastTarget = false;
         }
         private void Stripe(Transform parent, string name, float x, float y, float width, float height, Color color)
         {

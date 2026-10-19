@@ -13,6 +13,7 @@
 
 # Preserve the supplied original document snapshots byte-for-byte.
 /Docs/Source/*.md -text
+/Docs/Source/S6_20261013/** -text
 /Assets/_Game/Art/Fonts/OFL.txt -text whitespace=-blank-at-eol
 
 # Binary art, models, audio, video, and fonts use Git LFS.

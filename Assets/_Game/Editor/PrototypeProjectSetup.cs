@@ -82,11 +82,13 @@ namespace CrazyRubbish.Editor
                 importer.SaveAndReimport();
                 appearance.itemIcons[(int)item] = AssetDatabase.LoadAssetAtPath<Sprite>(path);
             }
+            LocalArtInstaller.Apply(appearance);
             EditorUtility.SetDirty(appearance);
             AssetDatabase.SaveAssets();
 
             if (File.Exists(ScenePath)) EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
-            if (UnityEngine.Object.FindObjectOfType<PrototypeGame>() == null) CreateScene(balance, appearance);
+            if (UnityEngine.Object.FindObjectsOfType<PrototypeGame>(true).Length == 0) CreateScene(balance, appearance);
+            UnityEngine.Object.FindObjectsOfType<PrototypeGame>(true)[0].gameObject.SetActive(true);
             PrototypePresentationEditor.EnsureCurrentLayout();
             var previewGame = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
             var previewModel = new CrazyRubbish.Core.PrototypeSimulation(JsonUtility.FromJson<CrazyRubbish.Core.PrototypeSettings>(JsonUtility.ToJson(balance.values)), 4271);
@@ -99,6 +101,7 @@ namespace CrazyRubbish.Editor
             PlayerSettings.resizableWindow = true;
             AssetDatabase.SaveAssets();
             Debug.Log("M2 starting prototype setup complete. Main scene and balance are ready.");
+            PlanProjectSetup.Install();
         }
 
         private static Sprite LoadSprite(string folder, string name) => AssetDatabase.LoadAssetAtPath<Sprite>(folder + name + ".png");
@@ -167,8 +170,30 @@ namespace CrazyRubbish.Editor
                 if (report.summary.result != BuildResult.Succeeded)
                     throw new InvalidOperationException("Windows build failed: " + report.summary.result);
                 File.Copy("Assets/_Game/Art/Fonts/OFL.txt", outputDirectory + "/Font-OFL.txt", true);
-                File.Copy("Docs/Development/08_首区Demo.md", outputDirectory + "/首区试玩说明.md", true);
-                File.Copy("Docs/Development/09_新手教程.md", outputDirectory + "/新手教程说明.md", true);
+                if(development)
+                {
+                File.Copy("Docs/Development/11_新版策划核对与试玩.md", outputDirectory + "/新版策划核对与试玩.md", true);
+                File.Copy("Docs/Development/12_自然洞室地图.md", outputDirectory + "/12_自然洞室地图.md", true);
+                File.Copy("Docs/Development/14_大地图与地下河.md", outputDirectory + "/大地图与地下河.md", true);
+                File.Copy("Docs/Development/15_方形地图与连续河网.md", outputDirectory + "/方形地图与连续河网.md", true);
+                File.Copy("Docs/Development/16_右键交互与简洁界面.md", outputDirectory + "/右键交互与简洁界面.md", true);
+                File.Copy("Docs/Development/17_拖动地图与框选指挥.md", outputDirectory + "/拖动地图与框选指挥.md", true);
+                File.Copy("Docs/Development/18_河岸取水与出生地水塘.md", outputDirectory + "/河岸取水与出生地水塘.md", true);
+                File.Copy("Docs/Development/19_嵌入式时间控制条.md", outputDirectory + "/嵌入式时间控制条.md", true);
+                File.Copy("Docs/Development/20_底部设置与存档菜单.md", outputDirectory + "/底部设置与存档菜单.md", true);
+                File.Copy("Docs/Development/21_设施菜单拖动.md", outputDirectory + "/设施菜单拖动.md", true);
+                File.Copy("Docs/Development/23_启动停工放置与存档修复.md", outputDirectory + "/启动停工放置与存档修复.md", true);
+                File.Copy("Docs/Development/24_产线状态与风险提示.md", outputDirectory + "/产线状态与风险提示.md", true);
+                File.Copy("Docs/Development/25_自动化铺带接口与运输反馈.md", outputDirectory + "/自动化操作说明.md", true);
+                File.Copy("Docs/Development/26_三区矿料与返程通关.md", outputDirectory + "/三区返程通关说明.md", true);
+                File.Copy("Docs/Development/27_右上教程与选中人物动画.md", outputDirectory + "/右上教程与人物动画说明.md", true);
+                File.Copy("Docs/Development/28_建设搜索与生产查阅.md", outputDirectory + "/建设搜索与生产查阅说明.md", true);
+                }
+                else
+                {
+                    File.Copy("Docs/Release/0.1.0_开始游戏.txt", outputDirectory + "/0.1.0_开始游戏.txt", true);
+                    File.Copy("Docs/Release/0.1.0_已知问题.txt", outputDirectory + "/0.1.0_已知问题.txt", true);
+                }
                 Debug.Log("Windows " + (development ? "development" : "release") + " build succeeded: " + outputDirectory);
             }
             finally { PlayerSettings.bundleVersion = originalVersion; }

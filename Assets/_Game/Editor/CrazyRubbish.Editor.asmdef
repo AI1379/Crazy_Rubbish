@@ -1,7 +1,14 @@
 {
   "name": "CrazyRubbish.Editor",
   "rootNamespace": "CrazyRubbish.Editor",
-  "references": ["CrazyRubbish.Core", "CrazyRubbish.Prototype"],
-  "includePlatforms": ["Editor"],
+  "references": [
+    "CrazyRubbish.Core",
+    "CrazyRubbish.Prototype",
+    "Unity.2D.Sprite.Editor",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
   "autoReferenced": true
 }

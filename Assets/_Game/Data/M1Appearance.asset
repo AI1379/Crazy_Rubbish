@@ -13,74 +13,777 @@ MonoBehaviour:
   m_Name: M1Appearance
   m_EditorClassIdentifier: 
   font: {fileID: 12800000, guid: 292f0299c466a384b80788346fdc66e2, type: 3}
-  worker: {fileID: 21300000, guid: 107ddb4f701c3744fac2f33bcc5f8e08, type: 3}
-  wasteWood: {fileID: 21300000, guid: 7be28c64e5a8b8647bc26c2fb79752af, type: 3}
-  mixedPlastic: {fileID: 21300000, guid: 613a97d3f040dc1428c6ab3313c83ca7, type: 3}
-  fastener: {fileID: 21300000, guid: 9bb3b90517585df44b78a9f0e438d7c3, type: 3}
-  saw: {fileID: 21300000, guid: 25475dcfc0bb3b54eb69fa5df758baff, type: 3}
-  plank: {fileID: 21300000, guid: 2f6476954de283743ba50fb552064d4c, type: 3}
-  woodHandle: {fileID: 21300000, guid: 9cd5be905a451a64f9c97dc3d0de55a2, type: 3}
-  warehouse: {fileID: 21300000, guid: d57fc4c7debe5a149888e5e003fbf530, type: 3}
-  workbench: {fileID: 21300000, guid: 0d38b486cedca804d93a19861790974d, type: 3}
-  tile: {fileID: 21300000, guid: 75c119f9cd81d884eac2db23d5da97ce, type: 3}
+  worker: {fileID: -1315547118, guid: 1e4620cc59d38a148ba491ac4267dd35, type: 3}
+  wasteWood: {fileID: 425258981, guid: aaed7c05f0461de499d6b9022e32c235, type: 3}
+  mixedPlastic: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  fastener: {fileID: 2046259655, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  saw: {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  plank: {fileID: -81188650, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  woodHandle: {fileID: -81188650, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  warehouse: {fileID: -1497945257, guid: 07c32109c3498cc489dd2e9cb556c7e9, type: 3}
+  workbench: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  tile: {fileID: 304992730, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
   marker: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   itemIcons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 21300000, guid: 3d37fea9fd0700b408ff6097d53485d3, type: 3}
-  - {fileID: 21300000, guid: 9f44c9b269fb48c47aca9f1515ddc513, type: 3}
-  - {fileID: 21300000, guid: b235f90e309c89a4fb1b7ee1f1ff2491, type: 3}
-  - {fileID: 21300000, guid: 784f3ccf638a2614bb6a058b358ff0c7, type: 3}
-  - {fileID: 21300000, guid: 0dd33e0ca5223da458bbe4b5482e6354, type: 3}
-  - {fileID: 21300000, guid: 37276898901ee134badd91f4fe0374cc, type: 3}
-  - {fileID: 21300000, guid: a85abd30831027c408da6e8e02113fa8, type: 3}
-  - {fileID: 21300000, guid: 3160b7faa4bfd2f40b1c136793ba9b50, type: 3}
-  - {fileID: 21300000, guid: a1246b8eb064f66459a62cf372c85e36, type: 3}
-  - {fileID: 21300000, guid: 162d7f433c488774bb14445db1d096d5, type: 3}
-  - {fileID: 21300000, guid: d73fe7b1264f22c429a2990f78e75c82, type: 3}
-  - {fileID: 21300000, guid: 3d5dad2fa8e078242babe864546ab16f, type: 3}
-  - {fileID: 21300000, guid: 1ee44aa4009b6364489e01134a63b095, type: 3}
-  - {fileID: 21300000, guid: dbbe5a204fdc8c847960f010fa1f32d7, type: 3}
-  - {fileID: 21300000, guid: 10cb173d4b5da0b4d977967973ae8753, type: 3}
-  - {fileID: 21300000, guid: 731b74ee1ef75254cbe35175a0f2dc38, type: 3}
-  - {fileID: 21300000, guid: a96253ef943b5474d8bccf6b7289d921, type: 3}
-  - {fileID: 21300000, guid: 1db1311e30909fc469cd23c6fa569763, type: 3}
-  - {fileID: 21300000, guid: ee9b05c4d8287904b9fbefb1caf6e3c3, type: 3}
-  - {fileID: 21300000, guid: 9d85dbf638dae644682ce2488744a65e, type: 3}
-  - {fileID: 21300000, guid: 4a99d82e0445c92438a17e7eee0e61e7, type: 3}
-  - {fileID: 21300000, guid: 630e113913d731f4f8493f5e39aec074, type: 3}
-  - {fileID: 21300000, guid: 9b2141c037ff55e4ebc495c5f7ec77c9, type: 3}
-  - {fileID: 21300000, guid: 6b73b3fc7094b124cad4d203f30971bc, type: 3}
-  - {fileID: 21300000, guid: 1a6549d917d2d81479bb8bba498b4581, type: 3}
-  - {fileID: 21300000, guid: 282e5205916d8a145b7aa9c407efd3b0, type: 3}
-  - {fileID: 21300000, guid: fc9efa8c6919ab8479a66bcbdb3b8d82, type: 3}
-  - {fileID: 21300000, guid: 1c3ca4666e28cd540881c83dd9406fd3, type: 3}
-  - {fileID: 21300000, guid: 651b40a21388a56439ea184c21fd5018, type: 3}
-  - {fileID: 21300000, guid: ed213dff1c7bae640980c2d37faeec4a, type: 3}
-  - {fileID: 21300000, guid: 916110edfa6034245be2c86e85525c01, type: 3}
-  - {fileID: 21300000, guid: a8cb90ad58f3f1a4a9ba14f48f7275f9, type: 3}
-  - {fileID: 21300000, guid: 25bb0bc959b0cfd4481cb1b06a58dc27, type: 3}
-  - {fileID: 21300000, guid: ebd7bc85debe1134d9d720285bd2891a, type: 3}
-  - {fileID: 21300000, guid: 3d4b459b052bc744d8cad3e1d7053258, type: 3}
-  - {fileID: 21300000, guid: 9baa6dcedb303d44fa8c16e959201197, type: 3}
-  - {fileID: 21300000, guid: a5ebda3f761366b4894f070996b69611, type: 3}
-  - {fileID: 21300000, guid: 1f0804e595178da428f501d2aa967426, type: 3}
-  - {fileID: 21300000, guid: 6f5b3fb169432a847b254684f855c950, type: 3}
-  - {fileID: 21300000, guid: c8b1a083f1ed27345b205a7d8560d111, type: 3}
-  - {fileID: 21300000, guid: 9c91532135898d845a3d2644b1564b4b, type: 3}
-  - {fileID: 21300000, guid: 0a8c6d52cdfeb00409c5f4d3c0f17990, type: 3}
-  - {fileID: 21300000, guid: c2632d13cded2c440a11b22f88502aae, type: 3}
-  - {fileID: 21300000, guid: 83df9e2802092ea40b8b50feeb321c2c, type: 3}
-  - {fileID: 21300000, guid: 42c461a3943856e4db2af02db6a43a82, type: 3}
-  - {fileID: 21300000, guid: 42ca3bb6ab6e57649972a90e0e42a930, type: 3}
-  - {fileID: 21300000, guid: 62df5cf4d889e814f8faf221605beb04, type: 3}
-  - {fileID: 21300000, guid: a590d64b925940045821aee2ec162f81, type: 3}
-  - {fileID: 21300000, guid: 7207aeec18c0beb42a5f86f35949bf19, type: 3}
-  - {fileID: 21300000, guid: 33e7229d193ff2d40a03a09890edddcc, type: 3}
-  - {fileID: 0}
-  - {fileID: 21300000, guid: 7bcb286dce377514c9235a7dcac6cb60, type: 3}
+  - {fileID: -1110042584, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - {fileID: 2046259655, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -81188650, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -81188650, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: 1272577333, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1359509266, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1811029, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: -1183753108, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: -42195386, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: -1412410088, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: -102271098, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: -553327690, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -192328292, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1800636494, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: -1005731284, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1359509266, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -451788581, guid: a9bbf310994b0f34e87ec1c77da13309, type: 3}
+  - {fileID: -451788581, guid: a9bbf310994b0f34e87ec1c77da13309, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 656361220, guid: 389f4cecfff0a7c498ab0462685125de, type: 3}
+  - {fileID: 1359509266, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1359509266, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1423741784, guid: 264b1812c9c4e4c469b1aef591385bd3, type: 3}
+  - {fileID: -504208859, guid: 5adf4de252b52c34fb028ac5565d87b6, type: 3}
+  - {fileID: -451788581, guid: a9bbf310994b0f34e87ec1c77da13309, type: 3}
+  - {fileID: -451788581, guid: a9bbf310994b0f34e87ec1c77da13309, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1272577333, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 656361220, guid: 389f4cecfff0a7c498ab0462685125de, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 1359509266, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -1540700031, guid: 4816bf296a1c4cd419276c20a3b7cf70, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 656361220, guid: 389f4cecfff0a7c498ab0462685125de, type: 3}
+  - {fileID: 656361220, guid: 389f4cecfff0a7c498ab0462685125de, type: 3}
+  - {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -81188650, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -1110042584, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - {fileID: -81188650, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  localArtVersion: local-art-2026-10-13-v1
+  generator: {fileID: -1470814519, guid: 8b04e10260eb0ef489fe073dec08d277, type: 3}
+  housing: {fileID: -1602479584, guid: 87fd00b07d521bc45b33a79a4f7c5635, type: 3}
+  hole: {fileID: -777273144, guid: 3cf9e24fbbca9d4499f5662197e851ea, type: 3}
+  lamp: {fileID: 1838480761, guid: 1cd0b11dce7ac934e8a8e52c2e6fd0a5, type: 3}
+  assemblyTable: {fileID: 857558928, guid: 85c7ddbfc703e804ebedb356ad0b8208, type: 3}
+  dismantleTable: {fileID: 1927602969, guid: bbc1a15e6f4f83d4cb64ce9a89188632, type: 3}
+  gameCover: {fileID: -416769088, guid: 51b38c0ba4fefbb45b2b4224b68a4505, type: 3}
+  woodHeapHigh: {fileID: 1872764066, guid: 15ec37aa64b0d344e9a91c980d91f301, type: 3}
+  metalHeap: {fileID: 1292216917, guid: 7e2c58a299cb97644be7762e64df53ec, type: 3}
+  metalHeapHigh: {fileID: 167549544, guid: 4dbaf790865e07e4899ba326a1973212, type: 3}
+  mixedHeapHigh: {fileID: -1177007656, guid: 76661c6db71f1f640a7ad1f98e7f9b95, type: 3}
+  bedrockTiles:
+  - {fileID: 304992730, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: 1426940208, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -1546479002, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: 792352875, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -1000960610, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: 908595647, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: 707340427, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -1071616746, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: 682465902, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -104204502, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -30038045, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: 2080748351, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -2005507887, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -2036220173, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: 42888300, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  - {fileID: -520498, guid: 9e2d3e18d659eae4d917e00f24b5900a, type: 3}
+  gravelTiles:
+  - {fileID: -372234987, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -899947561, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -430119973, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: 294397813, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: 1092145725, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: 1453824542, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -1889130507, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: 699281151, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -2116739432, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: 2082151919, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -1166029516, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -831786655, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: 480779186, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: 278047340, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -24653214, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  - {fileID: -604989048, guid: b05bc407a78a9c14b847935bc73b8fd6, type: 3}
+  compactedTiles:
+  - {fileID: -101683460, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: -2096367502, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 1928326709, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: -1893196376, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 1591878163, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 2049734644, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 1377625576, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: -877725770, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 1081741807, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 75887437, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 2044226786, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: -1171302526, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: -320634086, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: 1670178240, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: -1699916953, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  - {fileID: -1294246202, guid: f72f5682900b00845a1150dda460e1d6, type: 3}
+  caveRocks:
+  - {fileID: -315185466, guid: e58b61e245784f1469008d7dc20e580c, type: 3}
+  - {fileID: -1854639000, guid: e58b61e245784f1469008d7dc20e580c, type: 3}
+  - {fileID: -783006565, guid: e58b61e245784f1469008d7dc20e580c, type: 3}
+  - {fileID: 1043735841, guid: e58b61e245784f1469008d7dc20e580c, type: 3}
+  cavePillar: {fileID: 21300000, guid: 2588211bd2f3c2340be88622f40abfc8, type: 3}
+  male:
+    idle:
+    - {fileID: -1315547118, guid: 1e4620cc59d38a148ba491ac4267dd35, type: 3}
+    - {fileID: -932714003, guid: 1ad27556d76b72445b9bbd8c77f1ee7c, type: 3}
+    - {fileID: -1283827232, guid: c344715fc0f28e849a45eb24735453a3, type: 3}
+    - {fileID: 1083781724, guid: f33a2793ade97ea40b867f90d231b69b, type: 3}
+    carry:
+    - {fileID: 907041037, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: 1074584006, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: -2040239072, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: -408226848, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    pickup:
+    - {fileID: -1413365537, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: -695985893, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: 1808669452, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: 1981959490, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    saw:
+    - {fileID: 405500981, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: 1317688922, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: 863869103, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+    - {fileID: -386878843, guid: 46e8954c7681c01488441ac2534284d7, type: 3}
+  female:
+    idle:
+    - {fileID: -1680749598, guid: ba8d8e4410c8e554fb2ca656ebfad739, type: 3}
+    - {fileID: -1798686747, guid: 7772d80e074d0eb438194a26337edcec, type: 3}
+    - {fileID: 937354267, guid: eabf674498f1b7f45945fc0ee61ea753, type: 3}
+    - {fileID: -1372936841, guid: bed52721de4a4fa439105bf5d2482627, type: 3}
+    carry:
+    - {fileID: 1921933571, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: 398821766, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: -1942488109, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: 1793981398, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    pickup:
+    - {fileID: -280755965, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: 1328840926, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: 2103323847, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: -298671651, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    saw:
+    - {fileID: 553913363, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: -1315877246, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: 1483348814, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+    - {fileID: -285659454, guid: 813ce2ed48b0ebe4d803667fee2bf92a, type: 3}
+  residents:
+  - idle:
+    - {fileID: -856953263, guid: 9e40dc9b87f3dab408466c226755f9c7, type: 3}
+    - {fileID: -476666757, guid: 53fb4e4de1e087645a1af523472f1212, type: 3}
+    - {fileID: -1347271253, guid: 1d60955df24d8a8409a012fd87c85648, type: 3}
+    - {fileID: 111691, guid: 29cc4fe84bb2bdf4a9ee698f9adc66d7, type: 3}
+    carry:
+    - {fileID: 203365908, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 265084862, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 164714909, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 1307317095, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    pickup:
+    - {fileID: 1933355464, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 79274230, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 326238082, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 2101301756, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    saw:
+    - {fileID: 1184679234, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: -2080641856, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 1426202190, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+    - {fileID: 2063933355, guid: 3e56497d88eb05c45bfb08d1f6c6b522, type: 3}
+  - idle:
+    - {fileID: -904368736, guid: a63f667e7e93c084cbfe85543224cf51, type: 3}
+    - {fileID: 1603135050, guid: 7b12763748ec74440b6188848119d6f9, type: 3}
+    - {fileID: 386868064, guid: 7871222ae771ad843ad5abe598839e78, type: 3}
+    - {fileID: 205516154, guid: 2ef21a9e705cc3a4b845107ac85c8ef9, type: 3}
+    carry:
+    - {fileID: 1884823458, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: 951610857, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: -402520823, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: 915320318, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    pickup:
+    - {fileID: -1862812136, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: 15425495, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: 1929110554, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: 1102676497, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    saw:
+    - {fileID: -948342114, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: -1484569179, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: -853571920, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+    - {fileID: 1369549139, guid: c4258a383222e074bb2b3238f337328d, type: 3}
+  - idle:
+    - {fileID: 1041436313, guid: 9c90b66b82f18ad408dc0f779afc8ae4, type: 3}
+    - {fileID: -1668820339, guid: 56832481ded43ac4e885c942f6641398, type: 3}
+    - {fileID: -928893479, guid: 2986864d459186b43961a10e4a69b1e5, type: 3}
+    - {fileID: 977037044, guid: 8a9316ac062ef6f42818aadd352d669a, type: 3}
+    carry:
+    - {fileID: -637492847, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: 709799022, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: -1679132717, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: -1705935406, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    pickup:
+    - {fileID: -1226593253, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: 737606649, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: 929241499, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: -1507999203, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    saw:
+    - {fileID: -327281231, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: 2025472949, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: 2108735679, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+    - {fileID: -62302780, guid: fb35ea11daba13d4cbbe06ba82a67b42, type: 3}
+  - idle:
+    - {fileID: 169940545, guid: 896f07f3358c23b42aeb157cde704fcf, type: 3}
+    - {fileID: -230784164, guid: e4eb08381517b0d42a5c115b912050ab, type: 3}
+    - {fileID: 23386299, guid: b0f1e3cb1aec4f8498bf5e95751ecddb, type: 3}
+    - {fileID: -3065159, guid: 4ae60f3513e132b41a1e90d2a41d4cd9, type: 3}
+    carry:
+    - {fileID: -91675765, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: -1668093663, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: -1734054560, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: -221121823, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    pickup:
+    - {fileID: -399381550, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: -964202252, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: -172941067, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: 355670045, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    saw:
+    - {fileID: 735350094, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: -133835851, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: 2106566597, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+    - {fileID: 1687836635, guid: bc23409b9c856834eb58c53d68d2095c, type: 3}
+  planItems:
+  - id: waste_wood
+    sprite: {fileID: -1110042584, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: wood_chips
+    sprite: {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: sorted_wood
+    sprite: {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: boards
+    sprite: {fileID: -81188650, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: wood_handle
+    sprite: {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: fasteners
+    sprite: {fileID: 2046259655, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: steel_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: copper_scrap
+    sprite: {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: aluminum_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: tool_steel_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: steel_billet
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: copper_billet
+    sprite: {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: aluminum_billet
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: tool_steel_billet
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: steel_parts
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: copper_parts
+    sprite: {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: aluminum_parts
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: wire
+    sprite: {fileID: 1272577333, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: motor
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: machine_saw
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: heater
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: container
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: handle_mold
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: box_mold
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: feeder
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: grow_light_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: light_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: furnace_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: lining
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: fixture
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: thermal_module
+    sprite: {fileID: 1359509266, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: generator_module
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: hammer_head
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: handsaw_blade
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: screwdriver_shaft
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: broom_head
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: waste_textile
+    sprite: {fileID: -1005731284, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: old_clothes
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: clean_old_clothes
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: patch
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: clothes
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: clean_rag
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: food
+    sprite: {fileID: -553327690, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: water
+    sprite: {fileID: -192328292, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: soap
+    sprite: {fileID: 1800636494, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: plastic_mix
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: plastic_handle
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: storage_box
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: seed
+    sprite: {fileID: -553327690, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: substrate
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: sprouts
+    sprite: {fileID: -553327690, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: controller
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: drive
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: dryer
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pet_melter
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: strap_mold
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: wire_die
+    sprite: {fileID: 1272577333, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pet_strap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: cuttable_textile
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: washed_textile
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: fabric_panel
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: repair_motor
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: repair_drive
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: organic_feed
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: compost
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: waste_paper
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: paper_pulp
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: paperboard
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: carton
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: waste_glass
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: cullet
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: glass_product
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: industrial_water
+    sprite: {fileID: -192328292, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: survey_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: drill_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: beneficiation_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: kiln_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: coil
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: ceramic_insulator
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: mechanical_filler
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: boiler_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: turbine_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: condenser_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: paper_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: glass_mold
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: filter_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: press_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: separator_module
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: sorted_pp
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: flakes_pp
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: resin_pp
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: sorted_hdpe
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: flakes_hdpe
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: resin_hdpe
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: sorted_pet
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: flakes_pet
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: resin_pet
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: plastic_other
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: slag
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: ash
+    sprite: {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: dirty_rag
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: spent_substrate
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: organic_mix
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: organic_residual
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: immature_compost
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: mixed_residue
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: industrial_effluent
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: sludge
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: mine_tailings
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: ceramic_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: iron_ore
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: copper_ore
+    sprite: {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: clay_ore
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: iron_concentrate
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: copper_concentrate
+    sprite: {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: clean_clay
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: reclaimed_structure
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: lift_frame
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: lift_drive
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: lift_brake
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: lift_control
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: lift_cable
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: lift_cabin
+    sprite: {fileID: 1313603434, guid: eb29c785dcea7e046ab3d8c974f982ce, type: 3}
+  - id: mined_steel_billet
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: mined_copper_billet
+    sprite: {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: hammer_wood
+    sprite: {fileID: -42195386, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: broken_hammer_wood
+    sprite: {fileID: -42195386, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: hammer_plastic
+    sprite: {fileID: -42195386, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: broken_hammer_plastic
+    sprite: {fileID: -42195386, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: handsaw_wood
+    sprite: {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: broken_handsaw_wood
+    sprite: {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: handsaw_plastic
+    sprite: {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: broken_handsaw_plastic
+    sprite: {fileID: 1110088141, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: screwdriver_wood
+    sprite: {fileID: 1811029, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: broken_screwdriver_wood
+    sprite: {fileID: 1811029, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: screwdriver_plastic
+    sprite: {fileID: 1811029, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: broken_screwdriver_plastic
+    sprite: {fileID: 1811029, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: wrench
+    sprite: {fileID: -1183753108, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: broken_wrench
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: scissors
+    sprite: {fileID: -1412410088, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: broken_scissors
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: sewing
+    sprite: {fileID: -102271098, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: broken_sewing
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: tongs
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: broken_tongs
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: file
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: broken_file
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: broom
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: broken_broom
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_motor
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_drive
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_cutter
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_washer
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_former
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_molds
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_wires
+    sprite: {fileID: 1272577333, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_grow_light
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_feeder
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_furnace
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_fixture
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_control_basic
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_controller
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_dryer
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_pet_former
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_drive_box
+    sprite: {fileID: -371653922, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_wire_maker
+    sprite: {fileID: 1272577333, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_survey
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_drill
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_separator
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_kiln
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_structure
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_boiler
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_turbine
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_condenser
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_paper_machine
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_glass_mold
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: old_water_filter
+    sprite: {fileID: -192328292, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_waste_wood
+    sprite: {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_sorted_wood
+    sprite: {fileID: 191340580, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_steel_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_copper_scrap
+    sprite: {fileID: 1095848800, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: pack_aluminum_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_tool_steel_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_plastic_mix
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: pack_sorted_pp
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_sorted_hdpe
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_sorted_pet
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_plastic_other
+    sprite: {fileID: 1779673184, guid: f643e190d1b1a17439c8caf53af69094, type: 3}
+  - id: pack_waste_textile
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: pack_cuttable_textile
+    sprite: {fileID: 516775106, guid: 5eb9be320a9f51647b0f7a13ca3f882e, type: 3}
+  - id: pack_waste_paper
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_waste_glass
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_slag
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_mixed_residue
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_organic_residual
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_mine_tailings
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: pack_ceramic_scrap
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: raw_freshwater
+    sprite: {fileID: -192328292, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: seed_tuber
+    sprite: {fileID: -553327690, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: tubers
+    sprite: {fileID: -553327690, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  - id: filter_media
+    sprite: {fileID: 828948283, guid: 6c1e22d059cc953469cd12d430ebad10, type: 3}
+  planFacilities:
+  - id: wood
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: disassembly
+    sprite: {fileID: 1927602969, guid: bbc1a15e6f4f83d4cb64ce9a89188632, type: 3}
+  - id: bench
+    sprite: {fileID: 857558928, guid: 85c7ddbfc703e804ebedb356ad0b8208, type: 3}
+  - id: washing
+    sprite: {fileID: -504208859, guid: 5adf4de252b52c34fb028ac5565d87b6, type: 3}
+  - id: generator
+    sprite: {fileID: -1470814519, guid: 8b04e10260eb0ef489fe073dec08d277, type: 3}
+  - id: electric_wood
+    sprite: {fileID: 1423741784, guid: 264b1812c9c4e4c469b1aef591385bd3, type: 3}
+  - id: auto_wood
+    sprite: {fileID: -1954397594, guid: 7ee04255d5f3a434cb0a6130db4844ea, type: 3}
+  - id: sorting
+    sprite: {fileID: -1365209192, guid: c30a7caffd65c8c42b0ce861a3d40999, type: 3}
+  - id: plastic_pre
+    sprite: {fileID: 1611267868, guid: 6618e7321c07f624bbf7d3f1dfa47f3e, type: 3}
+  - id: plastic_remake
+    sprite: {fileID: -451788581, guid: a9bbf310994b0f34e87ec1c77da13309, type: 3}
+  - id: metal_raw
+    sprite: {fileID: 95908120, guid: c4394f815b2029c46afe226fd979e957, type: 3}
+  - id: metal_parts
+    sprite: {fileID: -1540700031, guid: 4816bf296a1c4cd419276c20a3b7cf70, type: 3}
+  - id: warehouse
+    sprite: {fileID: -1497945257, guid: 07c32109c3498cc489dd2e9cb556c7e9, type: 3}
+  - id: housing
+    sprite: {fileID: -1602479584, guid: 87fd00b07d521bc45b33a79a4f7c5635, type: 3}
+  - id: streetlamp
+    sprite: {fileID: 1838480761, guid: 1cd0b11dce7ac934e8a8e52c2e6fd0a5, type: 3}
+  - id: growing
+    sprite: {fileID: -922862071, guid: 245827f9025e0fd4f9a598905ff8fde2, type: 3}
+  - id: grow_lamp
+    sprite: {fileID: 656361220, guid: 389f4cecfff0a7c498ab0462685125de, type: 3}
+  - id: auto_plastic_pre
+    sprite: {fileID: -1620909486, guid: fa29a70329227cb4283527e4b5d09e99, type: 3}
+  - id: auto_plastic_remake
+    sprite: {fileID: -1852499679, guid: 0a7edd8977b7ed04d8951754be850d65, type: 3}
+  - id: auto_parts
+    sprite: {fileID: -151553288, guid: 1f003088dbe4b42438e05f1e33fdfb86, type: 3}
+  - id: wire_maker
+    sprite: {fileID: -1894612510, guid: 18cfae92c8b726a47b00e72bf94bf0c2, type: 3}
+  - id: refurbish
+    sprite: {fileID: 592017681, guid: 03f58899d9b12fb42a6a26988c84e3a8, type: 3}
+  - id: composting
+    sprite: {fileID: 547122681, guid: 52ba81aa8cc24e742a6b0697c8a0df41, type: 3}
+  - id: substrate_mixer
+    sprite: {fileID: 1227626048, guid: 0a9b43d9da5d67646a13bfc203b33647, type: 3}
+  - id: electromechanical
+    sprite: {fileID: 857558928, guid: 85c7ddbfc703e804ebedb356ad0b8208, type: 3}
+  - id: survey
+    sprite: {fileID: -1595578416, guid: 0908c425e6743304ebf4d2cf47b36dab, type: 3}
+  - id: mine
+    sprite: {fileID: 1226021168, guid: 0fa5df5e842932e47b93a5544d44e31c, type: 3}
+  - id: ore_pre
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: ore_furnace
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: ceramic_kiln
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: complex_recovery
+    sprite: {fileID: 1611267868, guid: 6618e7321c07f624bbf7d3f1dfa47f3e, type: 3}
+  - id: lift_assembly
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: lift_launch
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: paper_pulper
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: paper_press
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: glass_furnace
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: water_recovery
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: baler
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: boiler
+    sprite: {fileID: -1470814519, guid: 8b04e10260eb0ef489fe073dec08d277, type: 3}
+  - id: turbine
+    sprite: {fileID: -1470814519, guid: 8b04e10260eb0ef489fe073dec08d277, type: 3}
+  - id: condenser
+    sprite: {fileID: -504208859, guid: 5adf4de252b52c34fb028ac5565d87b6, type: 3}
+  - id: auto_metal_raw
+    sprite: {fileID: 95908120, guid: c4394f815b2029c46afe226fd979e957, type: 3}
+  - id: auto_complex
+    sprite: {fileID: -1620909486, guid: fa29a70329227cb4283527e4b5d09e99, type: 3}
+  - id: auto_tool_parts
+    sprite: {fileID: -151553288, guid: 1f003088dbe4b42438e05f1e33fdfb86, type: 3}
+  - id: belt
+    sprite: {fileID: -15122156, guid: a288baaae62b80e449ea38fda456e66d, type: 3}
+  - id: port
+    sprite: {fileID: 1022516393, guid: a288baaae62b80e449ea38fda456e66d, type: 3}
+  - id: power_line
+    sprite: {fileID: -584849297, guid: 164038a6426b2704db4422a7b09361c4, type: 3}
+  - id: steam_pipe
+    sprite: {fileID: -584849297, guid: 164038a6426b2704db4422a7b09361c4, type: 3}
+  - id: landfill
+    sprite: {fileID: 1437244391, guid: 12144da004f0a234ca8a70f7d1be8310, type: 3}
+  - id: water_intake
+    sprite: {fileID: -504208859, guid: 5adf4de252b52c34fb028ac5565d87b6, type: 3}
+  - id: water_purifier
+    sprite: {fileID: -504208859, guid: 5adf4de252b52c34fb028ac5565d87b6, type: 3}
+  - id: kitchen
+    sprite: {fileID: 857558928, guid: 85c7ddbfc703e804ebedb356ad0b8208, type: 3}
+  - id: auto_water_plant
+    sprite: {fileID: -1620909486, guid: fa29a70329227cb4283527e4b5d09e99, type: 3}
+  planLogistics: []

@@ -1,0 +1,2778 @@
+{
+  "version": "local-art-2026-10-13-v1",
+  "sourceRoot": "桌面/喂——出来游戏素材",
+  "files": [
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_female_interactions.png",
+      "source": "人物/交互姿势/chr_hero_female_interactions.png",
+      "sha256": "530d34d610080447eeefc3c051698c3c28bbf309f7b3f7df7c519129de2d4e1a",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "carry_up",
+          "x": 33,
+          "y": 989,
+          "width": 224,
+          "height": 472,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_down",
+          "x": 285,
+          "y": 987,
+          "width": 229,
+          "height": 474,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_left",
+          "x": 530,
+          "y": 985,
+          "width": 221,
+          "height": 476,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_right",
+          "x": 766,
+          "y": 985,
+          "width": 227,
+          "height": 476,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_up",
+          "x": 31,
+          "y": 548,
+          "width": 243,
+          "height": 336,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_down",
+          "x": 299,
+          "y": 540,
+          "width": 210,
+          "height": 369,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_left",
+          "x": 509,
+          "y": 542,
+          "width": 249,
+          "height": 358,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_right",
+          "x": 774,
+          "y": 540,
+          "width": 235,
+          "height": 366,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_up",
+          "x": 12,
+          "y": 57,
+          "width": 255,
+          "height": 441,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_down",
+          "x": 279,
+          "y": 61,
+          "width": 236,
+          "height": 432,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_left",
+          "x": 521,
+          "y": 54,
+          "width": 216,
+          "height": 438,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_right",
+          "x": 778,
+          "y": 52,
+          "width": 231,
+          "height": 441,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_male_interactions.png",
+      "source": "人物/交互姿势/chr_hero_male_interactions.png",
+      "sha256": "65f8191ec20cdb1a5ea9ce6755e35750b237b05245eba96a82acc7cd336b2c15",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "carry_up",
+          "x": 17,
+          "y": 962,
+          "width": 245,
+          "height": 482,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_down",
+          "x": 273,
+          "y": 962,
+          "width": 240,
+          "height": 482,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_left",
+          "x": 530,
+          "y": 962,
+          "width": 201,
+          "height": 482,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_right",
+          "x": 797,
+          "y": 962,
+          "width": 202,
+          "height": 482,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_up",
+          "x": 16,
+          "y": 547,
+          "width": 253,
+          "height": 333,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_down",
+          "x": 293,
+          "y": 537,
+          "width": 217,
+          "height": 353,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_left",
+          "x": 521,
+          "y": 543,
+          "width": 241,
+          "height": 339,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_right",
+          "x": 773,
+          "y": 543,
+          "width": 241,
+          "height": 339,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_up",
+          "x": 16,
+          "y": 46,
+          "width": 253,
+          "height": 439,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_down",
+          "x": 273,
+          "y": 50,
+          "width": 245,
+          "height": 435,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_left",
+          "x": 523,
+          "y": 42,
+          "width": 235,
+          "height": 444,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_right",
+          "x": 778,
+          "y": 42,
+          "width": 232,
+          "height": 443,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_01_interactions.png",
+      "source": "人物/交互姿势/chr_worker_01_interactions.png",
+      "sha256": "25414e3df97a002972d8330345c5f30f9197f1516f6d8ff13112f5da90a169b5",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "carry_up",
+          "x": 30,
+          "y": 996,
+          "width": 211,
+          "height": 452,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_down",
+          "x": 272,
+          "y": 996,
+          "width": 219,
+          "height": 452,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_left",
+          "x": 528,
+          "y": 995,
+          "width": 193,
+          "height": 454,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_right",
+          "x": 813,
+          "y": 995,
+          "width": 194,
+          "height": 454,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_up",
+          "x": 23,
+          "y": 598,
+          "width": 248,
+          "height": 306,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_down",
+          "x": 303,
+          "y": 585,
+          "width": 211,
+          "height": 333,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_left",
+          "x": 519,
+          "y": 586,
+          "width": 237,
+          "height": 334,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_right",
+          "x": 774,
+          "y": 586,
+          "width": 238,
+          "height": 334,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_up",
+          "x": 10,
+          "y": 82,
+          "width": 245,
+          "height": 446,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_down",
+          "x": 265,
+          "y": 87,
+          "width": 241,
+          "height": 440,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_left",
+          "x": 519,
+          "y": 81,
+          "width": 220,
+          "height": 447,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_right",
+          "x": 793,
+          "y": 81,
+          "width": 218,
+          "height": 447,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_02_interactions.png",
+      "source": "人物/交互姿势/chr_worker_02_interactions.png",
+      "sha256": "e56bbd8add78a3b5d6935a1b401ed676add15af0dc2e5128f589968afd9031fb",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "carry_up",
+          "x": 16,
+          "y": 1005,
+          "width": 214,
+          "height": 474,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_down",
+          "x": 272,
+          "y": 1004,
+          "width": 222,
+          "height": 477,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_left",
+          "x": 530,
+          "y": 1004,
+          "width": 210,
+          "height": 474,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_right",
+          "x": 807,
+          "y": 1004,
+          "width": 206,
+          "height": 470,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_up",
+          "x": 15,
+          "y": 590,
+          "width": 237,
+          "height": 340,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_down",
+          "x": 283,
+          "y": 579,
+          "width": 219,
+          "height": 363,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_left",
+          "x": 507,
+          "y": 585,
+          "width": 244,
+          "height": 345,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_right",
+          "x": 776,
+          "y": 590,
+          "width": 237,
+          "height": 346,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_up",
+          "x": 16,
+          "y": 69,
+          "width": 240,
+          "height": 458,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_down",
+          "x": 272,
+          "y": 70,
+          "width": 222,
+          "height": 459,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_left",
+          "x": 514,
+          "y": 64,
+          "width": 221,
+          "height": 457,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_right",
+          "x": 792,
+          "y": 64,
+          "width": 221,
+          "height": 457,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_03_interactions.png",
+      "source": "人物/交互姿势/chr_worker_03_interactions.png",
+      "sha256": "a09e80de582c70b524055684f65c11e6568fd965235ffd3f3fd7503979e84955",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "carry_up",
+          "x": 30,
+          "y": 1018,
+          "width": 213,
+          "height": 443,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_down",
+          "x": 261,
+          "y": 1015,
+          "width": 237,
+          "height": 445,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_left",
+          "x": 518,
+          "y": 1012,
+          "width": 191,
+          "height": 449,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_right",
+          "x": 807,
+          "y": 1012,
+          "width": 192,
+          "height": 449,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_up",
+          "x": 24,
+          "y": 551,
+          "width": 244,
+          "height": 326,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_down",
+          "x": 295,
+          "y": 546,
+          "width": 204,
+          "height": 338,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_left",
+          "x": 525,
+          "y": 553,
+          "width": 226,
+          "height": 324,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_right",
+          "x": 768,
+          "y": 553,
+          "width": 226,
+          "height": 324,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_up",
+          "x": 7,
+          "y": 54,
+          "width": 253,
+          "height": 395,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_down",
+          "x": 263,
+          "y": 54,
+          "width": 254,
+          "height": 409,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_right",
+          "x": 524,
+          "y": 53,
+          "width": 240,
+          "height": 404,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_left",
+          "x": 786,
+          "y": 53,
+          "width": 231,
+          "height": 404,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_04_interactions.png",
+      "source": "人物/交互姿势/chr_worker_04_interactions.png",
+      "sha256": "486b36ddc286b3dd3aa436dee915a74436bdbafcf8ce06a30eb01704bdbd362b",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "carry_up",
+          "x": 19,
+          "y": 992,
+          "width": 225,
+          "height": 476,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_down",
+          "x": 277,
+          "y": 991,
+          "width": 225,
+          "height": 482,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_left",
+          "x": 525,
+          "y": 990,
+          "width": 209,
+          "height": 483,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "carry_right",
+          "x": 808,
+          "y": 990,
+          "width": 204,
+          "height": 482,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_up",
+          "x": 15,
+          "y": 563,
+          "width": 241,
+          "height": 331,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_down",
+          "x": 300,
+          "y": 552,
+          "width": 216,
+          "height": 356,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_left",
+          "x": 519,
+          "y": 565,
+          "width": 239,
+          "height": 349,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "pickup_right",
+          "x": 779,
+          "y": 565,
+          "width": 237,
+          "height": 347,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_up",
+          "x": 10,
+          "y": 52,
+          "width": 253,
+          "height": 445,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_down",
+          "x": 282,
+          "y": 53,
+          "width": 234,
+          "height": 444,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_left",
+          "x": 525,
+          "y": 52,
+          "width": 229,
+          "height": 446,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        },
+        {
+          "name": "saw_right",
+          "x": 787,
+          "y": 52,
+          "width": 226,
+          "height": 447,
+          "pivotX": 0.5,
+          "pivotY": 0.06
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_female_down.png",
+      "source": "人物/女主/chr_hero_female_down.png",
+      "sha256": "07653fb45025962afb50e20293d79db9a97bdeb9e1553e0de620c5f07ee8cfec",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 162,
+          "y": 74,
+          "width": 701,
+          "height": 1395,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_female_left.png",
+      "source": "人物/女主/chr_hero_female_left.png",
+      "sha256": "d678c8d8daca5d1a72d7611ecdd3e76abda8bcb002b031d8652b232972b8a47c",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 253,
+          "y": 49,
+          "width": 524,
+          "height": 1421,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_female_right.png",
+      "source": "人物/女主/chr_hero_female_right.png",
+      "sha256": "05014f7ed6fa570d47604e8db0cf1d8c3713480ff9b08568f97c598404f0ea1f",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 251,
+          "y": 41,
+          "width": 503,
+          "height": 1414,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_female_up.png",
+      "source": "人物/女主/chr_hero_female_up.png",
+      "sha256": "972d42a88f701e8e90f67d2f74507f244095b9b0c5323ba15beb00a8722267b8",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 177,
+          "y": 76,
+          "width": 670,
+          "height": 1392,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_down.png",
+      "source": "人物/居民/worker_01/chr_worker_down.png",
+      "sha256": "3183a53d4782be2d8106d5e4d8eb1d3cc5b6d8dad9265922e16420525f331626",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 186,
+          "y": 58,
+          "width": 652,
+          "height": 1410,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_left.png",
+      "source": "人物/居民/worker_01/chr_worker_left.png",
+      "sha256": "f574e3e5c737c82d5a605472c9f3b02a7963cd1a609e194576413ce71fb93746",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 299,
+          "y": 55,
+          "width": 421,
+          "height": 1400,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_right.png",
+      "source": "人物/居民/worker_01/chr_worker_right.png",
+      "sha256": "9305299f93d1cfb6d1eb335c01077dce00899fae9a4bfb6057d1687fab790f5e",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 309,
+          "y": 62,
+          "width": 406,
+          "height": 1411,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_up.png",
+      "source": "人物/居民/worker_01/chr_worker_up.png",
+      "sha256": "9d21c86094df3cd04b3bda1a19c0b89784069cdb68cdc0d372dd509758f7d086",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 187,
+          "y": 58,
+          "width": 651,
+          "height": 1429,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_02_down.png",
+      "source": "人物/居民/worker_02/chr_worker_02_down.png",
+      "sha256": "824390e7c551f0112c7ab4a1e7657ea302975ec05a8e1ca57606e25573d3435b",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 205,
+          "y": 57,
+          "width": 613,
+          "height": 1411,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_02_left.png",
+      "source": "人物/居民/worker_02/chr_worker_02_left.png",
+      "sha256": "2b70ba1bcfa97771154bc8ef529d15952f650d1f61d257e2a893b1a67743be9e",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 276,
+          "y": 50,
+          "width": 449,
+          "height": 1419,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_02_right.png",
+      "source": "人物/居民/worker_02/chr_worker_02_right.png",
+      "sha256": "c1511d6702e7e3e609ad3653ebab72f1803d92be4a9029f8a464033a561d69c9",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 311,
+          "y": 58,
+          "width": 419,
+          "height": 1400,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_02_up.png",
+      "source": "人物/居民/worker_02/chr_worker_02_up.png",
+      "sha256": "e928d066c1ccc1734893b2d362b25a8d8a8aa7e59455c12726047e5a67305d31",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 207,
+          "y": 68,
+          "width": 611,
+          "height": 1394,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_03_down.png",
+      "source": "人物/居民/worker_03/chr_worker_03_down.png",
+      "sha256": "e6d6b9a17c933c2b8e5c1a15963273dfd026e531897cafdc19dca6b1e1600c87",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 170,
+          "y": 59,
+          "width": 685,
+          "height": 1412,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_03_left.png",
+      "source": "人物/居民/worker_03/chr_worker_03_left.png",
+      "sha256": "f8d380d6b877bea0fcfb15174b77b3a2c9e82454b4d0b2f4115f90768c4e0d4a",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 310,
+          "y": 57,
+          "width": 412,
+          "height": 1416,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_03_right.png",
+      "source": "人物/居民/worker_03/chr_worker_03_right.png",
+      "sha256": "ff9ce61cf4a1c76844be36169d6a844eb726003d2c808491b9e486d0d101677f",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 323,
+          "y": 54,
+          "width": 379,
+          "height": 1419,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_03_up.png",
+      "source": "人物/居民/worker_03/chr_worker_03_up.png",
+      "sha256": "c7222cbe3ffb82eae6a4f95246e1489a9651b942a9734f3a32686c71272b657b",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 160,
+          "y": 59,
+          "width": 705,
+          "height": 1412,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_04_down.png",
+      "source": "人物/居民/worker_04/chr_worker_04_down.png",
+      "sha256": "1aa98c88aaca95ac13e740e26c7b519613ff412afb59898b6d588e91d42fa4df",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 187,
+          "y": 66,
+          "width": 649,
+          "height": 1404,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_04_left.png",
+      "source": "人物/居民/worker_04/chr_worker_04_left.png",
+      "sha256": "2df88dfd7a0ca6aa74953ed771c6906b651ef0828a305077250e44d37cec49d0",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 283,
+          "y": 28,
+          "width": 454,
+          "height": 1448,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_04_right.png",
+      "source": "人物/居民/worker_04/chr_worker_04_right.png",
+      "sha256": "44d30da166bd0f6a1bd94614db58035df150769188110596903d1f060a6387e3",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 298,
+          "y": 45,
+          "width": 408,
+          "height": 1432,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_worker_04_up.png",
+      "source": "人物/居民/worker_04/chr_worker_04_up.png",
+      "sha256": "293f13b28d852e278a8fccb069952e435d23ad4a7a59fbbc3c3085a362f9c3a3",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 191,
+          "y": 66,
+          "width": 644,
+          "height": 1395,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_down.png",
+      "source": "人物/男主/chr_hero_down.png",
+      "sha256": "302a1671a85a5a9aebd72a2e0b7797ecc6a31afd8695a3e71359c6e84c003001",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 137,
+          "y": 68,
+          "width": 752,
+          "height": 1395,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_left.png",
+      "source": "人物/男主/chr_hero_left.png",
+      "sha256": "e87c6d813785c17beb37869f14788861cbc47954f4203f23f80e2dc0d4c46572",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 247,
+          "y": 42,
+          "width": 545,
+          "height": 1420,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_right.png",
+      "source": "人物/男主/chr_hero_right.png",
+      "sha256": "70fe9048dd0ea6823ea86504a3858b13f7b5855702b5a9d0a5fbeb1cbf6f4696",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 253,
+          "y": 50,
+          "width": 508,
+          "height": 1409,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Characters/chr_hero_up.png",
+      "source": "人物/男主/chr_hero_up.png",
+      "sha256": "3822d06460248909cb8d5726f18077dac265f688e5f2cc20378e5e0c6d7ad451",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 137,
+          "y": 75,
+          "width": 750,
+          "height": 1388,
+          "pivotX": 0.5,
+          "pivotY": 0.035
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_cave_bedrock_v1.png",
+      "source": "场景/洞穴地面/env_cave_bedrock_v1.png",
+      "sha256": "4cddf7f548da8c9926f2367404dac623a4277e2321731cc588febedb95af900f",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "tile_0",
+          "x": 0,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_1",
+          "x": 314,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_2",
+          "x": 627,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_3",
+          "x": 940,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_4",
+          "x": 0,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_5",
+          "x": 314,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_6",
+          "x": 627,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_7",
+          "x": 940,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_8",
+          "x": 0,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_9",
+          "x": 314,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_10",
+          "x": 627,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_11",
+          "x": 940,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_12",
+          "x": 0,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_13",
+          "x": 314,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_14",
+          "x": 627,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_15",
+          "x": 940,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_cave_compacted_v1.png",
+      "source": "场景/洞穴地面/env_cave_compacted_v1.png",
+      "sha256": "c1537c189286afc154e8012726cd6c43a0e43b61647ad8658f3cc1493926d2f4",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "tile_0",
+          "x": 0,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_1",
+          "x": 314,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_2",
+          "x": 627,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_3",
+          "x": 940,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_4",
+          "x": 0,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_5",
+          "x": 314,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_6",
+          "x": 627,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_7",
+          "x": 940,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_8",
+          "x": 0,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_9",
+          "x": 314,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_10",
+          "x": 627,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_11",
+          "x": 940,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_12",
+          "x": 0,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_13",
+          "x": 314,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_14",
+          "x": 627,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_15",
+          "x": 940,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_cave_gravel_v1.png",
+      "source": "场景/洞穴地面/env_cave_gravel_v1.png",
+      "sha256": "9f7c61e8579759d9c94d2ece85b88806f155828ed1d117288d2e273e327c1e0e",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "tile_0",
+          "x": 0,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_1",
+          "x": 314,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_2",
+          "x": 627,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_3",
+          "x": 940,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_4",
+          "x": 0,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_5",
+          "x": 314,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_6",
+          "x": 627,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_7",
+          "x": 940,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_8",
+          "x": 0,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_9",
+          "x": 314,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_10",
+          "x": 627,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_11",
+          "x": 940,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_12",
+          "x": 0,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_13",
+          "x": 314,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_14",
+          "x": 627,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_15",
+          "x": 940,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_old_housing_south_unpowered.png",
+      "source": "场景/首区基础/bld_old_housing_south_unpowered.png",
+      "sha256": "78afe7ae5a79029f2f3c980b7c64665365172e6802bbf11cd3db6a12176ac72e",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 190,
+          "y": 143,
+          "width": 875,
+          "height": 942,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_old_warehouse_south_idle.png",
+      "source": "场景/首区基础/bld_old_warehouse_south_idle.png",
+      "sha256": "584ce4a919936e44fb1abc258aa533a24ba6069e065c74036b2511cf5b8abd32",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 134,
+          "y": 136,
+          "width": 987,
+          "height": 940,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_streetlamp_unpowered.png",
+      "source": "场景/首区基础/bld_streetlamp_unpowered.png",
+      "sha256": "1376c1fe4fc23c74859c7e82bc1963af33029b0602aa83750ee4e546e9bc454d",
+      "width": 1024,
+      "height": 1536,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 346,
+          "y": 115,
+          "width": 501,
+          "height": 1234,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_hole_east.png",
+      "source": "场景/首区基础/env_hole_east.png",
+      "sha256": "db6108278f591e97d4a7d5dbe61ebb0975a2075bc5f69da85bd467d4b2f83910",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 230,
+          "y": 258,
+          "width": 804,
+          "height": 711,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_waste_metal_high.png",
+      "source": "场景/首区基础/env_waste_metal_high.png",
+      "sha256": "66d2bf401176a1c4aba4c490bb98846265ccfc0c0a6bbaeb71ad0c4b76026f08",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 137,
+          "y": 170,
+          "width": 1005,
+          "height": 801,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_waste_metal_low.png",
+      "source": "场景/首区基础/env_waste_metal_low.png",
+      "sha256": "8659867bfa259b6957d9bd2058db717f60f4a1c7117eac6c678be80e3bb86015",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 235,
+          "y": 316,
+          "width": 813,
+          "height": 504,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_waste_mixed_high.png",
+      "source": "场景/首区基础/env_waste_mixed_high.png",
+      "sha256": "0f0aa74479c78a10e4f6cfb039f1421ba852c08b508aa80351906a18ca1f05a0",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 111,
+          "y": 151,
+          "width": 1064,
+          "height": 905,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_waste_mixed_low.png",
+      "source": "场景/首区基础/env_waste_mixed_low.png",
+      "sha256": "f1b8ca528a6c4dda11d65c55ef7bf96315813ebf8f7b1209de53010524c8d87f",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 229,
+          "y": 303,
+          "width": 834,
+          "height": 537,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_waste_wood_high.png",
+      "source": "场景/首区基础/env_waste_wood_high.png",
+      "sha256": "02bfe412189ce52a3dac2781215b208c902675ce44a12e1c7425f1ddeb1b62ed",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 202,
+          "y": 254,
+          "width": 850,
+          "height": 663,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_waste_wood_low.png",
+      "source": "场景/首区基础/env_waste_wood_low.png",
+      "sha256": "3f178dfe5cc7a4df2382f98504b7519b7065a7b88d48e935cecdc57efd72847c",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 261,
+          "y": 347,
+          "width": 744,
+          "height": 423,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/UI/GameCover.png",
+      "source": "宣传/喂——出来_头图_v1.png",
+      "sha256": "9a6fb92693114f80400aff3c68f1ef9b02f3b3b5971fdd0482cd8cddd829e557",
+      "width": 1672,
+      "height": 941,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 0,
+          "y": 0,
+          "width": 1672,
+          "height": 941,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_auto_plastic_preprocessing_idle.png",
+      "source": "机器/生产设备/bld_auto_plastic_preprocessing_idle.png",
+      "sha256": "82e4a368b0f35eaa35d9d84cefef3179a9394a9ae2cc3d5f33ac5faa840e5336",
+      "width": 1086,
+      "height": 1448,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 192,
+          "y": 108,
+          "width": 704,
+          "height": 1238,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_auto_plastic_reprocessing_idle.png",
+      "source": "机器/生产设备/bld_auto_plastic_reprocessing_idle.png",
+      "sha256": "f1a6cbdb0f4fe632b216caa8b08a0bb6a1aa09d2b6e996d496089e4f4eb1db15",
+      "width": 1086,
+      "height": 1448,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 189,
+          "y": 64,
+          "width": 751,
+          "height": 1346,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_auto_structural_parts_idle.png",
+      "source": "机器/生产设备/bld_auto_structural_parts_idle.png",
+      "sha256": "a3f9ed4574b5ee02e136f028836785ecdee45f0db67f346fb79d9231f105bc46",
+      "width": 1086,
+      "height": 1448,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 168,
+          "y": 91,
+          "width": 846,
+          "height": 1285,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_automatic_woodwork_idle.png",
+      "source": "机器/生产设备/bld_automatic_woodwork_idle.png",
+      "sha256": "0529b06c7f021aa8ef99d85589a015965fd10b32011996f5a4704acc2fd9ecf7",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 98,
+          "y": 106,
+          "width": 1044,
+          "height": 1065,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_composting_idle.png",
+      "source": "机器/生产设备/bld_composting_idle.png",
+      "sha256": "f16c1a93cfa2719f343d877587722c8a298be7586fe890edc05a859b22070dab",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 171,
+          "y": 131,
+          "width": 913,
+          "height": 989,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_disassembly_idle.png",
+      "source": "机器/生产设备/bld_disassembly_idle.png",
+      "sha256": "2e1504bdd6beaf922ba5764a7080140988e923c8c04faa8afbf8f71eac5ccfe3",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 152,
+          "y": 149,
+          "width": 950,
+          "height": 946,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_electric_woodwork_idle.png",
+      "source": "机器/生产设备/bld_electric_woodwork_idle.png",
+      "sha256": "bc5304e6d6f5a575579303f3d5ebda2890e7859d4c246e6cd310353673f28fea",
+      "width": 1536,
+      "height": 1024,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 68,
+          "y": 89,
+          "width": 1418,
+          "height": 856,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_generator_idle.png",
+      "source": "机器/生产设备/bld_generator_idle.png",
+      "sha256": "7fcd4dc852417e85b097e242d1330e7ccb164f0773739cdaf8c2e36e4e9eb569",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 82,
+          "y": 187,
+          "width": 1102,
+          "height": 958,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_grow_light_idle.png",
+      "source": "机器/生产设备/bld_grow_light_idle.png",
+      "sha256": "930d8afadb58c1a2a839b1ffafbab2d46f25dcdb7dc5258f79116004f472a80b",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 302,
+          "y": 227,
+          "width": 650,
+          "height": 768,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_growing_bed_idle.png",
+      "source": "机器/生产设备/bld_growing_bed_idle.png",
+      "sha256": "cabb5de2064f45af4ec3db957f9e2e97b9c49d795deac4642fd11b17e73f7ec1",
+      "width": 1278,
+      "height": 1230,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 153,
+          "y": 111,
+          "width": 972,
+          "height": 998,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_metal_parts_idle.png",
+      "source": "机器/生产设备/bld_metal_parts_idle.png",
+      "sha256": "12396294f77e4db18674033fc52d6b3fd48333c48080842e821841aa39a02ce5",
+      "width": 1278,
+      "height": 1230,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 142,
+          "y": 65,
+          "width": 1010,
+          "height": 1108,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_metal_processing_idle.png",
+      "source": "机器/生产设备/bld_metal_processing_idle.png",
+      "sha256": "9b1f9c35e84aa8b123fa241c7f78fae377cc7f5afc6d86f7c016aa9397f269d9",
+      "width": 1293,
+      "height": 1217,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 129,
+          "y": 80,
+          "width": 1056,
+          "height": 1041,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_plastic_preprocessing_idle.png",
+      "source": "机器/生产设备/bld_plastic_preprocessing_idle.png",
+      "sha256": "caa07a8296ed45a5e52bd225abfb0c87f36780249cbaafa6bb89a4b369f0c94e",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 83,
+          "y": 126,
+          "width": 1087,
+          "height": 1016,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_plastic_reprocessing_idle.png",
+      "source": "机器/生产设备/bld_plastic_reprocessing_idle.png",
+      "sha256": "d68c68f1ad707ebdf0e857cb9f9fd64bdb4d51a04b35640c147d53ef9ffd3de2",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 103,
+          "y": 115,
+          "width": 1046,
+          "height": 1031,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_plastic_sorting_idle.png",
+      "source": "机器/生产设备/bld_plastic_sorting_idle.png",
+      "sha256": "2f37be5d807a36b0567f26dba465d43d2d0a89969abe9a8a9b5b027b8176a130",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 199,
+          "y": 169,
+          "width": 857,
+          "height": 921,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_refurbishment_idle.png",
+      "source": "机器/生产设备/bld_refurbishment_idle.png",
+      "sha256": "1bf8cb22c8f26032d0aa4dd65d417b089833b8c22d8a765a8a2614db5ef5de50",
+      "width": 1536,
+      "height": 1024,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 147,
+          "y": 131,
+          "width": 1263,
+          "height": 740,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_substrate_mixing_idle.png",
+      "source": "机器/生产设备/bld_substrate_mixing_idle.png",
+      "sha256": "38443740f2eaef877cb9fd3553004f980687020c12f6775249daa62faf046f23",
+      "width": 1272,
+      "height": 1236,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 203,
+          "y": 116,
+          "width": 955,
+          "height": 983,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_washing_idle.png",
+      "source": "机器/生产设备/bld_washing_idle.png",
+      "sha256": "917055817e33b8585ed4e416def16b97a8a025d61e7411908e0d82a25a382996",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 194,
+          "y": 158,
+          "width": 866,
+          "height": 933,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_wire_manufacturing_idle.png",
+      "source": "机器/生产设备/bld_wire_manufacturing_idle.png",
+      "sha256": "7e1abea40ee1de8f444685fc049713396c08a888b7fea8902e150f9bcd10b2d2",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 159,
+          "y": 167,
+          "width": 937,
+          "height": 910,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_woodwork_loaded.png",
+      "source": "机器/生产设备/bld_woodwork_loaded.png",
+      "sha256": "373b6711353e3a7a8c5394ae1332ac481d11cccf7f89113aee815b3e80c2ad27",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 219,
+          "y": 243,
+          "width": 816,
+          "height": 768,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_workbench_idle.png",
+      "source": "机器/生产设备/bld_workbench_idle.png",
+      "sha256": "204f363caabf5d91493869e8709250312cc3a51c3978ce90525d91c72780c57f",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 184,
+          "y": 143,
+          "width": 886,
+          "height": 924,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Atlases/atlas_items_core_v1.png",
+      "source": "补充贴图_20261012/atlas_items_core_v1.png",
+      "sha256": "4b5b7fd4c65ca0d9e29f000471142f7b5896fe61368bde78b14832eea44a2d7d",
+      "width": 1448,
+      "height": 1086,
+      "sprites": [
+        {
+          "name": "waste_wood",
+          "x": 42,
+          "y": 741,
+          "width": 313,
+          "height": 287,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "boards",
+          "x": 404,
+          "y": 740,
+          "width": 319,
+          "height": 264,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "wood_chips",
+          "x": 759,
+          "y": 740,
+          "width": 307,
+          "height": 223,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "fasteners",
+          "x": 1124,
+          "y": 751,
+          "width": 283,
+          "height": 251,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "steel_parts",
+          "x": 42,
+          "y": 384,
+          "width": 320,
+          "height": 317,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "wire",
+          "x": 362,
+          "y": 379,
+          "width": 345,
+          "height": 281,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "thermal_module",
+          "x": 741,
+          "y": 362,
+          "width": 320,
+          "height": 343,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "generator_module",
+          "x": 1091,
+          "y": 444,
+          "width": 321,
+          "height": 195,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "handsaw",
+          "x": 26,
+          "y": 95,
+          "width": 336,
+          "height": 253,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "food",
+          "x": 362,
+          "y": 76,
+          "width": 352,
+          "height": 266,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "water",
+          "x": 848,
+          "y": 48,
+          "width": 135,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "money",
+          "x": 1110,
+          "y": 82,
+          "width": 287,
+          "height": 248,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Atlases/atlas_items_extra_v1.png",
+      "source": "补充贴图_20261012/atlas_items_extra_v1.png",
+      "sha256": "4c1cbf8eed4ecb18ae78093339abae5ab6c61e097a76fdfe928976ebecab0cf0",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "copper_parts",
+          "x": 69,
+          "y": 874,
+          "width": 322,
+          "height": 288,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "soap",
+          "x": 480,
+          "y": 877,
+          "width": 300,
+          "height": 248,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "waste_textile",
+          "x": 865,
+          "y": 877,
+          "width": 340,
+          "height": 248,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "old_clothes",
+          "x": 52,
+          "y": 469,
+          "width": 357,
+          "height": 327,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "hammer",
+          "x": 466,
+          "y": 473,
+          "width": 338,
+          "height": 323,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "screwdriver",
+          "x": 879,
+          "y": 465,
+          "width": 324,
+          "height": 331,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "wrench",
+          "x": 67,
+          "y": 80,
+          "width": 325,
+          "height": 325,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "scissors",
+          "x": 460,
+          "y": 69,
+          "width": 339,
+          "height": 335,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "sewing",
+          "x": 890,
+          "y": 93,
+          "width": 313,
+          "height": 275,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Atlases/atlas_logistics_v1.png",
+      "source": "补充贴图_20261012/atlas_logistics_v1.png",
+      "sha256": "5ea602cf10ab4e58f4660d63de9dfdc35bda9a2f71c544858db87993127d9083",
+      "width": 1536,
+      "height": 1024,
+      "sprites": [
+        {
+          "name": "straight",
+          "x": 197,
+          "y": 568,
+          "width": 192,
+          "height": 378,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "corner",
+          "x": 598,
+          "y": 568,
+          "width": 323,
+          "height": 378,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "merge",
+          "x": 1063,
+          "y": 568,
+          "width": 331,
+          "height": 378,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "crossing",
+          "x": 78,
+          "y": 88,
+          "width": 414,
+          "height": 385,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "inlet",
+          "x": 669,
+          "y": 88,
+          "width": 228,
+          "height": 364,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "outlet",
+          "x": 1164,
+          "y": 88,
+          "width": 222,
+          "height": 365,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Atlases/atlas_power_lines_v1.png",
+      "source": "补充贴图_20261012/atlas_power_lines_v1.png",
+      "sha256": "5cf66dabad83286c20272d65ed8fd83add27a85f661333ba5c3d84293d7857a9",
+      "width": 1536,
+      "height": 1024,
+      "sprites": [
+        {
+          "name": "straight",
+          "x": 50,
+          "y": 663,
+          "width": 438,
+          "height": 97,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "corner",
+          "x": 588,
+          "y": 616,
+          "width": 354,
+          "height": 316,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "terminal",
+          "x": 1048,
+          "y": 630,
+          "width": 323,
+          "height": 144,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tee",
+          "x": 34,
+          "y": 154,
+          "width": 450,
+          "height": 324,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "cross",
+          "x": 547,
+          "y": 71,
+          "width": 442,
+          "height": 420,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Atlases/atlas_work_status_v1.png",
+      "source": "补充贴图_20261012/atlas_work_status_v1.png",
+      "sha256": "714c79dd0d34745409216c8188bd3e1a706232298c01e518fc1d36458386e271",
+      "width": 1774,
+      "height": 887,
+      "sprites": [
+        {
+          "name": "needs_materials",
+          "x": 60,
+          "y": 468,
+          "width": 355,
+          "height": 329,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "needs_tool",
+          "x": 478,
+          "y": 467,
+          "width": 332,
+          "height": 364,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "output_blocked",
+          "x": 924,
+          "y": 463,
+          "width": 359,
+          "height": 356,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "unreachable",
+          "x": 1388,
+          "y": 463,
+          "width": 335,
+          "height": 333,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "paused",
+          "x": 109,
+          "y": 88,
+          "width": 221,
+          "height": 281,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "needs_fuel",
+          "x": 527,
+          "y": 54,
+          "width": 360,
+          "height": 353,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "needs_power",
+          "x": 887,
+          "y": 59,
+          "width": 443,
+          "height": 348,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_mine_idle_v1.png",
+      "source": "补充贴图_20261012/bld_mine_idle_v1.png",
+      "sha256": "af679c37d8d661030c6ceeb53a77d87fee689b8deaeab55794460847450ec3c2",
+      "width": 1267,
+      "height": 1241,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 142,
+          "y": 116,
+          "width": 1049,
+          "height": 1032,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Buildings/bld_survey_idle_v1.png",
+      "source": "补充贴图_20261012/bld_survey_idle_v1.png",
+      "sha256": "ca12650c65884da0d641f8a439bd73a09a6795066d88a16750a106b08e15edd8",
+      "width": 1295,
+      "height": 1215,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 199,
+          "y": 85,
+          "width": 905,
+          "height": 1100,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Environment/env_ground_plain_v1.png",
+      "source": "补充贴图_20261012/env_ground_plain_v1.png",
+      "sha256": "ff260d91273e5c024a93bcd759d300db3a11a77968c21b05903ffbe93f4bcaa9",
+      "width": 1254,
+      "height": 1254,
+      "sprites": [
+        {
+          "name": "tile_0",
+          "x": 0,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_1",
+          "x": 314,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_2",
+          "x": 627,
+          "y": 0,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_3",
+          "x": 940,
+          "y": 0,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_4",
+          "x": 0,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_5",
+          "x": 314,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_6",
+          "x": 627,
+          "y": 314,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_7",
+          "x": 940,
+          "y": 314,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_8",
+          "x": 0,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_9",
+          "x": 314,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_10",
+          "x": 627,
+          "y": 627,
+          "width": 313,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_11",
+          "x": 940,
+          "y": 627,
+          "width": 314,
+          "height": 313,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_12",
+          "x": 0,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_13",
+          "x": 314,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_14",
+          "x": 627,
+          "y": 940,
+          "width": 313,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        },
+        {
+          "name": "tile_15",
+          "x": 940,
+          "y": 940,
+          "width": 314,
+          "height": 314,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    },
+    {
+      "path": "Assets/_Game/Art/Local/Vehicles/veh_return_lift_idle_v1.png",
+      "source": "补充贴图_20261012/veh_return_lift_idle_v1.png",
+      "sha256": "1472a4f9ea24e39ac3375dcd084fc2637e6abb053c5dfc1f94304be1071ab5fd",
+      "width": 1536,
+      "height": 1024,
+      "sprites": [
+        {
+          "name": "default",
+          "x": 158,
+          "y": 123,
+          "width": 1253,
+          "height": 785,
+          "pivotX": 0.5,
+          "pivotY": 0.5
+        }
+      ]
+    }
+  ]
+}

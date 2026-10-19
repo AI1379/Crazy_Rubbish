@@ -38,7 +38,14 @@ $metadata = [ordered]@{
 }
 $metadataPath = Join-Path $buildRoot 'build-info.json'
 [System.IO.File]::WriteAllText($metadataPath, ($metadata | ConvertTo-Json), [System.Text.UTF8Encoding]::new($false))
-[System.IO.Compression.ZipFile]::CreateFromDirectory($buildRoot, $packagePath, [System.IO.Compression.CompressionLevel]::Optimal, $false)
+$archive=[System.IO.Compression.ZipFile]::Open($packagePath,[System.IO.Compression.ZipArchiveMode]::Create)
+try {
+    foreach($file in Get-ChildItem -LiteralPath $buildRoot -Recurse -File){
+        $relative=$file.FullName.Substring($buildRoot.Length+1).Replace('\','/')
+        if($file.Extension -ieq '.pdb' -or $relative -match '(?i)(?:^|/)[^/]*(?:DoNotShip|ButDontShip)[^/]*(?:/|$)'){continue}
+        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive,$file.FullName,$relative,[System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+    }
+} finally {$archive.Dispose()}
 $zip = [System.IO.Compression.ZipFile]::OpenRead($packagePath)
 try {
     $entries = @($zip.Entries | ForEach-Object { $_.FullName.Replace('\', '/') })

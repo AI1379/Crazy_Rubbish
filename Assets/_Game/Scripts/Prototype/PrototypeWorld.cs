@@ -26,7 +26,10 @@ namespace CrazyRubbish.Prototype
         private readonly List<CellView> cells = new List<CellView>();
         private readonly List<TextMesh> secondaryLabels = new List<TextMesh>();
         [SerializeField] private int layoutVersion;
-        public bool HasCurrentLayout => HasLayout && layoutVersion == 2;
+        [SerializeField] private string artVersion;
+        public bool HasCurrentLayout => HasLayout && layoutVersion == 3 && artVersion == game.appearance.localArtVersion;
+        private readonly Dictionary<Transform, ActorView> actors = new Dictionary<Transform, ActorView>();
+        private sealed class ActorView { public Vector3 Position; public int Facing; public bool Initialized; public double LastMoved = -1; }
 
         private sealed class PileView
         { public GameObject Root; public SpriteRenderer Icon, Highlight, Badge; public TextMesh Count; }
@@ -49,8 +52,12 @@ namespace CrazyRubbish.Prototype
 
         public void BuildLayout(PrototypeSimulation model)
         {
-            if (HasLayout) { ConfigureLabels(); return; }
-            layoutVersion = 2;
+            if (HasCurrentLayout) { ConfigureLabels(); return; }
+            if (visualRoot != null) RemoveView(visualRoot.gameObject);
+            piles.Clear(); cells.Clear(); residentViews.Clear(); actors.Clear();
+            previousModel = null; lastRevision = -1; tutorialTarget = null;
+            layoutVersion = 3;
+            artVersion = game.appearance.localArtVersion;
             visualRoot = new GameObject("World").transform;
             visualRoot.SetParent(transform, false);
             pileRoot = new GameObject("Ground Items").transform;
@@ -65,7 +72,8 @@ namespace CrazyRubbish.Prototype
             for (int x = 0; x < model.Settings.mapWidth; x++)
                 for (int y = 0; y < model.Settings.mapHeight; y++)
                 {
-                    var tile = Sprite($"Ground {x},{y}", game.appearance.tile, x, y, 1, -20);
+                    var tile = Sprite($"Ground {x},{y}", game.appearance.GroundTile(x, y), x, y, 1, -20);
+                    SetSpriteSize(tile, 1, 1);
                     tile.color = GroundColor(x, y);
                     floor.Add(tile);
                 }
@@ -75,30 +83,30 @@ namespace CrazyRubbish.Prototype
             StationPad("Dismantle Pad", PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY, new Color32(87, 138, 153, 255));
             StationPad("Workbench Pad", PrototypeSimulation.TableX, PrototypeSimulation.TableY, new Color32(135, 160, 113, 255));
             StationPad("Generator Pad", PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY, new Color32(192, 150, 76, 255));
-            SpriteRenderer depot = Sprite("WarehouseWhitebox", game.appearance.warehouse,
+            SpriteRenderer depot = Sprite("Warehouse", game.appearance.warehouse,
                 PrototypeSimulation.WarehouseX, 3, 2.8f, 4);
-            depot.color = new Color32(165, 194, 174, 255);
+            depot.color = Color.white;
             bench = Sprite("WoodworkBench", game.appearance.workbench,
                 PrototypeSimulation.BenchX + 0.5f, PrototypeSimulation.BenchY + 1.5f, 1.7f, 5);
             benchLabel = StationLabel("BenchLabel", "木工台", PrototypeSimulation.BenchX, PrototypeSimulation.BenchY);
-            generator = Sprite("GeneratorWhitebox", game.appearance.workbench, PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 1.5f, 1.8f, 5);
+            generator = Sprite("Generator", game.appearance.generator, PrototypeSimulation.GeneratorX + 0.5f, PrototypeSimulation.GeneratorY + 1.5f, 1.8f, 5);
             generatorLabel = StationLabel("GeneratorLabel", "发电机", PrototypeSimulation.GeneratorX, PrototypeSimulation.GeneratorY);
-            table = Sprite("TableWhitebox", game.appearance.workbench, PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 1.5f, 1.8f, 5);
+            table = Sprite("AssemblyTable", game.appearance.assemblyTable, PrototypeSimulation.TableX + 0.5f, PrototypeSimulation.TableY + 1.5f, 1.8f, 5);
             tableLabel = StationLabel("TableLabel", "工作台", PrototypeSimulation.TableX, PrototypeSimulation.TableY);
-            dismantle = Sprite("DismantleWhitebox", game.appearance.workbench, PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 1.5f, 1.8f, 5);
+            dismantle = Sprite("DismantleTable", game.appearance.dismantleTable, PrototypeSimulation.DismantleX + 0.5f, PrototypeSimulation.DismantleY + 1.5f, 1.8f, 5);
             dismantleLabel = StationLabel("DismantleLabel", "拆解台", PrototypeSimulation.DismantleX, PrototypeSimulation.DismantleY);
-            var housing = Sprite("OldHousingWhitebox", game.appearance.warehouse, PrototypeSimulation.HousingX, 3, 2.8f, 4);
-            housing.color = new Color32(214, 177, 136, 255);
+            var housing = Sprite("OldHousing", game.appearance.housing, PrototypeSimulation.HousingX, 3, 2.8f, 4);
+            housing.color = Color.white;
             Label("HousingLabel", "旧住房 · 6人", PrototypeSimulation.HousingX, 1.5f, 0.13f);
             Label("OwnedLandLabel", "建设区 / 18×18", 20, 23.8f, 0.18f, new Color32(166, 199, 169, 255));
-            var hole = Sprite("HoleWhitebox", game.appearance.tile, 2.5f, 20.5f, 1.8f, -5);
-            hole.color = new Color32(38, 43, 43, 255);
+            var hole = Sprite("Hole", game.appearance.hole, 2.5f, 20.5f, 1.8f, -5);
+            hole.color = Color.white;
             Label("HoleLabel", "洞 · 去向不明", 2.5f, 19.2f, 0.12f);
             Label("WarehouseLabel", "仓库", PrototypeSimulation.WarehouseX, 5.8f, 0.13f);
             Label("DropLabel", "来料区 / 8×6", 3.5f, 12.3f, 0.15f, new Color32(232, 185, 121, 255));
 
-            var lamp = Sprite("CommunityLamp", game.appearance.fastener, 20, 5, 0.8f, 5);
-            lamp.color = new Color32(143, 142, 112, 255);
+            var lamp = Sprite("CommunityLamp", game.appearance.lamp, 20, 5, 0.8f, 5);
+            lamp.color = Color.white;
             Label("LampLabel", "社区路灯", 20, 6, 0.11f);
             Label("MeetingPoint", "会面点", 16, -0.5f, 0.11f);
             worker = Sprite("Protagonist", game.appearance.worker, (float)model.PlayerX, (float)model.PlayerY, 1.25f, 40).transform;
@@ -153,6 +161,7 @@ namespace CrazyRubbish.Prototype
                 cells.Clear();
                 foreach (Transform view in residentViews.Values) RemoveView(view.gameObject);
                 residentViews.Clear();
+                actors.Clear();
                 previousModel = model;
                 lastRevision = -1;
             }
@@ -183,30 +192,32 @@ namespace CrazyRubbish.Prototype
                 SetSpriteSize(cell.View.Badge, detailed ? 0.42f : 0.15f, detailed ? 0.24f : 0.15f);
             }
             foreach (TextMesh label in secondaryLabels) label.gameObject.SetActive(pixelsPerCell >= 26 && LabelFitsViewport(label));
-            worker.position = new Vector3((float)model.PlayerX, (float)model.PlayerY, 0);
+            UpdateActor(worker, game.appearance.male, (float)model.PlayerX, (float)model.PlayerY,
+                model, model.State == WorkState.Working && !model.WorkerAtBench && model.SelectedRecipe != WoodRecipe.SortedWood
+                    ? "saw" : model.Interacting ? "pickup" : model.Carry.Used > 0 ? "carry" : null);
             playerLabel.transform.position = worker.position + new Vector3(0, -0.75f, 0);
             bench.color = model.BenchBuilt ? Color.white : new Color32(195, 180, 155, 130);
             benchLabel.text = "木工台";
             benchLabel.color = model.BenchBuilt ? Color.white : new Color32(212, 187, 137, 255);
-            generator.color = model.GeneratorBuilt ? new Color32(226, 165, 91, 255) : new Color32(226, 165, 91, 130);
+            generator.color = model.GeneratorBuilt ? Color.white : new Color32(255, 255, 255, 130);
             table.color = model.TableBuilt ? Color.white : new Color32(195, 180, 155, 130);
-            dismantle.color = model.DismantleBuilt ? new Color32(147, 184, 201, 255) : new Color32(147, 184, 201, 130);
+            dismantle.color = model.DismantleBuilt ? Color.white : new Color32(255, 255, 255, 130);
             generatorLabel.text = "发电机";
             tableLabel.text = "工作台";
             dismantleLabel.text = "拆解台";
             foreach (TextMesh label in new[] { benchLabel, generatorLabel, tableLabel, dismantleLabel })
                 label.gameObject.SetActive(LabelFitsViewport(label));
             foreach(int id in residentViews.Keys.Where(id=>!model.Residents.Any(r=>r.Id==id)).ToArray())
-            {RemoveView(residentViews[id].gameObject);residentViews.Remove(id);}
+            {actors.Remove(residentViews[id]);RemoveView(residentViews[id].gameObject);residentViews.Remove(id);}
             foreach (Resident resident in model.Residents)
             {
                 if (!residentViews.TryGetValue(resident.Id, out Transform view))
                 {
-                    view = Sprite("Resident_" + resident.Id, game.appearance.worker, (float)resident.X, (float)resident.Y, 1, 35).transform;
-                    view.GetComponent<SpriteRenderer>().color = new Color32(143, 200, 179, 255);
+                    view = Sprite("Resident_" + resident.Id, game.appearance.ResidentSprites(resident.Id).Get(0), (float)resident.X, (float)resident.Y, 1, 35).transform;
                     residentViews.Add(resident.Id, view);
                 }
-                view.position = new Vector3((float)resident.X, (float)resident.Y, 0);
+                string pose = resident.Cargo.Used > 0 ? "carry" : resident == model.Woodworker && model.WorkerAtBench && model.State == WorkState.Working && model.SelectedRecipe != WoodRecipe.SortedWood ? "saw" : null;
+                UpdateActor(view, game.appearance.ResidentSprites(resident.Id), (float)resident.X, (float)resident.Y, model, pose);
             }
             if(Application.isPlaying)RefreshTutorialTarget(model);
         }
@@ -264,10 +275,7 @@ namespace CrazyRubbish.Prototype
 
         private static Color GroundColor(int x, int y)
         {
-            if (x <= 7 && y >= 6 && y <= 11) return new Color32(255, 221, 163, 255);
-            if (x >= 10 && x <= 27 && y >= 6 && y <= 23) return new Color32(217, 248, 221, 255);
-            if (y >= 3 && y <= 5 && x >= 8 && x <= 23) return new Color32(238, 230, 205, 255);
-            return (x + y) % 2 == 0 ? new Color32(131, 171, 157, 255) : new Color32(138, 178, 163, 255);
+            return Color.white;
         }
 
         private void ZoneOutline(string name, float x, float y, float width, float height, Color color)
@@ -336,7 +344,7 @@ namespace CrazyRubbish.Prototype
                     plate.transform.SetParent(station.Item1.transform, true);
                 }
             }
-            layoutVersion = 2;
+            layoutVersion = 3;
         }
 
         private static void SetSpriteSize(SpriteRenderer renderer, float width, float height)
@@ -423,7 +431,8 @@ namespace CrazyRubbish.Prototype
                     view.Badge.transform.SetParent(root.transform, true);
                     piles.Add(key, view);
                 }
-                view.Icon.sprite = game.appearance.ItemSprite(pile.Item);
+                view.Icon.sprite = game.appearance.GroundSprite(pile.Item, model.GroundCapacityAt(pile.X, pile.Y) > model.Settings.pileCapacity);
+                FitSprite(view.Icon, 0.86f);
                 view.Icon.enabled = false;
                 view.Highlight.enabled = false;
                 view.Count.gameObject.SetActive(false);
@@ -444,7 +453,7 @@ namespace CrazyRubbish.Prototype
                 int types = content.Select(p => p.Item).Distinct().Count();
                 int amount = content.Sum(p => p.Amount);
                 view.Icon.enabled = true;
-                view.Icon.color = Color.white;
+                view.Icon.color = game.appearance.ItemTint(primary.Item);
                 view.Count.text = types > 1 ? "+" + (types - 1) : amount.ToString();
                 cells.Add(new CellView { X = primary.X, Y = primary.Y, Types = types, View = view });
             }
@@ -455,11 +464,38 @@ namespace CrazyRubbish.Prototype
             var obj = new GameObject(objectName);
             obj.transform.SetParent(visualRoot, false);
             obj.transform.position = new Vector3(x, y, 0);
-            obj.transform.localScale = new Vector3(scale, scale, 1);
             var renderer = obj.AddComponent<SpriteRenderer>();
             renderer.sprite = image;
             renderer.sortingOrder = order;
+            FitSprite(renderer, scale);
             return renderer;
+        }
+
+        private static void FitSprite(SpriteRenderer renderer, float size)
+        {
+            if (renderer.sprite == null) return;
+            float unitScale = size / Mathf.Max(renderer.sprite.bounds.size.x, renderer.sprite.bounds.size.y);
+            renderer.transform.localScale = new Vector3(unitScale, unitScale, 1);
+        }
+
+        private void UpdateActor(Transform view, CharacterSprites bank, float x, float y, PrototypeSimulation model, string pose)
+        {
+            if (!actors.TryGetValue(view, out ActorView actor)) actors.Add(view, actor = new ActorView());
+            Vector3 position = new Vector3(x, y, 0);
+            Vector3 delta = actor.Initialized ? position - actor.Position : Vector3.zero;
+            if (delta.sqrMagnitude > 0.000001f)
+            {
+                actor.LastMoved = model.GameSeconds;
+                actor.Facing = Mathf.Abs(delta.x) > Mathf.Abs(delta.y) ? (delta.x < 0 ? 2 : 3) : (delta.y < 0 ? 0 : 1);
+            }
+            bool moving = actor.LastMoved >= 0 && model.GameSeconds - actor.LastMoved < 0.15 && !model.Paused;
+            if (pose == "saw") actor.Facing = 1;
+            var renderer = view.GetComponent<SpriteRenderer>();
+            renderer.sprite = bank.Get(actor.Facing, pose) ?? game.appearance.worker;
+            FitSprite(renderer, view == worker ? 1.35f : 1.25f);
+            view.position = position;
+            view.localRotation = Quaternion.Euler(0, 0, moving ? Mathf.Sin((float)model.GameSeconds * 12 + x) * 4 : 0);
+            actor.Position = position; actor.Initialized = true;
         }
 
         private TextMesh Label(string objectName, string value, float x, float y, float size, Color? color = null)

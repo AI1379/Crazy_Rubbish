@@ -280,8 +280,9 @@ namespace CrazyRubbish.Tests
         }
         [Test]public void SavedSceneContainsCurrentSettingsAndPortableChineseFont()
         {
-            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Main.unity");var game=UnityEngine.Object.FindObjectOfType<PrototypeGame>();
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Main.unity");var game=UnityEngine.Object.FindObjectsOfType<PrototypeGame>(true).First();
             Assert.That(game,Is.Not.Null);Assert.That(game.appearance.font.HasCharacter('锯'),Is.True);Assert.That(game.balance.values.mapWidth,Is.EqualTo(32));Assert.That(game.balance.values.moveSpeed,Is.EqualTo(0.8f));Assert.DoesNotThrow(()=>game.balance.values.Validate());
+            var latest=UnityEngine.Object.FindObjectOfType<PlanGameController>();Assert.That(latest,Is.Not.Null);Assert.That(latest.legacyRoot.activeSelf,Is.False);Assert.That(latest.LoadConfig().version,Is.EqualTo("balance-2026-10-13-food-water-v1.1"));
         }
     }
 }
