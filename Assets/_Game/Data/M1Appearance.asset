@@ -224,6 +224,34 @@ MonoBehaviour:
   - {fileID: 21300000, guid: edd6b1ea32277e340bc6379688853365, type: 3}
   - {fileID: 21300000, guid: edd6b1ea32277e340bc6379688853365, type: 3}
   - {fileID: 21300000, guid: edd6b1ea32277e340bc6379688853365, type: 3}
+  localArtVersion: 
+  lamp: {fileID: 0}
+  assemblyTable: {fileID: 0}
+  dismantleTable: {fileID: 0}
+  gameCover: {fileID: 0}
+  woodHeapHigh: {fileID: 0}
+  metalHeap: {fileID: 0}
+  metalHeapHigh: {fileID: 0}
+  mixedHeapHigh: {fileID: 0}
+  bedrockTiles: []
+  gravelTiles: []
+  compactedTiles: []
+  caveRocks: []
+  cavePillar: {fileID: 0}
+  male:
+    idle: []
+    carry: []
+    pickup: []
+    saw: []
+  female:
+    idle: []
+    carry: []
+    pickup: []
+    saw: []
+  residents: []
+  planItems: []
+  planFacilities: []
+  planLogistics: []
   housing: {fileID: 21300000, guid: b26ba1c083caa0047948c566bb4edec7, type: 3}
   hole: {fileID: 21300000, guid: 6d0cc3a1b5c1dfa4baf5420f3d249067, type: 3}
   streetlamp: {fileID: 21300000, guid: 9a121dc585a7b7b47a6c7125d12854c8, type: 3}

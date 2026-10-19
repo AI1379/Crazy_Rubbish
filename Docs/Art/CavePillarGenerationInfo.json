@@ -1,0 +1,14 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-15",
+  "asset": "Assets/_Game/Art/Cave/cave_pillar_v1.png",
+  "originalPath": "C:/Users/snowy_light/.codex/generated_images/01a0ff85-591a-7ab1-9da6-fb4b7328e1dc/exec-4cefed60-6c74-4d3d-9b73-06166d32e952.png",
+  "prompt": "Use case: stylized-concept. Asset type: single transparent 2D pixel art game environment sprite. Primary request: a tall natural cavern stone pillar, a thick irregular stalagmite column with a broad jagged base, tapering rugged top, viewed from an overhead three-quarter camera consistent with top-down factory management game sprites. Simple low resolution pixel art, restrained charcoal grey and warm grey stone palette, several clearly readable planar rock faces, hard pixel edges, upper-left soft directional light, limited colors and no photorealism. One isolated pillar centered with generous transparent margin, whole silhouette visible. No floor tile, no scenery, no characters, no labels or text, no border, no cast shadow beyond a small contact shadow. True transparent background. Square canvas.",
+  "transparent": true,
+  "notes": "Generated PNG copied unchanged; Unity imports as a point-filtered single sprite.",
+  "sha256": "187bab830b599ab5da8ea6aa17b89fc27aa87998d9500568a8bc272aaa7df344",
+  "size": [
+    1254,
+    1254
+  ]
+}

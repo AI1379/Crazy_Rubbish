@@ -769,7 +769,7 @@ namespace CrazyRubbish.Prototype
                 throw new InvalidOperationException("Presentation changed the simulated resources.");
         }
 
-        private static void CapturePreview(string path)
+        public static void CapturePreview(string path)
         {
             Camera main = Camera.main;
             Canvas canvas = FindObjectOfType<Canvas>();

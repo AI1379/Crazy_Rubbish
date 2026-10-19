@@ -146,7 +146,7 @@ namespace CrazyRubbish.Editor
         public static void ValidateScene()
         {
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Main.unity", OpenSceneMode.Single);
-            var game = UnityEngine.Object.FindObjectOfType<PrototypeGame>();
+            var game = UnityEngine.Object.FindObjectsOfType<PrototypeGame>(true).Single();
             var world = game.GetComponent<PrototypeWorld>();
             if (!world.HasCurrentLayout || game.appearance.characters.Length != 6)
                 throw new InvalidOperationException("The saved demo art layout is incomplete.");

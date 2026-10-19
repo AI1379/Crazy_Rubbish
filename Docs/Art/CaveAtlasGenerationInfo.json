@@ -1,0 +1,11 @@
+{
+  "tool": "built-in image_gen",
+  "intent": "new transparent pixel-art cave boundary atlas",
+  "file": "cave_rocks_atlas_v1.png",
+  "sha256": "cd62176b545edb36f834ee6971f38835cede3273acfcb9c14d76af254631b270",
+  "width": 1254,
+  "height": 1254,
+  "alpha": "RGBA; verified range 0..255",
+  "sprite_layout": "2x2 quadrants,627x627 each,top-left ridge,top-right boulders,bottom-left shale,bottom-right rubble",
+  "prompt": "Use case: stylized-concept. Asset type: a production-ready TRANSPARENT sprite atlas for a simple pixel-art 2D overhead cave factory-management game. Create exactly FOUR separate natural rock clusters on a square 1024 x 1024 transparent canvas in a strict 2 by 2 grid of equal 512 x 512 cells. Each rock cluster must stay wholly inside its cell with at least 40 pixels transparent padding on every side. TOP LEFT: long low jagged limestone rock ridge with a rough irregular silhouette, for layering into cave walls; TOP RIGHT: rounded pile of cracked boulders and small loose rubble; BOTTOM LEFT: angular layered shale outcrop; BOTTOM RIGHT: smaller scattered stone pile. No ground slabs under the rocks. Brown-gray desaturated stone with dark charcoal crevices, muted warm gray highlights, slight ochre flecks, compatible with earthy underground factory-game cave floor. Strict simple crisp chunky pixel art, limited palette, visible hard square pixel edges, no smoothing, no glossy 3D rendering, no labels, no characters, no buildings, no text, no watermark, no borders or grid lines. View from directly above with just a small readable south-facing rock face, same overhead game perspective for all four pieces. Separate disconnected cutouts with real alpha transparency, no painted checkerboard. Balanced simple game sprites, not photorealism. They will be cropped at the exact 512x512 quadrant boundaries and drawn overlapping to make irregular cave map boundaries. This is a NEW atlas, not editing the reference texture. Do not add a floor background."
+}

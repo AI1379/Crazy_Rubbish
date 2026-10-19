@@ -154,7 +154,7 @@ jobs:
         shell: pwsh
         env:
           EXPECTED_VERSION: ${{ needs.metadata.outputs.build_version }}
-        run: ./Tools/CI/SmokeWindows.ps1 -ExpectedVersion $env:EXPECTED_VERSION -Automation -TimeoutSeconds 240
+        run: ./Tools/CI/SmokeWindows.ps1 -ExpectedVersion $env:EXPECTED_VERSION -TimeoutSeconds 240
       - name: Package complete player and checksum
         shell: pwsh
         env:

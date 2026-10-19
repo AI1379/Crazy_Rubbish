@@ -1,0 +1,335 @@
+{
+  "game_name": "喂——出来",
+  "competition_theme": "涌现",
+  "version": "balance-2026-10-13-food-water-v1.1",
+  "definitions": {
+    "wood": {
+      "name": "木料加工知识",
+      "cash": 60,
+      "items": [
+        "boards",
+        "wood_handle",
+        "sorted_wood"
+      ],
+      "market_groups": [
+        "boards",
+        "sorted_wood",
+        "wood_handle"
+      ],
+      "requires_technologies": [
+        "manual_wood"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "textile": {
+      "name": "纺织处理知识",
+      "cash": 50,
+      "items": [
+        "clothes",
+        "clean_rag",
+        "washed_textile",
+        "fabric_panel"
+      ],
+      "market_groups": [
+        "clean_rag",
+        "clothes",
+        "fabric_panel",
+        "washed_textile"
+      ],
+      "requires_technologies": [
+        "washing",
+        "workbench"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "metal": {
+      "name": "金属加工知识",
+      "cash": 100,
+      "items": [
+        "steel_billet",
+        "steel_parts",
+        "copper_billet",
+        "copper_parts",
+        "aluminum_billet",
+        "aluminum_parts",
+        "mined_steel_billet",
+        "mined_copper_billet"
+      ],
+      "market_groups": [
+        "aluminum_billet",
+        "aluminum_parts",
+        "copper_billet",
+        "copper_parts",
+        "steel_billet",
+        "steel_parts"
+      ],
+      "requires_technologies": [
+        "metal_raw",
+        "metal_parts"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "tools": {
+      "name": "工具制造知识",
+      "cash": 80,
+      "items": [
+        "tool_steel_billet",
+        "hammer_head",
+        "handsaw_blade",
+        "screwdriver_shaft",
+        "hammer_wood",
+        "hammer_plastic",
+        "handsaw_wood",
+        "handsaw_plastic",
+        "screwdriver_wood",
+        "screwdriver_plastic"
+      ],
+      "market_groups": [
+        "hammer_head",
+        "hammer_plastic",
+        "hammer_wood",
+        "handsaw_blade",
+        "handsaw_plastic",
+        "handsaw_wood",
+        "screwdriver_plastic",
+        "screwdriver_shaft",
+        "screwdriver_wood",
+        "tool_steel_billet"
+      ],
+      "requires_technologies": [
+        "tool_steel"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "plastic": {
+      "name": "基础塑料知识",
+      "cash": 80,
+      "items": [
+        "resin_pp",
+        "resin_hdpe",
+        "resin_pet",
+        "plastic_handle",
+        "storage_box"
+      ],
+      "market_groups": [
+        "plastic_handle",
+        "resin_hdpe",
+        "resin_pet",
+        "resin_pp",
+        "storage_box"
+      ],
+      "requires_technologies": [
+        "plastic_remake"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "agriculture": {
+      "name": "栽培知识",
+      "cash": 40,
+      "items": [
+        "food",
+        "sprouts",
+        "tubers",
+        "seed_tuber"
+      ],
+      "market_groups": [
+        "food",
+        "seed_tuber",
+        "sprouts",
+        "tubers"
+      ],
+      "requires_technologies": [
+        "growing"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "pet": {
+      "name": "PET工艺知识",
+      "cash": 100,
+      "items": [
+        "sorted_pet",
+        "flakes_pet",
+        "resin_pet",
+        "pet_strap"
+      ],
+      "market_groups": [
+        "flakes_pet",
+        "pet_strap",
+        "resin_pet",
+        "sorted_pet"
+      ],
+      "requires_technologies": [
+        "pet"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "wire": {
+      "name": "制线知识",
+      "cash": 80,
+      "items": [
+        "wire"
+      ],
+      "market_groups": [
+        "wire"
+      ],
+      "requires_technologies": [
+        "wire"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "refurbish": {
+      "name": "机电翻修知识",
+      "cash": 60,
+      "items": [
+        "motor",
+        "drive"
+      ],
+      "market_groups": [
+        "drive",
+        "motor"
+      ],
+      "requires_technologies": [
+        "refurbish"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "compost": {
+      "name": "堆肥及基质知识",
+      "cash": 40,
+      "items": [
+        "compost",
+        "substrate"
+      ],
+      "market_groups": [
+        "compost",
+        "substrate"
+      ],
+      "requires_technologies": [
+        "compost",
+        "substrate"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "paper": {
+      "name": "制纸知识",
+      "cash": 60,
+      "items": [
+        "paper_pulp",
+        "paperboard",
+        "carton"
+      ],
+      "market_groups": [
+        "carton",
+        "paper_pulp",
+        "paperboard"
+      ],
+      "requires_technologies": [
+        "paperboard"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "glass": {
+      "name": "玻璃处理知识",
+      "cash": 80,
+      "items": [
+        "cullet",
+        "glass_product"
+      ],
+      "market_groups": [
+        "cullet",
+        "glass_product"
+      ],
+      "requires_technologies": [
+        "glass"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "electromechanical": {
+      "name": "机电组装知识",
+      "cash": 100,
+      "items": [
+        "motor",
+        "drive",
+        "controller",
+        "coil",
+        "generator_module",
+        "feeder"
+      ],
+      "market_groups": [
+        "coil",
+        "controller",
+        "drive",
+        "feeder",
+        "generator_module",
+        "motor"
+      ],
+      "requires_technologies": [
+        "electromechanical"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "complex": {
+      "name": "复合料处理知识",
+      "cash": 60,
+      "items": [
+        "mechanical_filler"
+      ],
+      "market_groups": [
+        "mechanical_filler"
+      ],
+      "requires_technologies": [
+        "complex"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    },
+    "mineral": {
+      "name": "矿物加工知识",
+      "cash": 100,
+      "items": [
+        "mined_steel_billet",
+        "mined_copper_billet",
+        "ceramic_insulator"
+      ],
+      "market_groups": [
+        "ceramic_insulator",
+        "copper_billet",
+        "steel_billet"
+      ],
+      "requires_technologies": [
+        "ore_furnace",
+        "ceramics"
+      ],
+      "uses": 1,
+      "permanent_floor": true,
+      "removes_knowledge": false
+    }
+  }
+}

@@ -9,6 +9,35 @@ namespace CrazyRubbish.Prototype
         public Sprite worker, wasteWood, mixedPlastic, fastener, saw, plank, woodHandle, warehouse, workbench, tile;
         public Sprite marker;
         public Sprite[] itemIcons;
+        public string localArtVersion;
+        public Sprite lamp, assemblyTable, dismantleTable, gameCover;
+        public Sprite woodHeapHigh, metalHeap, metalHeapHigh, mixedHeapHigh;
+        public Sprite[] bedrockTiles, gravelTiles, compactedTiles;
+        public Sprite[] caveRocks;
+        public Sprite cavePillar;
+        public PlanCharacterSprites male = new PlanCharacterSprites(), female = new PlanCharacterSprites();
+        public PlanCharacterSprites[] residents;
+        public NamedPlanSprite[] planItems,planFacilities,planLogistics;
+        public Sprite PlanSprite(string id,bool facility=false)
+        {
+            var bank=facility?planFacilities:planItems;
+            if(bank!=null)foreach(var entry in bank)if(entry.id==id)return entry.sprite;
+            return facility?workbench:mixedPlastic;
+        }
+
+        public Sprite GroundTile(int x, int y)
+        {
+            var tiles = x <= 7 && y >= 6 && y <= 11 ? gravelTiles
+                : (x >= 10 && x <= 27 && y >= 6 && y <= 23) || (y >= 3 && y <= 5) ? compactedTiles : bedrockTiles;
+            return tiles != null && tiles.Length == 16 ? tiles[(y % 4) * 4 + x % 4] : tile;
+        }
+
+        public PlanCharacterSprites ResidentSprites(int id) => residents != null && residents.Length > 0
+            ? residents[Mathf.Abs(id - 1) % residents.Length] : male;
+
+        public Color ItemTint(ItemId item) => item == ItemId.PowerAsh ? new Color32(150, 150, 150, 255) : Color.white;
+
+
         public Sprite housing, hole, streetlamp, woodwork, generator, dismantle;
         public Sprite electricWoodwork,automaticWoodwork,conveyor,conveyorCrossing,inputPort,outputPort;
         public Sprite wasteWoodLow, wasteWoodHigh, wasteMetalLow, wasteMetalHigh, wasteMixedLow, wasteMixedHigh;
@@ -56,6 +85,20 @@ namespace CrazyRubbish.Prototype
                 case ItemId.SteelMaterial: case ItemId.CopperMaterial: return fastener;
                 default: return ItemCatalog.IsTool(item) ? saw : mixedPlastic;
             }
+        }
+    }
+    [System.Serializable] public sealed class NamedPlanSprite { public string id;public Sprite sprite; }
+
+    // Plan uses down, up, left, right; the legacy nested type keeps up, down, left, right.
+    [System.Serializable]
+    public sealed class PlanCharacterSprites
+    {
+        public Sprite[] idle, carry, pickup, saw;
+        public Sprite Get(int facing, string pose = null)
+        {
+            Sprite[] bank = pose == "carry" ? carry : pose == "pickup" ? pickup : pose == "saw" ? saw : idle;
+            if (bank != null && bank.Length > facing && bank[facing] != null) return bank[facing];
+            return idle != null && idle.Length > facing ? idle[facing] : null;
         }
     }
 }

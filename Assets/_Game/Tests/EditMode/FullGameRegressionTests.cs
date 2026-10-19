@@ -19,7 +19,10 @@ namespace CrazyRubbish.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Main.unity");
             try
             {
-                var game=UnityEngine.Object.FindObjectOfType<PrototypeGame>();
+                var plan=UnityEngine.Object.FindObjectOfType<PlanGameController>();
+                if(plan!=null)plan.gameObject.SetActive(false);
+                var game=UnityEngine.Object.FindObjectsOfType<PrototypeGame>(true).Single();
+                game.gameObject.SetActive(true);
                 var hud=game.GetComponent<PrototypeHud>();
                 Assert.That(hud.HasLayout,Is.True,"exercise the serialized scene layout upgrade");
                 typeof(PrototypeGame).GetMethod("Awake",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(game,null);

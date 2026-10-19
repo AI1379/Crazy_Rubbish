@@ -1,0 +1,1230 @@
+{
+  "game_name": "喂——出来",
+  "competition_theme": "涌现",
+  "version": "balance-2026-10-13-food-water-v1.1",
+  "status": "食物与水v1.1首版调参；未在Unity试玩",
+  "units": {
+    "time": "游戏秒",
+    "money": "钱（内部整数分）",
+    "capacity": "抽象容量单位",
+    "power": "相对负载",
+    "distance": "格"
+  },
+  "global": {
+    "clock": {
+      "tick_seconds": 0.1,
+      "speeds": [
+        1,
+        2,
+        3
+      ],
+      "pause_allowed": true,
+      "pause_planning": true,
+      "resume_finishes_construction": true,
+      "new_game_seconds": 0,
+      "duration_limit": null,
+      "autosave_seconds": 300,
+      "autosave_slots": 3,
+      "manual_slots": null,
+      "simultaneous_failure_priority": [
+        "hero_death",
+        "riot_timeout",
+        "lower_invasion",
+        "return_arrival"
+      ],
+      "event_order": [
+        "payroll_due_and_bonus_expiry",
+        "submitted_manual_payments",
+        "life_and_consumption",
+        "production_and_deliveries",
+        "riot_check",
+        "ending_check"
+      ]
+    },
+    "construction": {
+      "seconds": 0,
+      "workers_must_be_idle": true,
+      "cancel_preview_refunds": false,
+      "no_materials_charged_before_confirm": true,
+      "builders_become_maintainers": true,
+      "surplus_builders_become_idle": true,
+      "maintenance_people_per_machine": 1,
+      "moving_seconds": 0,
+      "moving_stops_interactions": true,
+      "deconstruct_refund_fraction": 1,
+      "selling_refund_materials": false,
+      "selling_cash_fraction": 0.45,
+      "selling_durability_factor": "0.5 + durability/200（无耐久设施取1）",
+      "contents_return": "库存或旧址溢出；原料/中间物/产物仅结算一次；不退已耗燃料、水或已完成工序的输入",
+      "old_community_assets_owned": false,
+      "backpack_capacity": 8,
+      "rotation_degrees": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "inaccessible_service_side": "建设预览阻止；设备旋转改变接口及操作侧坐标"
+    },
+    "workers": {
+      "move_grid_per_second": 0.8,
+      "carry_capacity": 8,
+      "pickup_seconds": 0.5,
+      "pickup_range": 1.5,
+      "loading_seconds": 2,
+      "unloading_seconds": 2,
+      "priority_values": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "priority_higher_number_first": true,
+      "default_priority": {
+        "life_emergency": 5,
+        "maintenance": 4,
+        "construction": 4,
+        "production": 3,
+        "transport": 2
+      },
+      "idle_seek_interval": 2,
+      "preempt_between_human_stages": true,
+      "manual_assignment_preempt": false,
+      "one_worker_one_job": true,
+      "tools_slots_per_required_family_per_worksite": 2,
+      "tools_choice": "同类可用工具优先效率高；效率相同优先剩余耐久高；同件工具不共享",
+      "transport_priority": {
+        "life_and_essential_tools": 5,
+        "fuel_below_60s_and_crop_care": 4,
+        "clear_full_output": 3,
+        "routine_input": 2,
+        "other_storage": 1
+      },
+      "path_retry_seconds": 10,
+      "reservation_released_on_path_failure": true,
+      "same_priority_tiebreak": "任务创建时刻、路径距离、任务ID",
+      "tool_auto_purchase": false,
+      "tool_auto_purchase_budget_per_600s": 20,
+      "tool_spare_target_per_family": 1,
+      "tool_workshop_auto_make": true,
+      "tool_purchase_protect_next_payroll": true,
+      "human_efficiency_formula": "clamp(tool*(1+bonus)*happiness*arrears*food*water*local_pressure*overflow,0.25,1.60)；真实停工为0",
+      "happiness_multiplier": "clamp(0.7+0.3*H/70,0.7,1.05)",
+      "multi_tool_multiplier": "所需工具中最高效率倍率；不连乘",
+      "machine_phases_release_operator": true,
+      "two_operator_human_phases_require_both": true,
+      "two_operator_speed_reference": "表中人工秒为两人同时工作后的历时，不再除2"
+    },
+    "maintenance": {
+      "maximum": 100,
+      "active_decay_per_second": 0.2,
+      "repair_per_second_at_efficiency1": 0.4,
+      "restart_at": 20,
+      "idle_decay": 0,
+      "decay_during_human_phase": true,
+      "decay_during_powerless": false,
+      "maintenance_requires_power": false,
+      "stopped_operator_released": true,
+      "stopped_maintainer_stays": true,
+      "rioting_maintenance_stops": true
+    },
+    "power": {
+      "allocation": "同一连通电网统一公平供电比P=min(1,可用输出/当前请求)；不新增优先电网系统",
+      "machine_speed": "额定负载×P，机器进度速度P；P=0停，部分供电照常运行与耗耐久",
+      "housing_valid_ratio": 0.5,
+      "lamp_valid_ratio": 0.5,
+      "grow_speed_ratio": "太阳灯P；无灯或P=0生长暂停",
+      "generator_power": 4,
+      "generator_wood_seconds": 120,
+      "generator_chips_seconds": 60,
+      "fuel_buffer": 10,
+      "generator_fuel_when_unused": "有实际用电请求即按运行时间耗燃料；完全空载暂停；不按P重复打折燃料",
+      "ash_per_wood_equivalent": 20,
+      "chip_wood_equivalent": 0.5,
+      "thermal_station": {
+        "gross_output": 16,
+        "condenser_load": 1,
+        "net_output_at_full": 15,
+        "wood_seconds": 60,
+        "chips_seconds": 30,
+        "closed_loop_initial_water": 8,
+        "makeup_water_per_60s": 0.1,
+        "startup_machine_seconds": 20,
+        "startup_external_power": 1,
+        "steam_pipe_max_length": 12,
+        "one_to_one_boiler_turbine_condenser": true,
+        "no_heat_stock": true,
+        "fuel_freezes_when_trip": true,
+        "maintenance_workers": 3,
+        "boiler_and_turbine_must_be_operational": true,
+        "partial_condenser_power": "运行后站内先自供冷凝负载1，向公共电网提供净输出15；站内停机则整站停止，不建立循环供电求解；公共电网仍按统一公平供电比降速",
+        "station_internal_power_not_double_counted": true
+      }
+    },
+    "storage": {
+      "old_warehouse_capacity": 80,
+      "new_warehouse_capacity": 240,
+      "buffers_in_batches": 2,
+      "buffers_out_batches": 2,
+      "active_batches": 1,
+      "whole_batch_output_reservation": true,
+      "recipe_switch": "等本批完成后换；普通加工统一完成才扣在制预约，强制取消退全部预约输入且无半批成品；农业/堆肥例外按已耗料状态处理",
+      "floor_cell_capacity": 5,
+      "waste_stack_unlimited_height": true,
+      "hidden_overflow_queue": false,
+      "warehouse_pressure": false,
+      "warehouse_no_hidden_transport": "生活直接领取为例外；生产与地面回仓需人或传送带",
+      "belt_entities_per_second": 1,
+      "belt_entities_per_cell": 1,
+      "belt_power_per_cell": 0.005,
+      "belt_entity_rules": "实体物品整体输送；大件仍是1实体，仓储容量不另改变带速；散装数量按件/份，水默认1升封装单位，部分肥皂按其真实实例输送",
+      "merge_round_robin": true,
+      "crossing_independent": true,
+      "port_one_belt": true,
+      "port_move_stops_io": true,
+      "warehouse_floor_auto_transfer": "释放容量后创建搬运任务，不远程瞬移，需已有运输路径",
+      "package_capacity": 6,
+      "package_payload_count": 10,
+      "package_binding_strap": 1,
+      "package_disposal_uses_uncompressed_capacity": true
+    },
+    "save_state_required": [
+      "选择的主角",
+      "区域产权/首次生成标记",
+      "物品实例/来源/品质/材质组成/预约",
+      "个人钱包/遗产去向",
+      "工资原名单/分母/已支付份额",
+      "需求时钟/缺供积压/衣物磨损/清洁计时",
+      "工具实例/槽位/损耗/占用",
+      "机器耐久/工序阶段/在制批次ID/完成待出料",
+      "机器附件/建造材料记录",
+      "燃料热量余数/灰渣余数/集中火电启动状态",
+      "岗位/优先级/手动指定/运输任务",
+      "库存容量/地面格/堆高/填埋占用",
+      "传送带实体/接口过滤/合流顺序",
+      "电网连接",
+      "市场S/售出知识组/零钱余数",
+      "科技历史取得/矿脉勘探/采掘锚点",
+      "有机成熟/未熟包唯一ID/芽苗阶段",
+      "来料RNG/下一事件/分组待生成预算",
+      "暴动原因/组织者/固定补薪目标/承诺/原倒计时",
+      "倾倒真实容量/首次越阈值时刻/入侵计时",
+      "返程总成/唯一舱ID/试车状态/主角登舱/爬升进度",
+      "教学阶段/免费政策结束/救助配额",
+      "食物/饮水保留周期、食水自动补仓政策与独立预算",
+      "渗水源唯一ID/剩余量/预约量/补水余数",
+      "种薯已投入/待补水/留种唯一提交标记",
+      "滤材实例剩余使用单位/原水品质",
+      "同刻生活队首轮换/缺供开始/恢复起点"
+    ],
+    "pressure": {
+      "radius": 4,
+      "distance": "欧氏格距",
+      "local_formula": "暴露占格比例r：r<=0.3取1；0.3<r<=0.6线性降至0.8；0.6<r<=1线性降至0.6",
+      "eligible_cells": "局部可使用地面（含运输、设施工作区），不把矿体/永久填埋/洞/地图外算成空地",
+      "exposed_occupied_cells": "实际地面物品格；机器内部、仓库、带上物品不重复计入",
+      "overflow_formula": "max(0.4,1/(1+Q/C))，Q=岗位半径4格内暴露物品格超出每格5的容量总和，C=同范围暴露物品格数×5；C=0取1",
+      "only_ash_exempt": true,
+      "accidents_enabled": false
+    },
+    "payroll": {
+      "salary_per_worker": 10,
+      "period": 600,
+      "warning_before": 60,
+      "manual": true,
+      "first_due": "首次招募时刻+600，之后全局同一周期",
+      "bonus_per_worker_per_step": 2,
+      "bonus_step": 0.1,
+      "bonus_maximum": 0.3,
+      "bonus_ends_next_scheduled_due": true,
+      "bonus_requires_no_arrears": true,
+      "arrears_cycles_formula": "各工资账单未发额/原应发额之和；人数变化不重写旧分母",
+      "arrears_speed_formula": "max(0.6,1-0.1*等价欠薪周期)",
+      "repayment": "旧账优先，实际原名单平分，死亡者份额付社区",
+      "riot_threshold_equivalent_cycles": 3,
+      "salary_riot_recheck": "本次平息后，下次计划发薪点再判定，不清除剩余欠款"
+    },
+    "life": {
+      "food_per_300s": 1,
+      "water_liters_per_300s": 1,
+      "shortage_backlog_max_cycles": 2,
+      "retry_seconds": 10,
+      "clothes_seconds": 4800,
+      "clothes_become": "old_clothes，保留穿坏状态，需要清洗修补，不直接变全新",
+      "soap_units_per_person_per_600s": 1,
+      "soap_units_per_bar": 100,
+      "cleaning_people_per_group": 4,
+      "clean_rag_seconds": 600,
+      "broom_loss_per_600s": 1,
+      "food_efficiency_steps": [
+        [
+          300,
+          0.9
+        ],
+        [
+          900,
+          0.7
+        ]
+      ],
+      "water_efficiency_steps": [
+        [
+          180,
+          0.85
+        ],
+        [
+          600,
+          0.6
+        ]
+      ],
+      "food_death_seconds": 1800,
+      "water_death_seconds": 1200,
+      "efficiency_recovery_seconds": 180,
+      "drinking_reserve_liters_per_person": 2,
+      "new_resident_wallet": 5,
+      "new_resident_clothes_min_durability": 0.7,
+      "first_payroll_before_free_stock": true,
+      "external_personal_purchase": true,
+      "emergency_free_water_liters_per_600s": 2,
+      "free_food_default": false,
+      "external_subsidy_budget_default": 0,
+      "life_savings_protection": 4,
+      "clothes_savings_goal": 10,
+      "rent_per_600s": 1,
+      "rent_bounds": [
+        0,
+        2
+      ],
+      "rent_unpaid_creates_debt": false,
+      "community_illumination_per_600s": 0.4,
+      "community_cleaning_per_600s": 0.1,
+      "optional_rest_cost_per_600s": 1,
+      "optional_rest_happiness": 5,
+      "rest_seconds": 600,
+      "rest_stacks": false,
+      "consumption_priority": [
+        "water",
+        "food",
+        "clothes",
+        "soap",
+        "rent",
+        "community_services",
+        "rest"
+      ],
+      "hero_has_separate_salary": false,
+      "hero_death_ends_game": true,
+      "employee_death_reduces_population": true,
+      "food_reserve_portions_per_person": 2,
+      "population_includes_hero": true,
+      "consumable_need_items": {
+        "food": "food",
+        "water": "water"
+      },
+      "backlog_cap_discards_excess_need_not_shortage_timer": true,
+      "direct_food_water_happiness_loss": false
+    },
+    "starting_state": {
+      "hero_position": [
+        9,
+        4
+      ],
+      "hero_initial_clothing_remaining_fraction": 1,
+      "hero_cash": 0,
+      "old_house_beds": 6,
+      "old_house_power_load": 0.2,
+      "old_lamp_power_load": 0.1,
+      "old_lamp_radius": 6,
+      "old_lamp_owned_by_community": true,
+      "old_facilities_initial_powered": false,
+      "hero_first_food_and_water_due": 300,
+      "recruit_first_food_and_water_due": "加入+300；工资沿全局招募时钟",
+      "community_corridors_walkable_not_buildable": true,
+      "garbage_floor_walkable": true,
+      "garbage_walk_speed_multiplier": 1,
+      "no_hard_population_cap": "受住房、现金和岗位限制；不另设科技等级人口封顶"
+    },
+    "happiness": {
+      "base": 70,
+      "maximum": 100,
+      "minimum": 0,
+      "recovery_seconds": 180,
+      "losses": {
+        "no_bed": {
+          "grace": 60,
+          "ramp": 360,
+          "max_loss": 20
+        },
+        "housing_power": {
+          "grace": 60,
+          "ramp": 300,
+          "max_loss": 10
+        },
+        "no_light": {
+          "grace": 60,
+          "ramp": 300,
+          "max_loss": 5
+        },
+        "no_clothes": {
+          "grace": 120,
+          "ramp": 600,
+          "max_loss": 20
+        },
+        "unclean": {
+          "grace": 120,
+          "ramp": 600,
+          "max_loss": 15
+        }
+      },
+      "no_bed_not_double_power_light": true,
+      "no_money_direct_loss": false,
+      "food_water_direct_happiness_loss": false,
+      "riot_low_threshold": 25,
+      "riot_low_seconds": 180,
+      "riot_count": "max(2,ceil(0.2*员工人数))",
+      "riot_settle_happiness": 40
+    },
+    "riot": {
+      "deadline": 240,
+      "salary_target": "ceil_to_cent(触发时实际工资欠款/3)，目标固定；只累计本窗口补薪",
+      "all_human_stop": true,
+      "automatic_continues": true,
+      "natural_compost_continues": true,
+      "population_consumption_continues": true,
+      "fixed_promises": [
+        "恢复住房及供电",
+        "恢复衣物与清洁供给",
+        "清除阻断上述生活修复的障碍"
+      ],
+      "promise_workers": "实际组织暴动者；只可执行对应原因的修复任务，不恢复普通商业生产",
+      "promise_restarts_timer": false,
+      "all_present_causes_must_clear": true,
+      "organizers_must_recover": true,
+      "promise_timeout": "主角死亡；回首页，可读取旧存档",
+      "debt_counter_public": false,
+      "debt_amount_public": true
+    },
+    "market": {
+      "pressure_half_life": 600,
+      "decay_constant": 100,
+      "external_formula": "max(floor,base*exp(-S/100))",
+      "retail_formula": "min(设置参考价,max(floor,设置参考价*exp(-S/100)))；已售技术再以floor封顶；免费单独处理",
+      "pressure_increment_per_unit": 1,
+      "soap_pressure_increment_per_cleaning_unit": 0.01,
+      "buy_prices_fixed": true,
+      "external_buyer_capacity": "无限现金购买力；不免除实际库存与降价",
+      "rounding": "逐笔累计原始精度，结算整数分，保存余数",
+      "sold_tech_all_origins_floor": true,
+      "sold_tech_duplicate_family_floor_does_not_stack": true,
+      "tools_price_scales_remaining_durability": true,
+      "no_purchase_of_provenance_materials": true,
+      "corpse_wallet_to_community": true
+    },
+    "technology": {
+      "acquisition_history": true,
+      "instant_free": true,
+      "no_consumed_materials": true,
+      "obtaining_includes_purchase": true,
+      "region1_2_early_optional_technology_allowed": true,
+      "region3_geology_gate": true,
+      "sell_knowledge_still_usable": true,
+      "unknown_future_tech_ui": "只显示当前可见原料相关条目，避免直接展示下层信息"
+    },
+    "disposal": {
+      "landfill_capacity_per_cell": 20,
+      "landfill_min_cells": 4,
+      "permanent_loss_on_first_disposal": true,
+      "landfill_human_seconds_per_10_capacity": 10,
+      "landfill_max_batch_capacity": 10,
+      "landfill_partial_batch_allowed": true,
+      "hole_operator_human_seconds_per_10_capacity": 10,
+      "hole_single_batch_capacity": 10,
+      "hole_transport_required": true,
+      "accepted": "垃圾、处理残余、损坏工具；普通材料先标记废弃；不允许角色、设备实体、饮用水、工艺水或返程关键部件直接倾倒",
+      "ordinary_material_discard_tags_do_not_change_capacity": true,
+      "dump_threshold_capacity": 2400,
+      "invasion_delay_seconds": 600,
+      "dump_uses_actual_uncompressed_capacity": true,
+      "threshold_crossing_irreversible": true,
+      "lower_information_visible": false,
+      "ending_success": "倾倒量=0且抵达上层→好结局；倾倒量>0且入侵尚未发生时抵达→普通结局；达到阈值600秒后入侵→坏结局",
+      "failed_save_policy": "不覆盖失败前手动存档，结局回首页，新游戏完全重置"
+    },
+    "controls": {
+      "move": "WASD",
+      "interact": "E",
+      "rotate": "R",
+      "cancel": "右键/Esc",
+      "pause": "Space",
+      "speed": "1/2/3→1/2/3倍",
+      "camera_zoom_factor_bounds": [
+        0.5,
+        2.5
+      ],
+      "camera_pan_grid_per_second": 12,
+      "zoom_step": 0.1,
+      "supply_subsidy_budget_bounds": [
+        0,
+        1000
+      ],
+      "water_reserve_cycles_bounds": [
+        0,
+        10
+      ],
+      "recipe_repeat_default": true,
+      "manual_priority_default": 3,
+      "food_reserve_cycles_bounds": [
+        0,
+        10
+      ]
+    },
+    "waste_input": {
+      "time_origin": "新局开始，扩地不重置",
+      "base_capacity_per_minute_stages": [
+        [
+          0,
+          600,
+          8
+        ],
+        [
+          600,
+          1800,
+          12
+        ],
+        [
+          1800,
+          3600,
+          15
+        ],
+        [
+          3600,
+          5400,
+          18.75
+        ]
+      ],
+      "after_5400_growth_per_1800s": 1.25,
+      "cap": null,
+      "region_multipliers": {
+        "1": 1,
+        "2": 0.6,
+        "3": 0.4
+      },
+      "interval_stages": [
+        [
+          0,
+          600,
+          40,
+          80
+        ],
+        [
+          600,
+          1800,
+          36,
+          72
+        ],
+        [
+          1800,
+          3600,
+          32,
+          64
+        ],
+        [
+          3600,
+          5400,
+          28,
+          56
+        ]
+      ],
+      "later_mean_interval": "max(10,42*0.9^(1+floor((t-5400)/1800)))；实际均匀分布于平均的2/3—4/3",
+      "base_rate_after_5400": "18.75*1.25^(1+floor((t-5400)/1800))",
+      "batch_capacity": "积分B(t)dt/60×落点倍率×Uniform(0.85,1.15)，容量预算及小数余数保存；频率加快不再乘一次单位时间来料",
+      "random_seed_persisted": true,
+      "rng_state_and_next_event_persisted": true,
+      "composition_persisted_on_spawn": true,
+      "infrequent_large_instance": "预算不足生成6容量旧件时保留类别预算到下一次事件，已经落下的垃圾没有隐藏仓库"
+    },
+    "food_water": {
+      "version": "food-water-2026-10-13-v1.1",
+      "priority_authority": "本节修订采水、净化、薯类和供给保留，原消费频率与死亡阈值保持",
+      "source_quality": "仅固定合格渗水源可进入生活净化；垃圾渗滤液、工业废水、工业回用水不进入饮用或食物链",
+      "spring_recharge_liters_per_minute": 6,
+      "spring_buffer_liters": 12,
+      "spring_initial_liters": 12,
+      "spring_one_facility": true,
+      "spring_budget_pauses_with_game_time": true,
+      "spring_budget_not_reset_by_demolition_or_load": true,
+      "spring_upgrade_requires_old_intake_removed": true,
+      "raw_water_no_hidden_inventory_creation": true,
+      "purification_input_liters": 6,
+      "purification_output_liters": 5,
+      "purification_loss_liters": 1,
+      "filter_media_uses_per_item": 100,
+      "filter_cost_per_batch": 0.02,
+      "wood_chips_per_water_batch": 0.25,
+      "root_first_full_food_serial_seconds": 1240,
+      "root_first_six_food_seconds": 1200,
+      "root_serial_food_per_batch": 12,
+      "root_spare_seed_target_per_bed": 1,
+      "root_spare_seed_excludes_in_progress_seed": true,
+      "root_spare_seed_protected_against_auto_sale": true,
+      "food_reserve_cycles_default": 2,
+      "water_reserve_cycles_default": 2,
+      "reserve_counts_all_alive_people": true,
+      "reserve_protected_against_sale": true,
+      "potable_water_reserve_protected_against_all_production": true,
+      "life_reserve_does_not_prevent_personal_consumption": true,
+      "production_water_can_use_industrial_only_if_existing_recipe_allows": true,
+      "water_use_permissions": {
+        "water": "直接饮用及原有饮用水输入配方",
+        "raw_freshwater": [
+          "make_drinking_water"
+        ],
+        "industrial_water": [
+          "wash_pp_reuse",
+          "wash_hdpe_reuse",
+          "wash_pet_reuse",
+          "auto_wash_pp_reuse",
+          "auto_wash_hdpe_reuse",
+          "auto_wash_pet_reuse",
+          "paper_pulp_reuse",
+          "ore_sort_iron_reuse",
+          "ore_sort_copper_reuse",
+          "ore_sort_clay_reuse",
+          "complex_recovery_reuse",
+          "auto_complex_recovery_reuse"
+        ]
+      },
+      "raw_water_for_food_or_direct_drinking": false,
+      "raw_tubers_or_unwashed_sprouts_direct_consumption": false,
+      "food_spoilage_enabled": false,
+      "nutrition_types_enabled": false,
+      "random_water_poisoning_enabled": false,
+      "availability_reason_codes": [
+        "out_of_stock",
+        "no_warehouse_access",
+        "cannot_afford",
+        "external_purchase_disabled",
+        "subsidy_budget_exhausted",
+        "awaiting_transport",
+        "water_reserved_for_life",
+        "source_budget_insufficient",
+        "filter_exhausted",
+        "fuel_missing",
+        "power_missing"
+      ],
+      "life_work_priority": {
+        "water_intake_and_purification_below_two_cycles": 5,
+        "food_preparation_below_two_cycles": 5,
+        "crop_care": 4,
+        "otherwise": 3,
+        "respect_manual_assignment": true,
+        "preempt_only_between_human_stages": true
+      },
+      "food_water_recovery": "补齐最多2周期积压后清除缺供计时，180秒从当前惩罚线性恢复；部分补足不重置计时；新需求沿个人原时钟",
+      "same_timestamp_order": [
+        "完成产出/入仓/现金变更",
+        "工资账单与奖金到期、既有付款",
+        "产生个人食水需求",
+        "生活领取/外购/救助",
+        "生产与外销新预约",
+        "死亡及暴动判定"
+      ],
+      "fairness": "饮水先于食物；同类需求先处理更早缺供者，同一时间轮换队首并存档；不让同一角色永远排尾",
+      "source_input_reservation_in_shared_inventory": true,
+      "source_and_production_reservations_atomic": true,
+      "player_bulk_purchase": "只成交可入真实仓容的部分，付款与入库原子完成；个人即时外购直接消费不占仓、不扣玩家钱",
+      "warnings": {
+        "warning_cover_seconds": 600,
+        "critical_cover_seconds": 300,
+        "death_warning_remaining_seconds": 180,
+        "rate_sample_seconds": 600,
+        "report_observed_past_rates_only": true
+      },
+      "automatic_bulk_restock": {
+        "enabled_default": false,
+        "period_seconds": 600,
+        "cash_cap_default": 10,
+        "cash_cap_bounds": [
+          0,
+          1000
+        ],
+        "trigger_cycles": 1,
+        "target_cycles": 2,
+        "priority": [
+          "water",
+          "food"
+        ],
+        "protect_next_payroll_cash": true,
+        "no_negative_cash": true,
+        "unspent_budget_rollover": false,
+        "separate_from_personal_subsidy_budget": true
+      },
+      "art_status": "4件设施主体及种薯/待熟制薯类/原水/滤材图标尚未生成；可食用食物与饮用水沿用已有图标",
+      "numeric_scope": "全部产量、升数、时长与成本为游戏数值，不作现实饮食或净水参数",
+      "runtime_required_fields": [
+        "source_reservation",
+        "source_draw",
+        "staged_at_start",
+        "filter_media_remaining_units",
+        "reserve_protected_inventory",
+        "qualified_source_tag"
+      ]
+    }
+  },
+  "regions": {
+    "1": {
+      "name": "垃圾处理起点",
+      "purchase_cash": 0,
+      "land_rectangle": [
+        6,
+        6,
+        23,
+        23
+      ],
+      "land_cells": 324,
+      "garbage_rectangle": [
+        0,
+        0,
+        7,
+        5
+      ],
+      "garbage_cells": 48,
+      "garbage_flat_capacity": 240,
+      "old_house_beds": 6,
+      "old_warehouse_capacity": 80,
+      "cash_start": 0,
+      "free_hire_maximum": 5,
+      "hire_fee_later": 30,
+      "first_expansion_playtest_target_minutes": [
+        60,
+        90
+      ],
+      "first_hire_requires": "主角完成发电机并首次实际发电，只有招募费用免费",
+      "fixed_items": {
+        "waste_wood": 80,
+        "fasteners": 6,
+        "steel_parts": 30,
+        "copper_parts": 2,
+        "wire": 8,
+        "thermal_module": 1,
+        "generator_module": 1,
+        "food": 30,
+        "water": 40,
+        "soap": 3,
+        "waste_textile": 12,
+        "old_clothes": 6,
+        "hammer_wood": 1,
+        "handsaw_wood": 1,
+        "screwdriver_wood": 1,
+        "wrench": 1,
+        "scissors": 1,
+        "sewing": 1,
+        "old_cutter": 2,
+        "old_washer": 1,
+        "old_former": 1,
+        "old_molds": 1,
+        "old_wires": 1,
+        "old_grow_light": 1,
+        "old_feeder": 1,
+        "old_furnace": 2,
+        "old_fixture": 1,
+        "old_control_basic": 1,
+        "container": 2
+      },
+      "fixed_items_location": "垃圾堆及可访问边缘；旧住房/仓库不占玩家324格产权",
+      "category_weights": {
+        "wood": 35,
+        "metal_devices": 25,
+        "plastic": 20,
+        "textile": 15,
+        "life": 5
+      },
+      "metal_subweights": {
+        "steel_scrap": 35,
+        "copper_scrap": 10,
+        "aluminum_scrap": 10,
+        "tool_steel_scrap": 5,
+        "wreck": 40
+      },
+      "wreck_templates": [
+        "old_cutter",
+        "old_washer",
+        "old_former",
+        "old_feeder",
+        "old_furnace",
+        "old_fixture",
+        "old_control_basic"
+      ],
+      "textile_subweights": {
+        "waste_textile": 70,
+        "old_clothes": 30
+      },
+      "plastic_parts_per_10": {
+        "sorted_pp": 4,
+        "sorted_hdpe": 3,
+        "sorted_pet": 1,
+        "plastic_other": 2
+      },
+      "life_subweights_by_capacity": {
+        "food": 1,
+        "water": 1,
+        "soap": 1
+      },
+      "fixed_capacity": 246.5,
+      "fixed_overflow_capacity": 6.5,
+      "category_weights_unit": "容量预算占比，不是件数；水/肥皂依其实际占容分配",
+      "organic_actual_feed_fraction": 0.8,
+      "wreck_template_distribution": "符合阶段的旧件等权；第三区域框架占旧件预算15%，其余旧件平分剩余85%",
+      "repairable_instance_probabilities": {
+        "usable": 0.5,
+        "repairable": 0.25,
+        "scrap_only": 0.25
+      },
+      "freshwater_source": {
+        "id": "spring_1",
+        "source": [
+          22,
+          22
+        ],
+        "manual_anchor": [
+          22,
+          22
+        ],
+        "auto_anchor": [
+          22,
+          21
+        ],
+        "quality": "qualified_fresh_source",
+        "recharge_liters_per_minute": 6,
+        "maximum_liters": 12,
+        "initial_liters": 12,
+        "discovered_on_region_unlock": true,
+        "geological_survey_required": false,
+        "one_intake_or_auto_plant": true,
+        "placement_requires_owned_land": true
+      }
+    },
+    "2": {
+      "name": "自动化与再利用区",
+      "purchase_cash": 200,
+      "prerequisite_region": 1,
+      "land_rectangle": [
+        28,
+        6,
+        51,
+        23
+      ],
+      "land_cells": 432,
+      "garbage_rectangle": [
+        44,
+        0,
+        49,
+        5
+      ],
+      "garbage_cells": 36,
+      "garbage_flat_capacity": 180,
+      "fixed_items": {
+        "old_controller": 2,
+        "old_dryer": 1,
+        "old_pet_former": 1,
+        "old_drive_box": 2,
+        "old_wire_maker": 1,
+        "old_motor": 1,
+        "old_drive": 1,
+        "sorted_pet": 3,
+        "waste_wood": 40,
+        "plastic_mix": 60,
+        "steel_scrap": 20,
+        "cuttable_textile": 8,
+        "organic_mix": 16
+      },
+      "guaranteed_repair_state": {
+        "old_motor": "repairable",
+        "old_drive": "repairable"
+      },
+      "category_weights": {
+        "wood": 27,
+        "metal_devices": 28,
+        "plastic": 25,
+        "textile": 12,
+        "organic": 5,
+        "life": 3
+      },
+      "metal_subweights": {
+        "steel_scrap": 30,
+        "copper_scrap": 15,
+        "aluminum_scrap": 10,
+        "tool_steel_scrap": 5,
+        "wreck": 40
+      },
+      "wreck_templates": [
+        "old_controller",
+        "old_dryer",
+        "old_pet_former",
+        "old_drive_box",
+        "old_wire_maker",
+        "old_motor",
+        "old_drive"
+      ],
+      "textile_subweights": {
+        "cuttable_textile": 50,
+        "waste_textile": 30,
+        "old_clothes": 20
+      },
+      "plastic_parts_per_10": {
+        "sorted_pp": 3,
+        "sorted_hdpe": 3,
+        "sorted_pet": 2,
+        "plastic_other": 2
+      },
+      "fixed_capacity": 201,
+      "fixed_overflow_capacity": 21,
+      "category_weights_unit": "容量预算占比，不是件数；水/肥皂依其实际占容分配",
+      "life_subweights_by_capacity": {
+        "food": 1,
+        "water": 1,
+        "soap": 1
+      },
+      "organic_actual_feed_fraction": 0.8,
+      "wreck_template_distribution": "符合阶段的旧件等权；第三区域框架占旧件预算15%，其余旧件平分剩余85%",
+      "repairable_instance_probabilities": {
+        "usable": 0.5,
+        "repairable": 0.25,
+        "scrap_only": 0.25
+      },
+      "freshwater_source": {
+        "id": "spring_2",
+        "source": [
+          50,
+          22
+        ],
+        "manual_anchor": [
+          50,
+          22
+        ],
+        "auto_anchor": [
+          50,
+          21
+        ],
+        "quality": "qualified_fresh_source",
+        "recharge_liters_per_minute": 6,
+        "maximum_liters": 12,
+        "initial_liters": 12,
+        "discovered_on_region_unlock": true,
+        "geological_survey_required": false,
+        "one_intake_or_auto_plant": true,
+        "placement_requires_owned_land": true
+      }
+    },
+    "3": {
+      "name": "矿料与返程工程区",
+      "purchase_cash": 600,
+      "prerequisite_region": 2,
+      "land_rectangle": [
+        52,
+        6,
+        75,
+        25
+      ],
+      "land_cells": 480,
+      "garbage_rectangle": [
+        76,
+        12,
+        81,
+        17
+      ],
+      "garbage_cells": 36,
+      "garbage_flat_capacity": 180,
+      "fixed_items": {
+        "old_survey": 1,
+        "old_drill": 3,
+        "old_separator": 1,
+        "old_kiln": 1,
+        "old_structure": 5,
+        "old_boiler": 1,
+        "old_turbine": 1,
+        "old_condenser": 1,
+        "old_paper_machine": 1,
+        "old_glass_mold": 1,
+        "old_water_filter": 1,
+        "waste_paper": 20,
+        "waste_glass": 20,
+        "plastic_other": 24,
+        "tool_steel_scrap": 20,
+        "waste_wood": 20
+      },
+      "veins": {
+        "iron": {
+          "rectangle": [
+            55,
+            18,
+            58,
+            21
+          ],
+          "anchor": [
+            55,
+            18
+          ]
+        },
+        "copper": {
+          "rectangle": [
+            64,
+            18,
+            67,
+            21
+          ],
+          "anchor": [
+            64,
+            18
+          ]
+        },
+        "clay": {
+          "rectangle": [
+            69,
+            8,
+            72,
+            11
+          ],
+          "anchor": [
+            69,
+            8
+          ]
+        }
+      },
+      "veins_infinite": true,
+      "max_extractors_per_vein": 1,
+      "vein_cells_within_land": true,
+      "accessible_land_excludes_mine_footprints": true,
+      "launch_platform_anchor": [
+        72,
+        21
+      ],
+      "return_shaft_external_story_only": true,
+      "world_minimum_size": [
+        86,
+        32
+      ],
+      "category_weights": {
+        "wood": 22,
+        "paper": 8,
+        "metal_devices": 20,
+        "plastic": 25,
+        "glass": 10,
+        "textile": 8,
+        "organic": 5,
+        "life": 2
+      },
+      "metal_subweights": {
+        "steel_scrap": 25,
+        "copper_scrap": 15,
+        "aluminum_scrap": 5,
+        "tool_steel_scrap": 10,
+        "wreck": 45
+      },
+      "wreck_templates": [
+        "old_survey",
+        "old_drill",
+        "old_separator",
+        "old_kiln",
+        "old_structure",
+        "old_boiler",
+        "old_turbine",
+        "old_condenser",
+        "old_paper_machine",
+        "old_glass_mold",
+        "old_water_filter",
+        "old_motor",
+        "old_drive"
+      ],
+      "reclaimed_structure_fixed": 20,
+      "critical_structure_wreck_share_of_wreck_budget": 0.15,
+      "textile_subweights": {
+        "cuttable_textile": 60,
+        "waste_textile": 20,
+        "old_clothes": 20
+      },
+      "plastic_parts_per_10": {
+        "sorted_pp": 2,
+        "sorted_hdpe": 2,
+        "sorted_pet": 2,
+        "plastic_other": 4
+      },
+      "fixed_capacity": 206,
+      "fixed_overflow_capacity": 26,
+      "category_weights_unit": "容量预算占比，不是件数；水/肥皂依其实际占容分配",
+      "life_subweights_by_capacity": {
+        "food": 1,
+        "water": 1,
+        "soap": 1
+      },
+      "organic_actual_feed_fraction": 0.8,
+      "wreck_template_distribution": "符合阶段的旧件等权；第三区域框架占旧件预算15%，其余旧件平分剩余85%",
+      "repairable_instance_probabilities": {
+        "usable": 0.5,
+        "repairable": 0.25,
+        "scrap_only": 0.25
+      },
+      "freshwater_source": {
+        "id": "spring_3",
+        "source": [
+          54,
+          7
+        ],
+        "manual_anchor": [
+          54,
+          7
+        ],
+        "auto_anchor": [
+          54,
+          7
+        ],
+        "quality": "qualified_fresh_source",
+        "recharge_liters_per_minute": 6,
+        "maximum_liters": 12,
+        "initial_liters": 12,
+        "discovered_on_region_unlock": true,
+        "geological_survey_required": false,
+        "one_intake_or_auto_plant": true,
+        "placement_requires_owned_land": true
+      }
+    }
+  },
+  "sources": [
+    {
+      "title": "EPA：Common Recyclables",
+      "url": "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+      "scope": "纸和玻璃分类回收方向；不提供本案产率或耗水数字"
+    },
+    {
+      "title": "美国能源部：Biopower",
+      "url": "https://www.energy.gov/cmei/fuels/biopower-energy-heat-and-electricity",
+      "scope": "燃料供热、蒸汽驱动发电的方向；不提供本案功率、燃料或时间数字"
+    },
+    {
+      "title": "CDC: How to Make Water Safe in an Emergency",
+      "url": "https://www.cdc.gov/water-emergency/about/",
+      "scope": "煮沸不能使化学污染水安全；不提供游戏产率、耗材或时间"
+    },
+    {
+      "title": "University of Minnesota Extension: Growing potatoes",
+      "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-potatoes",
+      "scope": "以种薯与合适土壤栽培的工艺方向，不提供游戏营养、产量与周期"
+    }
+  ],
+  "return_vehicle": {
+    "name": "齿条式检修升降舱",
+    "type": "单人电动爬升舱，沿现存双齿条检修轨道上升",
+    "appearance": {
+      "sprite_cells": [
+        3,
+        2
+      ],
+      "suggested_native_pixels": [
+        192,
+        128
+      ],
+      "palette": "灰褐金属、深灰导轨轮、少量铜色线缆；红色制动器与绿色运行灯",
+      "silhouette": "左侧封闭乘员舱与小窗，右侧上下两组夹轨驱动轮；顶端回收钢架，底部红色安全钳，后侧卷缆",
+      "states": [
+        "装配未完成",
+        "待测试",
+        "试车",
+        "主角登舱",
+        "上升",
+        "停机",
+        "到达"
+      ],
+      "movement": "运行时沿竖向导轨平移，轮组简单转动；无需额外人物行走帧",
+      "platform_sprite_cells": [
+        4,
+        4
+      ],
+      "sprite_has_no_extra_inventory": true
+    },
+    "route": [
+      "第三区域旧检修平台",
+      "与垃圾落料通道实体隔离的检修竖井",
+      "上层垃圾处理场检修出口"
+    ],
+    "shaft_height_story_meters": 480,
+    "track_already_exists": true,
+    "shaft_environment": "废弃但主结构可用的既有维护通道；不是中下层洞，也不模拟第四张经营地图",
+    "story_discovery": "购买第三区域后见到旧检修标识；勘探及开采获得耐压结构/绝缘材料后主角提出复用旧竖井的方案",
+    "terminal_parts": {
+      "lift_frame": 5,
+      "lift_drive": 2,
+      "lift_brake": 2,
+      "lift_control": 1,
+      "lift_cable": 1
+    },
+    "test_effective_seconds": 180,
+    "ascent_effective_seconds": 190,
+    "ascent_power": 12,
+    "cabin_capacity_people": 1,
+    "during_ascent": "其余经营计时继续；缺电或耐久不足暂停爬升；主角在舱内不能同时劳动；管理仍可操作",
+    "failure_conditions": "沿用主角死亡、暴动超时、下层入侵；不增加碰撞或随机坠落",
+    "good_ending": "主角回到上层；画面并列展示中层仍在运行的回收产线与主角看到的上层垃圾入口，说明中层发展未向下层转嫁垃圾",
+    "normal_ending": "主角回到上层，镜头停在中层向下的洞口；不宣称下层安全或已经消灭中层",
+    "bad_invasion": "下层利用难处理垃圾发展后入侵，中层工厂熄灭，主角失败",
+    "riot_ending": "组织暴动者包围主角，倒计时未平息时主角被丢下去并死亡；不进入下层游玩",
+    "presentation": "静态像素画面+短文字，结局后回首页；尚未生成这些新贴图",
+    "direct_parts_material_bill": {
+      "reclaimed_structure": 20,
+      "mined_steel_billet": 30,
+      "steel_parts": 56,
+      "motor": 2,
+      "drive": 2,
+      "mined_copper_billet": 16,
+      "ceramic_insulator": 20,
+      "tool_steel_billet": 8,
+      "controller": 2,
+      "wire": 48
+    }
+  },
+  "waste_input_examples": [
+    {
+      "minutes": 0,
+      "base_capacity_per_minute": 8,
+      "all_3_regions_capacity_per_minute": 16
+    },
+    {
+      "minutes": 10,
+      "base_capacity_per_minute": 12,
+      "all_3_regions_capacity_per_minute": 24
+    },
+    {
+      "minutes": 30,
+      "base_capacity_per_minute": 15,
+      "all_3_regions_capacity_per_minute": 30
+    },
+    {
+      "minutes": 60,
+      "base_capacity_per_minute": 18.75,
+      "all_3_regions_capacity_per_minute": 37.5
+    },
+    {
+      "minutes": 90,
+      "base_capacity_per_minute": 23.438,
+      "all_3_regions_capacity_per_minute": 46.875
+    },
+    {
+      "minutes": 120,
+      "base_capacity_per_minute": 29.297,
+      "all_3_regions_capacity_per_minute": 58.594
+    },
+    {
+      "minutes": 180,
+      "base_capacity_per_minute": 45.776,
+      "all_3_regions_capacity_per_minute": 91.553
+    },
+    {
+      "minutes": 240,
+      "base_capacity_per_minute": 71.526,
+      "all_3_regions_capacity_per_minute": 143.051
+    },
+    {
+      "minutes": 360,
+      "base_capacity_per_minute": 174.623,
+      "all_3_regions_capacity_per_minute": 349.246
+    }
+  ]
+}

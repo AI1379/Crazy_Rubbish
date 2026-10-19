@@ -4,10 +4,15 @@ Input is Google's Noto Sans SC variable font, kept outside Assets in Artifacts/F
 The bundled derivative uses its own family name and preserves the adjacent OFL license.
 Rerun after introducing new UI characters.
 """
+import argparse
 from pathlib import Path
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 from fontTools import subset
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--include-font", type=Path, action="append", default=[], help="Also preserve the character map of this font (repeatable).")
+args = parser.parse_args()
 
 root = Path(__file__).resolve().parents[1]
 original = root / "Artifacts/Fonts/NotoSansSC-variable.ttf"
@@ -21,6 +26,11 @@ for folder in [root / "Assets/_Game/Scripts", root / "Docs", root / "README.md"]
     for path in files:
         if path.suffix in {".cs", ".md"}:
             characters.update(path.read_text(encoding="utf-8-sig"))
+# Keep existing glyphs when regenerating, including glyphs from another branch.
+for previous_font in [out, *args.include_font]:
+    if previous_font.exists():
+        with TTFont(previous_font) as previous:
+            characters.update(chr(value) for value in previous.getBestCmap())
 static_cache = original.with_name("NotoSansSC-Regular-full.ttf")
 if static_cache.exists():
     font = TTFont(static_cache)

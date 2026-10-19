@@ -34,6 +34,9 @@ try {
     foreach ($file in @('CrazyRubbish.exe', 'UnityPlayer.dll', 'Font-OFL.txt', 'CrazyRubbish_Data/Managed/CrazyRubbish.Core.dll', 'MonoBleedingEdge/EmbedRuntime/mono.dll')) {
         [System.IO.File]::WriteAllText((Join-Path $build $file), "fixture-$file")
     }
+    New-Item -ItemType Directory -Path (Join-Path $build 'BackUpThisFolder_ButDontShipItWithYourGame') -Force | Out-Null
+    [System.IO.File]::WriteAllText((Join-Path $build 'BackUpThisFolder_ButDontShipItWithYourGame/debug.txt'),'debug-only')
+    [System.IO.File]::WriteAllText((Join-Path $build 'CrazyRubbish_Data/Managed/debug.pdb'),'debug-only')
     $output = Join-Path $fixtureRoot 'packages with spaces'
     $revision = 'a' * 40
     & (Join-Path $PSScriptRoot 'PackageWindows.ps1') -BuildDirectory $build -OutputDirectory $output -Version 'v1.2.3-rc.1' -Commit $revision -ReleaseTag 'v1.2.3-rc.1' | Out-Null
@@ -47,6 +50,7 @@ try {
         Assert-Ci ($null -ne $zip.GetEntry('CrazyRubbish.exe')) 'Executable must be at ZIP root.'
         Assert-Ci ($null -ne $zip.GetEntry('MonoBleedingEdge/EmbedRuntime/mono.dll')) 'Mono runtime was not packaged.'
         Assert-Ci ($null -ne $zip.GetEntry('CrazyRubbish_Data/Managed/CrazyRubbish.Core.dll')) 'Managed player data was not packaged.'
+        Assert-Ci ($null -eq $zip.GetEntry('BackUpThisFolder_ButDontShipItWithYourGame/debug.txt') -and $null -eq $zip.GetEntry('CrazyRubbish_Data/Managed/debug.pdb')) 'Debug-only build files must not be published.'
         $reader = [System.IO.StreamReader]::new($zip.GetEntry('build-info.json').Open())
         try { $info = $reader.ReadToEnd() | ConvertFrom-Json } finally { $reader.Dispose() }
         Assert-Ci ($info.commit -ceq $revision -and $info.version -ceq '1.2.3-rc.1' -and $info.releaseTag -ceq 'v1.2.3-rc.1') 'Build provenance is incorrect.'
